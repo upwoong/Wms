@@ -1,0 +1,534 @@
+<!--테일윈드 불러오기-->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.16/tailwind.min.css">
+<!--폰트어썸 불러오기-->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css">
+<link rel="stylesheet" href="css/maincss.css">
+<div class="all-box">
+  <!--section-1-->
+  <!--날씨-->
+  <div class="section-1">
+    <div class="flex-1 mr-5">
+      <div class="reaction-weather-box hei-70 margin-b-10 flex justify-center items-center font-bold font-21 c-69B1EB bg-white border-radius-15">
+        <span>
+          Weather
+        </span>
+      </div>
+
+      <!--section-2-->
+      <!--날짜-->
+      <div class="Weather-box hei-157 bg-white flex justify-center items-center border-radius-15">
+        <div>
+          <div class="flex items-center">
+            <div>
+              <div class="flex justify-end items-center text-sm font-bold c-7E889A">
+                <span id='textday'>
+                        　　　　　　　　　　　
+                      </span>
+              </div>
+              <div class="flex items-center">
+                <div class="img-box MapPin-icon">
+                  <img src="https://cdn.jsdelivr.net/gh/kimhyeji324/ICT_Resource@master/docs/MapPin.png" alt="">
+                </div>
+                <div class="text-lg font-bold c-565656">
+                  <span>{{selectcityname}}</span>
+                  <span>{{selectvillagename}}</span>
+                </div>
+              </div>
+            </div>
+            <div class="wid-20"></div>
+            <div class="wid-92 hei-72 bg-69B1EB flex justify-center items-center border-radius-10">
+              <div class="img-box weather-icon">
+                <img src="https://cdn.jsdelivr.net/gh/kimhyeji324/ICT_Resource@master/docs/top-cl.png" alt="">
+              </div>
+            </div>
+          </div>
+          <div class="flex items-center mt-5">
+            <div class="flex items-center">
+              <div>
+                <div class="img-box Temp-icon">
+                  <img src="https://cdn.jsdelivr.net/gh/kimhyeji324/ICT_Resource@master/docs/Temp.png" alt="">
+                </div>
+              </div>
+              <div class="text-sm font-bold c-BEBEBE mx-1">
+                <span>Temp</span>
+              </div>
+              <div class="text-lg font-bold c-565656 flex">
+                <span>17</span>
+                <span>C</span>
+                <div class="img-box tem-s-icon">
+                  <img src="https://cdn.jsdelivr.net/gh/kimhyeji324/ICT_Resource@master/docs/tem-s.png" alt="">
+                </div>
+              </div>
+              <div>
+              </div>
+            </div>
+            <div class="flex-1"></div>
+            <div class="flex items-center">
+              <div class="img-box Clock-icon">
+                <img src="https://cdn.jsdelivr.net/gh/kimhyeji324/ICT_Resource@master/docs/Clock.png" alt="">
+              </div>
+              <div class="text-lg font-bold c-565656">
+                <span id="texthours"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--section-3-->
+    <!--수전-->
+    <div class="flex-1 mr-5">
+      <div class="reaction-water mb-3 flex">
+        <div class="water-bar hei-91 wid-39 bg-69B1EB flex justify-center items-center text-white">
+          <span>
+            All
+          </span>
+        </div>
+        <div class="water-box w-full flex items-center justify-center bg-white hei-91">
+          <div class="w-full">
+            <div class="flex items-center mx-2 mb-2">
+              <div class="img-box Vector-icon mr-1">
+                <img src="https://cdn.jsdelivr.net/gh/kimhyeji324/ICT_Resource@master/docs/Vector.png" alt="">
+              </div>
+              <div class="font-bold text-sm c-787878">
+                <span>
+                  수전 총 사용량
+                </span>
+              </div>
+              <div class="flex-1"></div>
+              <div class="font-bold c-565656">
+                <span>20</span>
+                <span style="margin-left: -5px;">L</span>
+              </div>
+            </div>
+            <div>
+              <div class="graph-back-bar h-2 border-radius-5 mx-2">
+                <div class="percent-bar h-full border-radius-50" style="width: 20%;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="hei-135 flex">
+        <div class="reaction-winter-Up-icon wid-39 bg-69B1EB flex justify-center items-center">
+          <diV class="img-box winter-Up-icon">
+            <img src="https://cdn.jsdelivr.net/gh/kimhyeji324/ICT_Resource@master/docs/CloudArrowUp.png" alt="">
+          </diV>
+        </div>
+
+        <!--section-4-->
+        <!--지역-->
+        <div class="reaction-weather-up w-full bg-white flex justify-center items-center overflow-hidden">
+          <!--1-->
+          <div>
+            <div class="flex">
+              <div class="selection-box mb-1 mr-1 text-gray-400 border-1-C4C4C4">
+                <form method="post">
+                        <select name="name" id="localname" class="w-36 h-6">
+                          <option selected hidden>{{localselected}}</option>
+                          {{#each contents}}
+                          <option name='adw' value="{{this}}">{{this}}</option>
+                          {{/each}}
+                        </select>
+              </div>
+              <input type='submit' value='선택' onclick='this.form.action ="/weatherlista"'
+                      class="text-sm bg-69B1EB mb-1 flex justify-center items-center font-bold text-white border-radius-5">
+            </div>
+            <!--2-->
+            <div class="flex">
+              <div class="selection-box mb-1 mr-1 text-gray-400 border-1-C4C4C4">
+                <select name="city" class="w-36 h-6">
+                        <option selected hidden>{{cityselected}}</option>
+                        {{#each cityname}}
+                        <option value="{{this}}">{{this}}</option>
+                        {{/each}}
+                      </select>
+              </div>
+               <input type='submit' value='선택' onclick='this.form.action ="/weatherlista"'
+                      class="text-sm bg-69B1EB mb-1 flex justify-center items-center font-bold text-white border-radius-5">
+            </div>
+            <!--3-->
+            <div class="flex">
+              <div class="selection-box text-gray-400 mr-1 border-1-C4C4C4">
+                <select name="village" class="w-36 h-6">
+                        {{#each village}}
+                        <option value="{{this}}">{{this}}</option>
+                        {{/each}}
+                      </select>
+              </div>
+              <input type='submit' value='선택' onclick='this.form.action= "/weather"'
+                      class="text-sm bg-69B1EB mb-1 flex justify-center items-center font-bold text-white border-radius-5">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--section-5-->
+    <!--오염-->
+    <div class="reaction-poll-bar flex-1 flex mr-5">
+      <div class="hei-237 bg-1A8FEC poll-bar wid-39 flex justify-center items-center text-white">
+        <span>
+          1
+        </span>
+      </div>
+      <div class="w-full ml-1">
+        <!--1-->
+        <div class="poll poll-1 hei-72 bg-white mb-1 flex justify-center items-center">
+          <div class="w-full">
+            <div class="flex items-center mx-2 mb-2">
+              <div class="font-bold text-sm c-787878">
+                <span>
+                  공기필터 오염량
+                </span>
+              </div>
+              <div class="flex-1"></div>
+              <div class="font-bold text-sm c-565656">
+                <span>90</span>
+                <span style="margin-left: -5px;">%</span>
+              </div>
+            </div>
+            <div>
+              <div class="graph-back-bar h-2 border-radius-5 mx-2">
+                <div class="poll-percent-bar h-full border-radius-50" style="width: 90%;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--2-->
+        <div class="poll poll-2 hei-78 bg-white px-2 flex justify-start items-center mb-1">
+          <div>
+            <div class="text-sm font-bold c-FF7528">
+              <span>
+                필터를 교체 해주세요
+              </span>
+            </div>
+            <div class="font-14 c-A7A7A7">
+              90%이상 오염시 알람
+            </div>
+          </div>
+          <div class="flex-1 mr-5"></div>
+          <div class="img-box change-alarm-icon">
+            <img src="https://cdn.jsdelivr.net/gh/kimhyeji324/ICT_Resource@master/docs/change-alarm.png" alt="">
+          </div>
+        </div>
+        <!--3-->
+        <div class="poll poll-3 hei-78 bg-white flex justify-center items-center">
+          <div class="w-full mx-2">
+            <div class="font-14 c-787878 font-bold">
+              <span>
+                핸드드라이어 필터 교체 여부
+              </span>
+            </div>
+            <div>
+              <div class="flex justify-end">
+                <div class="poll-btn inline-block">
+                  <div class="flex relative">
+                    <div style="right: 0;">
+                      <span class="h-full flex justify-center items-center">
+                        <i class="text-white fas fa-exclamation"></i>
+                      </span>
+                    </div>
+                    <div class="btn-text-off hei-34 bg-white flex justify-center items-center" style="width: 50px;">off</div>
+                    <div class="btn-text-danger bg-white flex" style="width: 50px;"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--section-6-->
+    <!--사용-->
+    <div class="flex-1 flex">
+      <div class="reaction-Use-bar hei-237 bg-1A8FEC poll-bar wid-39 flex justify-center items-center text-white">
+        <span>
+          1
+        </span>
+      </div>
+      <div class="w-full ml-1">
+        <!--1-->
+        <div class="Use Use-1 hei-72 bg-white mb-1 flex justify-center items-center">
+          <div class="w-full">
+            <div class="flex items-center mx-2 mb-2">
+              <div class="font-bold text-sm c-787878">
+                <span>
+                  핸드타올 사용량
+                </span>
+              </div>
+              <div class="flex-1"></div>
+              <div class="font-bold text-sm c-565656">
+                <span>90</span>
+                <span style="margin-left: -5px;">%</span>
+              </div>
+            </div>
+            <div>
+              <div class="graph-back-bar h-2 border-radius-5 mx-2">
+                <div class="tawer-percent-bar h-full border-radius-50" style="width: 90%;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--2-->
+        <div class="Use Use-2 hei-78 bg-white px-2 flex justify-start items-center mb-1">
+          <div>
+            <div class="text-sm c-FF7528 font-bold">
+              <span>
+                필터를 교체 해주세요
+              </span>
+            </div>
+            <div class="font-14 c-A7A7A7">
+              90%이상 오염시 알람
+            </div>
+          </div>
+          <div class="flex-1 mr-5"></div>
+          <div class="img-box change-alarm-icon">
+            <img src="https://cdn.jsdelivr.net/gh/kimhyeji324/ICT_Resource@master/docs/change-alarm.png" alt="">
+          </div>
+        </div>
+        <!--3-->
+        <div class="Use Use-3 hei-78 bg-white flex justify-center items-center">
+          <div class="w-full flex items-center mx-2">
+            <div class="font-14 font-bold c-787878">
+              <span>
+                타올 교체 여부
+              </span>
+            </div>
+            <div class="flex-1"></div>
+            <div>
+              <div class="flex">
+                <div class="poll-btn inline-block">
+                  <div class="flex relative">
+                    <div style="right: 0;">
+                      <span class="h-full flex justify-center items-center">
+                        <i class="text-white fas fa-exclamation"></i>
+                      </span>
+                    </div>
+                    <div class="btn-text-off hei-34 bg-white flex justify-center items-center" style="width: 50px;">off</div>
+                    <div class="btn-text-danger bg-white flex" style="width: 50px;"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-2 mt-5">
+    <div class="flex flex-1">
+      <!--section-7-->
+      <div class="flex-1 mr-5">
+        <!--1-->
+        <div class="hei-34 bar-gra-1 font-bold flex justify-center items-center text-white">
+          <span>
+            Image
+          </span>
+        </div>
+        <!--2-->
+        <div class="img-preview w-full hei-261 flex justify-center items-center margin-b-10 bg-white">
+          <div class="img-box mirror-img max-w-120 max-h-170">
+            <img src="https://i.postimg.cc/J4RrxMQL/Kakao-Talk-20211015-115032591.jpg" alt="">
+          </div>
+        </div>
+        <!--3-->
+        <div class="img-preview-btn bg-white flex justify-center items-center hei-140">
+          <div>
+            <div class="mb-1 text-sm c-7E889A flex justify-center">
+              <span>
+                이미지를 선택 해주세요.
+              </span>
+            </div>
+            <div>
+              <div class="selection-box text-gray-400 mr-1">
+                <form method="post">
+                        <select class="w-60 text-gray-400" name="name" id="videofilelist" onchange="chageimageSelect()">
+                          <option value="" selected disabled>=== 동영상 url 선택 ===</option>
+                          {{#each imgfile}}
+                          <option name="videofile" value="{{this.name}}">{{this.name}}
+                          </option>
+                          {{/each}}
+                        </select>
+              </div>
+            </div>
+            <div class="mt-1 text-base flex justify-center">
+              <div class="Dle-btn bg-69B1EB text-sm text-white font-bold mr-1 flex justify-center items-center border-radius-5">
+
+                   <input type="submit" value="이미지 URL 삭제" onclick='this.form.action= "/deleteimage"'
+                          class="px-4 py-1">
+                          <!-- 이부분 전에 썻던 css랑 달라서 버튼 색깔 수정이 안되는뎀...용 -->
+              </div>
+              <div class="move-btn bg-69B1EB text-sm text-white font-bold flex justify-center items-center border-radius-5">
+                <span class="px-4 py-1">
+                  세부설정 이동 <!-- 이부분 <a href="">을 써서 홈페이지 이동을 할 수 있게 수정해주세용 -->
+                </span>
+              </div>
+            </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <!--section-8-->
+      <div class="flex-1">
+        <!--1-->
+        <div class="hei-34 bar-gra-2 font-bold flex justify-center items-center text-white">
+          <span>
+            Vidio
+          </span>
+        </div>
+        <!--2-->
+        <div class="img-preview w-full hei-261 flex justify-center items-center margin-b-10 bg-white">
+          <div class="video-box mirror-img">
+            <video class="video-1 p-2" src="test.mp4" controls></video>
+          </div>
+        </div>
+        <!--3-->
+        <div class="img-preview-btn bg-white flex justify-center items-center hei-140">
+          <div>
+            <div class="mb-1 text-sm c-7E889A flex justify-center">
+              <span>
+                영상을 선택 해주세요.
+              </span>
+            </div>
+            <div>
+              <div class="selection-box text-gray-400 mr-1">
+                <form method="post">
+                  <select class="w-60 text-gray-400" name="name" id="videofilelist" onchange="chagevidoeSelect()">
+                    <option value="" selected disabled>=== 동영상 url 선택 ===</option>
+                    {{#each videofile}}
+                    <option name="videofile" value="{{this.name}}">{{this.name}}
+                    </option>
+                    {{/each}}
+                  </select>
+              </div>
+            </div>
+            <div class="mt-1 text-base flex justify-center">
+              <div class="Dle-btn bg-69B1EB text-sm text-white font-bold mr-1 flex justify-center items-center border-radius-5">
+
+                   <input type="submit" value="비디오 URL 삭제" onclick='this.form.action= "/deletevideo"'
+                          class="px-4 py-1">
+                          <!-- 이부분 전에 썻던 css랑 달라서 버튼 색깔 수정이 안되는뎀...용 -->
+              </div>
+              <div class="move-btn bg-69B1EB text-sm text-white font-bold flex justify-center items-center border-radius-5">
+                <span class="px-4 py-1">
+                  세부설정 이동 <!-- 이부분 <a href="">을 써서 홈페이지 이동을 할 수 있게 수정해주세용 -->
+                </span>
+              </div>
+            </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--section-9-->
+    <div class="reaction-access-list flex-1 ml-5">
+      <div class="hei-34 font-bold font-bold text-sm text-white text-sm flex justify-center items-center bar-gra-3">
+        <span class="flex-1 text-center">ID</span>
+        <span class="flex-1 text-center">DATE</span>
+        <span class="flex-1 text-center">HANDDRYER</span>
+        <span class="flex-1 text-center">수전 사용량</span>
+      </div>
+      <!--1-->
+      <div class="access-list hei-411 bg-white text-sm overflow-hidden">
+        <div class="hei-40 flex items-center border-b-1-EBEBEB">
+          <span class="flex-1 text-center c-696969">Lorem</span>
+          <span class="flex-1 text-center c-A7A7A7">2021.09.27 15 : 00 : 21</span>
+          <span class="flex-1 text-center font-bold c-4FA6EB">사용</span>
+          <span class="flex-1 text-center c-696969">20L</span>
+        </div>
+        <!--2-->
+        {{#each accessmanage}}
+        <div class="hei-40 flex items-center border-b-1-EBEBEB">
+          <span class="flex-1 text-center c-696969">{{this.name}}</span>
+          <span class="flex-1 text-center c-A7A7A7">{{this.Date}} {{this.Hour}}</span>
+          <span class="flex-1 text-center font-bold c-4FA6EB">사용</span>
+          <span class="flex-1 text-center c-696969">20L</span>
+        </div>
+        {{/each}}
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+    function chagevidoeSelect() {
+      let selectedvideo = document.getElementById("videofilelist");
+      let showvideo = document.getElementById("showvideo");
+      let selectvideotext = selectedvideo.options[selectedvideo.selectedIndex].text;
+      showvideo.src = "../smartmirror/video/" + selectvideotext
+    }
+
+    function chageimageSelect() {
+      let selectedimage = document.getElementById("imgfilelist");
+      let showimage = document.getElementById("showimage");
+      let selectimage = selectedimage.options[selectedimage.selectedIndex].text;
+      showimage.src = "../smartmirror/image/" + selectimage;
+    }
+
+
+
+    let txtday = document.getElementById('textday');
+    let txthours = document.getElementById('texthours');
+    function clock() {
+      let today = new Date();
+      let month = today.getMonth() + 1;
+      let date = today.getDate();
+      let day = today.getDay();
+      let charday = "";
+      switch (day) {
+        case 0: charday = "일요일";
+          break;
+        case 1: charday = "월요일";
+          break;
+        case 2: charday = "화요일";
+          break;
+        case 3: charday = "수요일";
+          break;
+        case 4: charday = "목요일";
+          break;
+        case 5: charday = "금요일";
+          break;
+        case 6: charday = "토요일";
+          break;
+      }
+      let hours = today.getHours();
+      let minutes = today.getMinutes();
+      let daytext = month + "월 " + date + "일 " + charday;
+
+      txtday.innerText = daytext;
+    }
+    function clockminute() {
+      let today = new Date();
+      let hours = today.getHours();
+      let minutes = today.getMinutes();
+      let daytext = hours + " : " + minutes;
+
+      txthours.innerText = daytext;
+    }
+    setInterval(clock, 1000);
+    setInterval(clockminute, 1000);
+
+    //실시간 값 받기
+
+    var socket = io();
+    socket.on('messageled', (msg) => {
+      var handdryercheck = document.getElementById("handdryercheck");
+      if (msg == "checked") {
+        handdryercheck.style.right = "1px";
+      }
+      else {
+        handdryercheck.style.right = "";
+      }
+    });
+
+    socket.on('messageh1', (msg) => {
+            var txt=document.getElementById('changeh1');
+            txt.style.width = msg + "%"
+        });
+    
+  </script>

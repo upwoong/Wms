@@ -1,0 +1,480 @@
+<html>
+
+<body>
+
+
+  <!--테일윈드 불러오기-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.16/tailwind.min.css">
+  <!--폰트어썸 불러오기-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css">
+  <link rel="stylesheet" href="css/maincss.css">
+  <div class="p-5">
+    <!--section1-->
+    <!--4개 레이아웃 시작-->
+    <div class="section-1 h-full">
+      <div class="section-1-box gap-5 h-full">
+        <!--section1__수전 사용량-->
+        <div class="section-1__element section-1__element-1 w-full flex items-center bg-white">
+          <div class="w-full">
+            <div class="flex w-full">
+              <div class="top-polka-icon img-box pl-10p">
+                <img src="https://cdn.jsdelivr.net/gh/kimhyeji324/ICT_Resource@master/docs/Vector.png" alt="">
+              </div>
+              <div class="font-21 whitespace-nowrap items-center font-bold color-69">
+                <span>수전 사용량</span>
+              </div>
+              <div class="flex-grow"></div>
+              <div class="font-21 font-black color-56 pr-10p">
+                <span>20L</span>
+              </div>
+            </div>
+            <div class="top-graph pr-10p pl-10p pt-4">
+              <div class="back-bar">
+                <div class="back-bar__color-bar back-bar__color-bar-1" style="width: 40%;">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--section1__핸드타올 사용량-->
+        <div class="section-1__element section-1__element-2 w-full flex items-center bg-white">
+          <div class="w-full">
+            <div class="flex w-full">
+              <div class="font-21 whitespace-nowrap items-center font-bold color-69 pl-10p">
+                <span>핸드타올 사용량</span>
+              </div>
+              <div class="flex-grow"></div>
+              <div class="font-21 font-black color-56 pr-10p">
+                <span>20L</span>
+              </div>
+            </div>
+            <div class="top-graph pr-10p pl-10p pt-4">
+              <div class="back-bar">
+                <div class="back-bar__color-bar back-bar__color-bar-2" style="width: 50%;">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--section1__공기필터 오염량-->
+        <div class="section-1__element section-1__element-3 w-full flex items-center bg-white">
+          <div class="w-full">
+            <div class="flex w-full">
+              <div class="font-21 whitespace-nowrap items-center font-bold color-69 pl-10p">
+                <span>공기필터 오염량</span>
+              </div>
+              <div class="flex-grow"></div>
+              <div class="font-21 font-black color-56 pr-10p">
+                <span>20L</span>
+              </div>
+            </div>
+            <div class="top-graph pr-10p pl-10p pt-4">
+              <div class="back-bar">
+                <div class="back-bar__color-bar back-bar__color-bar-3" style="width : 0%" id="changeh1">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--section1__날씨-->
+        <div class="section-1__element section-1__element-4 w-full flex items-center">
+          <div class="w-full">
+            <div class="flex w-full justify-center items-center">
+              <div class="img-box top-cloud-icon">
+                <img src="../weathericon/weather-0.jpg" alt="">
+              </div>
+              <div class="text-3xl font-black flex text-white pl-3">
+                <span class="Weather-Number">
+                  30
+                </span>
+                <div class="temperature-icon"></div>
+              </div>
+              <div class="pl-3 weather-text-box">
+                <div class="Weather-Zone whitespace-nowrap text-white font-semibold text-lg">
+                  <span>
+                    {{selectcityname}}
+                  </span>
+                  <span>
+                    {{selectvillagename}}
+                  </span>
+                </div>
+                <div class="Day-box">
+                  <div
+                    class="font-font-medium Weather-Days whitespace-nowrap text-white text-base font-medium text-indigo-50">
+                    <div>
+                      <span id='timemessage'>
+                        　　　　　　　　　　　
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!--4개 레이아웃 끝-->
+          <!--공통 조상-->
+        </div>
+      </div>
+    </div>
+
+    <!--section2-->
+    <div class="section-2">
+      <div class="h-full">
+        <div class="section-2-box h-full">
+          <!--section2__출입관리 시작-->
+          <div class="section-2__element section-2__element-1 bg-white mr-5 overflow-hidden">
+            <div class="w-full">
+              <div class="section-2__main-text text-2xl font-bold">출입 관리</div>
+              <div class="section-2__body-text overflow-hidden flex items-center text-white font-bold">
+                <div class="whitespace-nowrap">
+                  <span>
+                    ID
+                  </span>
+                </div>
+                <div class="whitespace-nowrap">
+                  <span>
+                    HANDDRYER
+                  </span>
+                </div>
+                <div class="whitespace-nowrap">
+                  <span>
+                    수전 사용량
+                  </span>
+                </div>
+                <div class="whitespace-nowrap">
+                  <span>
+                    DATE
+                  </span>
+                </div>
+              </div>
+              <!--출입관리 회원 목록 1-->
+              <div class="section-2__sub-text section-2__border-line ">
+                <div class="flex items-center h-full w-full overflow-hidden">
+                  <div class="text-id">
+                    <span>
+                      Lorem
+                    </span>
+                  </div>
+                  <div class="text-use font-bold">
+                    <span class="whitespace-nowrap">
+                      사용
+                    </span>
+                  </div>
+                  <div class="text-use-percent flex">
+                    <span>
+                      20
+                    </span>
+                    <span>
+                      L
+                    </span>
+                  </div>
+                  <div class="text-day flex">
+                    <span>
+                      2021.09.27
+                    </span>
+                    <span class="px-1 text-gray-300">
+                      |
+                    </span>
+                    <span class="whitespace-nowrap">
+                      15 : 00 : 21
+                    </span>
+                  </div>
+                </div>
+              </div>
+              {{#each accessmanage}}
+              <div class="section-2__sub-text section-2__border-line ">
+                <div class="flex items-center h-full w-full overflow-hidden">
+                  <div class="text-id">
+                    <span>
+                      {{this.name}}
+                    </span>
+                  </div>
+                  <div class="text-use font-bold">
+                    <span class="whitespace-nowrap">
+                      사용
+                    </span>
+                  </div>
+                  <div class="text-use-percent flex">
+                    <span>
+                      20L
+                    </span>
+                  </div>
+                  <div class="text-day flex">
+                    <span>
+                      {{this.Date}}
+                    </span>
+                    <span class="px-1 text-gray-300">
+                      |
+                    </span>
+                    <span class="whitespace-nowrap">
+                      {{this.Hour}}
+                    </span>
+                  </div>
+                </div>
+              </div>
+              {{/each}}
+
+            </div>
+          </div>
+          <!--section2__출입관리 끝-->
+
+          <!--오염량, 지역선택, 컨텐츠 공통 조상-->
+          <div class="element-box-1 mt-5">
+            <!--핸드 드라이어와 지역선택 시작-->
+            <div class="section-2__element section-2__element-2">
+              <!--핸드 드라이어 시작-->
+              <div class="bg-white flex-1 flex justify-center items-center">
+                <div class="mx-5 overflow-hidden p-3">
+                  <div class="text-lg font-bold whitespace-nowrap">
+                    <span>
+                      핸드 드라이어 필터 교체 여부
+                    </span>
+                  </div>
+                  <div class="flex itmes-center">
+                    <span class="btn-on text-base whitespace-nowrap">
+                      공기필터 오염시 버튼 ON
+                    </span>
+                    <div class="main__btn-text-box inline-block">
+                      <div class="flex relative">
+                        <div class="on-btn" id="handdryercheck">
+                          <span class="h-full flex justify-center items-center">
+                            <i class="fas fa-exclamation"></i>
+                          </span>
+                        </div>
+                        <div class="btn-text-off flex justify-center items-center">off</div>
+                        <div class="btn-text-danger flex"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!--지역선택 시작-->
+              <div class="bg-white flex flex-1 justify-center items-center">
+                <div class="fa-cloud-box mr-5">
+                  <div>
+                    <span class="flex justify-center">
+                      <i class="fas fa-cloud-upload-alt"></i>
+                    </span>
+                  </div>
+                  <div>
+                    <span class="zone-text font-bold text-base">
+                      지역선택
+                    </span>
+                  </div>
+                </div>
+                <!--시 선택/콤보박스-->
+                <div class="mr-5">
+                  <div class="flex">
+                    <div class="text-gray-400 selection-box selection-box-1">
+                      <form method="post">
+                        <select name="name" id="localname" class="w-40 h-7">
+                          <option selected hidden>{{localselected}}</option>
+                          {{#each contents}}
+                          <option name='adw' value="{{this}}">{{this}}</option>
+                          {{/each}}
+                        </select>
+                    </div>
+                    <input type='submit' value='선택' onclick='this.form.action ="/weatherlista"'
+                      class="zone__selection-btn flex justify-center items-center font-bold text-white">
+                  </div>
+                  <!--구 선택/콤보박스-->
+                  <div class="flex">
+                    <div class="text-gray-400 selection-box selection-box-2">
+                      <select name="city" class="w-40 h-7">
+                        <option selected hidden>{{cityselected}}</option>
+                        {{#each cityname}}
+                        <option value="{{this}}">{{this}}</option>
+                        {{/each}}
+                      </select>
+                    </div>
+                    <input type='submit' value='선택' onclick='this.form.action ="/weatherlista"'
+                      class="zone__selection-btn flex justify-center items-center font-bold text-white">
+                  </div>
+                  <!--동 선택/콤보박스-->
+                  <div class="flex">
+                    <div class="text-gray-400 selection-box selection-box-3">
+                      <select name="village" class="w-40 h-7">
+                        {{#each village}}
+                        <option value="{{this}}">{{this}}</option>
+                        {{/each}}
+                      </select>
+                    </div>
+                    <input type='submit' value='선택' onclick='this.form.action= "/weather"'
+                      class="zone__selection-btn flex justify-center items-center font-bold text-white">
+                  </div>
+                </div>
+                </form>
+              </div>
+            </div>
+            <!--핸드 드라이어와 지역선택 끝-->
+
+            <!--컨텐츠 시작-->
+            <div class="section-2__element section-2__element-3 mt-5">
+              <div class="flex-box">
+                <div class="contents-1-box bg-white justify-center my-5 items-center overflow-hidden">
+                  <div class="bordr-r">
+                    <video class="video-1 p-2" src="test.mp4" controls muted autoplay id="showvideo"></video>
+                  </div>
+                  <div>
+                    <div class="contents__video-text-1 text-lg font-bold">
+                      <span class="box-border whitespace-nowrap">
+                        동영상을 선택해 주세요
+                      </span>
+                    </div>
+                    <div class="contents__video-text-2 text-base">
+                      <span class="box-border whitespace-nowrap">
+                        스마트 미러에 송출 됩니다
+                      </span>
+                    </div>
+                    <div class="selection-box selection-box-4 mb-1">
+                      <form method="post">
+                        <select class="w-60 text-gray-400" name="name" id="videofilelist" onchange="chagevidoeSelect()">
+                          <option value="" selected disabled>=== 동영상 url 선택 ===</option>
+                          {{#each videofile}}
+                          <option name="videofile" value="{{this.name}}">{{this.name}}
+                          </option>
+                          {{/each}}
+                        </select>
+                    </div>
+                    <div class="flex contents-btn-box">
+                      <div>
+                        <input type="submit" value="비디오 URL 삭제" onclick='this.form.action= "/deletevideo"'
+                          class="contents-btn contents-btn-1 flex items-center text-sm text-white whitespace-nowrap font-bold">
+                      </div>
+                      <div>
+                        <span
+                          class="contents-btn contents-btn-2 flex items-center text-sm text-white whitespace-nowrap font-bold">
+                          세부설정 이동
+                        </span>
+                      </div>
+                    </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+              <div class="flex-box">
+                <div class="contents-1-box bg-white justify-center my-5 items-center overflow-hidden">
+                  <div class="contents__img-layout">
+                    <img src="https://i.postimg.cc/fbMXZ74X/kelly-sikkema-3-S0-pz-VIT-w-unsplash.jpg" alt=""
+                      id="showimage">
+                  </div>
+                  <div class="flex-box-2">
+                    <div>
+                      <div class="contents__video-text-1 text-lg font-bold">
+                        <span class="box-border whitespace-nowrap">
+                          이미지를 선택해 주세요
+                        </span>
+                      </div>
+
+                      <div class="contents__video-text-2 text-base">
+                        <span class="box-border whitespace-nowrap">
+                          스마트 미러에 송출 됩니다
+                        </span>
+                      </div>
+                      <div class="selection-box selection-box-4 mb-1">
+                        <form method="post">
+                          <select class="w-60 text-gray-400" name="name" id="imgfilelist" onchange="chageimageSelect()">
+                            <option value="" selected disabled>=== 이미지 url 선택 ===</option>
+                            {{#each imgfile}}
+                            <option name="imgfile" value="{{this.name}}">{{this.name}}
+                            </option>
+                            {{/each}}
+                          </select>
+                      </div>
+                      <div class="flex contents-btn-box">
+                        <div>
+                          <input type="submit" value="이미지 URL 삭제" onclick='this.form.action= "/deleteimage"'
+                            class="contents-btn contents-btn-1 flex items-center text-sm text-white whitespace-nowrap font-bold">
+                        </div>
+                        <div>
+                          <span
+                            class="contents-btn contents-btn-2 flex items-center text-sm text-white whitespace-nowrap font-bold">
+                            세부설정 이동
+                          </span>
+                        </div>
+                      </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!--오염량, 지역선택, 컨텐츠 공통 조상-->
+          </div>
+          <!--section2 공통 조상-->
+        </div>
+      </div>
+    </div>
+    <!--최상단 공통 엘리먼트-->
+  </div>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    function chagevidoeSelect() {
+      let selectedvideo = document.getElementById("videofilelist");
+      let showvideo = document.getElementById("showvideo");
+      let selectvideotext = selectedvideo.options[selectedvideo.selectedIndex].text;
+      showvideo.src = "../smartmirror/video/" + selectvideotext
+    }
+
+    function chageimageSelect() {
+      let selectedimage = document.getElementById("imgfilelist");
+      let showimage = document.getElementById("showimage");
+      let selectimage = selectedimage.options[selectedimage.selectedIndex].text;
+      showimage.src = "../smartmirror/image/" + selectimage;
+    }
+
+
+
+    let txt = document.getElementById('timemessage');
+    function clock() {
+      let today = new Date();
+      let month = today.getMonth() + 1;
+      let date = today.getDate();
+      let day = today.getDay();
+      let charday = "";
+      switch (day) {
+        case 0: charday = "일요일";
+          break;
+        case 1: charday = "월요일";
+          break;
+        case 2: charday = "화요일";
+          break;
+        case 3: charday = "수요일";
+          break;
+        case 4: charday = "목요일";
+          break;
+        case 5: charday = "금요일";
+          break;
+        case 6: charday = "토요일";
+          break;
+      }
+      let hours = today.getHours();
+      let minutes = today.getMinutes();
+      let daytext = month + "월 " + date + "일 " + charday + " " + hours + " : " + minutes;
+
+      txt.innerText = daytext;
+    }
+    setInterval(clock, 1000);
+
+    //실시간 값 받기
+
+    var socket = io();
+    socket.on('messageled', (msg) => {
+      var handdryercheck = document.getElementById("handdryercheck");
+      if (msg == "checked") {
+        handdryercheck.style.right = "1px";
+      }
+      else {
+        handdryercheck.style.right = "";
+      }
+    });
+
+    socket.on('messageh1', (msg) => {
+            var txt=document.getElementById('changeh1');
+            txt.style.width = msg + "%"
+        });
+    
+  </script>
+</body>
+
+</html>
