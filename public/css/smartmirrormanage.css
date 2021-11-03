@@ -1,0 +1,130 @@
+/*서울 남산체 폰트 가져오기*/
+@font-face {
+  font-family: "SeoulNamsanM";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_two@1.0/SeoulNamsanM.woff")
+    format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+html > body {
+  margin: 0;
+  font-family: SeoulNamsanM, sans-serif;
+  background-color: #f2f2f2;
+  height: 100vh;
+}
+
+/*라이브러리 시작*/
+.img-box > img {
+  display: block;
+  width: 100%;
+}
+.border-radius-5 {
+ border-radius: 5px;
+}
+.border-r {
+  border: 2px solid red;
+}
+.border-o {
+  border: 2px solid orange;
+}
+.border-g {
+  border: 2px solid green;
+}
+.border-b {
+  border: 2px solid blue;
+}
+.border-i {
+  border: 2px solid indigo;
+}
+.border-1-8D8D8D {
+  border: 1px solid #8d8d8d;
+}
+/*배경*/
+.bg-8D8D8D {
+  background-color: #8d8d8d;
+}
+.bg-1F94F1 {
+  background-color: #1f94f1;
+}
+.bg-69B1EB {
+  background-color: #69b1eb;
+}
+/*텍스트*/
+.c-545454 {
+  color: #545454;
+}
+.c-949494 {
+  color: #949494;
+}
+/*폰트*/
+.font-14 {
+  font-size: 14px;
+}
+.font-32 {
+  font-size: 32px;
+}
+/*여백*/
+.padding-3 {
+  padding: 3px;
+}
+.padding-6 {
+  padding: 6px;
+}
+.padding-t-3 {
+  padding: 3px;
+}
+.padding-b-3 {
+  padding: 3px;
+}
+/*높이*/
+.hei-90 {
+  height: 90px;
+}
+.hei-28 {
+  height: 28px;
+}
+/*최소 높이*/
+.m-h-280 {
+  min-height: 280px;
+}
+
+/*라이브러리 끝*/
+
+/*뒷배경*/
+.all-element-box {
+  box-shadow: -4px 4px 2px 0 #cccccc;
+  border-radius: 5px;
+  padding: 40px 70px;
+}
+/*이미지*/
+.poster-img {
+  max-width: 60%;
+}
+.poster-img > img {
+  min-height: 390px;
+  max-height: 390px;
+  widht: 48%;
+}
+
+.video-back-bg, .img-back-bg {
+  box-shadow: 0 0 0 2px #EDEDED;
+}
+
+.Check-btn {
+  width: 75px;
+  box-shadow: 0px 2px 2px 0 #cccccc;
+  height: 50px;
+}
+
+.file-up-btn {
+  display: inline-block;
+  color: #ffffff;
+  background-color: #178ce9;
+  cursor: pointer;
+  border: 1px solid #178ce9;
+  border-radius: 5px;
+  padding: 13px 22px;
+  box-shadow: -2px 2px 2px 0 #cccccc;
+  font-size: 14px;
+}

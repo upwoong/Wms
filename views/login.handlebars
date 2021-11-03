@@ -1,0 +1,34 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="css/style.css">
+<script src="script.js"></script>
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet" type="text/css">
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+	
+</head> 
+
+<body>
+<div class="wrapper">
+	<form method='post' class="login" 
+    action="/#" >
+	<p class="title"><!--Log in--><img style="width: 40%;" src="img/logo.svg"></p>
+	<input type="text" name = 'name' placeholder="Username" autofocus/>
+	<input type="password" name='password' placeholder="Password" />
+
+	<a href="#">Forgot your password?</a>
+	<div style="line-height: 30px;"> &nbsp;</div>
+
+	<button type='submit' value='logindb' onclick='this.form.action ="/main"'>
+	  <i class="spinner"></i>
+	  <span>Log in</span>
+	</button>
+	</form>
+	
+	<!--<footer>
+	  <a target="blank" href="http://boudra.me/">boudra.me</a>
+	</footer>-->
+</div>
+</body>
+</html>

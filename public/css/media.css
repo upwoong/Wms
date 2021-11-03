@@ -1,0 +1,199 @@
+/*서울 남산체 폰트 가져오기*/
+@font-face {
+  font-family: "SeoulNamsanM";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_two@1.0/SeoulNamsanM.woff")
+    format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+html > body {
+  margin: 0;
+  font-family: SeoulNamsanM, sans-serif;
+  background-color: #f2f2f2;
+  height: 100vh;
+}
+
+/*라이브러리 시작*/
+.pr-10p {
+  padding-right: 10%;
+}
+.pl-10p {
+  padding-left: 10%;
+}
+.border-r {
+  border: 2px solid red;
+}
+.border-o {
+  border: 2px solid orange;
+}
+.border-g {
+  border: 2px solid green;
+}
+.border-b {
+  border: 2px solid blue;
+}
+.border-i {
+  border: 2px solid indigo;
+}
+.border-8D {
+  border: 1px solid #8d8d8d;
+}
+.img-box > img {
+  display: block;
+  width: 100%;
+}
+.text-8D {
+  color: #8d8d8d;
+}
+.max-width-273 {
+  max-width: 273px;
+}
+.min-height-387 {
+  min-height: 387px;
+}
+.border-radius-5 {
+  border-radius: 5px;
+}
+/*라이브러리 끝*/
+.all-element-box {
+  padding: 40px 70px;
+}
+/*뒷배경 시작*/
+.all-element-box {
+  box-shadow: -4px 4px 2px 0 #cccccc;
+  border-radius: 5px;
+}
+/*뒷배경 끝*/
+
+/*제목 시작*/
+.title-deck {
+  width: 5px;
+  height: 34px;
+  background-color: #1f94f1;
+}
+.title-text {
+  padding: 0 5px;
+  color: #545454;
+}
+.body-text {
+  color: #949494;
+}
+/*제목 끝*/
+
+/*영상 이미지 시작 */
+/*공통*/
+.preview-img > img {
+  min-width: 273px;
+  min-height: 386px;
+  box-shadow: -2px 2px 2px 2px #D6D6D6;
+}
+.video-title-text,
+.img-title-text {
+  background-color: #ffffff;
+  border-radius: 5px;
+  background-color: #198eeb;
+  box-shadow: -2px 2px 2px 0 #cccccc;
+}
+.selection-box {
+  padding: 12px 4px;
+  border-radius: 5px;
+  background-color: #ffffff;
+  box-shadow: 0px 2px 2px 0 #cccccc;
+}
+.selection-box > select {
+  padding: 1px;
+  width: 100%;
+}
+.Vi-Icon > img {
+  width: 18px;
+}
+.Vi-Pl-text {
+  color: #696969;
+  font-size: 15px;
+  padding: 16px 0;
+}
+.Del-btn,
+.Pl-btn,
+.Up-btn {
+  height: 50px;
+  margin: 5px 0;
+}
+.Del-btn,
+.Pl-btn,
+.Up-btn > div:first-child {
+  background-color: #ffffff;
+  border-radius: 5px;
+  box-shadow: 0px 2px 2px 0 #cccccc;
+}
+.Check-btn {
+  width: 75px;
+  border-radius: 5px;
+  box-shadow: 0px 2px 2px 0 #cccccc;
+  background-color: #178ce9;
+}
+.fa-chevron-down {
+  font-size: 25px;
+  color: #ffffff;
+}
+/*영상 끝*/
+
+.filebox input[type="file"] {
+  position: absolute;
+  width: 0;
+  height: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+}
+
+.filebox label {
+  display: inline-block;
+  color: #ffffff;
+  background-color: #178ce9;
+  cursor: pointer;
+  border: 1px solid #178ce9;
+  border-radius: 5px;
+  font-size: 14px;
+  white-space: nowrap;
+  padding: 13px 22px;
+  box-shadow: -2px 2px 2px 0 #cccccc;
+}
+
+/* 확인 버튼 시작*/
+.filebox .upload-name {
+  display: inline-block;
+  height: 35px;
+  font-size: 18px;
+  padding: 0 10px;
+  vertical-align: middle;
+  background-color: #f5f5f5;
+  border: 1px solid #ebebeb;
+  border-radius: 5px;
+}
+
+.file-up-btn {
+  display: inline-block;
+  color: #ffffff;
+  background-color: #178ce9;
+  cursor: pointer;
+  border: 1px solid #178ce9;
+  border-radius: 5px;
+  padding: 13px 22px;
+  box-shadow: -2px 2px 2px 0 #cccccc;
+  font-size: 14px;
+}
+
+.flie-del-btn {
+  display: inline-block;
+  color: #ffffff;
+  vertical-align: middle;
+  background-color: #178ce9;
+  cursor: pointer;
+  border: 1px solid #178ce9;
+  border-radius: 5px;
+  padding: 13px 22px;
+  box-shadow: -2px 2px 2px 0 #cccccc;
+  font-size: 14px;
+}
+/* 확인 버튼 끝*/

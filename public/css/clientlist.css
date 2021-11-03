@@ -1,0 +1,110 @@
+/*서울 남산체 폰트 가져오기*/
+@font-face {
+    font-family: "SeoulNamsanM";
+    src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_two@1.0/SeoulNamsanM.woff")
+      format("woff");
+    font-weight: normal;
+    font-style: normal;
+  }
+  
+  html > body {
+    margin: 0;
+    font-family: SeoulNamsanM, sans-serif;
+    background-color: #f2f2f2;
+    height: 100vh;
+  }
+  
+  /*라이브러리 시작*/
+  .border-r {
+    border: 2px solid red;
+  }
+  .border-o {
+    border: 2px solid orange;
+  }
+  .border-g {
+    border: 2px solid green;
+  }
+  .border-b {
+    border: 2px solid blue;
+  }
+  .border-i {
+    border: 2px solid indigo;
+  }
+  .b-1-eaeaea {
+    border: 1px solid #eaeaea;
+  }
+  .br-1-eaeaea {
+    border-right: 1px solid #eaeaea;
+  }
+  .img-box > img {
+    display: block;
+    width: 100%;
+  }
+  .c-69B1EB {
+    color: #69b1eb;
+  }
+  .c-696969 {
+    color: #696969;
+  }
+  .c-8D8D8D {
+    color: #8d8d8d;
+  }
+  .c-A0A0A0 {
+    color: #a0a0a0;
+  }
+  .c-0490ff {
+    color: #0490ff;
+  }
+  .max-wid-160 {
+    max-width: 160px;
+  }
+  .hei-45 {
+    height: 45px;
+  }
+  .padding-14 {
+    padding: 14px;
+  }
+  .font-size-21 {
+    font-size: 21px;
+  }
+  /*라이브러리 끝*/
+  
+  /*배경 레이아웃*/
+  .enter-tap-bar {
+    background: linear-gradient(to right, #008eff, #a4d7ff);
+  }
+  /*탑바*/
+  .enter-icon > img {
+    width: 30px;
+    margin-right: 8px;
+  }
+  /*회원 목록*/
+  .all-element-box {
+    box-shadow: -4px 4px 2px 0 #cccccc;
+    border-radius: 0 0 5px 5px;
+  }
+  .list-text {
+    padding: 15px 0;
+    border-bottom: 1px solid #dedede;
+  }
+  .list-text-1 {
+    max-width: 148px;
+    min-width: 148px;
+  }
+  /*하단 버튼*/
+  .left-icon > img {
+    width: 10px;
+  }
+  .right-icon > img {
+    width: 10px;
+  }
+  .more-icon > img {
+    width: 10px;
+  }
+  .page-text {
+    color: #48aeff;
+  }
+  .page-mave-btn-box {
+    box-shadow: -2px 2px 1px 0 #cccccc;
+  }
+  

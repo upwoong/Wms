@@ -1,0 +1,215 @@
+<!--요소 시작-->
+<div class="Ele-All-Box flex">
+  <!--이미지-->
+  <div class="Img-All-Box h-full flex-1">
+    <div class="hei-7-p flex">
+      <div class="w-24 bg-637484 flex justify-center items-center text-white font-bold text-sm">Image</div>
+      <div class="bg-6F8294 flex-1"></div>
+    </div>
+    <div class="hei-59-p bg-white">
+      <div class="Img-Pre-V hei-61 flex items-center c-047525B ml-10">[ Preview ]</div>
+      <div class="Img-Setn">
+        <div class="img-box Image h-full flex justify-center items-center">
+          <img src="https://i.postimg.cc/JzRZD81j/Kakao-Talk-20211015-115032591.jpg" alt="" id="showimage">
+        </div>
+      </div>
+      <div class="h-10">
+      </div>
+    </div>
+    <div class="hei-1-p">-</div>
+    <div class="hei-33-p bg-white c-047525B">
+      <div class="Img-Sel-Box flex items-center">
+        <div class="w-full">
+          <div class="ml-8 text-xs font-bold">Select</div>
+          <div class="flex">
+            <div class="flex flex-1">
+              <div class="text-sm c-8F8F8F ml-9 mr-1 whitespace-nowrap">
+                <span>추가된 파일 : </span>
+              </div>
+              <form method="post">
+                <div class="flex flex-1 mr-2">
+                  <div class="Img-Url-Box w-full text-sm c-8F8F8F border-1-C4C4C4">
+                    <select class="w-full h-5 text-xs cursor-pointer" name="name" id="imgfilelist" onchange="changeimageSelect()">
+                      <option value="none" selected disabled>--</option>
+                      {{#each imgfile}}
+                        <option name="videofile" value="{{this.name}}">{{this.name}}</option>
+                      {{/each}}
+                    </select>
+                  </div>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="Img-Btn-Box flex">
+        <div class="flex-1">
+          <div class="Img-Del-Btn-Box flex items-center ml-8">
+            <div>
+              <div class="text-xs font-bold">
+                <span>Delete Button</span>
+              </div>
+              <div class="flex items-center ml-5">
+                <div class="text-sm c-8F8F8F">
+                  <span>추가된 URL (파일) 삭제</span>
+                </div>
+                <div>
+                  <input class="Flie-Del-Btn bg-3AAFE2 flex justify-center items-center text-white text-xs ml-2 cursor-pointer border-radius-50" type="submit" value="확인" onclick='this.form.action= "/deleteimage"'>
+                </div>
+              </div>
+            </div>
+          </div>
+          </form>
+          <div class="Img-Add-Btn-Box flex items-center ml-8">
+            <div>
+
+              <div class="text-xs font-bold">
+                <span>Add Button</span>
+              </div>
+              <div class="flex items-center ml-5">
+                <div class="text-sm c-8F8F8F">
+                  <span>상단 박스에 (파일) 추가</span>
+                </div>
+                <div>
+                  <form class="flex itmes-center" action="/processbookingimage" method="post" enctype="multipart/form-data">
+                    <label class="Flie-Add-Btn bg-3AAFE2 flex justify-center items-center text-white text-xs ml-2 cursor-pointer border-radius-50" for="file">add</label>
+                    <input type="file" id="file" name="photo">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="flex-1 flex items-center">
+          <div class="ml-6">
+            <div class="text-xs font-bold">
+              <span>Reservation</span>
+            </div>
+            <div class="text-sm c-8F8F8F ml-2">
+              <span>영상 업로드 날짜를 선택</span>
+            </div>
+            <div class="Img-Cal-Box mt-2">
+
+              <div class="flex items-center">
+              <input class="Img-Cal-Sel-Box h-5 bg-white text-sm c-8F8F8F border border-opacity-0 border-radius-50" type='date' name='chooseimageday' />
+              <input class="Flie-Up-Btn bg-3AAFE2 flex justify-center self-center text-white text-xs ml-2 cursor-pointer border-radius-50" type="submit" value="up" name="submit" />
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--영상-->
+  <div class="Vid-All-Box h-full flex-1">
+    <div class="hei-7-p flex">
+      <div class="w-24 bg-637484 flex justify-center items-center text-white font-bold text-sm">Video</div>
+      <div class="bg-6F8294 flex-1"></div>
+    </div>
+    <div class="hei-59-p bg-white">
+      <div class="Img-Pre-V hei-61 flex items-center c-047525B ml-10">[ Preview ]</div>
+      <div class="Img-Setn">
+        <div class="video-box Image h-full flex justify-center items-center">
+          <video width="448px;" src="test.mp4" controls muted autoplay id="showvideo"></video>
+        </div>
+      </div>
+      <div class="h-10">
+      </div>
+    </div>
+    <div class="hei-1-p">-</div>
+    <div class="hei-33-p bg-white c-047525B">
+      <div class="Img-Sel-Box flex items-center">
+        <div class="w-full">
+          <div class="ml-8 text-xs font-bold">Select</div>
+          <div class="flex">
+            <div class="flex flex-1">
+              <div class="text-sm c-8F8F8F ml-9 mr-1 whitespace-nowrap">
+                <span>추가된 파일 : </span>
+              </div>
+              <form method="post">
+              <div class="flex flex-1 mr-2">
+                <div class="Img-Url-Box w-full text-sm c-8F8F8F border-1-C4C4C4">
+                  <select class="w-full h-5 text-xs cursor-pointer" id="videofilelist" onchange="changevideoSelect()">
+                    <option value="" selected disabled>--</option>
+                    {{#each videofile}}
+                    <option name="videofile" value="{{this.name}}">{{this.name}}</option>
+                    {{/each}}
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="Img-Btn-Box flex">
+        <div class="flex-1">
+          <div class="Img-Del-Btn-Box flex items-center ml-8">
+            <div>
+              <div class="text-xs font-bold">
+                <span>Delete Button</span>
+              </div>
+              <div class="flex items-center ml-5">
+                <div class="text-sm c-8F8F8F">
+                  <span>추가된 URL (파일) 삭제</span>
+                </div>
+                <div>
+                  <input class="Flie-Del-Btn bg-3AAFE2 flex justify-center items-center text-white text-xs ml-2 cursor-pointer border-radius-50" type="submit" value="del" onclick='this.form.action= "/deletevideo"'>
+                </div>
+              </div>
+            </div>
+          </div>
+          </form>
+          <div class="Img-Add-Btn-Box flex items-center ml-8">
+            <div>
+              <div class="text-xs font-bold">
+                <span>Add Button</span>
+              </div>
+              <div class="flex items-center ml-5">
+                <div class="text-sm c-8F8F8F">
+                  <span>상단 박스에 (파일) 추가</span>
+                </div>
+                <div>
+                  <form action="/processbookingvideo" method="post" enctype="multipart/form-data"></form>
+                  <label class="Flie-Add-Btn bg-3AAFE2 flex justify-center items-center text-white text-xs ml-2 cursor-pointer border-radius-50" for="file">add</label>
+                  <input type="file" id="file" name="photo">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="flex-1 flex items-center">
+          <div class="ml-6">
+            <div class="text-xs font-bold">
+              <span>Reservation</span>
+            </div>
+            <div class="text-sm c-8F8F8F ml-2">
+              <span>영상 업로드 날짜를 선택</span>
+            </div>
+            <div class="Img-Cal-Box mt-2">
+<div class="flex">
+              <input class="Img-Cal-Sel-Box h-5 bg-white text-sm c-8F8F8F border border-opacity-0 border-radius-50" type='date' name='chooseimageday' />
+              <input class="Flie-Up-Btn bg-3AAFE2 flex justify-center self-center text-white text-xs ml-2 cursor-pointer border-radius-50" type="submit" value="up" name="submit" />
+  </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function changevideoSelect() {
+    let selectedvideo = document.getElementById("videofilelist");
+    let showvideo = document.getElementById("showvideo");
+    let selectvideotext = selectedvideo.options[selectedvideo.selectedIndex].text;
+    showvideo.src = "../smartmirror/video/" + selectvideotext
+  }
+
+  function changeimageSelect() {
+    let selectedimage = document.getElementById("imgfilelist");
+    let showimage = document.getElementById("showimage");
+    let selectimage = selectedimage.options[selectedimage.selectedIndex].text;
+    showimage.src = "../smartmirror/image/" + selectimage;
+  }
+</script>

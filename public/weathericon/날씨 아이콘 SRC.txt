@@ -1,0 +1,6 @@
+ 날씨 SRC
+https://cdn.jsdelivr.net/gh/kimhyeji324/ICT_Resource@master/docs/weather-0 .png
+https://cdn.jsdelivr.net/gh/kimhyeji324/ICT_Resource@master/docs/weather-1 .png
+https://cdn.jsdelivr.net/gh/kimhyeji324/ICT_Resource@master/docs/weather-2 .png
+https://cdn.jsdelivr.net/gh/kimhyeji324/ICT_Resource@master/docs/weather-3 .png
+https://cdn.jsdelivr.net/gh/kimhyeji324/ICT_Resource@master/docs/weather-4 .png
