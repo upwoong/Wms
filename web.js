@@ -109,14 +109,16 @@ var videoProjection = {
     __v: false,
     _id: false,
     locations: false
-};
+}
 
 var imgProjection = {
     __v: false,
     _id: false,
-};
-app.use('/smartmirror', static(path.join(__dirname, 'smartmirror')));
-app.set('views', __dirname + '/views');
+}
+app.use('/smartmirror', static(path.join(__dirname, 'smartmirror')))
+app.set('views', __dirname + '/views')
+app.use(express.static(__dirname + '/public'))
+app.use(express.static(__dirname + '/api'))
 let arraywater = []
 const endpoint = 'http://localhost:8001/graphql/waterinput'
 const schema = Graphql.buildSchema(`
@@ -187,7 +189,7 @@ app.use('/graphql', GraphqlHttp({
 }))
 
 // 라우터 사용하여 라우팅 함수 등록
-var router = express.Router();
+var router = express.Router()
 
 
 var storagevideo = multer.diskStorage({
@@ -195,12 +197,12 @@ var storagevideo = multer.diskStorage({
         callback(null, 'smartmirror/video')
     },
     filename: function (req, file, callback) {
-        var extension = path.extname(file.originalname);
-        var basename = path.basename(file.originalname, extension);
+        var extension = path.extname(file.originalname)
+        var basename = path.basename(file.originalname, extension)
         basename = basename.replace(/(\s*)/g, "")
-        callback(null, basename + Date.now() + extension);
+        callback(null, basename + Date.now() + extension)
     }
-});
+})
 
 
 var upload = multer({
@@ -213,26 +215,26 @@ var upload = multer({
 //기본 비디오 파일 저장
 router.route('/processvideo').post(upload.array('photo', 1), function (req, res) {
     try {
-        var files = req.files;
+        var files = req.files
 
         version++
 
         if (files.length > 0) {
-            console.dir(files[0]);
+            console.dir(files[0])
 
             // 현재의 파일 정보를 저장할 변수 선언
             var originalname = '',
                 filename = '',
                 mimetype = '',
-                size = 0;
+                size = 0
 
             if (Array.isArray(files)) {   // 배열에 들어가 있는 경우 (설정에서 1개의 파일도 배열에 넣게 했음)
 
                 for (var i = 0; i < files.length; i++) {
-                    originalname = files[i].originalname;
-                    filename = files[i].filename;
-                    mimetype = files[i].mimetype;
-                    size = files[i].size;
+                    originalname = files[i].originalname
+                    filename = files[i].filename
+                    mimetype = files[i].mimetype
+                    size = files[i].size
                 }
             }
 
@@ -248,20 +250,20 @@ router.route('/processvideo').post(upload.array('photo', 1), function (req, res)
                 }
                 return
             })
-            res.end();
+            res.end()
         } else {
-            console.log('파일이 없습니다');
+            console.log('파일이 없습니다')
         }
     } catch (err) {
-        console.dir(err.stack);
+        console.dir(err.stack)
     }
 });
 
 router.route('/processbookingvideo').post(upload.array('photo', 1), function (req, res) {
     try {
-        var files = req.files;
+        var files = req.files
         var selectday = req.body.chooseimageday
-        const strArr = selectday.split('-');
+        const strArr = selectday.split('-')
         const month = strArr[1]
         const day = strArr[2]
         const currentday = strArr[1] + "-" + strArr[2]
@@ -269,21 +271,21 @@ router.route('/processbookingvideo').post(upload.array('photo', 1), function (re
         version++
 
         if (files.length > 0) {
-            console.dir(files[0]);
+            console.dir(files[0])
 
             // 현재의 파일 정보를 저장할 변수 선언
             var originalname = '',
                 filename = '',
                 mimetype = '',
-                size = 0;
+                size = 0
 
             if (Array.isArray(files)) {   // 배열에 들어가 있는 경우 (설정에서 1개의 파일도 배열에 넣게 했음)
 
                 for (var i = 0; i < files.length; i++) {
-                    originalname = files[i].originalname;
-                    filename = files[i].filename;
-                    mimetype = files[i].mimetype;
-                    size = files[i].size;
+                    originalname = files[i].originalname
+                    filename = files[i].filename
+                    mimetype = files[i].mimetype
+                    size = files[i].size
                 }
             }
 
@@ -299,14 +301,14 @@ router.route('/processbookingvideo').post(upload.array('photo', 1), function (re
                 }
                 return
             })
-            res.end();
+            res.end()
         } else {
-            console.log('파일이 없습니다');
+            console.log('파일이 없습니다')
         }
     } catch (err) {
-        console.dir(err.stack);
+        console.dir(err.stack)
     }
-});
+})
 
 //이미지파일
 
@@ -315,12 +317,12 @@ var storageimg = multer.diskStorage({
         callback(null, 'smartmirror/image')
     },
     filename: function (req, file, callback) {
-        var extension = path.extname(file.originalname);
-        var basename = path.basename(file.originalname, extension);
+        var extension = path.extname(file.originalname)
+        var basename = path.basename(file.originalname, extension)
         basename = basename.replace(/(\s*)/g, "")
-        callback(null, basename + Date.now() + extension);
+        callback(null, basename + Date.now() + extension)
     }
-});
+})
 
 var uploadimg = multer({
     storage: storageimg, // storage 객체
@@ -328,32 +330,32 @@ var uploadimg = multer({
         files: 10, // 한번에 업로드할 수 있는 파일 개수
         fileSize: 1024 * 1024 * 1024
     }
-});
+})
 
 //기본 이미지 파일 저장
 router.route('/processimage').post(uploadimg.array('photo', 1), function (req, res) {
     try {
-        var files = req.files;
+        var files = req.files
 
         version++
 
         if (files.length > 0) {
-            console.dir(files[0]);
+            console.dir(files[0])
 
             // 현재의 파일 정보를 저장할 변수 선언
             var originalname = '',
                 filename = '',
                 mimetype = '',
-                size = 0;
+                size = 0
 
             if (Array.isArray(files)) {   // 배열에 들어가 있는 경우 (설정에서 1개의 파일도 배열에 넣게 했음)
 
 
                 for (var i = 0; i < files.length; i++) {
-                    originalname = files[i].originalname;
-                    filename = files[i].filename;
-                    mimetype = files[i].mimetype;
-                    size = files[i].size;
+                    originalname = files[i].originalname
+                    filename = files[i].filename
+                    mimetype = files[i].mimetype
+                    size = files[i].size
                 }
             }
 
@@ -373,21 +375,21 @@ router.route('/processimage').post(uploadimg.array('photo', 1), function (req, r
             })
             Imgfile.find({}, null, { sort: '-name' }, function (err, docs) { })
         } else {
-            console.log('파일이 없습니다');
+            console.log('파일이 없습니다')
         }   
     } catch (err) {
-        console.dir(err.stack);
+        console.dir(err.stack)
     }
 
-});
+})
 
 
 //예약 이미지 파일 저장
 router.route('/processbookingimage').post(uploadimg.array('photo', 1), function (req, res) {
     try {
-        var files = req.files;
+        var files = req.files
         var selectday = req.body.chooseimageday
-        const strArr = selectday.split('-');
+        const strArr = selectday.split('-')
         const month = strArr[1]
         const day = strArr[2]
         const currentday = strArr[1] + "-" + strArr[2]
@@ -395,22 +397,22 @@ router.route('/processbookingimage').post(uploadimg.array('photo', 1), function 
         version++
 
         if (files.length > 0) {
-            console.dir(files[0]);
+            console.dir(files[0])
 
             // 현재의 파일 정보를 저장할 변수 선언
             var originalname = '',
                 filename = '',
                 mimetype = '',
-                size = 0;
+                size = 0
 
             if (Array.isArray(files)) {   // 배열에 들어가 있는 경우 (설정에서 1개의 파일도 배열에 넣게 했음)
 
 
                 for (var i = 0; i < files.length; i++) {
-                    originalname = files[i].originalname;
-                    filename = files[i].filename;
-                    mimetype = files[i].mimetype;
-                    size = files[i].size;
+                    originalname = files[i].originalname
+                    filename = files[i].filename
+                    mimetype = files[i].mimetype
+                    size = files[i].size
                 }
             }
 
@@ -429,14 +431,14 @@ router.route('/processbookingimage').post(uploadimg.array('photo', 1), function 
                 return
             })
             Imgfile.find({}, null, { sort: '-name' }, function (err, docs) { })
-            res.end();
+            res.end()
         } else {
-            console.log('파일이 없습니다');
+            console.log('파일이 없습니다')
         }
     } catch (err) {
-        console.dir(err.stack);
+        console.dir(err.stack)
     }
-});
+})
 
 
 //매일 오전6시에 예약한 날짜가 되면 스마트미러에 예약한 이미지포스터로 교체
@@ -535,8 +537,8 @@ var j = schedule.scheduleJob("* * 6 * * *", function () {
     })
 
     version++
-    console.log("매분 5초마다 등장");
-});
+    console.log("매분 5초마다 등장")
+})
 
 
 app.get('/dkatk', function (req, res) {
@@ -549,9 +551,256 @@ app.get('/dkatk', function (req, res) {
     }).sort({ Date: 1 })
 })
 //fs.unlink(`smartmirror/image/${name}`, function () { })
-app.use('/', router);
+app.use('/', router)
 
 
+
+//기상청api의 초기 x와 y값 불러오기
+let weathername = new Array()
+let weatherdata = new Array()
+let currentlocationX
+let currentlocationY
+Weather.find({}, imgProjection, function (err, data) {
+    locationdata = data[0].name
+    for (let index = 2; index < 3775; index++) {
+        if (locationdata == firstSheet["B" + index].v) {
+            currentlocationX = firstSheet["F" + index].v
+            currentlocationY = firstSheet["G" + index].v
+        }
+    }
+})
+
+//실시간 날씨 상태와 온도 불러오기
+const timeout = setInterval(() => {
+    moment.tz.setDefault("Asia/Seoul")
+    const date = moment().format('YYYYMMDD')
+    var nowhourtime = moment().format('HH' + "00")
+    if (moment().format('mm') < 30) {
+        nowhourtime = nowhourtime - 100
+    }
+    if (nowhourtime < 1000)
+    {
+        nowhourtime = "0" + nowhourtime
+    }
+    const hourtime = nowhourtime.toString()
+    let locationdata
+
+    Weather.find({}, imgProjection, function (err, data) {
+        locationdata = data[0].name
+        for (let index = 2; index < 3775; index++) {
+            if (locationdata == firstSheet["B" + index].v) {
+                currentlocationX = firstSheet["F" + index].v
+                currentlocationY = firstSheet["G" + index].v
+            }
+        }
+    })
+    var url = 'http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtNcst';
+    var queryParams = '?' + encodeURIComponent('ServiceKey') + '=VHqmEJqAw45745GV0%2BkA3l6TePYLRpgPhuEYJMsNv69w%2F6NaV98Z6fOUZruSuV7xvSyOfSDEa941PCus5fUjzg%3D%3D'; /* Service Key*/
+    queryParams += '&' + encodeURIComponent('pageNo') + '=' + encodeURIComponent('1') /* */
+    queryParams += '&' + encodeURIComponent('numOfRows') + '=' + encodeURIComponent('20') /* */
+    queryParams += '&' + encodeURIComponent('dataType') + '=' + encodeURIComponent('XML') /* */
+    queryParams += '&' + encodeURIComponent('base_date') + '=' + encodeURIComponent(date) /* */
+    queryParams += '&' + encodeURIComponent('base_time') + '=' + encodeURIComponent(hourtime); /* */
+    queryParams += '&' + encodeURIComponent('nx') + '=' + encodeURIComponent(currentlocationX) /* */
+    queryParams += '&' + encodeURIComponent('ny') + '=' + encodeURIComponent(currentlocationY) /* */
+
+    request({ url: url + queryParams, method: 'GET' }, function (error, response, body) {
+        if (weatherdata != "") {
+            weatherdata = new Array()
+            weathername = new Array()
+        }
+        $ = cheerio.load(body);
+        $('item').each(function (idx) {
+            const time = $(this).find('baseTime').text();
+            const weather = $(this).find('category').text();
+            const wea_val = $(this).find('obsrValue').text();
+            // 출력
+            if (weather == 'PTY' || weather == 'T1H') {
+                weathername.push(weather)
+                weatherdata.push(wea_val)
+            }
+        });
+    });
+    /*
+    없음(0), 비(1), 비/눈(2), 눈(3), 소나기(4), 빗방울(5), 빗방울/눈날림(6), 눈날림(7)
+    */
+
+    let currentimg
+    switch (weatherdata[0]) {
+        case '0': currentimg = "weathericon/weather-0.jpg"
+            break
+        case '1': currentimg = "weathericon/weather-4.jpg"
+            break
+        case '2':
+        case '6': currentimg = "weathericon/weather-2.jpg"
+            break
+        case '3':
+        case '7': currentimg = "weathericon/weather-3.jpg"
+            break
+        case '4':
+        case '5': currentimg = "weathericon/weather-1.jpg"
+            break
+    }
+    io.emit("currentimage", currentimg)
+    io.emit("currentT1H", weatherdata[1])
+}, 10000)
+
+//기상청 엑셀정보 불러오기
+const excelFile = xlsx.readFile("기상청41_단기예보 조회서비스_오픈API활용가이드_격자_위경도(20210401).xlsx")
+const firstSheet = excelFile.Sheets[excelFile.SheetNames[0]]
+
+var localselect
+var cityselect
+var villageselect
+var locationcodename
+var cityname = new Array()
+var villagename = new Array();
+codename = new Array();
+
+//기상청 구역코드 불러오기
+/*
+app.get('/weatherlista', function (req, res) {
+    res.render('weatherlista', { contents: localname, cityname: cityname, village: villagename, layout: null })
+})
+*/
+//구역 선택 post
+app.post('/weatherlista', function (req, res) {
+    const name = req.body.name
+    const city = req.body.city
+    const village = req.body.village
+    localselect = name
+    cityselect = city
+    villageselect = village
+    // localselect의 값과 중복된 값을 cityname에 추가
+    cityname = new Array()
+    for (var index = 2; index <= 3775; index++) {
+        if (localselect != firstSheet["C" + index].v) continue
+        var data = firstSheet["D" + index].v
+        if (data == "") continue;
+        var state = true;
+        // 중복검사
+        for (var i = 0; i < cityname.length; i++) {
+            if (cityname[i] == data) {
+                state = false;
+                break
+            }
+        }
+        // 새 데이터 추가
+        if (state) cityname.push(data)
+    }
+    villagename = new Array();
+    for (var index = 2; index <= 3775; index++) {
+        if (localselect == firstSheet["C" + index].v && cityselect == firstSheet["D" + index].v) {
+            var data = firstSheet["E" + index].v
+            if (data != "") villagename.push(data)
+        }
+    }
+    return Water.find(function (err, water) {
+        Videofilesave.find(function (err, videofile) {
+            Imgfile.find(function (err, imgfile) {
+                res.render('sub', {
+                    accessmanage: water, videofile: videofile, imgfile: imgfile, water: usewater, remainwater: remainwater,
+                    contents: localname, cityname: cityname, village: villagename, localselected: localselect, cityselected: cityselect,
+                    selectcityname: selectcityname, selectvillagename: selectvillagename
+                })
+            })
+        })
+    }).sort({ Date: -1 }).sort({ Hour: -1 }).limit(7)
+})
+let selectcityname;
+let selectvillagename;
+
+//최종 구역 선택 post
+app.post('/weather', function (req, res) {
+    const name = req.body.name
+    const city = req.body.city
+    const village = req.body.village
+    localselect = name
+    cityselect = city
+    villageselect = village
+    const deleteweather = Weather.find({ '__v': 0 })
+    deleteweather.deleteOne(function (err) {
+    })
+
+    for (var index = 2; index <= 3775; index++) {
+        if (localselect == firstSheet["C" + index].v && cityselect == firstSheet["D" + index].v && villageselect == firstSheet["E" + index].v) {
+            var data = firstSheet["B" + index].v
+            selectcityname = firstSheet["D" + index].v
+            selectvillagename = firstSheet["E" + index].v
+            currentlocationX = firstSheet["F" + index].v
+            currentlocationY = firstSheet["G" + index].v
+            if (data != "") {
+                codename.push(data)
+                locationcodename = codename[0]
+                codename = new Array();
+
+                const weather = new Weather({ 'name': data })
+                weather.save(function (err, slience) {
+                    if (err) {
+                        console.log(err)
+                        res.status(500).send('update error')
+                        return
+                    }
+                    return console.log("complete")
+                })
+            }
+        }
+    }
+    version++
+    Water.find(function (err, water) {
+        Videofilesave.find(function (err, videofile) {
+            Imgfile.find(function (err, imgfile) {
+                res.render('sub', {
+                    accessmanage: water, videofile: videofile, imgfile: imgfile, water: usewater, remainwater: remainwater,
+                    contents: localname, cityname: cityname, village: villagename, localselected: localselect, cityselected: cityselect,
+                    selectcityname: selectcityname, selectvillagename: selectvillagename
+                })
+            })
+        })
+    }).sort({ Date: -1 }).sort({ Hour: -1 }).limit(7)
+})
+
+
+
+var index = 2
+var localname = new Array()
+// localname 중복검사 및 추가
+for (var index = 2; index <= 3775; index++) {
+    var data = firstSheet["C" + index].v
+    var state = true;
+    // 중복검사
+    for (var i = 0; i < localname.length; i++) {
+        if (localname[i] == data) {
+            state = false;
+            break
+        }
+    }
+    // 새 데이터 추가
+    if (state) localname.push(data)
+}
+cityname = new Array()
+// localselect의 값과 중복된 값을 cityname에 추가
+for (var index = 2; index <= 3775; index++) {
+    if (localselect != firstSheet["C" + index].v) continue
+    var data = firstSheet["D" + index].v
+    var state = true;
+    // 중복검사
+    for (var i = 0; i < cityname.length; i++) {
+        if (cityname[i] == data) {
+            state = false;
+            break
+        }
+    }
+    // 새 데이터 추가
+    if (state) cityname.push(data)
+}
+villagename = new Array();
+for (var index = 2; index <= 3775; index++) {
+    if (localselect == firstSheet["C" + index].v && cityselect == firstSheet["D" + index].v) {
+        var data = firstSheet["E" + index].v
+        if (data != "") villagename.push(data)
+    }
+}
 
 
 
@@ -574,7 +823,7 @@ app.post('/insert', function (req, res, next) {
 //로그인
 app.post('/main', (req, res) => {
     User.findOne({ name: req.body.name, password: req.body.password }, (err, user) => {
-        if (err) return res.status(500).send({ message: '에러!' });
+        if (err) return res.status(500).send({ message: '에러!' })
         else if (user) {
             Water.find(function (err, water) {
                 Videofilesave.find(function (err, videofile) {
@@ -594,9 +843,9 @@ app.post('/main', (req, res) => {
                 })
             }).sort({ Date: -1 }).sort({ Hour: -1 }).limit(7)
         }
-        else return res.status(404).send({ message: '유저 없음!' });
-    });
-});
+        else return res.status(404).send({ message: '유저 없음!' })
+    })
+})
 
 //관리자 아이디 수정 페이지
 app.get('/modifyid', function (req, res) {
@@ -740,7 +989,6 @@ app.engine('handlebars', expressHandlebars({
     },
 }))
 app.set('view engine', 'handlebars')
-app.use(express.static(__dirname + '/public'))
 
 //메인페이지
 app.get('/main', function (req, res) {
@@ -780,7 +1028,20 @@ app.get('/login', function (req, res) {
 app.get('/', function (req, res) {
     res.render('login', { layout: null })
 })
+let testweather = ""
+//행정구역코드 초기 데이터 설정
+Weather.find({}, imgProjection, function (err, locationcode) {
+    testweather = locationcode[0]
+    testweather = testweather.toString().replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\//name\ ]/g, "")
 
+    for (let index = 2; index < 3775; index++) {
+        if (testweather == firstSheet["B" + index].v) {
+            selectcityname = firstSheet["D" + index].v
+            selectvillagename = firstSheet["E" + index].v
+
+        }
+    }
+})
 app.get('/smartmirror/item', function (req, res) {
     res.render('item', { layout: null })
 })
