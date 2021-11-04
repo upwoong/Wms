@@ -116,7 +116,7 @@ var imgProjection = {
     _id: false,
 };
 app.use('/smartmirror', static(path.join(__dirname, 'smartmirror')));
-
+app.set('views', __dirname + '/views');
 let arraywater = []
 const endpoint = 'http://localhost:8001/graphql/waterinput'
 const schema = Graphql.buildSchema(`
@@ -997,7 +997,7 @@ app.get('/clientlist/:page', function (req, res) {
 })
 
 app.get("/cafe24test",function(req,res){
-    res.render('../bookmedia')
+    res.render('bookmedia')
 })
 
 //핸드드라이어 공기필터 오염량 관리 페이지
