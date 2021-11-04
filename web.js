@@ -997,8 +997,7 @@ app.get('/clientlist/:page', function (req, res) {
 })
 
 app.get("/cafe24test",function(req,res){
-    res.write("<script>alert('success')</script>");
-res.write("<script>window.location=\"../view/notices\"</script>");
+    res.render('../bookmedia')
 })
 
 //핸드드라이어 공기필터 오염량 관리 페이지
