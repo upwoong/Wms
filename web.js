@@ -194,7 +194,7 @@ var router = express.Router()
 
 var storagevideo = multer.diskStorage({
     destination: function (req, file, callback) {
-        callback(null, 'smartmirror/video')
+        callback(null, '/home/hosting_users/creativethon/apps/creativethon_wmsadmina/smartmirror/video')
     },
     filename: function (req, file, callback) {
         var extension = path.extname(file.originalname)
@@ -314,7 +314,7 @@ router.route('/processbookingvideo').post(upload.array('photo', 1), function (re
 
 var storageimg = multer.diskStorage({
     destination: function (req, file, callback) {
-        callback(null, 'smartmirror/image')
+        callback(null, '/home/hosting_users/creativethon/apps/creativethon_wmsadmina/smartmirror/image')
     },
     filename: function (req, file, callback) {
         var extension = path.extname(file.originalname)
