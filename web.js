@@ -575,7 +575,9 @@ const timeout = setInterval(() => {
     if (moment().format('mm') < 30) {
         nowhourtime = nowhourtime - 100
     }
-    else {
+    if (nowhourtime < 1000)
+    {
+        nowhourtime = "0" + nowhourtime
     }
     const hourtime = nowhourtime.toString()
     let locationdata
@@ -641,7 +643,7 @@ const timeout = setInterval(() => {
 }, 10000)
 
 //기상청 엑셀정보 불러오기
-const excelFile = xlsx.readFile("기상청41_단기예보 조회서비스_오픈API활용가이드_격자_위경도(20210401).xlsx")
+const excelFile = xlsx.readFile("api/기상청41_단기예보 조회서비스_오픈API활용가이드_격자_위경도(20210401).xlsx")
 const firstSheet = excelFile.Sheets[excelFile.SheetNames[0]]
 
 var localselect
@@ -690,7 +692,17 @@ app.post('/weatherlista', function (req, res) {
             if (data != "") villagename.push(data)
         }
     }
-    return res.redirect('main')
+    return Water.find(function (err, water) {
+        Videofilesave.find(function (err, videofile) {
+            Imgfile.find(function (err, imgfile) {
+                res.render('sub', {
+                    accessmanage: water, videofile: videofile, imgfile: imgfile, water: usewater, remainwater: remainwater,
+                    contents: localname, cityname: cityname, village: villagename, localselected: localselect, cityselected: cityselect,
+                    selectcityname: selectcityname, selectvillagename: selectvillagename
+                })
+            })
+        })
+    }).sort({ Date: -1 }).sort({ Hour: -1 }).limit(7)
 })
 let selectcityname;
 let selectvillagename;
@@ -732,7 +744,17 @@ app.post('/weather', function (req, res) {
         }
     }
     version++
-    res.redirect('main')
+    Water.find(function (err, water) {
+        Videofilesave.find(function (err, videofile) {
+            Imgfile.find(function (err, imgfile) {
+                res.render('sub', {
+                    accessmanage: water, videofile: videofile, imgfile: imgfile, water: usewater, remainwater: remainwater,
+                    contents: localname, cityname: cityname, village: villagename, localselected: localselect, cityselected: cityselect,
+                    selectcityname: selectcityname, selectvillagename: selectvillagename
+                })
+            })
+        })
+    }).sort({ Date: -1 }).sort({ Hour: -1 }).limit(7)
 })
 
 
