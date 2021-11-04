@@ -781,20 +781,6 @@ app.get('/', function (req, res) {
     res.render('login', { layout: null })
 })
 
-let testweather = ""
-//행정구역코드 초기 데이터 설정
-Weather.find({}, imgProjection, function (err, locationcode) {
-    testweather = locationcode[0]
-    testweather = testweather.toString().replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\//name\ ]/g, "")
-
-    for (let index = 2; index < 3775; index++) {
-        if (testweather == firstSheet["B" + index].v) {
-            selectcityname = firstSheet["D" + index].v
-            selectvillagename = firstSheet["E" + index].v
-
-        }
-    }
-})
 app.get('/smartmirror/item', function (req, res) {
     res.render('item', { layout: null })
 })
