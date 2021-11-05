@@ -120,7 +120,7 @@ app.set('views', __dirname + '/views')
 app.use(express.static(__dirname + '/public'))
 app.use(express.static(__dirname + '/api'))
 let arraywater = []
-const endpoint = 'http://localhost:8001/graphql/waterinput'
+const endpoint = 'http://wmsadmina.cafe24app.com//graphql/waterinput'
 const schema = Graphql.buildSchema(`
 type usingwater{
     name : String,
