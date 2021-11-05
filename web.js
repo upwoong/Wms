@@ -561,14 +561,7 @@ let weatherdata = new Array()
 let currentlocationX
 let currentlocationY
 Weather.find({}, imgProjection, function (err, data) {
-    if(locationcode)
-    {
-        testweather = locationcode[0]
-    }
-    else
-    {
-        testweather = 1111053000
-    }
+    locationdata = data[0].name
     for (let index = 2; index < 3775; index++) {
         if (locationdata == firstSheet["B" + index].v) {
             currentlocationX = firstSheet["F" + index].v
@@ -1038,7 +1031,14 @@ app.get('/', function (req, res) {
 let testweather = ""
 //행정구역코드 초기 데이터 설정
 Weather.find({}, imgProjection, function (err, locationcode) {
-    testweather = locationcode[0]
+    if(locationcode)
+    {
+        testweather = locationcode[0]
+    }
+    else
+    {
+        testweather = 1111053000
+    }
     testweather = testweather.toString().replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\//name\ ]/g, "")
 
     for (let index = 2; index < 3775; index++) {
