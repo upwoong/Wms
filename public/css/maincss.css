@@ -6,42 +6,26 @@
   font-weight: normal;
   font-style: normal;
 }
-
 html > body {
   margin: 0;
   font-family: SeoulNamsanM, sans-serif;
-  height: 100vh;
-  background-color: #d2e8f7;
+  background-color: #e5ebf2;
 }
-
-/*라이브러리 시작*/
-.img-box > img {
-  display: block;
-  width: 100%;
+/* 스크롤바 설정*/
+html::-webkit-scrollbar {
+  width: 8px;
 }
-.bar-gra-1 {
-  background: linear-gradient(to right, #bee2ff, #83c8ff);
-}
-.bar-gra-2 {
-  background: linear-gradient(to right, #83c8ff, #3da9ff);
-}
-.bar-gra-3 {
-  background: linear-gradient(to right, #3da9ff, #0590ff);
-}
-
-.border-radius-5 {
-  border-radius: 5px;
-}
-.border-radius-10 {
+/* 스크롤바 막대 설정*/
+html::-webkit-scrollbar-thumb {
+  height: 17%;
+  background-color: #4f6884;
   border-radius: 10px;
 }
-.border-radius-15 {
-  border-radius: 15px;
+/* 스크롤바 뒷 배경 설정*/
+html::-webkit-scrollbar-track {
+  background-color: #e5ebf2;
 }
-.border-radius-50 {
-  border-radius: 50px;
-}
-
+/*미디어 Top-S*/
 .border-r {
   border: 2px solid red;
 }
@@ -57,381 +41,267 @@ html > body {
 .border-i {
   border: 2px solid indigo;
 }
-.border-1-8D8D8D {
-  border: 1px solid #8d8d8d;
-}
-.border-1-C4C4C4 {
-  border: 1px solid #c4c4c4;
-}
-.border-b-1-E0E0E0 {
-  border-bottom: 1px solid #e0e0e0;
-}
-.border-b-1-EBEBEB {
-  border-bottom: 1px solid #ebebeb;
-}
-
-/*배경*/
-.bg-69B1EB {
-  background-color: #69b1eb;
+.img-box > img {
+  display: block;
+  width: 100%;
 }
 .bg-1A8FEC {
-  background-color: #1a8fec;
+  background-color: #4f6884;
 }
-
-/*텍스트*/
-.c-191919 {
-  color: #191919;
+.bg-6F8294 {
+  background-color: #6f8294;
 }
-.c-545454 {
-  color: #545454;
+.bg-637484 {
+  background-color: #637484;
 }
-.c-565656 {
-  color: #545454;
+.margin-t-20 {
+  margin-top: 20px;
 }
-.c-696969 {
-  color: #696969;
+.margin-t-40 {
+  margin-top: 40px;
 }
-.c-7D7D7D {
-  color: #7d7d7d;
+.padding-t-3-p {
+  padding-top: 3%;
 }
-.c-787878 {
-  color: #787878;
+.margin-b-20 {
+  margin-bottom: 20px;
 }
-.c-949494 {
-  color: #949494;
+.margin-b-30 {
+  margin-bottom: 30px;
 }
-.c-BEBEBE {
-  color: #bebebe;
+.padding-l-1-p {
+  padding-left: 1%;
 }
-.c-A7A7A7 {
-  color: #a7a7a7;
+.padding-r-1-p {
+  padding-right: 1%;
 }
-.c-FF4921 {
-  color: #ff4921;
-}
-.c-4FA6EB {
-  color: #4fa6eb;
-}
-.c-FF7528 {
-  color: #ff7528;
-}
-.c-69B1EB {
-  color: #69b1eb;
-}
-.c-FFB287 {
-  color: #ffb287;
-}
-.c-1A8FEC {
-  color: #1a8fec;
-}
-.c-7E889A {
-  color: #7e889a;
-}
-
-/*폰트*/
-.font-12 {
-  font-size: 12px;
-}
-.font-14 {
-  font-size: 14px;
-}
-.font-16 {
-  font-size: 16px;
-}
-.font-21 {
-  font-size: 21px;
-}
-.font-32 {
-  font-size: 32px;
-}
-.font-48 {
-  font-size: 48px;
-}
-
-/*여백*/
-.padding-3 {
-  padding: 3px;
-}
-.padding-6 {
-  padding: 6px;
-}
-.padding-10 {
-  padding: 10px;
-}
-.padding-x-14 {
-  padding: 14px;
-}
-.padding-t-3 {
-  padding: 3px;
-}
-.padding-t-8 {
-  padding-top: 8px;
-}
-.padding-b-3 {
-  padding: 3px;
-}
-.margin-b-10 {
-  margin-bottom: 10px;
-}
-.padding-r-5 {
-  padding-right: 5px;
-}
-
-/*넓이*/
-.wid-20 {
-  width: 20px;
-}
-.wid-39 {
-  width: 39px;
-}
-.wid-59 {
-  width: 59px;
-}
-.wid-92 {
-  width: 92px;
-}
-.wid-160 {
-  width: 160px;
-}
-.wid-643 {
-  width: 643px;
-}
-.wid-40-p {
-  width: 40%;
-}
-.wid-6-p {
-  width: 60%;
-}
-/*최대 넓이*/
-.max-w-120 {
-  max-width: 120px;
-}
-
-/*높이*/
-.hei-9-p {
-  height: 9%;
-}
-.hei-10 {
-  height: 10px;
-}
-.hei-28 {
-  height: 28px;
-}
-.hei-34 {
-  height: 34px;
-}
-.hei-40 {
-  height: 40px;
-}
-.hei-48 {
-  height: 48px;
-}
-.hei-50 {
-  height: 50px;
-}
-.hei-52 {
-  height: 52px;
-}
-.hei-65 {
-  height: 65px;
+.wid-14-5-p {
+  width: 14.5%;
 }
 .hei-70 {
   height: 70px;
 }
-.hei-72 {
-  height: 72px;
+.c-686868 {
+  color: #686868;
 }
-.hei-78 {
-  height: 78px;
+.logo-box {
+  box-shadow: 1px 1px 1px #d4d4d4;
 }
-.hei-84 {
-  height: 84px;
+.title-text {
+  font-size: 0.65rem;
 }
-.hei-90 {
-  height: 90px;
+.list-text > ul > li {
+  font-size: 0.85rem;
 }
-.hei-91 {
-  height: 91px;
-}
-.hei-92 {
-  height: 92px;
-}
-.hei-135 {
-  height: 135px;
-}
-.hei-137 {
-  height: 137px;
-}
-.hei-140 {
-  height: 140px;
-}
-.hei-157 {
-  height: 157px;
-}
-.hei-160 {
-  height: 160px;
-}
-.hei-167 {
-  height: 167px;
-}
-.hei-170 {
-  height: 175px;
-}
-.hei-188 {
-  height: 188px;
-}
-.hei-215 {
-  height: 215px;
-}
-.hei-221 {
-  height: 221px;
-}
-.hei-237 {
-  height: 237px;
-}
-.hei-261 {
-  height: 261px;
-}
-.hei-293 {
-  height: 293px;
-}
-.hei-359 {
-  height: 359px;
-}
-.hei-408 {
-  height: 408px;
-}
-.hei-411 {
-  height: 411px;
-}
-.hei-520 {
-  height: 520px;
+.img-profile-box > img {
+  width: 120px;
+  min-width: 100%;
 }
 
-/*최대 높이*/
-.max-h-28 {
-  max-height: 28px;
+/*요소 시작*/
+.border-radius-50 {
+  border-radius: 50px;
 }
-.max-h-170 {
-  max-height: 170px;
+.border-05-787878 {
+  border: 0.5px solid #787878;
 }
-/*라이브러리 끝*/
-
-/*레이아웃 시작*/
-.all-box {
-  margin: 20px 49px 82px 49px;
+.btn-hover-shadow {
+  box-shadow: -1px 1px 1px #a7a7a7;
 }
-.MapPin-icon > img {
-  width: 20px;
-}
-.weather-icon > img {
-  width: 65px;
-}
-.Temp-icon > img {
-  width: 18px;
-}
-.tem-s-icon > img {
-  width: 7px;
-}
-.Clock-icon > img {
-  width: 20px;
-}
-.winter-Up-icon > img {
-  width: 20px;
-}
-.Vector-icon > img {
+.wid-10 {
   width: 10px;
 }
-.change-alarm-icon > img {
+.wid-80-p {
+  width: 80%;
+}
+.hei-43 {
+  height: 43px;
+}
+.bg-3AAFE2 {
+  background-color: #3aafe2;
+}
+.bg-4F6884 {
+  background-color: #4f6884;
+}
+.bg-6F8294 {
+  background-color: #6f8294;
+}
+.bg-637484 {
+  background-color: #637484;
+}
+.c-8F8F8F {
+  color: #8f8f8f;
+}
+.c-686868 {
+  color: #686868;
+}
+.c-696969 {
+  color: #696969;
+}
+.c-565656 {
+  color: #565656;
+}
+.c-6F8294 {
+  color: #6f8294;
+}
+.c-FD7B32 {
+  color: #fd7b32;
+}
+.c-079E24 {
+  color: #079e24;
+}
+.M-R-1 {
+  margin-right: 1px;
+}
+.M-B-2 {
+  margin-bottom: 2px;
+}
+.M-B--2 {
+  margin-bottom: -2px;
+}
+.M-l--9 {
+  margin-left: -9px;
+}
+.Btn {
+  box-shadow: -1px 1px 1px #a7a7a7;
+}
+.Ele-All-Box {
+  height: calc(100% - 113px);
+  padding: 16px;
+}
+.Weat-Box {
+  height: calc(100% / 13);
+}
+.Ele-Box {
+  height: calc(100% / 2.4);
+}
+.Use-List-Box {
+  height: calc(100% / 2.2);
+}
+.Wea-Ther-Icon > img {
   width: 25px;
 }
-.mirror-img > img {
-  min-height: 170px;
-  box-shadow: -2px 2px 2px 2px #d6d6d6;
+.Map-Pin-White > img {
+  width: 11px;
+}
+.fa-genderless {
+  font-size: 5px;
+}
+.Flie-Add-Btn {
+  padding: 3px 12px;
+  box-shadow: -1px 1px 1px #a7a7a7;
+  transition: color 0.3s;
+  transition: background-color 0.3s;
+  background-color: #3AAFE2;
+}
+.Flie-Add-Btn:hover {
+  background-color: #fd7b32;
+}
+.Graph-Box {
+  height: calc(100% - 70px);
+}
+/* UI Object 가로 */
+.h_graph ul {
+  margin: 0 50px 0 50px;
+  padding: 1px 0 0 0;
+  border-top: 0;
+  border-right: 0;
+  font-size: 11px;
+  list-style: none;
 }
 
-.graph-back-bar {
-  box-shadow: inset 0 0 3px #969696;
-}
-.percent-bar {
-  background: linear-gradient(to right, #4fa6eb, #bfe3ff);
-}
-.poll-percent-bar {
-  background: linear-gradient(to right, #ffb287, #ff7528);
-}
-.tawer-percent-bar {
-  background: linear-gradient(to right, #fff2c2, #ffb726);
+.h_graph li {
+  position: relative;
+  margin: 5px 0;
+  vertical-align: top;
+  white-space: nowrap;
 }
 
+.h_graph .g_term {
+  position: absolute;
+  top: -20%;
+  left: -50px;
+  width: 40px;
+  color: #767676;
+  line-height: 20px;
+  text-align: right;
+}
+
+/* 소제목 색깔 */
+.h_graph .g_bar {
+  display: inline-block;
+  position: relative;
+  height: 10px;
+  border-left: 0;
+  background: #3aafe2;
+  border-radius: 0 20px 20px 0;
+}
+
+/* 막대기 색깔 */
+.h_graph .g_bar span {
+  position: absolute;
+  top: -35%;
+  right: -50px;
+  width: 40px;
+  color: #4f6884;
+  line-height: 20px;
+}
+
+/* //UI Object */
+.Url-Box {
+  height: 140px;
+}
+.Sel-Box {
+  height: calc(100% - 178px);
+}
+.Flie-Del-Btn {
+  padding: 3px 14px;
+  transition: color 0s;
+  transition: background-color 0.3s;
+}
+.Detail-Move-Btn {
+  background-color: #ffffff;
+  transition: background-color 0.3s;
+}
+.Detail-Move-Btn:hover {
+  background-color: #fd7b32;
+  color: #ffffff;
+}
+.Flie-Del-Btn:hover {
+  background-color: #fd7b32;
+}
+.Img-Poster > img {
+  width: 25%;
+  min-height: 100%;
+  padding: 8px 0;
+}
+.Use-List {
+  height: calc(100% - 36px);
+}
+.Use-List-Item-Box {
+  height: calc(100% / 5);
+  border-bottom: 0.5px solid #e7e7e7;
+}
 .btn-text-off {
-  border-radius: 50px 0 0 50px;
-  box-shadow: 2px 2px 2px 2px #cccccc;
+  box-shadow: -1px 1px 1px #cccccc;
   color: #7c7c7c;
 }
 .btn-text-danger {
-  height: 34px;
+  height: 28px;
   background-color: white;
-  border-radius: 0 50px 50px 0;
-  box-shadow: 2px 4px 2px 0 #cccccc;
+  box-shadow: -1px 1px 1px #cccccc;
 }
-.poll-btn > div > div:first-child {
+.Use-Move-Btn {
   position: absolute;
-  background: linear-gradient(to right, #fc8a38, #fc3838);
-  width: 60%;
-  height: 34px;
-  border-radius: 50px;
+  width: 50%;
+  height: 100%;
+  background-color: #3aafe2;
+  color: #ffffff;
+  font-size: 0.875rem;
 }
-.section-1 {
-  display: flex;
+.Graph-Back-Bar {
+  box-shadow: inset 0 0 3px #969696;
 }
-.section-2 {
-  display: flex;
+.Percent-Bar {
+  background-color: #3aafe2;
 }
-/*레이아웃 끝*/
-
-/*반응형 시작*/
-@media (max-width: 1500px) {
-  .img-preview,
-  .video-preview {
-    height: 200px;
-  }
-  .img-preview-btn,
-  .video-preview-btn {
-    height: 120px;
-  }
-  .access-list {
-    height: 330px;
-  }
-}
-@media (max-width: 1024px) {
-  .section-1 {
-    display: block;
-  }
-  .reaction-weather-box,
-  .Weather-box {
-    margin-right: -20px;
-  }
-  .reaction-water,
-  .reaction-weather-up {
-    margin-top: 10px;
-    margin-right: -20px;
-  }
-  .reaction-winter-Up-icon,
-  .reaction-poll-bar,
-  .Use-1,
-  .reaction-Use-bar {
-    margin-top: 10px;
-  }
-  .poll {
-    margin-right: -20px;
-  }
-  .section-2 {
-    display: block;
-  }
-  .reaction-access-list {
-    margin-left: -20px;
-    margin-right: 20px;
-    margin-top: 10px;
-  }
-}
-/*반응형 끝*/
