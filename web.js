@@ -55,6 +55,9 @@ db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function callback() {
 console.log("mongo db connection OK.");
 })
+app.set('views', __dirname + '/views')
+app.use(express.static(__dirname + '/public'))
+app.use(express.static(__dirname + '/api'))
 
 //스키마생성
 const adminuser = mongoose.Schema({
