@@ -55,9 +55,7 @@ db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function callback() {
 console.log("mongo db connection OK.");
 })
-app.set('views', __dirname + '/views')
-app.use(express.static(__dirname + '/public'))
-app.use(express.static(__dirname + '/api'))
+
 
 //스키마생성
 const adminuser = mongoose.Schema({
@@ -98,6 +96,8 @@ const smartmodel = new mongoose.Schema({
 name: String
 })
 const monthuseage = new mongoose.Schema({
+Data : String,
+Year : String,
 Month : String
 })
 
@@ -110,6 +110,7 @@ const Weather = mongoose.model('weather', weather)
 const SmartModel = mongoose.model('smartmodel', smartmodel)
 const Smartmirrorimagefile = mongoose.model('smartmirrorimagefile', smartmirrorimagefile)
 const Smartmirrorvideofile = mongoose.model('smartmirrorvideofile', smartmirrorvideofile)
+const MonthUseage = mongoose.model('monthuseage',monthuseage)
 
 
 var videoProjection = {
@@ -296,7 +297,7 @@ try {
         // 클라이언트에 응답 전송
         res.write('<h3>파일 업로드 성공</h3>');
 
-        const videofile = new Videofilesave({ 'name': filename, 'Date': currentday, 'type': "None" })
+        const videofile = new Videofilesave({ 'name': filename, 'Date': currentday, 'type': "reservation" })
         videofile.save(function (err, slience) {
             if (err) {
                 console.log(err)
@@ -386,7 +387,6 @@ try {
 }
 });
 
-
 //예약 이미지 파일 저장
 router.route('/processbookingimage').post(uploadimg.array('photo', 1), function (req, res) {
 try {
@@ -443,7 +443,7 @@ try {
 }
 });
 
-//매일 오전6시에 예약한 날짜가 되면 스마트미러에 예약한 이미지포스터로 교체
+//매일 오전6시에 예약한 날짜가 되면 스마트미러에 예약한 이미지포스터로 교체, 수전사용량 어제자 교체
 let changefilename
 var j = schedule.scheduleJob("* * 6 * * *", function () {
 let imagestate = false
@@ -538,7 +538,7 @@ Videofilesave.find(function (err, data) {
         }
     }
 })
-console.log(Hour)
+console.log("날짜 : " + date + "시간 : " + Hour)
 version++
 });
 
@@ -617,7 +617,9 @@ io.emit("currentT1H", weatherdata[1])
 })
 
 //매달 1일에 함수 실행
+//1년치 데이터를 달마다 보여주기 위하여 실행
 var m = schedule.scheduleJob("* * 1 * * *", function () {
+const todayYear = moment().format('YY')
 const todayMonth = moment().format('MM')
 let finallyuseage = 0
 Water.find({'Date' : todayMonth},function(err,data){
@@ -625,6 +627,15 @@ Water.find({'Date' : todayMonth},function(err,data){
     {
         finallyuseage += data[index].Useage
     }
+})
+const monthdata = new MonthUseage({ 'Data' : finallyuseage, 'Year' : todayYear, 'Month' : todayMonth})
+monthdata.save(function (err, slience) {
+    if (err) {
+        console.log(err)
+        res.status(500).send('update error')
+        return
+    }
+    return console.log("complete")
 })
 })
 
@@ -643,8 +654,10 @@ let weathername = new Array()
 let weatherdata = new Array()
 let currentlocationX
 let currentlocationY
+let locationdata
 Weather.find({}, imgProjection, function (err, data) {
 locationdata = data[0].name
+console.log(locationdata)
 for (let index = 2; index < 3775; index++) {
     if (locationdata == firstSheet["B" + index].v) {
         currentlocationX = firstSheet["F" + index].v
@@ -706,8 +719,8 @@ for (var index = 2; index <= 3775; index++) {
     }
 }
 return Water.find(function (err, water) {
-    Videofilesave.find(function (err, videofile) {
-        Imgfile.find(function (err, imgfile) {
+    Smartmirrorvideofile.find(function (err, videofile) {
+        Smartmirrorimagefile.find(function (err, imgfile) {
             res.render('sub', {
                 accessmanage: water, videofile: videofile, imgfile: imgfile, water: usewater, remainwater: remainwater,
                 contents: localname, cityname: cityname, village: villagename, localselected: localselect, cityselected: cityselect,
@@ -759,8 +772,8 @@ for (var index = 2; index <= 3775; index++) {
 
 version++
 Water.find(function (err, water) {
-    Videofilesave.find(function (err, videofile) {
-        Imgfile.find(function (err, imgfile) {
+    Smartmirrorvideofile.find(function (err, videofile) {
+        Smartmirrorimagefile.find(function (err, imgfile) {
             res.render('sub', {
                 accessmanage: water, videofile: videofile, imgfile: imgfile, water: usewater, remainwater: remainwater,
                 contents: localname, cityname: cityname, village: villagename, localselected: localselect, cityselected: cityselect,
@@ -828,8 +841,8 @@ user.save(function (err, slience) {
     return console.log("complete")
 })
 Water.find(function (err, water) {
-    Videofilesave.find(function (err, videofile) {
-        Imgfile.find(function (err, imgfile) {
+    Smartmirrorvideofile.find(function (err, videofile) {
+        Smartmirrorimagefile.find(function (err, imgfile) {
             res.render('sub', {
                 accessmanage: water, videofile: videofile, imgfile: imgfile, water: usewater, remainwater: remainwater,
                 contents: localname, cityname: cityname, village: villagename, localselected: localselect, cityselected: cityselect,
@@ -846,8 +859,8 @@ User.findOne({ name: req.body.name, password: req.body.password }, (err, user) =
     if (err) return res.status(500).send({ message: '에러!' });
     else if (user) {
         Water.find(function (err, water) {
-            Videofilesave.find(function (err, videofile) {
-                Imgfile.find(function (err, imgfile) {
+            Smartmirrorvideofile.find(function (err, videofile) {
+                Smartmirrorimagefile.find(function (err, imgfile) {
                     req.session.logindata =
                     {
                         id: req.body.name,
@@ -906,7 +919,6 @@ if (req.session.logindata) {
 res.render('login', { layout: null })
 })
 
-
 //수전사용량 데이터 입력
 app.post('/insertwater', function (req, res, next) {
 const watername = req.body.watername
@@ -920,8 +932,8 @@ user.save(function (err, slience) {
         return
     }
     Water.find(function (err, water) {
-        Videofilesave.find(function (err, videofile) {
-            Imgfile.find(function (err, imgfile) {
+        Smartmirrorvideofile.find(function (err, videofile) {
+            Smartmirrorimagefile.find(function (err, imgfile) {
                 res.render('sub', {
                     accessmanage: water, videofile: videofile, imgfile: imgfile, water: usewater, remainwater: remainwater,
                     contents: localname, cityname: cityname, village: villagename, localselected: localselect, cityselected: cityselect,
@@ -956,8 +968,8 @@ const water = req.body.water
 usewater = water
 remainwater = 100 - water
 Water.find(function (err, water) {
-    Videofilesave.find(function (err, videofile) {
-        Imgfile.find(function (err, imgfile) {
+    Smartmirrorvideofile.find(function (err, videofile) {
+        Smartmirrorimagefile.find(function (err, imgfile) {
             res.render('sub', {
                 accessmanage: water, videofile: videofile, imgfile: imgfile, water: usewater, remainwater: remainwater,
                 contents: localname, cityname: cityname, village: villagename, localselected: localselect, cityselected: cityselect,
@@ -1003,24 +1015,57 @@ image.remove(function (err) {
 })
 
 //미디어컨텐츠관리 창
+
 app.use('/mediacontents', function (req, res) {
+let videoArray = new Array()
+let imageArray = new Array()
 Videofilesave.find(function (err, videofile) {
+    for(let index = 0; index < videofile.length; index++)
+    {
+        if(videofile[index].type == "None")
+        {
+            videoArray.push(videofile[index])
+        }
+    }
     Imgfile.find(function (err, imgfile) {
-        res.render('mediacontents', { videofile: videofile, imgfile: imgfile })
+        for(let index = 0; index < imgfile.length; index++)
+        {
+            if(imgfile[index].type == "None")
+            {
+                imageArray.push(imgfile[index])
+            }
+        }
+        res.render('mediacontents', { videofile: videoArray, imgfile: imageArray })
     })
 })
 })
 
 //예약미디어컨텐츠관리 창
 app.use('/bookmedia', function (req, res) {
+let videoArray = new Array()
+let imageArray = new Array()
 Videofilesave.find(function (err, videofile) {
+    for(let index = 0; index < videofile.length; index++)
+    {
+        if(videofile[index].type == "reservation")
+        {
+            videoArray.push(videofile[index])
+        }
+    }
     Imgfile.find(function (err, imgfile) {
-        res.render('bookmedia', { videofile: videofile, imgfile: imgfile })
+        for(let index = 0; index < imgfile.length; index++)
+    {
+        if(imgfile[index].type == "reservation")
+        {
+            imageArray.push(imgfile[index])
+        }
+    }
+        res.render('bookmedia', { videofile: videoArray, imgfile: imageArray })
     })
 })
 })
 
-const port = process.env.PORT || 8080
+const port = process.env.PORT || 8001
 app.engine('handlebars', expressHandlebars({
 defaultLayout: 'main',
 runtimeOptions: {
@@ -1029,13 +1074,15 @@ runtimeOptions: {
 },
 }))
 app.set('view engine', 'handlebars')
+app.set('views', __dirname + '/views')
 app.use(express.static(__dirname + '/public'))
+app.use(express.static(__dirname + '/api'))
 
 //메인페이지
 app.get('/main', function (req, res) {
 Water.find(function (err, water) {
-    Videofilesave.find(function (err, videofile) {
-        Imgfile.find(function (err, imgfile) {
+    Smartmirrorvideofile.find(function (err, videofile) {
+        Smartmirrorimagefile.find(function (err, imgfile) {
             if (req.session.logindata) {
                 res.render('sub', {
                     accessmanage: water, videofile: videofile, imgfile: imgfile, water: usewater, remainwater: remainwater,
@@ -1328,6 +1375,26 @@ res.render('dkatk', { layout: null })
 })
 
 
+//데이터 수정 예시
+//nfc를 통하여 수전데이터를 받고 누적시키기 위하여 만든 함수
+let valuedata = 82
+let namedata = 132
+Water.find(function(err,data){
+let changeDate
+for(let index = 0; index < data.length; index++)
+{
+    if(data[index].name =="132")
+    {
+        changeDate = data[index].Date
+    }
+}
+Water.updateOne({ 'name' : namedata}, { $set : { 'Date' : changeDate+100}},function(err){
+    if(err) console.log(err)
+    console.log("complete")
+})
+})
+//const user = new Water({ 'name': "132", 'Date' : valuedata, 'Hour' : "18 : 10" })
+
 // 퍼센트 구하는 함수
 function percent(par,total) {
 return (par / total) * 100
@@ -1335,8 +1402,14 @@ return (par / total) * 100
 //초기 7일간 데이터중 가장 높은값 구하기 설정
 let maxValue = 0
 Water.find(function(err,data){
-maxValue = Math.max(...data) //ES6 문법이기 때문에 안되면 const maxValue = Math.max.apply(null, data) 를 사용
-}).sort({ Date : -1}).limit(7) //추후엔 Month 와 Day로 나누기 때문에 각각에 sort정렬을 해줘야 최신 데이터가 나옴
+//maxValue = Math.max(...data.Date) //ES6 문법이기 때문에 안되면 const maxValue = Math.max.apply(null, data) 를 사용
+let Valuedata = new Array()
+for(let index = 0; index < data.length; index++)
+{
+    Valuedata.push(data[index].Date)
+}
+maxValue = Math.max.apply(null, Valuedata)
+}).sort({ Year : -1}).sort({ Month : -1}).sort({ Day : -1}).limit(7) //추후엔 Month 와 Day로 나누기 때문에 각각에 sort정렬을 해줘야 최신 데이터가 나옴
 
 //nfc 태그(임시)
 let wateruseage = ""
@@ -1350,7 +1423,7 @@ if(wateruseage > maxValue)
 {
     maxValue = wateruseage
 }
-const user = new Water({ 'Useage': wateruseage, 'Year' : todayYear, 'Month' : todayMonth, 'Day' : todayMonth })
+const user = new Water({ 'Useage': wateruseage, 'Year' : todayYear, 'Month' : todayMonth, 'Day' : todayDay })
 user.save(function (err, slience) {
     if (err) {
         console.log(err)
@@ -1360,13 +1433,24 @@ user.save(function (err, slience) {
     return console.log("complete")
 })
 
+//일주일 데이터
 Water.find(function(err,data){
     for(let index = 0; index < data.length; index++)
     {
         weekendWater.push(percent(data[index].Useage,maxValue))
     }
-}).sort({'Year' : -1}).sort({'Month' : -1}).sort({'Day' : -1}).limit(7)
+}).sort({Year : -1}).sort({Month : -1}).sort({Day : -1}).limit(7) 
+
+//한달 데이터
+let Monthwater = 0
+Water.find({'Month' : todayMonth},function(err,data){
+    for(let index = 0; index < data.length; index++)
+    {
+        Monthwater += data[index].Useage
+    }
+})
 io.emit(weekendWater) // 7일간 데이터를 배열로 보냄
+io.emit(Monthwater) // 1년간의 데이터중 이번달 데이터만 표시
 res.render('dkatk', { layout: null })
 })
 
