@@ -63,9 +63,11 @@ name: String,
 password: String,
 })
 const usingwater = new mongoose.Schema({
-name: String,
-Date: String,
-Hour: String
+Useage: String,
+Year: String,
+Month: String,
+Day: String,
+Persent : String
 })
 const clients = new mongoose.Schema({
 name: String,
@@ -96,9 +98,9 @@ const smartmodel = new mongoose.Schema({
 name: String
 })
 const monthuseage = new mongoose.Schema({
-Data : String,
-Year : String,
-Month : String
+Data: String,
+Year: String,
+Month: String
 })
 
 const User = mongoose.model('users', adminuser)
@@ -110,7 +112,7 @@ const Weather = mongoose.model('weather', weather)
 const SmartModel = mongoose.model('smartmodel', smartmodel)
 const Smartmirrorimagefile = mongoose.model('smartmirrorimagefile', smartmirrorimagefile)
 const Smartmirrorvideofile = mongoose.model('smartmirrorvideofile', smartmirrorvideofile)
-const MonthUseage = mongoose.model('monthuseage',monthuseage)
+const MonthUseage = mongoose.model('monthuseage', monthuseage)
 
 
 var videoProjection = {
@@ -244,7 +246,6 @@ try {
         }
 
         // 클라이언트에 응답 전송
-        res.write('<h3>파일 업로드 성공</h3>');
 
         const videofile = new Videofilesave({ 'name': filename, 'Date': new Date(), 'type': "None" })
         videofile.save(function (err, slience) {
@@ -255,7 +256,7 @@ try {
             }
             return
         })
-        res.end();
+        res.redirect('mediacontents')
     } else {
         console.log('파일이 없습니다');
     }
@@ -295,7 +296,7 @@ try {
         }
 
         // 클라이언트에 응답 전송
-        res.write('<h3>파일 업로드 성공</h3>');
+        
 
         const videofile = new Videofilesave({ 'name': filename, 'Date': currentday, 'type': "reservation" })
         videofile.save(function (err, slience) {
@@ -306,7 +307,7 @@ try {
             }
             return
         })
-        res.end();
+        res.redirect('bookmedia')
     } else {
         console.log('파일이 없습니다');
     }
@@ -366,7 +367,7 @@ try {
 
 
         // 클라이언트에 응답 전송
-        res.write('<h3>파일 업로드 성공</h3>');
+        
 
         const imgfile = new Imgfile({ 'name': filename, 'Date': new Date(), 'type': "None" })
         imgfile.save(function (err, slience) {
@@ -378,7 +379,7 @@ try {
             return
         })
         Imgfile.find({}, null, { sort: '-name' }, function (err, docs) { })
-        res.end();
+        res.redirect('mediacontents')
     } else {
         console.log('파일이 없습니다');
     }
@@ -421,7 +422,7 @@ try {
 
 
         // 클라이언트에 응답 전송
-        res.write('<h3>파일 업로드 성공</h3>');
+        
 
         const date = moment().format('MMDD')
         const imgfile = new Imgfile({ 'name': filename, 'Date': currentday, 'type': "reservation" })
@@ -434,7 +435,7 @@ try {
             return
         })
         Imgfile.find({}, null, { sort: '-name' }, function (err, docs) { })
-        res.end();
+        res.redirect('bookmedia')
     } else {
         console.log('파일이 없습니다');
     }
@@ -622,13 +623,12 @@ var m = schedule.scheduleJob("* * 1 * * *", function () {
 const todayYear = moment().format('YY')
 const todayMonth = moment().format('MM')
 let finallyuseage = 0
-Water.find({'Date' : todayMonth},function(err,data){
-    for(let index = 0;index < data.length; index++)
-    {
+Water.find({ 'Month': todayMonth }, function (err, data) {
+    for (let index = 0; index < data.length; index++) {
         finallyuseage += data[index].Useage
     }
 })
-const monthdata = new MonthUseage({ 'Data' : finallyuseage, 'Year' : todayYear, 'Month' : todayMonth})
+const monthdata = new MonthUseage({ 'Data': finallyuseage, 'Year': todayYear, 'Month': todayMonth })
 monthdata.save(function (err, slience) {
     if (err) {
         console.log(err)
@@ -641,7 +641,7 @@ monthdata.save(function (err, slience) {
 
 app.get('/dkatk', function (req, res) {
 Water.find(function (err, data) {
-    console.log(data[0].name)
+    console.log(data[0].Useage)
     res.render('dkatk', { layout: null, data: data })
 })
 })
@@ -1020,18 +1020,14 @@ app.use('/mediacontents', function (req, res) {
 let videoArray = new Array()
 let imageArray = new Array()
 Videofilesave.find(function (err, videofile) {
-    for(let index = 0; index < videofile.length; index++)
-    {
-        if(videofile[index].type == "None")
-        {
+    for (let index = 0; index < videofile.length; index++) {
+        if (videofile[index].type == "None") {
             videoArray.push(videofile[index])
         }
     }
     Imgfile.find(function (err, imgfile) {
-        for(let index = 0; index < imgfile.length; index++)
-        {
-            if(imgfile[index].type == "None")
-            {
+        for (let index = 0; index < imgfile.length; index++) {
+            if (imgfile[index].type == "None") {
                 imageArray.push(imgfile[index])
             }
         }
@@ -1045,27 +1041,26 @@ app.use('/bookmedia', function (req, res) {
 let videoArray = new Array()
 let imageArray = new Array()
 Videofilesave.find(function (err, videofile) {
-    for(let index = 0; index < videofile.length; index++)
-    {
-        if(videofile[index].type == "reservation")
-        {
+    for (let index = 0; index < videofile.length; index++) {
+        if (videofile[index].type == "reservation") {
             videoArray.push(videofile[index])
         }
     }
     Imgfile.find(function (err, imgfile) {
-        for(let index = 0; index < imgfile.length; index++)
-    {
-        if(imgfile[index].type == "reservation")
-        {
-            imageArray.push(imgfile[index])
+        for (let index = 0; index < imgfile.length; index++) {
+            if (imgfile[index].type == "reservation") {
+                imageArray.push(imgfile[index])
+            }
         }
-    }
         res.render('bookmedia', { videofile: videoArray, imgfile: imageArray })
     })
 })
 })
 
 const port = process.env.PORT || 8001
+app.set('views', __dirname + '/views')
+app.use(express.static(__dirname + '/public'))
+app.use(express.static(__dirname + '/api'))
 app.engine('handlebars', expressHandlebars({
 defaultLayout: 'main',
 runtimeOptions: {
@@ -1074,9 +1069,7 @@ runtimeOptions: {
 },
 }))
 app.set('view engine', 'handlebars')
-app.set('views', __dirname + '/views')
 app.use(express.static(__dirname + '/public'))
-app.use(express.static(__dirname + '/api'))
 
 //메인페이지
 app.get('/main', function (req, res) {
@@ -1379,37 +1372,54 @@ res.render('dkatk', { layout: null })
 //nfc를 통하여 수전데이터를 받고 누적시키기 위하여 만든 함수
 let valuedata = 82
 let namedata = 132
-Water.find(function(err,data){
+Water.find(function (err, data) {
 let changeDate
-for(let index = 0; index < data.length; index++)
-{
-    if(data[index].name =="132")
-    {
-        changeDate = data[index].Date
+for (let index = 0; index < data.length; index++) {
+    if (data[index].Month == "132") {
+        changeDate = data[index].Useage
     }
 }
-Water.updateOne({ 'name' : namedata}, { $set : { 'Date' : changeDate+100}},function(err){
-    if(err) console.log(err)
+Water.updateOne({ 'Month': namedata }, { $set: { 'Useage': changeDate } }, function (err) {
+    if (err) console.log(err)
     console.log("complete")
+})
+})
+
+
+app.get('/wateruseage', function (req, res) {
+Water.find(function (err, data) {
+    let count
+    let newArray = new Array()
+    for (let index = 0; index < data.length; index++) {
+        //weekendWater.push(percent(data[index].Useage, maxValue))
+        data[index].Persent = Math.floor(percent(data[index].Useage, maxValue))
+    }
+    res.render('wateruseage', { data: data, selectcityname: selectcityname, selectvillagename: selectvillagename,newArray : newArray })
 })
 })
 //const user = new Water({ 'name': "132", 'Date' : valuedata, 'Hour' : "18 : 10" })
 
-// 퍼센트 구하는 함수
-function percent(par,total) {
+// 퍼센트 구하는 함수 ex) percetn(50,100) = 50
+function percent(par, total) {
 return (par / total) * 100
 }
 //초기 7일간 데이터중 가장 높은값 구하기 설정
 let maxValue = 0
-Water.find(function(err,data){
+Water.find(function (err, data) {
 //maxValue = Math.max(...data.Date) //ES6 문법이기 때문에 안되면 const maxValue = Math.max.apply(null, data) 를 사용
 let Valuedata = new Array()
-for(let index = 0; index < data.length; index++)
-{
-    Valuedata.push(data[index].Date)
+for (let index = 0; index < data.length; index++) {
+    Valuedata.push(data[index].Useage)
 }
 maxValue = Math.max.apply(null, Valuedata)
-}).sort({ Year : -1}).sort({ Month : -1}).sort({ Day : -1}).limit(7) //추후엔 Month 와 Day로 나누기 때문에 각각에 sort정렬을 해줘야 최신 데이터가 나옴
+}).sort({ Year: -1 }).sort({ Month: -1 }).sort({ Day: -1 }).limit(7) //추후엔 Month 와 Day로 나누기 때문에 각각에 sort정렬을 해줘야 최신 데이터가 나옴
+
+let weekendWater = new Array()
+Water.find(function (err, data) {
+for (let index = 0; index < data.length; index++) {
+    weekendWater.push(percent(data[index].Useage, maxValue))
+}
+})
 
 //nfc 태그(임시)
 let wateruseage = ""
@@ -1419,11 +1429,10 @@ wateruseage = req.query.wateruseage
 const todayYear = moment().format('YY')
 const todayMonth = moment().format('MM')
 const todayDay = moment().format('DD')
-if(wateruseage > maxValue)
-{
+if (wateruseage > maxValue) {
     maxValue = wateruseage
 }
-const user = new Water({ 'Useage': wateruseage, 'Year' : todayYear, 'Month' : todayMonth, 'Day' : todayDay })
+const user = new Water({ 'Useage': wateruseage, 'Year': todayYear, 'Month': todayMonth, 'Day': todayDay })
 user.save(function (err, slience) {
     if (err) {
         console.log(err)
@@ -1434,18 +1443,16 @@ user.save(function (err, slience) {
 })
 
 //일주일 데이터
-Water.find(function(err,data){
-    for(let index = 0; index < data.length; index++)
-    {
-        weekendWater.push(percent(data[index].Useage,maxValue))
+Water.find(function (err, data) {
+    for (let index = 0; index < data.length; index++) {
+        weekendWater.push(percent(data[index].Useage, maxValue))
     }
-}).sort({Year : -1}).sort({Month : -1}).sort({Day : -1}).limit(7) 
+}).sort({ Year: -1 }).sort({ Month: -1 }).sort({ Day: -1 }).limit(7)
 
 //한달 데이터
 let Monthwater = 0
-Water.find({'Month' : todayMonth},function(err,data){
-    for(let index = 0; index < data.length; index++)
-    {
+Water.find({ 'Month': todayMonth }, function (err, data) {
+    for (let index = 0; index < data.length; index++) {
         Monthwater += data[index].Useage
     }
 })
