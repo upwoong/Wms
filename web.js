@@ -993,7 +993,7 @@ video.remove(function (err) {
         res.status(500).send('update error')
         return
     }
-    res.status(200).send("Removed")
+    res.redirect('sub')
 })
 })
 
@@ -1010,7 +1010,7 @@ image.remove(function (err) {
         res.status(500).send('update error')
         return
     }
-    res.status(200).send("Removed")
+    res.redirect('sub')
 })
 })
 
