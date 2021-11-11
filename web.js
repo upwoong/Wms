@@ -67,7 +67,7 @@ Useage: String,
 Year: String,
 Month: String,
 Day: String,
-Persent : String
+Persent: String
 })
 const clients = new mongoose.Schema({
 name: String,
@@ -86,10 +86,12 @@ Date: String,
 type: String
 })
 const smartmirrorimagefile = new mongoose.Schema({
-name: String
+name: String,
+type: String
 })
 const smartmirrorvideofile = new mongoose.Schema({
-name: String
+name: String,
+type: String
 })
 const weather = new mongoose.Schema({
 name: String
@@ -168,8 +170,9 @@ const root = {
 //홈페이지에서 값을 입력하면 이곳에서 데이터 저장
 //http://localhost:8080/graphql?query={getusingwater(name:"이곳에 입력", username:"이곳에 입력", password:"이곳에 입력", sex : "이곳에 입력"){name}}
 async getusingwater(input) {
-    console.log(input.name)
-    return await input.name
+    app.get('/aaaaaa',function(req,res){
+        console.log(input)
+    })
 },
 //graphql 페이지에서 값을 입력하면 페이지 저장
 addusingwater: (input) => {
@@ -182,7 +185,7 @@ addusingwater: (input) => {
             return
         }
     })
-    return saveusingwater
+    return response.redirect('main')
 },
 async createwater({ input }) {
     console.log(arraywater)
@@ -245,7 +248,21 @@ try {
             }
         }
 
-        // 클라이언트에 응답 전송
+        //만약 현재 보여주는 미디어들의 type 이 None일 경우 smartmirrorimagefile 데이터베이스에도 추가하여 바로 반영되도록 추가
+        Smartmirrorvideofile.find(function(err,data){
+            if(data[0].type == "None")
+            {
+                const videofile = new Smartmirrorvideofile({ 'name': filename, 'Date': new Date(), 'type': "None" })
+                videofile.save(function (err, slience) {
+                    if (err) {
+                        console.log(err)
+                        res.send('update error,aaaaa')
+                        return
+                    }
+                    return
+                })
+            }
+        })
 
         const videofile = new Videofilesave({ 'name': filename, 'Date': new Date(), 'type': "None" })
         videofile.save(function (err, slience) {
@@ -295,8 +312,23 @@ try {
             }
         }
 
-        // 클라이언트에 응답 전송
+        //만약 현재 보여주는 미디어들의 type 이 reservation이고 날짜가 현재 날짜와 같다면 smartmirrorvideofile 데이터베이스에도 추가
+        Smartmirrorvideofile.find(function(err,data){
+            if(data[0].type == "reservation" && data[0].Date == currentday)
+            {
+                const videofile = new Smartmirrorvideofile({ 'name': filename, 'Date': currentday, 'type': "reservation" })
+                videofile.save(function (err, slience) {
+                    if (err) {
+                        console.log(err)
+                        res.send('update error,aaaaa')
+                        return
+                    }
+                    return
+                })
+            }
+        })
         
+
 
         const videofile = new Videofilesave({ 'name': filename, 'Date': currentday, 'type': "reservation" })
         videofile.save(function (err, slience) {
@@ -367,8 +399,23 @@ try {
 
 
         // 클라이언트에 응답 전송
-        
 
+        //만약 현재 보여주는 미디어들의 type 이 None일 경우 smartmirrorimagefile 데이터베이스에도 추가하여 바로 반영되도록 추가
+        Smartmirrorimagefile.find(function(err,data){
+            if(data[0].type == "None")
+            {
+                const imgfile = new Smartmirrorimagefile({ 'name': filename, 'Date': new Date(), 'type': "None" })
+                imgfile.save(function (err, slience) {
+                    if (err) {
+                        console.log(err)
+                        res.send('update error,aaaaa')
+                        return
+                    }
+                    return
+                })
+            }
+        })
+        
         const imgfile = new Imgfile({ 'name': filename, 'Date': new Date(), 'type': "None" })
         imgfile.save(function (err, slience) {
             if (err) {
@@ -378,7 +425,7 @@ try {
             }
             return
         })
-        Imgfile.find({}, null, { sort: '-name' }, function (err, docs) { })
+        // 삭제 예정 2021-11-11 Imgfile.find({}, null, { sort: '-name' }, function (err, docs) { })
         res.redirect('mediacontents')
     } else {
         console.log('파일이 없습니다');
@@ -422,7 +469,22 @@ try {
 
 
         // 클라이언트에 응답 전송
-        
+        //만약 현재 보여주는 미디어들의 type 이 reservation이고 날짜가 현재 날짜와 같다면 smartmirrorimagefile 데이터베이스에도 추가
+        Smartmirrorimagefile.find(function(err,data){
+            if(data[0].type == "reservation" && data[0].Date == currentday)
+            {
+                const imgfile = new Smartmirrorimagefile({ 'name': filename, 'Date': currentday, 'type': "reservation" })
+                imgfile.save(function (err, slience) {
+                    if (err) {
+                        console.log(err)
+                        res.send('update error,aaaaa')
+                        return
+                    }
+                    return
+                })
+            }
+        })
+
 
         const date = moment().format('MMDD')
         const imgfile = new Imgfile({ 'name': filename, 'Date': currentday, 'type': "reservation" })
@@ -469,7 +531,7 @@ Imgfile.find(function (err, data) {
     for (let i = 0; i < data.length; i++) {
         if (data[i].Date == date && data[i].type == "reservation") {
             changefilename = data[i].name
-            const changefile = new Smartmirrorimagefile({ 'name': changefilename })
+            const changefile = new Smartmirrorimagefile({ 'name': changefilename, 'type' : "reservation" })
             changefile.save(function (err, slience) {
                 if (err) {
                     console.log(err)
@@ -486,7 +548,7 @@ Imgfile.find(function (err, data) {
         for (let i = 0; i < data.length; i++) {
             if (data[i].type == "None") {
                 changefilename = data[i].name
-                const changefile = new Smartmirrorimagefile({ 'name': changefilename })
+                const changefile = new Smartmirrorimagefile({ 'name': changefilename, 'type' : "None" })
                 changefile.save(function (err, slience) {
                     if (err) {
                         console.log(err)
@@ -508,7 +570,7 @@ Videofilesave.find(function (err, data) {
     for (let i = 0; i < data.length; i++) {
         if (data[i].Date == date && data[i].type == "reservation") {
             changefilename = data[i].name
-            const changefile = new Smartmirrorimagefile({ 'name': changefilename })
+            const changefile = new Smartmirrorimagefile({ 'name': changefilename, 'type' : "None" })
             changefile.save(function (err, slience) {
                 if (err) {
                     console.log(err)
@@ -525,7 +587,7 @@ Videofilesave.find(function (err, data) {
         for (let i = 0; i < data.length; i++) {
             if (data[i].type == "None") {
                 changefilename = data[i].name
-                const changefile = new Smartmirrorimagefile({ 'name': changefilename })
+                const changefile = new Smartmirrorimagefile({ 'name': changefilename, 'type' : "None" })
                 changefile.save(function (err, slience) {
                     if (err) {
                         console.log(err)
@@ -993,7 +1055,7 @@ video.remove(function (err) {
         res.status(500).send('update error')
         return
     }
-    res.redirect('main')
+    res.status(200).send("Removed")
 })
 })
 
@@ -1010,7 +1072,7 @@ image.remove(function (err) {
         res.status(500).send('update error')
         return
     }
-    res.redirect('main')
+    res.status(200).send("Removed")
 })
 })
 
@@ -1058,9 +1120,6 @@ Videofilesave.find(function (err, videofile) {
 })
 
 const port = process.env.PORT || 8001
-app.set('views', __dirname + '/views')
-app.use(express.static(__dirname + '/public'))
-app.use(express.static(__dirname + '/api'))
 app.engine('handlebars', expressHandlebars({
 defaultLayout: 'main',
 runtimeOptions: {
@@ -1070,7 +1129,8 @@ runtimeOptions: {
 }))
 app.set('view engine', 'handlebars')
 app.use(express.static(__dirname + '/public'))
-
+app.set('views', __dirname + '/views')
+app.use(express.static(__dirname + '/api'))
 //메인페이지
 app.get('/main', function (req, res) {
 Water.find(function (err, water) {
@@ -1394,7 +1454,7 @@ Water.find(function (err, data) {
         //weekendWater.push(percent(data[index].Useage, maxValue))
         data[index].Persent = Math.floor(percent(data[index].Useage, maxValue))
     }
-    res.render('wateruseage', { data: data, selectcityname: selectcityname, selectvillagename: selectvillagename,newArray : newArray })
+    res.render('wateruseage', { data: data, selectcityname: selectcityname, selectvillagename: selectvillagename, newArray: newArray })
 })
 })
 //const user = new Water({ 'name': "132", 'Date' : valuedata, 'Hour' : "18 : 10" })
