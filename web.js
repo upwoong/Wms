@@ -272,7 +272,7 @@ try {
     const strArr = selectday.split('-');
     const month = strArr[1]
     const day = strArr[2]
-    const currentday = strArr[1] + "-" + strArr[2]
+    const currentday = strArr[1] + strArr[2]
     console.log("month :" + month + "day :" + day)
     version++
 
@@ -396,7 +396,7 @@ try {
     const strArr = selectday.split('-');
     const month = strArr[1]
     const day = strArr[2]
-    const currentday = strArr[1] + "-" + strArr[2]
+    const currentday = strArr[1] + strArr[2]
     console.log("month :" + month + "day :" + day)
     version++
 
