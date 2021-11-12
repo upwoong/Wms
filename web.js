@@ -87,11 +87,13 @@ type: String
 })
 const smartmirrorimagefile = new mongoose.Schema({
 name: String,
-type: String
+type: String,
+Date : String
 })
 const smartmirrorvideofile = new mongoose.Schema({
 name: String,
-type: String
+type: String,
+Date : String
 })
 const weather = new mongoose.Schema({
 name: String
@@ -512,7 +514,7 @@ var j = schedule.scheduleJob("* * 6 * * *", function () {
 let imagestate = false
 let videostate = false
 const date = moment().format('MMDD')
-const Hour = moment().format('HH')
+const Hour = moment().format('HH:mm:ss')
 const yesterdaydate = date - 100
 Smartmirrorimagefile.deleteMany(function (err, data) {
     //기존에 있던 smartmirror 데이터베이스를 모두 삭제
@@ -531,7 +533,7 @@ Imgfile.find(function (err, data) {
     for (let i = 0; i < data.length; i++) {
         if (data[i].Date == date && data[i].type == "reservation") {
             changefilename = data[i].name
-            const changefile = new Smartmirrorimagefile({ 'name': changefilename, 'type' : "reservation" })
+            const changefile = new Smartmirrorimagefile({ 'name': changefilename, 'Date' : date, 'type' : "reservation" })
             changefile.save(function (err, slience) {
                 if (err) {
                     console.log(err)
@@ -570,7 +572,7 @@ Videofilesave.find(function (err, data) {
     for (let i = 0; i < data.length; i++) {
         if (data[i].Date == date && data[i].type == "reservation") {
             changefilename = data[i].name
-            const changefile = new Smartmirrorimagefile({ 'name': changefilename, 'type' : "None" })
+            const changefile = new Smartmirrorimagefile({ 'name': changefilename, 'Date' : date, 'type' : "None" })
             changefile.save(function (err, slience) {
                 if (err) {
                     console.log(err)
