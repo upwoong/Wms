@@ -172,9 +172,7 @@ const root = {
 //홈페이지에서 값을 입력하면 이곳에서 데이터 저장
 //http://localhost:8080/graphql?query={getusingwater(name:"이곳에 입력", username:"이곳에 입력", password:"이곳에 입력", sex : "이곳에 입력"){name}}
 async getusingwater(input) {
-    app.get('/aaaaaa',function(req,res){
-        console.log(input)
-    })
+    console.log(input)
 },
 //graphql 페이지에서 값을 입력하면 페이지 저장
 addusingwater: (input) => {
