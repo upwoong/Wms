@@ -40,12 +40,12 @@ session({
 )
 process.setMaxListeners(15);
 var Graphql = require('graphql')
+const jwt = require('jsonwebtoken')
 var GraphqlHttp = require('express-graphql').graphqlHTTP
 //데이터베이스 초기설정
 const mongoose = require('mongoose')
 const { WSATYPE_NOT_FOUND } = require('constants')
 const { response } = require('express')
-const cookieSession = require('cookie-session')
 const { next } = require('cheerio/lib/api/traversing')
 //const { arrayParentSymbol } = require('mongose/lib/helpers/symbools')
 mongoose.connect('mongodb+srv://upwoong:ehdrhd12@cluster0.ahlcp.mongodb.net/test', { useNewUrlParser: true, useUnifiedTopology: true })
@@ -88,12 +88,12 @@ type: String
 const smartmirrorimagefile = new mongoose.Schema({
 name: String,
 type: String,
-Date : String
+Date: String
 })
 const smartmirrorvideofile = new mongoose.Schema({
 name: String,
 type: String,
-Date : String
+Date: String
 })
 const weather = new mongoose.Schema({
 name: String
@@ -138,6 +138,12 @@ type usingwater{
 name : String,
 password : String,
 username : String,
+sex : String
+}
+type Person {
+_id : ID
+name : String
+username : String
 Sex : String
 }
 input inputusingwater {
@@ -146,9 +152,9 @@ password : String,
 username : String,
 sex : String
 }
-
 type Query {
 getusingwater(name : String, password : String, username : String, sex : String) : usingwater
+people(name : String) : [Person]
 }
 
 type Mutation {
@@ -158,7 +164,6 @@ createuser(input : inputusingwater) : usingwater
 
 
 `)
-
 /*
 let selectdata
 User.find(function(err,data){
@@ -172,9 +177,27 @@ const root = {
 //홈페이지에서 값을 입력하면 이곳에서 데이터 저장
 //http://localhost:8080/graphql?query={getusingwater(name:"이곳에 입력", username:"이곳에 입력", password:"이곳에 입력", sex : "이곳에 입력"){name}}
 async getusingwater(input) {
-    console.log(input)
+    const token = jwt.sign({
+        name: input.name
+    }, "secretKey", {
+        expiresIn: '1m',
+        issuer: 'tokenuser',
+    })
+    console.log(token)
+    return input
 },
 
+async people(input) {
+    let dataArray = new Array()
+    const people = await Client.find(function (err, data) {
+        for (let index = 0; index < data.length; index++) {
+            if (data[index].name == input.name) {
+                dataArray.push(data[index])
+            }
+        }
+    });
+    return dataArray;
+},
 //graphql 페이지에서 값을 입력하면 페이지 저장
 addusingwater: (input) => {
     console.log(input)
@@ -193,6 +216,7 @@ async createwater({ input }) {
     return arraywater.push(input.name)
 }
 }
+
 app.use('/graphql', GraphqlHttp({
 schema: schema,
 rootValue: root,
@@ -200,8 +224,7 @@ graphiql: true,
 }))
 
 // 라우터 사용하여 라우팅 함수 등록
-var router = express.Router();
-
+var router = express.Router()
 
 var storagevideo = multer.diskStorage({
 destination: function (req, file, callback) {
@@ -250,9 +273,8 @@ try {
         }
 
         //만약 현재 보여주는 미디어들의 type 이 None일 경우 smartmirrorimagefile 데이터베이스에도 추가하여 바로 반영되도록 추가
-        Smartmirrorvideofile.find(function(err,data){
-            if(data[0].type == "None")
-            {
+        Smartmirrorvideofile.find(function (err, data) {
+            if (data[0].type == "None") {
                 const videofile = new Smartmirrorvideofile({ 'name': filename, 'Date': new Date(), 'type': "None" })
                 videofile.save(function (err, slience) {
                     if (err) {
@@ -314,9 +336,8 @@ try {
         }
 
         //만약 현재 보여주는 미디어들의 type 이 reservation이고 날짜가 현재 날짜와 같다면 smartmirrorvideofile 데이터베이스에도 추가
-        Smartmirrorvideofile.find(function(err,data){
-            if(data[0].type == "reservation" && data[0].Date == currentday)
-            {
+        Smartmirrorvideofile.find(function (err, data) {
+            if (data[0].type == "reservation" && data[0].Date == currentday) {
                 const videofile = new Smartmirrorvideofile({ 'name': filename, 'Date': currentday, 'type': "reservation" })
                 videofile.save(function (err, slience) {
                     if (err) {
@@ -328,7 +349,7 @@ try {
                 })
             }
         })
-        
+
 
 
         const videofile = new Videofilesave({ 'name': filename, 'Date': currentday, 'type': "reservation" })
@@ -402,9 +423,8 @@ try {
         // 클라이언트에 응답 전송
 
         //만약 현재 보여주는 미디어들의 type 이 None일 경우 smartmirrorimagefile 데이터베이스에도 추가하여 바로 반영되도록 추가
-        Smartmirrorimagefile.find(function(err,data){
-            if(data[0].type == "None")
-            {
+        Smartmirrorimagefile.find(function (err, data) {
+            if (data[0].type == "None") {
                 const imgfile = new Smartmirrorimagefile({ 'name': filename, 'Date': new Date(), 'type': "None" })
                 imgfile.save(function (err, slience) {
                     if (err) {
@@ -416,7 +436,7 @@ try {
                 })
             }
         })
-        
+
         const imgfile = new Imgfile({ 'name': filename, 'Date': new Date(), 'type': "None" })
         imgfile.save(function (err, slience) {
             if (err) {
@@ -471,9 +491,8 @@ try {
 
         // 클라이언트에 응답 전송
         //만약 현재 보여주는 미디어들의 type 이 reservation이고 날짜가 현재 날짜와 같다면 smartmirrorimagefile 데이터베이스에도 추가
-        Smartmirrorimagefile.find(function(err,data){
-            if(data[0].type == "reservation" && data[0].Date == currentday)
-            {
+        Smartmirrorimagefile.find(function (err, data) {
+            if (data[0].type == "reservation" && data[0].Date == currentday) {
                 const imgfile = new Smartmirrorimagefile({ 'name': filename, 'Date': currentday, 'type': "reservation" })
                 imgfile.save(function (err, slience) {
                     if (err) {
@@ -532,7 +551,7 @@ Imgfile.find(function (err, data) {
     for (let i = 0; i < data.length; i++) {
         if (data[i].Date == date && data[i].type == "reservation") {
             changefilename = data[i].name
-            const changefile = new Smartmirrorimagefile({ 'name': changefilename, 'Date' : date, 'type' : "reservation" })
+            const changefile = new Smartmirrorimagefile({ 'name': changefilename, 'Date': date, 'type': "reservation" })
             changefile.save(function (err, slience) {
                 if (err) {
                     console.log(err)
@@ -549,7 +568,7 @@ Imgfile.find(function (err, data) {
         for (let i = 0; i < data.length; i++) {
             if (data[i].type == "None") {
                 changefilename = data[i].name
-                const changefile = new Smartmirrorimagefile({ 'name': changefilename, 'type' : "None" })
+                const changefile = new Smartmirrorimagefile({ 'name': changefilename, 'type': "None" })
                 changefile.save(function (err, slience) {
                     if (err) {
                         console.log(err)
@@ -571,7 +590,7 @@ Videofilesave.find(function (err, data) {
     for (let i = 0; i < data.length; i++) {
         if (data[i].Date == date && data[i].type == "reservation") {
             changefilename = data[i].name
-            const changefile = new Smartmirrorimagefile({ 'name': changefilename, 'Date' : date, 'type' : "None" })
+            const changefile = new Smartmirrorimagefile({ 'name': changefilename, 'Date': date, 'type': "None" })
             changefile.save(function (err, slience) {
                 if (err) {
                     console.log(err)
@@ -588,7 +607,7 @@ Videofilesave.find(function (err, data) {
         for (let i = 0; i < data.length; i++) {
             if (data[i].type == "None") {
                 changefilename = data[i].name
-                const changefile = new Smartmirrorimagefile({ 'name': changefilename, 'type' : "None" })
+                const changefile = new Smartmirrorimagefile({ 'name': changefilename, 'type': "None" })
                 changefile.save(function (err, slience) {
                     if (err) {
                         console.log(err)
@@ -733,7 +752,7 @@ for (let index = 2; index < 3775; index++) {
 
 
 //기상청 엑셀정보 불러오기
-const excelFile = xlsx.readFile("/home/hosting_users/creativethon/apps/creativethon_wmsadmina/api/기상청41_단기예보 조회서비스_오픈API활용가이드_격자_위경도(20210401).xlsx")
+const excelFile = xlsx.readFile("/home/hosting_users/creativethon/apps/creativethon_wmsadmina/api/기상청41_단기예보 조회서비스_오픈API")
 const firstSheet = excelFile.Sheets[excelFile.SheetNames[0]]
 
 var localselect
@@ -1130,8 +1149,7 @@ runtimeOptions: {
 }))
 app.set('view engine', 'handlebars')
 app.use(express.static(__dirname + '/public'))
-app.set('views', __dirname + '/views')
-app.use(express.static(__dirname + '/api'))
+
 //메인페이지
 app.get('/main', function (req, res) {
 Water.find(function (err, water) {
