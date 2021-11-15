@@ -174,6 +174,7 @@ const root = {
 async getusingwater(input) {
     console.log(input)
 },
+
 //graphql 페이지에서 값을 입력하면 페이지 저장
 addusingwater: (input) => {
     console.log(input)
@@ -508,7 +509,7 @@ try {
 
 //매일 오전6시에 예약한 날짜가 되면 스마트미러에 예약한 이미지포스터로 교체, 수전사용량 어제자 교체
 let changefilename
-var j = schedule.scheduleJob("* * 6 * * *", function () {
+var j = schedule.scheduleJob("0 0 6 * * *", function () {
 let imagestate = false
 let videostate = false
 const date = moment().format('MMDD')
