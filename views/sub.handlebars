@@ -1,633 +1,805 @@
-<!--테일윈드-->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.17/tailwind.min.css">
-<!--폰트어썸-->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-<link rel="stylesheet" href="css/maincss.css">
 
-<!--요소 시작-->
-<div class="Side-Box hei-43 bg-4F6884 flex items-center px-6">
-  <div class="flex items-center text-white">
-    <div class="img-box Wea-Ther-Icon mr-1">
-      <img src="https://cdn.jsdelivr.net/gh/kimhyeji324/ICT_Resource@master/docs/top-cl.png" alt="">
-    </div>
-    <div class="img-box Map-Pin-White M-R-1">
-      <img src="https://cdn.jsdelivr.net/gh/kimhyeji324/ICT_Resource@master/docs/Map-Pin-Whi.png" alt="">
-    </div>
-    <div class="text-sm text-white font-bold mr-1">
-      <span>{{selectcityname}}</span>
-                  <span>{{selectvillagename}}</span>
-    </div>
-    <div class="flex text-sm text-white font-bold">
-      <span class="h-full flex M-R-1" id="currentT1H"></span>
-      <span class="h-full flex M-R-1">C</span>
-      <span class="h-full flex">
-        <i class="fas fa-genderless"></i>
-      </span>
-    </div>
-  </div>
-  <div class="flex-1"></div>
-  <div class="flex">
-    <div class="flex text-sm text-white font-bold">
-      <div class="flex mr-1">
-        <span id="textday"></span>
-      </div>
-    </div>
-    <div class="text-sm text-white font-bold">
-      <span id="texthours"></span>
-    </div>
-  </div>
-</div>
-<div class="Ele-All-Box w-full">
-  <form method="post" class="Weat-Box flex mb-4">
-    <div class="flex-1 bg-white flex justify-center items-center border-05-787878 border-radius-50">
-      <div class="text-sm">
-        <span class="c-6F8294 font-bold">Weather Up</span>
-        <span class="c-696969">*날씨 업데이트*</span>
-      </div>
-    </div>
-    <div class="wid-10"></div>
-    <div class="bg-white flex flex-1 justify-center items-center border-05-787878 border-radius-50">
-      <select name="name" id="localname" class="bg-white bg-opacity-0 c-6F8294">
-        <option selected hidden>{{localselected}}</option>
-        {{#each contents}}
-        <option name='adw' value="{{this}}">{{this}}</option>
-        {{/each}}
-      </select>
-      <input type='submit' value='add' onclick='this.form.action= "/weatherlista"'
-        class="Btn Flie-Add-Btn flex justify-center items-center text-white text-xs cursor-pointer border-radius-50">
-    </div>
-    <div class="wid-10"></div>
-    <div class="bg-white flex flex-1 justify-center items-center border-05-787878 border-radius-50">
-      <select name="city" class="bg-white bg-opacity-0 c-6F8294">
-        <option selected hidden>{{cityselected}}</option>
-        {{#each cityname}}
-        <option value="{{this}}">{{this}}</option>
-        {{/each}}
-      </select>
-      <input type='submit' value='add' onclick='this.form.action= "/weatherlista"'
-        class="Btn Flie-Add-Btn bg-3AAFE2 flex justify-center items-center text-white text-xs cursor-pointer border-radius-50">
-    </div>
-    <div class="wid-10"></div>
-    <div class="bg-white flex flex-1 justify-center items-center border-05-787878 border-radius-50">
-      <select name="village" class="bg-white bg-opacity-0 c-6F8294">
-        {{#each village}}
-        <option value="{{this}}">{{this}}</option>
-        {{/each}}
-      </select>
-      <input type='submit' value='add' onclick='this.form.action= "/weather"'
-        class="Btn Flie-Add-Btn bg-3AAFE2 flex justify-center items-center text-white text-xs cursor-pointer border-radius-50">
-    </div>
-  </form>
-  <div class="Ele-Box flex mb-4">
-    <!--그래프-->
-    <div class="h-full bg-white flex-1">
-      <div class="h-9 flex">
-        <div class="bg-637484 flex items-center text-white text-sm font-bold px-6">
-          <span>Graph</span>
-        </div>
-        <div class=" bg-6F8294 flex justify-end items-center flex-1">
-          <div class="text-xs c-6F8294 mr-1">
-            <a href="#">
-              <span class="Btn Detail-Move-Btn inline-block py-1 px-4 border-radius-50">DETAIL PAGE</span>
-            </a>
-          </div>
-        </div>
-      </div>
-      <div class="flex justify-center text-sm c-686868 mt-3">
-        <span>
-          월별 사용량
-        </span>
-      </div>
-      <div class="Graph-Box flex items-center">
-        <div class="h_graph w-full">
-          <ul>
-            <!--월-->
-            <li>
-              <span class="g_term">11.01</span>
-              <span class="g_bar" style="width:30%">
-                <span>30%</span>
-              </span>
-            </li>
-            <!--화-->
-            <li>
-              <span class="g_term">11.02</span>
-              <span class="g_bar" style="width:20%">
-                <span>20%</span>
-              </span>
-            </li>
-            <!--수-->
-            <li>
-              <span class="g_term">11.03</span>
-              <span class="g_bar" style="width:30%">
-                <span>30%</span>
-              </span>
-            </li>
-            <!--목-->
-            <li>
-              <span class="g_term">11.04</span>
-              <span class="g_bar" style="width:40%">
-                <span>40%</span>
-              </span>
-            </li>
-            <!--금-->
-            <li>
-              <span class="g_term">11.05</span>
-              <span class="g_bar" style="width:50%">
-                <span>50%</span>
-              </span>
-            </li>
-            <!--토-->
-            <li>
-              <span class="g_term">11.06</span>
-              <span class="g_bar" style="width:60%">
-                <span>60%</span>
-              </span>
-            </li>
-            <!--일-->
-            <li>
-              <span class="g_term">11.07</span>
-              <span class="g_bar" style="width:100%">
-                <span>100%</span>
-              </span>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
-    <div class="w-5"></div>
-    <!--이미지-->
-    <div class="flex-1">
-      <div class="h-9 flex">
-        <div class="bg-637484 flex items-center text-white text-sm font-bold px-6">
-          <span>Image</span>
-        </div>
-        <div class=" bg-6F8294 flex justify-end items-center flex-1">
-          <div class="text-xs c-6F8294 mr-1">
-            <a href="#">
-              <span class="Btn Detail-Move-Btn inline-block py-1 px-4 border-radius-50">DETAIL PAGE</span>
-            </a>
-          </div>
-        </div>
-      </div>
-      <div class="Url-Box img-box Img-Poster bg-white flex justify-center M-B-2">
-        <img src="https://i.postimg.cc/JzRZD81j/Kakao-Talk-20211015-115032591.jpg" alt="" id="showimage">
-      </div>
-      <div class="Sel-Box w-full bg-white flex items-cneter">
-        <div class="Img-Del-Btn-Box w-full flex items-center mx-1">
-          <div class="w-full">
-            <div class="text-xs font-bold">
-              <span>Select</span>
+        <!--요소 시작-->
+        <link rel="stylesheet" href="css/maincss.css">
+        <div class="Side-Box hei-43 bg-4F6884 flex items-center px-6">
+          <div class="flex items-center text-white">
+            <div class="img-box Wea-Ther-Icon mr-1">
+              <img src="https://cdn.jsdelivr.net/gh/kimhyeji324/ICT_Resource@master/docs/top-cl.png" alt="" id="currentimage">
             </div>
-            <div class="flex items-center ml-5">
-              <div class="text-sm c-8F8F8F">
-                <span class="whitespace-nowrap">추가된 파일 : </span>
+            <div class="img-box Map-Pin-White M-R-1">
+              <img src="https://cdn.jsdelivr.net/gh/kimhyeji324/ICT_Resource@master/docs/Map-Pin-Whi.png" alt="">
+            </div>
+            <div class="text-sm text-white font-bold mr-1">
+              <span>{{selectcityname}}</span>
+              <span>{{selectvillagename}}</span>
+            </div>
+            <div class="flex text-sm text-white font-bold">
+              <span class="h-full flex M-R-1" id="currentT1H"></span>
+              <span class="h-full flex M-R-1">C</span>
+              <span class="h-full flex">
+                <i class="fas fa-genderless"></i>
+              </span>
+            </div>
+          </div>
+          <div class="flex-1"></div>
+          <div class="flex">
+            <div class="flex text-sm text-white font-bold">
+              <div class="flex mr-1">
+                <span id="textday"></span>
               </div>
-              <form method="post">
-                <div class="Img-Url-Box w-full text-sm c-8F8F8F border-1-C4C4C4">
-                  <select class="w-full h-5 text-xs ml-1 cursor-pointer border" name="name" id="imgfilelist"
-                    onchange="changeimageSelect()">
-                    <option value="" selected disabled>--</option>
-                    {{#each imgfile}}
-                    <option name="videofile" value="{{this.name}}">{{this.name}}</option>
-                    {{/each}}
-                  </select>
+            </div>
+            <div class="text-sm text-white font-bold">
+              <span id="texthours"></span>
+            </div>
+          </div>
+        </div>
+        <div class="Ele-All-Box w-full">
+          <form method="post" class="Weat-Box flex mb-3">
+            <div class="flex-1 bg-white flex justify-center items-center border-05-787878 border-radius-50">
+              <div class="text-sm">
+                <span class="c-6F8294 font-bold">Weather Up</span>
+                <span class="c-696969">*날씨 업데이트*</span>
+              </div>
+            </div>
+            <div class="wid-10"></div>
+            <div class="bg-white flex flex-1 justify-center items-center px-2 border-05-787878 border-radius-50">
+              <select name="name" id="localname" class="w-full bg-white bg-opacity-0 py-1 mr-1 text-sm c-6F8294 border border-radius-50">
+                <!--기본 텍스트 제가 내려가서 수정하겠습니다.-->
+                <option hidden selected>{{localselected}}</option>
+                {{#each contents}}
+                  <option name='adw' value="{{this}}">{{this}}</option>
+                {{/each}}
+              </select>
+              <input type='submit' value='add' onclick='this.form.action= "/weatherlista"' class="Btn Flie-Add-Btn flex justify-center items-center text-white text-xs cursor-pointer border-radius-50">
+            </div>
+            <div class="wid-10"></div>
+            <div class="bg-white flex flex-1 justify-center items-center px-2 border-05-787878 border-radius-50">
+              <select name="city" class="w-full bg-white bg-opacity-0 py-1 mr-1 text-sm c-6F8294 border border-radius-50">
+                <!--기본 텍스트 제가 내려가서 수정하겠습니다.-->
+                <option selected hidden>{{cityselected}}</option>
+                {{#each cityname}}
+                  <option value="{{this}}">{{this}}</option>
+                {{/each}}
+              </select>
+              <input type='submit' value='add' onclick='this.form.action= "/weatherlista"' class="Btn Flie-Add-Btn bg-3AAFE2 flex justify-center items-center text-white text-xs cursor-pointer border-radius-50">
+            </div>
+            <div class="wid-10"></div>
+            <div class="bg-white flex flex-1 justify-center items-center px-2 border-05-787878 border-radius-50">
+              <!--기본 텍스트 제가 내려가서 수정하겠습니다.-->
+              <select name="village" class="w-full bg-white bg-opacity-0 py-1 mr-1 text-sm c-6F8294 border border-radius-50">
+                {{#each village}}
+                  <option value="{{this}}">{{this}}</option>
+                {{/each}}
+              </select>
+              <input type='submit' value='add' onclick='this.form.action= "/weather"' class="Btn Flie-Add-Btn bg-3AAFE2 flex justify-center items-center text-white text-xs cursor-pointer border-radius-50">
+            </div>
+          </form>
+          <div class="Ele-Box flex mb-3">
+            <!--그래프-->
+            <div class="h-full bg-white flex-1">
+              <div class="h-9 flex">
+                <div class="bg-637484 flex items-center text-white text-sm font-bold px-6">
+                  <span>Graph</span>
                 </div>
-                <div>
-                  <input
-                    class="Btn Flie-Del-Btn bg-3AAFE2 flex justify-center items-center text-white text-xs ml-2 cursor-pointer border-radius-50"
-                    type="submit" value="del" onclick='this.form.action= "/deletevideo"'>
+                <div class=" bg-6F8294 flex justify-end items-center flex-1">
+                  <div class="text-xs c-6F8294 mr-1">
+                    <a href="#">
+                      <span class="Btn Detail-Move-Btn inline-block py-1 px-4 border-radius-50">DETAIL PAGE</span>
+                    </a>
+                  </div>
                 </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="w-5"></div>
-    <!--영상-->
-    <div class="flex-1">
-      <div class="h-9 flex">
-        <div class="bg-637484 flex items-center text-white text-sm font-bold px-6">
-          <span>Video</span>
-        </div>
-        <div class=" bg-6F8294 flex justify-end items-center flex-1">
-          <div class="text-xs c-6F8294 mr-1">
-            <a href="#">
-              <span class="Btn Detail-Move-Btn inline-block py-1 px-4 border-radius-50">DETAIL PAGE</span>
-            </a>
-          </div>
-        </div>
-      </div>
-      <div class="Url-Box Video-Box bg-white flex justify-center M-R-2">
-        <video width="300px;" src="test.mp4" controls muted autoplay id="showvideo" class="py-2"></video>
-      </div>
-      <div class="Sel-Box w-full bg-white flex items-cneter">
-        <div class="Img-Del-Btn-Box w-full flex items-center mx-1">
-          <div class="w-full">
-            <div class="text-xs font-bold">
-              <span>Select</span>
-            </div>
-            <div class="flex items-center ml-5">
-              <div class="text-sm c-8F8F8F">
-                <span class="whitespace-nowrap">추가된 파일 : </span>
               </div>
-              <form method="post">
-                <div class="Img-Url-Box w-full text-sm c-8F8F8F border-1-C4C4C4">
-                  <select class="w-full h-5 text-xs ml-1 cursor-pointer border" name="name" id="videofilelist"
-                    onchange="changevideoSelect()">
-                    <option value="" selected disabled>--</option>
-                    {{#each videofile}}
-                    <option name="videofile" value="{{this.name}}">{{this.name}}</option>
-                    {{/each}}
-                  </select>
+              <div class="Graph-Text flex justify-center c-686868 mt-3">
+                <span>
+                  일주일 사용량
+                </span>
+              </div>
+              <div class="Graph-Box flex items-end justify-center">
+                <!--G2-1-->
+                <div class="Graph-Bar-Item Graph-Bar-Item-2-1 relative inline-block">
+                  <div class="Nd-Pop-Up Pop-Up-2-1 text-xs">
+                    <span class="c-3AAFE2">
+                      <i class="fas fa-hand-holding-water"></i>
+                    </span>
+                    <span>
+                      2
+                    </span>
+                    <span>
+                      L
+                    </span>
+                  </div>
+                  <div class="flex justify-center">
+                    <span class="Gra-Per-Text text-xs c-A8A8A8">
+                      70
+                    </span>
+                    <span class="Gra-Per-Text text-xs c-A8A8A8">
+                      %
+                    </span>
+                  </div>
+                  <div class="Gra-Bar-Ele-Box flex justify-center items-end mt-1 mb-1">
+                    <div class="Gra-Back-Ele-Bar h-full flex items-end border-radius-2">
+                      <div class="w-full border-radius-2" style="height: 70%;"></div>
+                    </div>
+                  </div>
+                  <div class="flex justify-center items-center text-xs c-A8A8A8">
+                    <span>11</span>
+                    <span>.</span>
+                    <span>01</span>
+                    <span>(월)</span>
+                  </div>
                 </div>
-                <div>
-                  <input
-                    class="Btn Flie-Del-Btn bg-3AAFE2 flex justify-center items-center text-white text-xs ml-2 cursor-pointer border-radius-50"
-                    type="submit" value="del" onclick='this.form.action= "/deletevideo"'>
+                <div class="w-4"></div>
+                <!--G2-2-->
+                <div class="Graph-Bar-Item Graph-Bar-Item-2-2 relative inline-block">
+                  <div class="Nd-Pop-Up Pop-Up-2-2 text-xs">
+                    <span class="c-3AAFE2 mr-1">
+                      <i class="fas fa-hand-holding-water"></i>
+                    </span>
+                    <span>
+                      2
+                    </span>
+                    <span>
+                      L
+                    </span>
+                  </div>
+                  <div class="flex justify-center">
+                    <span class="Gra-Per-Text text-xs c-A8A8A8">
+                      60
+                    </span>
+                    <span class="Gra-Per-Text text-xs c-A8A8A8">
+                      %
+                    </span>
+                  </div>
+                  <div class="Gra-Bar-Ele-Box flex justify-center items-end mt-1 mb-1">
+                    <div class="Gra-Back-Ele-Bar h-full flex items-end border-radius-2">
+                      <div class="w-full border-radius-2" style="height: 60%;"></div>
+                    </div>
+                  </div>
+                  <div class="flex justify-center items-center text-xs c-A8A8A8">
+                    <span>11</span>
+                    <span>.</span>
+                    <span>02</span>
+                    <span>(화)</span>
+                  </div>
                 </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="Use-List-Box">
-    <div class="h-9 flex">
-      <div class="bg-637484 flex flex-1 justify-center items-center">
-        <span class="text-sm text-white font-bold">
-          Management
-        </span>
-      </div>
-      <div class="bg-6F8294 flex flex-1 justify-center items-center">
-        <span class="text-sm text-white">
-          사용량&오염량
-        </span>
-      </div>
-      <div class="bg-6F8294 flex flex-1 justify-center items-center">
-        <span class="text-sm text-white">
-          알람
-        </span>
-      </div>
-      <div class="bg-6F8294 flex flex-1 justify-center items-center">
-        <span class="text-sm text-white">
-          교체 여부
-        </span>
-      </div>
-      <div class="bg-6F8294 flex flex-1 justify-center items-center">
-        <span class="text-sm text-white">
-          수치
-        </span>
-      </div>
-      <div class="bg-6F8294 flex flex-1 justify-center items-center">
-        <div class="text-xs c-6F8294 mr-1">
-          <a href="#">
-            <span class="Btn Detail-Move-Btn inline-block py-1 px-4 border-radius-50">DETAIL PAGE</span>
-          </a>
-        </div>
-      </div>
-    </div>
-    <div class="Use-List bg-white">
-      <!--1-->
-      <div class="Use-List-Item-Box flex">
-        <div class="flex flex-1 justify-center items-center">
-          <span class="text-sm c-565656">
-            수전 사용량
-          </span>
-        </div>
-        <div class="flex flex-1 justify-center items-center">
-          <span class="text-sm c-565656">
-            20
-          </span>
-          <span class="text-sm c-565656">
-            L
-          </span>
-        </div>
-        <div class="flex flex-1 justify-center items-center">
-          <div style="display: none;">
-            <span class="c-079E24">
-              Change
-            </span>
-            <span class="text-xs c-079E24 M-B--2">
-              <i class="fas fa-exclamation-triangle"></i>
-            </span>
-          </div>
-        </div>
-        <div class="flex flex-1 justify-center items-center">
-          <div class="poll-btn inline-block">
-            <div class="relative flex">
-              <div class="Use-Move-Btn" style="left: 0;">
-                <span class="h-full flex justify-center items-center">
-                  btn
-                </span>
-              </div>
-              <div class="btn-text-off hei-34 bg-white flex justify-center items-center" style="width: 60px;">
-                <span class="text-xs c-FD7B32">
-                  <i class="fas fa-exclamation-triangle"></i>
-                </span>
-              </div>
-              <div class="btn-text-danger bg-white flex" style="width: 60px;">
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="flex flex-1 justify-center items-center border-radius-50">
-          <div class="Graph-Back-Bar wid-80-p h-2 mx-2 border-radius-50">
-            <div class="Percent-Bar h-full border-radius-50" style="width: 20%;"></div>
-          </div>
-        </div>
-        <div class="flex flex-1 justify-center items-center"></div>
-      </div>
-      <!--2-->
-      <div class="Use-List-Item-Box flex">
-        <div class="flex flex-1 justify-center items-center">
-          <span class="text-sm c-565656">
-            핸드타올 사용량 (1)
-          </span>
-        </div>
-        <div class="flex flex-1 justify-center items-center">
-          <span class="text-sm c-565656">
-            85
-          </span>
-          <span class="text-sm c-565656">
-            %
-          </span>
-        </div>
-        <div class="flex flex-1 justify-center items-center">
-          <div>
-            <span class="c-079E24">
-              Change
-            </span>
-            <span class="text-xs c-079E24 M-B--2 ml-1">
-              <i class="fas fa-exclamation-triangle"></i>
-            </span>
-          </div>
-        </div>
-        <div class="flex flex-1 justify-center items-center">
-          <div class="poll-btn inline-block">
-            <div class="relative flex">
-              <div class="Use-Move-Btn" style="right: 0;">
-                <span class="h-full flex justify-center items-center">
-                  btn
-                </span>
-              </div>
-              <div class="btn-text-off hei-34 bg-white flex justify-center items-center" style="width: 60px;">
-                <span class="text-xs c-FD7B32">
-                  <i class="fas fa-exclamation-triangle"></i>
-                </span>
-              </div>
-              <div class="btn-text-danger bg-white flex" style="width: 60px;">
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="flex flex-1 justify-center items-center border-radius-50">
-          <div class="Graph-Back-Bar wid-80-p h-2 mx-2 border-radius-50">
-            <div class="Percent-Bar h-full border-radius-50" style="width: 85%;"></div>
-          </div>
-        </div>
-        <div class="flex flex-1 justify-center items-center"></div>
-      </div>
-      <!--3-->
-      <div class="Use-List-Item-Box flex">
-        <div class="flex flex-1 justify-center items-center">
-          <span class="text-sm c-565656">
-            핸드타올 사용량 (2)
-          </span>
-        </div>
-        <div class="flex flex-1 justify-center items-center">
-          <span class="text-sm c-565656">
-            30
-          </span>
-          <span class="text-sm c-565656">
-            %
-          </span>
-        </div>
-        <div class="flex flex-1 justify-center items-center">
-          <div style="display:none;">
-            <span class="c-079E24">
-              Change
-            </span>
-            <span class="text-xs c-079E24 M-B--2 ml-1">
-              <i class="fas fa-exclamation-triangle"></i>
-            </span>
-          </div>
-        </div>
-        <div class="flex flex-1 justify-center items-center">
-          <div class="poll-btn inline-block">
-            <div class="relative flex">
-              <div class="Use-Move-Btn" style="left: 0;">
-                <span class="h-full flex justify-center items-center">
-                  btn
-                </span>
-              </div>
-              <div class="btn-text-off hei-34 bg-white flex justify-center items-center" style="width: 60px;">
-                <span class="text-xs c-FD7B32">
-                  <i class="fas fa-exclamation-triangle"></i>
-                </span>
-              </div>
-              <div class="btn-text-danger bg-white flex" style="width: 60px;">
+                <div class="w-4"></div>
+                <!--G2-3-->
+                <div class="Graph-Bar-Item Graph-Bar-Item-2-3 relative inline-block">
+                  <div class="Nd-Pop-Up Pop-Up-2-3 text-xs">
+                    <span class="c-3AAFE2 mr-1">
+                      <i class="fas fa-hand-holding-water"></i>
+                    </span>
+                    <span>
+                      2
+                    </span>
+                    <span>
+                      L
+                    </span>
+                  </div>
+                  <div class="flex justify-center">
+                    <span class="Gra-Per-Text text-xs c-A8A8A8">
+                      40
+                    </span>
+                    <span class="Gra-Per-Text text-xs c-A8A8A8">
+                      %
+                    </span>
+                  </div>
+                  <div class="Gra-Bar-Ele-Box flex justify-center items-end mt-1 mb-1">
+                    <div class="Gra-Back-Ele-Bar h-full flex items-end border-radius-2">
+                      <div class="w-full border-radius-2" style="height: 50%;"></div>
+                    </div>
+                  </div>
+                  <div class="flex justify-center items-center text-xs c-A8A8A8">
+                    <span>11</span>
+                    <span>.</span>
+                    <span>03</span>
+                    <span>(수)</span>
+                  </div>
+                </div>
+                <div class="w-4"></div>
+                <!--G2-4-->
+                <div class="Graph-Bar-Item Graph-Bar-Item-2-4 relative inline-block">
+                  <div class="Nd-Pop-Up Pop-Up-2-4 text-xs">
+                    <span class="c-3AAFE2 mr-1">
+                      <i class="fas fa-hand-holding-water"></i>
+                    </span>
+                    <span>
+                      2
+                    </span>
+                    <span>
+                      L
+                    </span>
+                  </div>
+                  <div class="flex justify-center">
+                    <span class="Gra-Per-Text text-xs c-A8A8A8">
+                      20
+                    </span>
+                    <span class="Gra-Per-Text text-xs c-A8A8A8">
+                      %
+                    </span>
+                  </div>
+                  <div class="Gra-Bar-Ele-Box flex justify-center items-end mt-1 mb-1">
+                    <div class="Gra-Back-Ele-Bar h-full flex items-end border-radius-2">
+                      <div class="w-full border-radius-2" style="height: 20%;"></div>
+                    </div>
+                  </div>
+                  <div class="flex justify-center items-center text-xs c-A8A8A8">
+                    <span>11</span>
+                    <span>.</span>
+                    <span>04</span>
+                    <span>(목)</span>
+                  </div>
+                </div>
+                <div class="w-4"></div>
+                <!--G2-5-->
+                <div class="Graph-Bar-Item Graph-Bar-Item-2-5 relative inline-block">
+                  <div class="Nd-Pop-Up Pop-Up-2-5 text-xs">
+                    <span class="c-3AAFE2 mr-1">
+                      <i class="fas fa-hand-holding-water"></i>
+                    </span>
+                    <span>
+                      2
+                    </span>
+                    <span>
+                      L
+                    </span>
+                  </div>
+                  <div class="flex justify-center">
+                    <span class="Gra-Per-Text text-xs c-A8A8A8">
+                      70
+                    </span>
+                    <span class="Gra-Per-Text text-xs c-A8A8A8">
+                      %
+                    </span>
+                  </div>
+                  <div class="Gra-Bar-Ele-Box flex justify-center items-end mt-1 mb-1">
+                    <div class="Gra-Back-Ele-Bar h-full flex items-end border-radius-2">
+                      <div class="w-full border-radius-2" style="height: 70%;"></div>
+                    </div>
+                  </div>
+                  <div class="flex justify-center items-center text-xs c-A8A8A8">
+                    <span>11</span>
+                    <span>.</span>
+                    <span>05</span>
+                    <span>(금)</span>
+                  </div>
+                </div>
+                <div class="w-4"></div>
+                <!--G2-6-->
+                <div class="Graph-Bar-Item Graph-Bar-Item-2-6 relative inline-block">
+                  <div class="Nd-Pop-Up Pop-Up-2-6 text-xs">
+                    <span class="c-3AAFE2 mr-1">
+                      <i class="fas fa-hand-holding-water"></i>
+                    </span>
+                    <span>
+                      2
+                    </span>
+                    <span>
+                      L
+                    </span>
+                  </div>
+                  <div class="flex justify-center">
+                    <span class="Gra-Per-Text text-xs c-A8A8A8">
+                      10
+                    </span>
+                    <span class="Gra-Per-Text text-xs c-A8A8A8">
+                      %
+                    </span>
+                  </div>
+                  <div class="Gra-Bar-Ele-Box flex justify-center items-end mt-1 mb-1">
+                    <div class="Gra-Back-Ele-Bar h-full flex items-end border-radius-2">
+                      <div class="w-full border-radius-2" style="height: 10%;"></div>
+                    </div>
+                  </div>
+                  <div class="flex justify-center items-center text-xs c-A8A8A8">
+                    <span>11</span>
+                    <span>.</span>
+                    <span>06</span>
+                    <span>(토)</span>
+                  </div>
+                </div>
+                <div class="w-4"></div>
+                <!--G2-7-->
+                <div class="Graph-Bar-Item Graph-Bar-Item-2-7 relative inline-block">
+                  <div class="Nd-Pop-Up Pop-Up-2-7 text-xs">
+                    <span class="c-3AAFE2 mr-1">
+                      <i class="fas fa-hand-holding-water"></i>
+                    </span>
+                    <span>
+                      2
+                    </span>
+                    <span>
+                      L
+                    </span>
+                  </div>
+                  <div class="flex justify-center">
+                    <span class="Gra-Per-Text text-xs c-A8A8A8">
+                      100
+                    </span>
+                    <span class="Gra-Per-Text text-xs c-A8A8A8">
+                      %
+                    </span>
+                  </div>
+                  <div class="Gra-Bar-Ele-Box flex justify-center items-end mt-1 mb-1">
+                    <div class="Gra-Back-Ele-Bar h-full flex items-end border-radius-2">
+                      <div class="w-full border-radius-2" style="height: 100%;"></div>
+                    </div>
+                  </div>
+                  <div class="flex justify-center items-center text-xs c-A8A8A8">
+                    <span>11</span>
+                    <span>.</span>
+                    <span>07</span>
+                    <span>(일)</span>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
-        <div class="flex flex-1 justify-center items-center border-radius-50">
-          <div class="Graph-Back-Bar wid-80-p h-2 mx-2 border-radius-50">
-            <div class="Percent-Bar h-full border-radius-50" style="width: 30%;"></div>
-          </div>
-        </div>
-        <div class="flex flex-1 justify-center items-center"></div>
-      </div>
-      <!--4-->
-      <div class="Use-List-Item-Box flex">
-        <div class="flex flex-1 justify-center items-center">
-          <span class="text-sm c-565656">
-            필터 오염량 (1)
-          </span>
-        </div>
-        <div class="flex flex-1 justify-center items-center">
-          <span class="text-sm c-565656">
-            90
-          </span>
-          <span class="text-sm c-565656">
-            %
-          </span>
-        </div>
-        <div class="flex flex-1 justify-center items-center">
-          <div>
-            <span class="c-079E24">
-              Change
-            </span>
-            <span class="text-xs c-079E24 M-B--2 ml-1">
-              <i class="fas fa-exclamation-triangle"></i>
-            </span>
-          </div>
-        </div>
-        <div class="flex flex-1 justify-center items-center">
-          <div class="poll-btn inline-block">
-            <div class="relative flex">
-              <div class="Use-Move-Btn" style="right: 0;">
-                <span class="h-full flex justify-center items-center">
-                  btn
-                </span>
+            <div class="w-5"></div>
+            <!--이미지-->
+            <div class="flex-1">
+              <div class="h-9 flex">
+                <div class="bg-637484 flex items-center text-white text-sm font-bold px-6">
+                  <span>Image</span>
+                </div>
+                <div class=" bg-6F8294 flex justify-end items-center flex-1">
+                  <div class="text-xs c-6F8294 mr-1">
+                    <a href="#">
+                      <span class="Btn Detail-Move-Btn inline-block py-1 px-4 border-radius-50">DETAIL PAGE</span>
+                    </a>
+                  </div>
+                </div>
               </div>
-              <div class="btn-text-off hei-34 bg-white flex justify-center items-center" style="width: 60px;">
-                <span class="text-xs c-FD7B32">
-                  <i class="fas fa-exclamation-triangle"></i>
-                </span>
+              <div class="Url-Box img-box Img-Poster bg-white flex justify-center M-B-2">
+                <img src="https://i.postimg.cc/JzRZD81j/Kakao-Talk-20211015-115032591.jpg" alt="" id="showimage">
               </div>
-              <div class="btn-text-danger bg-white flex" style="width: 60px;">
+              <div class="Sel-Box w-full bg-white flex items-cneter">
+                <div class="Img-Del-Btn-Box w-full flex items-center mx-1">
+                  <div class="w-full">
+                    <div class="text-xs font-bold">
+                      <span>Select</span>
+                    </div>
+
+                    <div class="flex items-center ml-3">
+
+                      <div class="text-sm c-8F8F8F">
+                        <span class="whitespace-nowrap">추가된 파일 : </span>
+                      </div>
+
+                      <form class="flex w-full" method="post">
+                        <div class="Img-Url-Box w-full text-sm c-8F8F8F border-1-C4C4C4">
+                          <select class="w-full h-5 text-xs cursor-pointer border" name="name" id="imgfilelist" onchange="changeimageSelect()">
+                            <option value="" selected disabled>--</option>
+                            {{#each imgfile}}
+                              <option name="videofile" value="{{this.name}}">{{this.name}}</option>
+                            {{/each}}
+                          </select>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
-        <div class="flex flex-1 justify-center items-center border-radius-50">
-          <div class="Graph-Back-Bar wid-80-p h-2 mx-2 border-radius-50">
-            <div class="Percent-Bar h-full border-radius-50" style="width: 90%;"></div>
-          </div>
-        </div>
-        <div class="flex flex-1 justify-center items-center"></div>
-      </div>
-      <!--5-->
-      <div class="Use-List-Item-Box flex">
-        <div class="flex flex-1 justify-center items-center">
-          <span class="text-sm c-565656">
-            필터 오염량 (2)
-          </span>
-        </div>
-        <div class="flex flex-1 justify-center items-center">
-          <span class="text-sm c-565656">
-            95
-          </span>
-          <span class="text-sm c-565656">
-            %
-          </span>
-        </div>
-        <div class="flex flex-1 justify-center items-center">
-          <div>
-            <span class="c-079E24">
-              Change
-            </span>
-            <span class="text-xs c-079E24 M-B--2 ml-1">
-              <i class="fas fa-exclamation-triangle"></i>
-            </span>
-          </div>
-        </div>
-        <div class="flex flex-1 justify-center items-center">
-          <div class="poll-btn inline-block">
-            <div class="relative flex">
-              <div class="Use-Move-Btn" style="right: 0;">
-                <span class="h-full flex justify-center items-center">
-                  btn
-                </span>
+            <div class="w-5"></div>
+            <!--영상-->
+            <div class="flex-1">
+              <div class="h-9 flex">
+                <div class="bg-637484 flex items-center text-white text-sm font-bold px-6">
+                  <span>Video</span>
+                </div>
+                <div class=" bg-6F8294 flex justify-end items-center flex-1">
+                  <div class="text-xs c-6F8294 mr-1">
+                    <a href="#">
+                      <span class="Btn Detail-Move-Btn inline-block py-1 px-4 border-radius-50">DETAIL PAGE</span>
+                    </a>
+                  </div>
+                </div>
               </div>
-              <div class="btn-text-off hei-34 bg-white flex justify-center items-center" style="width: 60px;">
-                <span class="text-xs c-FD7B32">
-                  <i class="fas fa-exclamation-triangle"></i>
-                </span>
+              <div class="Url-Box Video-Box bg-white flex justify-center M-B-2">
+                <video width="300px;" src="test.mp4" controls muted autoplay id="showvideo" class="py-2"></video>
               </div>
-              <div class="btn-text-danger bg-white flex" style="width: 60px;">
+              <div class="Sel-Box w-full bg-white flex items-cneter">
+                <div class="Img-Del-Btn-Box w-full flex items-center mx-1">
+                  <div class="w-full">
+                    <div class="text-xs font-bold">
+                      <span>Select</span>
+                    </div>
+                    <div class="flex items-center ml-3">
+                      <div class="text-sm c-8F8F8F">
+                        <span class="whitespace-nowrap">추가된 파일 : </span>
+                      </div>
+                      <form class="w-full flex" method="post">
+                        <div class="Img-Url-Box w-full text-sm c-8F8F8F border-1-C4C4C4 pr-1">
+                          <select class="w-full h-5 text-xs ml-1 cursor-pointer border" name="name" id="videofilelist" onchange="changevideoSelect()">
+                            <option value="" selected disabled>--</option>
+                            {{#each videofile}}
+                              <option name="videofile" value="{{this.name}}">{{this.name}}</option>
+                            {{/each}}
+                          </select>
+                        </div>
+                        <div>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div class="flex flex-1 justify-center items-center border-radius-50">
-          <div class="Graph-Back-Bar wid-80-p h-2 mx-2 border-radius-50">
-            <div class="Percent-Bar h-full border-radius-50" style="width: 95%;"></div>
+          <div class="Use-List-Box">
+            <div class="h-9 flex">
+              <div class="bg-637484 flex flex-1 justify-center items-center">
+                <span class="text-sm text-white font-bold">
+                  Management
+                </span>
+              </div>
+              <div class="bg-6F8294 flex flex-1 justify-center items-center">
+                <span class="text-sm text-white">
+                  사용량&오염량
+                </span>
+              </div>
+              <div class="bg-6F8294 flex flex-1 justify-center items-center">
+                <span class="text-sm text-white">
+                  알람
+                </span>
+              </div>
+              <div class="bg-6F8294 flex flex-1 justify-center items-center">
+                <span class="text-sm text-white">
+                  교체 여부
+                </span>
+              </div>
+              <div class="bg-6F8294 flex flex-1 justify-center items-center">
+                <span class="text-sm text-white">
+                  수치
+                </span>
+              </div>
+              <div class="bg-6F8294 flex flex-1 justify-center items-center">
+                <div class="text-xs c-6F8294 mr-1">
+                  <a href="#">
+                    <span class="Btn Detail-Move-Btn inline-block py-1 px-4 border-radius-50">DETAIL PAGE</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div class="Use-List bg-white">
+              <!--1-->
+              <div class="Use-List-Item-Box flex">
+                <div class="flex flex-1 justify-center items-center">
+                  <span class="text-sm c-565656">
+                    수전 사용량
+                  </span>
+                </div>
+                <div class="flex flex-1 justify-center items-center">
+                  <span class="text-sm c-565656">
+                    20
+                  </span>
+                  <span class="text-sm c-565656">
+                    L
+                  </span>
+                </div>
+                <div class="flex flex-1 justify-center items-center">
+                  <div style="display: none;">
+                    <span class="c-079E24">
+                      Change
+                    </span>
+                    <span class="text-xs c-079E24 M-B--2">
+                      <i class="fas fa-exclamation-triangle"></i>
+                    </span>
+                  </div>
+                </div>
+                <div class="flex flex-1 justify-center items-center">
+                  <div class="poll-btn inline-block">
+                    <div class="relative flex">
+                      <div class="Use-Move-Btn" style="left: 0;">
+                        <span class="h-full flex justify-center items-center">
+                          btn
+                        </span>
+                      </div>
+                      <div class="btn-text-off hei-34 bg-white flex justify-center items-center" style="width: 60px;">
+                        <span class="text-xs c-FD7B32">
+                          <i class="fas fa-exclamation-triangle"></i>
+                        </span>
+                      </div>
+                      <div class="btn-text-danger bg-white flex" style="width: 60px;">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="flex flex-1 justify-center items-center border-radius-50">
+                  <div class="Graph-Back-Bar wid-80-p h-2 mx-2 border-radius-50">
+                    <div class="Percent-Bar h-full border-radius-50" style="width: 20%;"></div>
+                  </div>
+                </div>
+                <div class="flex flex-1 justify-center items-center"></div>
+              </div>
+              <!--2-->
+              <div class="Use-List-Item-Box flex">
+                <div class="flex flex-1 justify-center items-center">
+                  <span class="text-sm c-565656">
+                    핸드타올 사용량 (1)
+                  </span>
+                </div>
+                <div class="flex flex-1 justify-center items-center">
+                  <span class="text-sm c-565656">
+                    85
+                  </span>
+                  <span class="text-sm c-565656">
+                    %
+                  </span>
+                </div>
+                <div class="flex flex-1 justify-center items-center">
+                  <div>
+                    <span class="c-079E24">
+                      Change
+                    </span>
+                    <span class="text-xs c-079E24 M-B--2 ml-1">
+                      <i class="fas fa-exclamation-triangle"></i>
+                    </span>
+                  </div>
+                </div>
+                <div class="flex flex-1 justify-center items-center">
+                  <div class="poll-btn inline-block">
+                    <div class="relative flex">
+                      <div class="Use-Move-Btn" style="right: 0;">
+                        <span class="h-full flex justify-center items-center">
+                          btn
+                        </span>
+                      </div>
+                      <div class="btn-text-off hei-34 bg-white flex justify-center items-center" style="width: 60px;">
+                        <span class="text-xs c-FD7B32">
+                          <i class="fas fa-exclamation-triangle"></i>
+                        </span>
+                      </div>
+                      <div class="btn-text-danger bg-white flex" style="width: 60px;">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="flex flex-1 justify-center items-center border-radius-50">
+                  <div class="Graph-Back-Bar wid-80-p h-2 mx-2 border-radius-50">
+                    <div class="Percent-Bar h-full border-radius-50" style="width: 85%;"></div>
+                  </div>
+                </div>
+                <div class="flex flex-1 justify-center items-center"></div>
+              </div>
+              <!--3-->
+              <div class="Use-List-Item-Box flex">
+                <div class="flex flex-1 justify-center items-center">
+                  <span class="text-sm c-565656">
+                    핸드타올 사용량 (2)
+                  </span>
+                </div>
+                <div class="flex flex-1 justify-center items-center">
+                  <span class="text-sm c-565656">
+                    30
+                  </span>
+                  <span class="text-sm c-565656">
+                    %
+                  </span>
+                </div>
+                <div class="flex flex-1 justify-center items-center">
+                  <div style="display:none;">
+                    <span class="c-079E24">
+                      Change
+                    </span>
+                    <span class="text-xs c-079E24 M-B--2 ml-1">
+                      <i class="fas fa-exclamation-triangle"></i>
+                    </span>
+                  </div>
+                </div>
+                <div class="flex flex-1 justify-center items-center">
+                  <div class="poll-btn inline-block">
+                    <div class="relative flex">
+                      <div class="Use-Move-Btn" style="left: 0;">
+                        <span class="h-full flex justify-center items-center">
+                          btn
+                        </span>
+                      </div>
+                      <div class="btn-text-off hei-34 bg-white flex justify-center items-center" style="width: 60px;">
+                        <span class="text-xs c-FD7B32">
+                          <i class="fas fa-exclamation-triangle"></i>
+                        </span>
+                      </div>
+                      <div class="btn-text-danger bg-white flex" style="width: 60px;">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="flex flex-1 justify-center items-center border-radius-50">
+                  <div class="Graph-Back-Bar wid-80-p h-2 mx-2 border-radius-50">
+                    <div class="Percent-Bar h-full border-radius-50" style="width: 30%;"></div>
+                  </div>
+                </div>
+                <div class="flex flex-1 justify-center items-center"></div>
+              </div>
+              <!--4-->
+              <div class="Use-List-Item-Box flex">
+                <div class="flex flex-1 justify-center items-center">
+                  <span class="text-sm c-565656">
+                    필터 오염량 (1)
+                  </span>
+                </div>
+                <div class="flex flex-1 justify-center items-center">
+                  <span class="text-sm c-565656">
+                    90
+                  </span>
+                  <span class="text-sm c-565656">
+                    %
+                  </span>
+                </div>
+                <div class="flex flex-1 justify-center items-center">
+                  <div>
+                    <span class="c-079E24">
+                      Change
+                    </span>
+                    <span class="text-xs c-079E24 M-B--2 ml-1">
+                      <i class="fas fa-exclamation-triangle"></i>
+                    </span>
+                  </div>
+                </div>
+                <div class="flex flex-1 justify-center items-center">
+                  <div class="poll-btn inline-block">
+                    <div class="relative flex">
+                      <div class="Use-Move-Btn" style="right: 0;">
+                        <span class="h-full flex justify-center items-center">
+                          btn
+                        </span>
+                      </div>
+                      <div class="btn-text-off hei-34 bg-white flex justify-center items-center" style="width: 60px;">
+                        <span class="text-xs c-FD7B32">
+                          <i class="fas fa-exclamation-triangle"></i>
+                        </span>
+                      </div>
+                      <div class="btn-text-danger bg-white flex" style="width: 60px;">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="flex flex-1 justify-center items-center border-radius-50">
+                  <div class="Graph-Back-Bar wid-80-p h-2 mx-2 border-radius-50">
+                    <div class="Percent-Bar h-full border-radius-50" style="width: 90%;"></div>
+                  </div>
+                </div>
+                <div class="flex flex-1 justify-center items-center"></div>
+              </div>
+              <!--5-->
+              <div class="Use-List-Item-Box flex">
+                <div class="flex flex-1 justify-center items-center">
+                  <span class="text-sm c-565656">
+                    필터 오염량 (2)
+                  </span>
+                </div>
+                <div class="flex flex-1 justify-center items-center">
+                  <span class="text-sm c-565656">
+                    95
+                  </span>
+                  <span class="text-sm c-565656">
+                    %
+                  </span>
+                </div>
+                <div class="flex flex-1 justify-center items-center">
+                  <div>
+                    <span class="c-079E24">
+                      Change
+                    </span>
+                    <span class="text-xs c-079E24 M-B--2 ml-1">
+                      <i class="fas fa-exclamation-triangle"></i>
+                    </span>
+                  </div>
+                </div>
+                <div class="flex flex-1 justify-center items-center">
+                  <div class="poll-btn inline-block">
+                    <div class="relative flex">
+                      <div class="Use-Move-Btn" style="right: 0;">
+                        <span class="h-full flex justify-center items-center">
+                          btn
+                        </span>
+                      </div>
+                      <div class="btn-text-off hei-34 bg-white flex justify-center items-center" style="width: 60px;">
+                        <span class="text-xs c-FD7B32">
+                          <i class="fas fa-exclamation-triangle"></i>
+                        </span>
+                      </div>
+                      <div class="btn-text-danger bg-white flex" style="width: 60px;">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="flex flex-1 justify-center items-center border-radius-50">
+                  <div class="Graph-Back-Bar wid-80-p h-2 mx-2 border-radius-50">
+                    <div class="Percent-Bar h-full border-radius-50" style="width: 95%;"></div>
+                  </div>
+                </div>
+                <div class="flex flex-1 justify-center items-center"></div>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="flex flex-1 justify-center items-center"></div>
+
+        <script src="/socket.io/socket.io.js"></script>
+        <script>
+          function changevideoSelect() {
+            let selectedvideo = document.getElementById("videofilelist");
+            let showvideo = document.getElementById("showvideo");
+            let selectvideotext = selectedvideo.options[selectedvideo.selectedIndex].text;
+            showvideo.src = "../smartmirror/video/" + selectvideotext
+          }
+
+          function changeimageSelect() {
+            let selectedimage = document.getElementById("imgfilelist");
+            let showimage = document.getElementById("showimage");
+            let selectimage = selectedimage.options[selectedimage.selectedIndex].text;
+            showimage.src = "../smartmirror/image/" + selectimage;
+          }
+          let txtday = document.getElementById('textday');
+          let txthours = document.getElementById('texthours');
+
+          function clock() {
+            let today = new Date();
+            let month = today.getMonth() + 1;
+            let date = today.getDate();
+            let day = today.getDay();
+            let charday = "";
+            switch (day) {
+              case 0:
+                charday = "일요일";
+                break;
+              case 1:
+                charday = "월요일";
+                break;
+              case 2:
+                charday = "화요일";
+                break;
+              case 3:
+                charday = "수요일";
+                break;
+              case 4:
+                charday = "목요일";
+                break;
+              case 5:
+                charday = "금요일";
+                break;
+              case 6:
+                charday = "토요일";
+                break;
+            }
+            let hours = today.getHours();
+            let minutes = today.getMinutes();
+            let daytext = month + "월 " + date + "일 " + charday;
+            txtday.innerText = daytext;
+          }
+
+          function clockminute() {
+            let today = new Date();
+            let hours = today.getHours();
+            let minutes = today.getMinutes();
+            let daytext = hours + " : " + minutes;
+            txthours.innerText = daytext;
+          }
+          setInterval(clock, 1000);
+          setInterval(clockminute, 1000);
+          //실시간 값 받기
+          var socket = io();
+          socket.on('messageled', (msg) => {
+            var handdryercheck = document.getElementById("handdryercheck");
+            if (msg == "checked") {
+              handdryercheck.style.right = "1px";
+            } else {
+              handdryercheck.style.right = "";
+            }
+          });
+          socket.on('messageh1', (msg) => {
+            var txt = document.getElementById('changeh1');
+            txt.style.width = msg + "%"
+          });
+          socket.on('currentimage', (msg) => {
+            var txt = document.getElementById('currentimage');
+            txt.src = msg
+          });
+          socket.on('currentT1H', (msg) => {
+            var txt = document.getElementById('currentT1H');
+            txt.innerText = msg
+          });
+        </script>
       </div>
-    </div>
-  </div>
-</div>
-
-
-<script src="/socket.io/socket.io.js"></script>
-<script>
-  function changevideoSelect() {
-    let selectedvideo = document.getElementById("videofilelist");
-    let showvideo = document.getElementById("showvideo");
-    let selectvideotext = selectedvideo.options[selectedvideo.selectedIndex].text;
-    showvideo.src = "../smartmirror/image/" + selectvideotext
-  }
-
-  function changeimageSelect() {
-    let selectedimage = document.getElementById("imgfilelist");
-    let showimage = document.getElementById("showimage");
-    let selectimage = selectedimage.options[selectedimage.selectedIndex].text;
-    showimage.src = "../smartmirror/image/" + selectimage;
-  }
-
-
-
-  let txtday = document.getElementById('textday');
-  let txthours = document.getElementById('texthours');
-  function clock() {
-    let today = new Date();
-    let month = today.getMonth() + 1;
-    let date = today.getDate();
-    let day = today.getDay();
-    let charday = "";
-    switch (day) {
-      case 0: charday = "일요일";
-        break;
-      case 1: charday = "월요일";
-        break;
-      case 2: charday = "화요일";
-        break;
-      case 3: charday = "수요일";
-        break;
-      case 4: charday = "목요일";
-        break;
-      case 5: charday = "금요일";
-        break;
-      case 6: charday = "토요일";
-        break;
-    }
-    let hours = today.getHours();
-    let minutes = today.getMinutes();
-    let daytext = month + "월 " + date + "일 " + charday;
-
-    txtday.innerText = daytext;
-  }
-  function clockminute() {
-    let today = new Date();
-    let hours = today.getHours();
-    let minutes = today.getMinutes();
-    let daytext = hours + " : " + minutes;
-
-    txthours.innerText = daytext;
-  }
-  setInterval(clock, 1000);
-  setInterval(clockminute, 1000);
-
-  //실시간 값 받기
-
-  var socket = io();
-  socket.on('messageled', (msg) => {
-    var handdryercheck = document.getElementById("handdryercheck");
-    if (msg == "checked") {
-      handdryercheck.style.right = "1px";
-    }
-    else {
-      handdryercheck.style.right = "";
-    }
-  });
-
-  socket.on('messageh1', (msg) => {
-    var txt = document.getElementById('changeh1');
-    txt.style.width = msg + "%"
-  });
-
-  socket.on('currentimage', (msg) => {
-    var txt = document.getElementById('currentimage');
-    txt.src = msg
-  });
-  socket.on('currentT1H', (msg) => {
-    var txt = document.getElementById('currentT1H');
-    txt.innerText = msg
-  });
-
-</script>
+      <!-- End of Main Content -->
