@@ -228,7 +228,7 @@ var router = express.Router()
 
 var storagevideo = multer.diskStorage({
 destination: function (req, file, callback) {
-    callback(null, '/home/hosting_users/creativethon/apps/creativethon_wmsadmina/smartmirror/video')
+    callback(null, '/home/hosting_users/creativethon/apps/creativethon_wmsadmina/smartmirror/image')
 },
 filename: function (req, file, callback) {
     var extension = path.extname(file.originalname);
@@ -374,7 +374,7 @@ try {
 
 var storageimg = multer.diskStorage({
 destination: function (req, file, callback) {
-    callback(null, '/home/hosting_users/creativethon/apps/creativethon_wmsadmina/smartmirror/image')
+    callback(null, 'smartmirror/image')
 },
 filename: function (req, file, callback) {
     var extension = path.extname(file.originalname);
@@ -1067,8 +1067,90 @@ app.post('/deletevideo', function (req, res, next) {
 const name = req.body.name
 const video = Videofilesave.find({ "name": name })
 version++
+fs.unlink(`/home/hosting_users/creativethon/apps/creativethon_wmsadmina/smartmirror/video/${name}`, function (err) {
+    if(err) console.log(err)
+})
+Smartmirrorvideofile.find(function(err,data){
+    for(let index = 0; index < data.length; index++)
+    {
+        if(data[index].name == name && data[index].type == "None")
+        {
+            const currentvideo = Smartmirrorvideofile.find({ "name" : data[index].name , "type" : "None"})
+            currentvideo.remove(function (err) {
+                if (err) {
+                    console.log(err)
+                    res.status(500).send('update error')
+                }
+            })
+        }
+    }
+})
+video.remove(function (err) {
+    if (err) {
+        console.log(err)
+        res.status(500).send('update error')
+        return
+    }
+})
+res.redirect('mediacontents')
+})
+
+//이미지파일 삭제
+app.post('/deleteimage', function (req, res, next) {
+const name = req.body.name
+const image = Imgfile.find({ "name": name })
+Smartmirror
+version++
+fs.unlink(`/home/hosting_users/creativethon/apps/creativethon_wmsadmina/smartmirror/image/${name}`, function (err) {
+    if(err) console.log(err)
+})
+Smartmirrorimagefile.find(function(err,data){
+    for(let index = 0; index < data.length; index++)
+    {
+        if(data[index].name == name && data[index].type == "None")
+        {
+            const currentimage = Smartmirrorimagefile.find({ "name" : data[index].name , "type" : "None"})
+            currentimage.remove(function (err) {
+                if (err) {
+                    console.log(err)
+                    res.status(500).send('update error')
+                }
+            })
+        }
+    }
+})
+image.remove(function (err) {
+    if (err) {
+        console.log(err)
+        res.status(500).send('update error')
+        return
+    }
+})
+res.redirect('mediacontents')
+})
+
+//예약 비디오파일 삭제
+app.post('/deletereservationvideo', function (req, res, next) {
+const name = req.body.name
+const video = Videofilesave.find({ "name": name })
+version++
 fs.unlink(`smartmirror/video/${name}`, function (err) {
     if(err) console.log(err)
+})
+Smartmirrorvideofile.find(function(err,data){
+    for(let index = 0; index < data.length; index++)
+    {
+        if(data[index].name == name && data[index].type == "reservation")
+        {
+            const currentvideo = Smartmirrorvideofile.find({ "name" : data[index].name , "type" : "reservation"})
+            currentvideo.remove(function (err) {
+                if (err) {
+                    console.log(err)
+                    res.status(500).send('update error')
+                }
+            })
+        }
+    }
 })
 video.remove(function (err) {
     if (err) {
@@ -1078,28 +1160,42 @@ video.remove(function (err) {
     }
     res.status(200).send("Removed")
 })
+res.redirect('bookmedia')
 })
-
-//이미지파일 삭제
-app.post('/deleteimage', function (req, res, next) {
+/
+//예약 이미지파일 삭제
+app.post('/deletereservationimage', function (req, res, next) {
 const name = req.body.name
 const image = Imgfile.find({ "name": name })
 version++
 fs.unlink(`smartmirror/image/${name}`, function (err) {
     if(err) console.log(err)
 })
+Smartmirrorimagefile.find(function(err,data){
+    for(let index = 0; index < data.length; index++)
+    {
+        if(data[index].name == name && data[index].type == "reservation")
+        {
+            const currentimage = Smartmirrorimagefile.find({ "name" : data[index].name , "type" : "reservation"})
+            currentimage.remove(function (err) {
+                if (err) {
+                    console.log(err)
+                    res.status(500).send('update error')
+                }
+            })
+        }
+    }
+})
 image.remove(function (err) {
     if (err) {
         console.log(err)
         res.status(500).send('update error')
-        return
     }
-    res.status(200).send("Removed")
 })
+res.redirect('bookmedia')
 })
 
 //미디어컨텐츠관리 창
-
 app.use('/mediacontents', function (req, res) {
 let videoArray = new Array()
 let imageArray = new Array()
