@@ -228,7 +228,7 @@ var router = express.Router()
 
 var storagevideo = multer.diskStorage({
 destination: function (req, file, callback) {
-    callback(null, '/home/hosting_users/creativethon/apps/creativethon_wmsadmina/smartmirror/image')
+    callback(null, '/home/hosting_users/creativethon/apps/creativethon_wmsadmina/smartmirror/video')
 },
 filename: function (req, file, callback) {
     var extension = path.extname(file.originalname);
@@ -374,7 +374,7 @@ try {
 
 var storageimg = multer.diskStorage({
 destination: function (req, file, callback) {
-    callback(null, 'smartmirror/image')
+    callback(null, '/home/hosting_users/creativethon/apps/creativethon_wmsadmina/smartmirror/image')
 },
 filename: function (req, file, callback) {
     var extension = path.extname(file.originalname);
@@ -1099,7 +1099,6 @@ res.redirect('mediacontents')
 app.post('/deleteimage', function (req, res, next) {
 const name = req.body.name
 const image = Imgfile.find({ "name": name })
-Smartmirror
 version++
 fs.unlink(`/home/hosting_users/creativethon/apps/creativethon_wmsadmina/smartmirror/image/${name}`, function (err) {
     if(err) console.log(err)
