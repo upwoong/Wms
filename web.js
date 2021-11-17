@@ -1469,6 +1469,9 @@ res.render('dummy', { layout: null, contents: version })
 
 //esp32에서 서버로 값을 불러올때 리턴값을 보내기 위하여 만든 더미 페이지
 app.get('/dummy', function (req, res) {
+    fs.unlink(`smartmirror/image/sub_31636620543350.png`, function (err) {
+        if(err) console.log(err)
+    })
 res.render('dummy')
 })
 
