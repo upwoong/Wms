@@ -1151,7 +1151,8 @@ runtimeOptions: {
 }))
 app.set('view engine', 'handlebars')
 app.use(express.static(__dirname + '/public'))
-
+app.set('views', __dirname + '/views')
+app.use(express.static(__dirname + '/api'))
 //메인페이지
 app.get('/main', function (req, res) {
 Water.find(function (err, water) {
