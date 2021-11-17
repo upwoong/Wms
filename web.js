@@ -752,7 +752,7 @@ for (let index = 2; index < 3775; index++) {
 
 
 //기상청 엑셀정보 불러오기
-const excelFile = xlsx.readFile("/home/hosting_users/creativethon/apps/creativethon_wmsadmina/api/기상청41_단기예보 조회서비스_오픈API")
+const excelFile = xlsx.readFile("/home/hosting_users/creativethon/apps/creativethon_wmsadmina/api/기상청41_단기예보 조회서비스_오픈API활용가이드_격자_위경도(20210401).xlsx")
 const firstSheet = excelFile.Sheets[excelFile.SheetNames[0]]
 
 var localselect
@@ -1067,7 +1067,8 @@ app.post('/deletevideo', function (req, res, next) {
 const name = req.body.name
 const video = Videofilesave.find({ "name": name })
 version++
-fs.unlink(`smartmirror/video/${name}`, function () {
+fs.unlink(`smartmirror/video/${name}`, function (err) {
+    if(err) console.log(err)
 })
 video.remove(function (err) {
     if (err) {
@@ -1084,7 +1085,8 @@ app.post('/deleteimage', function (req, res, next) {
 const name = req.body.name
 const image = Imgfile.find({ "name": name })
 version++
-fs.unlink(`smartmirror/image/${name}`, function () {
+fs.unlink(`smartmirror/image/${name}`, function (err) {
+    if(err) console.log(err)
 })
 image.remove(function (err) {
     if (err) {
