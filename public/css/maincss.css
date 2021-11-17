@@ -192,67 +192,18 @@ html::-webkit-scrollbar-track {
   box-shadow: -1px 1px 1px #a7a7a7;
   transition: color 0.3s;
   transition: background-color 0.3s;
-  background-color: #3AAFE2;
+  background-color: #3aafe2;
 }
 .Flie-Add-Btn:hover {
   background-color: #fd7b32;
 }
-.Graph-Box {
-  height: calc(100% - 70px);
-}
-/* UI Object 가로 */
-.h_graph ul {
-  margin: 0 50px 0 50px;
-  padding: 1px 0 0 0;
-  border-top: 0;
-  border-right: 0;
-  font-size: 11px;
-  list-style: none;
-}
-
-.h_graph li {
-  position: relative;
-  margin: 5px 0;
-  vertical-align: top;
-  white-space: nowrap;
-}
-
-.h_graph .g_term {
-  position: absolute;
-  top: -20%;
-  left: -50px;
-  width: 40px;
-  color: #767676;
-  line-height: 20px;
-  text-align: right;
-}
-
-/* 소제목 색깔 */
-.h_graph .g_bar {
-  display: inline-block;
-  position: relative;
-  height: 10px;
-  border-left: 0;
-  background: #3aafe2;
-  border-radius: 0 20px 20px 0;
-}
-
-/* 막대기 색깔 */
-.h_graph .g_bar span {
-  position: absolute;
-  top: -35%;
-  right: -50px;
-  width: 40px;
-  color: #4f6884;
-  line-height: 20px;
-}
 
 /* //UI Object */
 .Url-Box {
-  height: 140px;
+  height: 65%;
 }
 .Sel-Box {
-  height: calc(100% - 178px);
+  height: calc(100% - 65% - 36px);
 }
 .Flie-Del-Btn {
   padding: 3px 14px;
@@ -299,9 +250,112 @@ html::-webkit-scrollbar-track {
   color: #ffffff;
   font-size: 0.875rem;
 }
+.Graph-Box {
+  height: calc(100% - 70px);
+}
 .Graph-Back-Bar {
   box-shadow: inset 0 0 3px #969696;
 }
 .Percent-Bar {
   background-color: #3aafe2;
+}
+/*월별 사용량*/
+.Graph-Text {
+  font-size: 0.875rem;
+}
+.Graph-Bar-Item {
+  cursor: pointer;
+  height: calc(100% - 20px);
+}
+.Gra-Bar-Ele-Box {
+  height: calc(100% - 50px);
+}
+.Gra-Back-Ele-Bar {
+  width: 11px;
+  background-color: #e7f4ff;
+}
+.Gra-Back-Ele-Bar > div {
+  background-color: #3aafe2;
+}
+.Graph-Bar-Text-Box {
+  border-bottom: 0.5px solid #d7d7d7;
+}
+.Nd-Pop-Up {
+  width: 45px;
+  height: 24px;
+  background-color: white;
+  border-radius: 8px;
+  border: 2px solid #3aafe2;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: -12%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #079e24;
+  font-weight: bold;
+  opacity: 0;
+  visibility: hidden;
+  transition: visibility 0.2s, opacity 0.3s;
+}
+.Graph-Bar-Item-2-1:hover > .Pop-Up-2-1 {
+  opacity: 1;
+  visibility: visible;
+}
+.Graph-Bar-Item-2-2:hover > .Pop-Up-2-2 {
+  opacity: 1;
+  visibility: visible;
+}
+.Graph-Bar-Item-2-3:hover > .Pop-Up-2-3 {
+  opacity: 1;
+  visibility: visible;
+}
+.Graph-Bar-Item-2-4:hover > .Pop-Up-2-4 {
+  opacity: 1;
+  visibility: visible;
+}
+.Graph-Bar-Item-2-5:hover > .Pop-Up-2-5 {
+  opacity: 1;
+  visibility: visible;
+}
+.Graph-Bar-Item-2-6:hover > .Pop-Up-2-6 {
+  opacity: 1;
+  visibility: visible;
+}
+.Graph-Bar-Item-2-7:hover > .Pop-Up-2-7 {
+  opacity: 1;
+  visibility: visible;
+}
+.Graph-Bar-Item-2-8:hover > .Pop-Up-2-8 {
+  opacity: 1;
+  visibility: visible;
+}
+.Graph-Bar-Item-2-9:hover > .Pop-Up-2-9 {
+  opacity: 1;
+  visibility: visible;
+}
+.Graph-Bar-Item-2-10:hover > .Pop-Up-2-10 {
+  opacity: 1;
+  visibility: visible;
+}
+.Graph-Bar-Item-2-11:hover > .Pop-Up-2-11 {
+  opacity: 1;
+  visibility: visible;
+}
+.Graph-Bar-Item-2-12:hover > .Pop-Up-2-12 {
+  opacity: 1;
+  visibility: visible;
+}
+/*추가된 파일 : */
+.Add-File-Text {
+  font-size: 0.875rem;
+}
+@media (min-width: 1920px) {
+  .Graph-Text {
+    font-size: 1rem;
+  }
+  .Add-File-Text {
+    font-size: 1rem;
+  }
 }
