@@ -1413,8 +1413,8 @@ SmartmirrorExe.find({}, imgProjection, function (err, data) {
 
 //스마트미러에 기상청 행정구역코드 보내기
 app.get('/smartmirror/weather', function (req, res) {
-Weather.find(function (err, weather) {
-    res.render('weather', { contents: weather, layout: null })
+Weather.find({},imgProjection,function (err, weather) {
+    res.render('weather', { contents: weather[0].name, layout: null })
 })
 });
 
