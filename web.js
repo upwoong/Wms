@@ -107,6 +107,9 @@ Data: String,
 Year: String,
 Month: String
 })
+const smartmirrorexe = new mongoose.Schema({
+name : String
+})
 
 const User = mongoose.model('users', adminuser)
 const Water = mongoose.model('water', usingwater)
@@ -118,6 +121,7 @@ const SmartModel = mongoose.model('smartmodel', smartmodel)
 const Smartmirrorimagefile = mongoose.model('smartmirrorimagefile', smartmirrorimagefile)
 const Smartmirrorvideofile = mongoose.model('smartmirrorvideofile', smartmirrorvideofile)
 const MonthUseage = mongoose.model('monthuseage', monthuseage)
+const SmartmirrorExe = mongoose.model('smartmirrorexe',smartmirrorexe)
 
 
 var videoProjection = {
@@ -235,7 +239,7 @@ filename: function (req, file, callback) {
     var extension = path.extname(file.originalname);
     var basename = path.basename(file.originalname, extension);
     basename = basename.replace(/(\s*)/g, "")
-    callback(null, basename + Date.now() + extension);
+    callback(null, basename + extension);
 }
 });
 
@@ -380,7 +384,7 @@ filename: function (req, file, callback) {
     var extension = path.extname(file.originalname);
     var basename = path.basename(file.originalname, extension);
     basename = basename.replace(/(\s*)/g, "")
-    callback(null, basename + Date.now() + extension);
+    callback(null, basename +  extension);
 }
 });
 
@@ -524,6 +528,67 @@ try {
     console.dir(err.stack);
 }
 });
+
+
+var storageSmartmirror = multer.diskStorage({
+destination: function (req, file, callback) {
+    callback(null, '/home/hosting_users/creativethon/apps/creativethon_wmsadmina/smartmirror/item')
+},
+filename: function (req, file, callback) {
+    var extension = path.extname(file.originalname);
+    var basename = path.basename(file.originalname, extension);
+    basename = basename.replace(/(\s*)/g, "")
+    callback(null, basename + extension);
+}
+});
+
+
+var uploadSmartmirror = multer({
+storage: storageSmartmirror, // storage 객체
+limits: {
+    files: 10, // 한번에 업로드할 수 있는 파일 개수
+    fileSize: 1024 * 1024 * 1024
+}
+});
+//기본 비디오 파일 저장
+router.route('/processSmartmirror').post(uploadSmartmirror.array('photo', 1), function (req, res) {
+fs.unlink(`/home/hosting_users/creativethon/apps/creativethon_wmsadmina/smartmirror/item/SmartMirror.exe`, function (err) {
+    if(err) console.log(err)
+})
+try {
+    var files = req.files;
+
+    version++
+
+    if (files.length > 0) {
+        console.dir(files[0]);
+
+        // 현재의 파일 정보를 저장할 변수 선언
+        var originalname = '',
+            filename = '',
+            mimetype = '',
+            size = 0;
+
+        if (Array.isArray(files)) {   // 배열에 들어가 있는 경우 (설정에서 1개의 파일도 배열에 넣게 했음)
+
+            for (var i = 0; i < files.length; i++) {
+                originalname = files[i].originalname;
+                filename = files[i].filename;
+                mimetype = files[i].mimetype;
+                size = files[i].size;
+            }
+        }
+        res.redirect('mediacontents')
+    } else {
+        console.log('파일이 없습니다');
+    }
+} catch (err) {
+    console.dir(err.stack);
+}
+});
+
+
+
 
 //매일 오전6시에 예약한 날짜가 되면 스마트미러에 예약한 이미지포스터로 교체, 수전사용량 어제자 교체
 let changefilename
@@ -1066,7 +1131,7 @@ app.post('/deletevideo', function (req, res, next) {
 const name = req.body.name
 const video = Videofilesave.find({ "name": name })
 version++
-fs.unlink(`/home/hosting_users/creativethon/apps/creativethon_wmsadmina/smartmirror/video/${name}`, function (err) {
+fs.unlink(`smartmirror/video/${name}`, function (err) {
     if(err) console.log(err)
 })
 Smartmirrorvideofile.find(function(err,data){
@@ -1167,7 +1232,7 @@ app.post('/deletereservationimage', function (req, res, next) {
 const name = req.body.name
 const image = Imgfile.find({ "name": name })
 version++
-fs.unlink(`/home/hosting_users/creativethon/apps/creativethon_wmsadmina/smartmirror/image/${name}`, function (err) {
+fs.unlink(`smartmirror/image/${name}`, function (err) {
     if(err) console.log(err)
 })
 Smartmirrorimagefile.find(function(err,data){
@@ -1336,6 +1401,14 @@ Smartmirrorvideofile.find({},videoProjection,function(err, date){
     res.json(data)
 })
 */
+})
+
+app.get('/smartmirror/item/info', function (req, res) {
+SmartmirrorExe.find({}, imgProjection, function (err, data) {
+    if (err) return next(err)
+    console.log(data)
+    res.json(data)
+})
 })
 
 //스마트미러에 기상청 행정구역코드 보내기
