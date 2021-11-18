@@ -119,7 +119,7 @@
       <div class="Img-Pre-V hei-61 flex items-center c-047525B ml-10">[ Preview ]</div>
       <div class="Img-Setn">
         <div class="video-box Image h-full flex justify-center items-center">
-          <video width="448px;" src="test.mp4" controls id="showvideo"></video>
+          <video width="448px;" src="test.mp4" controls muted autoplay id="showvideo"></video>
         </div>
       </div>
       <div class="h-10">
@@ -164,7 +164,7 @@
                   <span>추가된 URL (파일) 삭제</span>
                 </div>
                 <div>
-                  <input class="Flie-Del-Btn bg-3AAFE2 flex justify-center items-center text-white text-xs ml-2 cursor-pointer border-radius-50" type="submit" value="del" onclick='this.form.action= "/deleteimage"'>
+                  <input class="Flie-Del-Btn bg-3AAFE2 flex justify-center items-center text-white text-xs ml-2 cursor-pointer border-radius-50" type="submit" value="del" onclick='this.form.action= "/deletevideo"'>
                 </div>
               </div>
             </div>
@@ -186,8 +186,8 @@
                 <span>상단 박스에 (파일) 추가</span>
               </div>
               <div>
-                  <label class="Flie-Add-Btn bg-3AAFE2 flex justify-center items-center text-white text-xs ml-2 cursor-pointer border-radius-50" for="file">add</label>
-                  <input type="file" id="file" name="photo">
+                  <label class="Flie-Add-Btn bg-3AAFE2 flex justify-center items-center text-white text-xs ml-2 cursor-pointer border-radius-50" for="videofile">add</label>
+                  <input type="file" id="videofile" name="photo">
               </div>
             </div>
           </div>

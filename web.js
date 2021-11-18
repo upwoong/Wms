@@ -26,6 +26,7 @@ app.use(cors({
 origin: true,
 credentials: true
 }))
+var expiryDate = new Date(Date.now() + 24 * 60 * 60 * 1000) // 1 hour
 app.use(cookieParser())
 app.use(
 session({
@@ -34,7 +35,7 @@ session({
     resave: false,
     saveUninitialized: false,
     cookie: {
-        expires: 60 * 60 * 24 * 24,
+        expires: expiryDate
     },
 })
 )
@@ -275,7 +276,7 @@ try {
         //만약 현재 보여주는 미디어들의 type 이 None일 경우 smartmirrorvideofile 데이터베이스가 비어있을 경우
         //Smartmirrorvideofile 데이터베이스에도 추가하여 바로 반영되도록 추가
         Smartmirrorvideofile.find(function (err, data) {
-            if ( data == "" || data[0].type == "None") {
+            if (data == "" || data[0].type == "None") {
                 const videofile = new Smartmirrorvideofile({ 'name': filename, 'Date': new Date(), 'type': "None" })
                 videofile.save(function (err, slience) {
                     if (err) {
@@ -310,7 +311,7 @@ router.route('/processbookingvideo').post(upload.array('photo', 1), function (re
 try {
     var files = req.files;
     var selectday = req.body.chooseimageday
-    const strArr = selectday.split('-');
+    const strArr = selectday.split('-')
     const month = strArr[1]
     const day = strArr[2]
     const currentday = strArr[1] + strArr[2]
@@ -424,7 +425,7 @@ try {
         //만약 현재 보여주는 미디어들의 type 이 None일 경우 또는 smartmirrorimagefile 데이터베이스가 비어있을경우
         //Smartmirror 데이터베이스에도 추가하여 바로 반영되도록 추가
         Smartmirrorimagefile.find(function (err, data) {
-            if ( data == "" || data[0].type == "None") {
+            if (data == "" || data[0].type == "None") {
                 const imgfile = new Smartmirrorimagefile({ 'name': filename, 'Date': new Date(), 'type': "None" })
                 imgfile.save(function (err, slience) {
                     if (err) {
