@@ -275,7 +275,7 @@ try {
         //만약 현재 보여주는 미디어들의 type 이 None일 경우 smartmirrorvideofile 데이터베이스가 비어있을 경우
         //Smartmirrorvideofile 데이터베이스에도 추가하여 바로 반영되도록 추가
         Smartmirrorvideofile.find(function (err, data) {
-            if (data[0].type == "None" || data == "") {
+            if ( data == "" || data[0].type == "None") {
                 const videofile = new Smartmirrorvideofile({ 'name': filename, 'Date': new Date(), 'type': "None" })
                 videofile.save(function (err, slience) {
                     if (err) {
@@ -424,7 +424,7 @@ try {
         //만약 현재 보여주는 미디어들의 type 이 None일 경우 또는 smartmirrorimagefile 데이터베이스가 비어있을경우
         //Smartmirror 데이터베이스에도 추가하여 바로 반영되도록 추가
         Smartmirrorimagefile.find(function (err, data) {
-            if (data[0].type == "None" || data == "") {
+            if ( data == "" || data[0].type == "None") {
                 const imgfile = new Smartmirrorimagefile({ 'name': filename, 'Date': new Date(), 'type': "None" })
                 imgfile.save(function (err, slience) {
                     if (err) {
