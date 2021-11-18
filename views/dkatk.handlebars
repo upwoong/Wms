@@ -1,28 +1,35 @@
-<!doctype html>
-<html lang="en">
- <head>
-    <meta charset="UTF-8">
-    <style>
-        /* UI Object 가로 */
-        .h_graph ul{margin:0 50px 0 50px;padding:1px 0 0 0;border:1px solid #ddd;border-top:0;border-right:0;font-size:11px;font-family:Tahoma, Geneva, sans-serif;list-style:none}
-        .h_graph li{position:relative;margin:10px 0;vertical-align:top;white-space:nowrap}
-        .h_graph .g_term{position:absolute;top:0;left:-50px;width:40px;font-weight:bold;color:#767676;line-height:20px;text-align:right} /* 소제목 색깔 */
-        .h_graph .g_bar{display:inline-block;position:relative;width:2%;border:1px solid #ccc;border-left:0;background:#e9e9e9} /* 막대기 색깔 */
-        .h_graph .g_bar span{position:absolute;top:0;right:-50px;width:40px;color:#767676;line-height:20px}
-        /* //UI Object */
-    </style>
-</head>
-
- <body>
-    <!-- UI Object 가로 -->
-    <div class="h_graph">
-        <ul>
-            <span class="g_bar" style="height:150px"><span>30%</span></span>
-            <span class="g_bar" style="height:450px"><span>20%</span></span>
-            <span class="g_bar" style="height:200px"><span>20%</span></span>
-        </ul>
-        asd
-    </div>
- </body>
-</html>
- 
+<form class="Form-Area-Box-2 flex items-center" action="/processSmartmirror" method="post" enctype="multipart/form-data">
+        <!--B-2-->
+        <div class="Img-Add-Btn-Box h-full flex items-center ml-8">
+          <div>
+            <div class="text-xs font-bold">
+              <span>Add Button</span>
+            </div>
+            <div class="flex items-center ml-5">
+              <div class="text-sm c-8F8F8F">
+                <span>상단 박스에 (파일) 추가</span>
+              </div>
+              <div>
+                  <label class="Flie-Add-Btn bg-3AAFE2 flex justify-center items-center text-white text-xs ml-2 cursor-pointer border-radius-50" for="videofile">add</label>
+                  <input type="file" id="videofile" name="photo">
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--B-3-->
+        <div class="Img-Up-Btn-Box h-full flex items-start">
+          <div>
+            <div class="text-xs font-bold">
+              <span>Up Button</span>
+            </div>
+            <div class="flex items-center ml-5">
+              <div class="text-sm c-8F8F8F ml-2">
+                <span>추가된 URL (파일) 업로드</span>
+              </div>
+              <div>
+                  <input class="Flie-Up-Btn bg-3AAFE2 flex justify-center items-center self-center text-white text-xs ml-2 cursor-pointer border-radius-50" type="submit" value="up" name="submit" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
