@@ -1,223 +1,227 @@
-<!--테일윈드 불러오기-->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.16/tailwind.min.css">
-<!--폰트어썸 불러오기-->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css">
+<!--테일윈드-->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.17/tailwind.min.css">
+<!--폰트어썸-->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 <link rel="stylesheet" href="css/media.css">
-<div class="all-box p-12">
-  <div class="all-element-box bg-white">
-
-    <!--section-1-->
-    <div class="section section-1 flex items-center mb-1">
-      <div>
-        <div class="title-deck"></div>
-      </div>
-      <div class="title-text text-3xl font-bold">
-        <span>ConTents</span>
-      </div>
-      <div class="body-text text-sm font-bold" style="margin-top: 8px;">
-        <span>Detail Setting.</span>
-      </div>
-      <!--section-1 공통 부모-->
+<!--요소 시작-->
+<div class="Ele-All-Box flex">
+  <!--이미지-->
+  <div class="Img-All-Box w-full h-full flex-1">
+    <div class="hei-7-p flex">
+      <div class="w-24 bg-637484 flex justify-center items-center text-white font-bold text-sm">Image</div>
+      <div class="bg-6F8294 flex-1"></div>
     </div>
-
-    <!--section-2 시작-->
-    <div class="flex">
-      <div class="flex-1">
-        <!--영상 시작-->
-        <div class="w-full">
-          <video class="border-radius-5 w-full min-height-387" src="test.mp4" controls muted autoplay style="" id="showvideo"></video>
+    <div class="hei-59-p bg-white">
+      <div class="Img-Pre-V hei-61 flex items-center c-047525B ml-10">[ Preview ]</div>
+      <div class="Img-Setn">
+        <div class="img-box Image h-full flex justify-center items-center">
+          <img src="https://i.postimg.cc/JzRZD81j/Kakao-Talk-20211015-115032591.jpg" alt="" id="showimage">
         </div>
-        <!--영상 끝-->
-        <!--버튼 시작-->
-        <div class="flex items-center mt-1">
-          <div class="video-title-text text-base font-bold text-white p-3 mr-1">
-            <span>
-              Video ConTents
-            </span>
-          </div>
-          <!--셀렉트-->
-          <form method="post">
-          <div class="flex-1 selection-box selection-box-1 h-full">
-            <select class="selection selection-1 text-gray-400 border-8D text-8D" name="name" id="videofilelist" onchange="changevideoSelect()">
-              <option value="" selected disabled>=== 동영상 url 선택 ===</option>
-              {{#each videofile}}
-              <option name="videofile" value="{{this.name}}">{{this.name}}
-              </option>
-              {{/each}}
-            </select>
-          </div>
-        </div>
-        <!--버튼 시작-->
-          <!--삭제-->
-          <div class="flex items-center">
-            <div class="Del-btn flex items-center w-full">
-              <div class="flex-1 flex items-center">
-                <div class="Vi-Icon img-box flex justify-center flex-1">
-                  <img src="https://cdn.jsdelivr.net/gh/kimhyeji324/ICT_Resource@master/docs/Vi__Url-Pl-icon.png" alt="">
-                </div>
-                <div class="Vi-Pl-text flex justify-center flex-1">
-                  <span>
-                    URL 삭제
-                  </span>
-                </div>
-                <div class="flex-1"></div>
-              </div>
-            </div>
-            <div>
-              <input class="flie-del-btn" type="submit" value="확인" onclick='this.form.action= "/deletevideo"'>
-            </div>
-            </form>
-            <!--버튼 끝-->
-          </div>
-          <!--추가-->
-          <form method="post" enctype="multipart/form-data" action="/processvideo">
-          <div class="filebox flex items-center">
-            <div class="Del-btn flex items-center w-full">
-              <div class="flex-1 flex items-center">
-                <div class="Vi-Icon img-box flex justify-center flex-1">
-                  <img src="https://cdn.jsdelivr.net/gh/kimhyeji324/ICT_Resource@master/docs/Vi__Url-Pl-icon.png" alt="">
-                </div>
-                <div class="Vi-Pl-text flex justify-center flex-1">
-                  <span>
-                    URL 추가
-                  </span>
-                </div>
-                <div class="flex-1"></div>
-              </div>
-            </div>
-            <input class="file-up-btn" type="submit" value="확인" name="submit" />
-          </div>
-          <!--업로드-->
-          <div class="filebox flex items-center">
-            <div class="Del-btn flex items-center w-full">
-              <div class="flex-1 flex items-center">
-                <div class="Vi-Icon img-box flex justify-center flex-1">
-                  <img src="https://cdn.jsdelivr.net/gh/kimhyeji324/ICT_Resource@master/docs/Vi__Url-Pl-icon.png" alt="">
-                </div>
-                <div class="Vi-Pl-text flex justify-center flex-1">
-                  <span>
-                    URL 업로드
-                  </span>
-                </div>
-                <div class="flex-1"></div>
-              </div>
-            </div>
-            <div>
-              <label class="h-full border-o" for="file">확인</label>
-              <input type="file" id="file" name="photo">
-            </div>
-          </div>
-          
-        </form>
-        <!--버튼 끝-->
-        <!--비디오 레이아웃 공통 부모-->
       </div>
-      <!--영상 끝-->
-
-      <div style="width: 10%;"></div>
-
-      <!--이미지 시작-->
-      <div class="flex-1">
-        <div class="flex justify-center items-center">
-        <div class="preview-img max-height-387 max-width-273">
-          <img class="border-radius-5 min-height-387 w-full object-cover" src="https://i.postimg.cc/J4RrxMQL/Kakao-Talk-20211015-115032591.jpg" alt="" style="border-radius: 5px;" id="showimage">
-        </div>
+      <div class="h-10"></div>
+    </div>
+    <div class="hei-1-p text-white text-opacity-0">-</div>
+    <!--버튼-->
+    <div class="hei-33-p bg-white c-047525B">
+      <form method="post" class="Img-Btn-Cover-All-Box flex items-center">
+        <div class="w-full h-full">
+          <!--1-->
+          <div class="Form-Area-Box-1 w-full flex items-center">
+            <!--셀렉트 박스와 삭제버튼 시작-->
+            <div class="w-full">
+              <div class="ml-8 text-xs font-bold">Select</div>
+              <div class="flex">
+                <div class="flex flex-1">
+                  <div class="text-sm c-8F8F8F ml-9 mr-1 whitespace-nowrap">
+                    <span>추가된 파일 : </span>
+                  </div>
+                  <div class="flex flex-1 mr-2">
+                    <div class="Img-Url-Box w-full text-sm c-8F8F8F border-1-C4C4C4">
+                      <select class="w-full flex h-5 text-xs cursor-pointer" name="name" id="imgfilelist" onchange="changeimageSelect()">
+                        <option value="none" selected disabled>--</option>
+                        {{#each imgfile}}
+                          <option name="videofile" value="{{this.name}}">{{this.name}}</option>
+                        {{/each}}
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!--1__B-1-->
+          <div class="Img-Del-Btn-Box flex items-end ml-8">
+            <div>
+              <div class="text-xs font-bold">
+                <span>Delete Button</span>
+              </div>
+              <div class="flex items-center ml-5">
+                <div class="text-sm c-8F8F8F">
+                  <span>추가된 URL (파일) 삭제</span>
+                </div>
+                <div>
+                  <input class="Flie-Del-Btn bg-3AAFE2 flex justify-center items-center text-white text-xs ml-2 cursor-pointer border-radius-50" type="submit" value="del" onclick='this.form.action= "/deleteimage"'>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!--Del 버튼 최상단-->
         </div>
         <!--버튼 시작-->
-        <div class="flex items-center mt-1">
-          <div class="img-title-text text-base font-bold text-white p-3 mr-1">
-            <span>
-              Image ConTents
-            </span>
-          </div>
-          <!--셀렉트-->
-          <form method="post">
-          <div class="flex-1 selection-box selection-box-1 h-full">
-            <select class="selection selection-1 text-gray-400 border-8D text-8D" name="name" id="imgfilelist" onchange="changeimageSelect()">
-              <option value="" selected disabled>=== 이미지 url 선택 ===</option>
-              {{#each imgfile}}
-              <option name="videofile" value="{{this.name}}">{{this.name}}
-              </option>
-              {{/each}}
-            </select>
+      </form>
+      <!--2-->
+      <form class="Form-Area-Box-2 flex items-center" action="/processimage" method="post" enctype="multipart/form-data">
+        <!--B-2-->
+        <div class="Img-Add-Btn-Box h-full flex items-center ml-8">
+          <div>
+            <div class="text-xs font-bold">
+              <span>Add Button</span>
+            </div>
+            <div class="flex items-center ml-5">
+              <div class="text-sm c-8F8F8F">
+                <span>상단 박스에 (파일) 추가</span>
+              </div>
+              <div>
+                  <label class="Flie-Add-Btn bg-3AAFE2 flex justify-center items-center text-white text-xs ml-2 cursor-pointer border-radius-50" for="file">add</label>
+                  <input type="file" id="file" name="photo">
+              </div>
+            </div>
           </div>
         </div>
-        <!--버튼 시작-->
-          <!--삭제-->
-          <div class="flex items-center">
-            <div class="Del-btn flex items-center w-full">
-              <div class="flex-1 flex items-center">
-                <div class="Vi-Icon img-box flex justify-center flex-1">
-                  <img src="https://cdn.jsdelivr.net/gh/kimhyeji324/ICT_Resource@master/docs/Vi__Url-Pl-icon.png" alt="">
-                </div>
-                <div class="Vi-Pl-text flex justify-center flex-1">
-                  <span>
-                    URL 삭제
-                  </span>
-                </div>
-                <div class="flex-1"></div>
+        <!--B-3-->
+        <div class="Img-Up-Btn-Box h-full flex items-start">
+          <div>
+            <div class="text-xs font-bold">
+              <span>Up Button</span>
+            </div>
+            <div class="flex items-center ml-5">
+              <div class="text-sm c-8F8F8F ml-2">
+                <span>추가된 URL (파일) 업로드</span>
+              </div>
+              <div>
+                  <input class="Flie-Up-Btn bg-3AAFE2 flex justify-center items-center self-center text-white text-xs ml-2 cursor-pointer border-radius-50" type="submit" value="up" name="submit" />
               </div>
             </div>
-            <div>
-              <input class="flie-del-btn" type="submit" value="확인" onclick='this.form.action= "/deleteimage"'>
-            </div>
           </div>
-          </form>
-          <!--추가-->
-           <form method="post" enctype="multipart/form-data" action="/processimage">
-          <div class="filebox flex items-center">
-            <div class="Del-btn flex items-center w-full">
-              <div class="flex-1 flex items-center">
-                <div class="Vi-Icon img-box flex justify-center flex-1">
-                  <img src="https://cdn.jsdelivr.net/gh/kimhyeji324/ICT_Resource@master/docs/Vi__Url-Pl-icon.png" alt="">
-                </div>
-                <div class="Vi-Pl-text flex justify-center flex-1">
-                  <span>
-                    URL 추가
-                  </span>
-                </div>
-                <div class="flex-1"></div>
-              </div>
-            </div>
-            <input class="file-up-btn border-r" type="submit" value="확인" name="submit" />
-          </div>
-          <!--업로드-->
-          <div class="filebox flex items-center">
-            <div class="Del-btn flex items-center w-full">
-              <div class="flex-1 flex items-center">
-                <div class="Vi-Icon img-box flex justify-center flex-1">
-                  <img src="https://cdn.jsdelivr.net/gh/kimhyeji324/ICT_Resource@master/docs/Vi__Url-Pl-icon.png" alt="">
-                </div>
-                <div class="Vi-Pl-text flex justify-center flex-1">
-                  <span>
-                    URL 업로드
-                  </span>
-                </div>
-                <div class="flex-1"></div>
-              </div>
-            </div>
-            <div>
-              <label class="file-up-btn border-r" for="selectimage">확인</label>
-              <input type="file" id="selectimage" name="photo" value="확인">
-            </div>
-          </div>
-        </form>
-        <!--section-2 공통 부모-->
+        </div>
+      </form>
+    </div>
+    <!--버튼 최상단-->
+  </div>
+  <!--이미지 All-Box-->
+  <!--영상-->
+  <div class="Vid-All-Box h-full flex-1">
+    <div class="hei-7-p flex">
+      <div class="w-24 bg-637484 flex justify-center items-center text-white font-bold text-sm">Video</div>
+      <div class="bg-6F8294 flex-1"></div>
+    </div>
+    <div class="hei-59-p bg-white">
+      <div class="Img-Pre-V hei-61 flex items-center c-047525B ml-10">[ Preview ]</div>
+      <div class="Img-Setn">
+        <div class="video-box Image h-full flex justify-center items-center">
+          <video width="448px;" src="test.mp4" controls id="showvideo"></video>
+        </div>
       </div>
-      <!--최상단 공통 조상-->
+      <div class="h-10">
+      </div>
+    </div>
+    <div class="hei-1-p text-white text-opacity-0">-</div>
+    <div class="hei-33-p bg-white c-047525B">
+      <form method="post" class="Vi-Btn-Cover-All-Box-2 flex items-center">
+        <div class="w-full h-full">
+          <!--1-->
+          <div class="Form-Area-Box-1 w-full flex items-center">
+            <!--셀렉트 박스와 삭제버튼 시작-->
+            <div class="w-full">
+              <div class="ml-8 text-xs font-bold">Select</div>
+              <div class="flex">
+                <div class="flex flex-1">
+                  <div class="text-sm c-8F8F8F ml-9 mr-1 whitespace-nowrap">
+                    <span>추가된 파일 : </span>
+                  </div>
+                  <div class="flex flex-1 mr-2">
+                    <div class="Img-Url-Box w-full text-sm c-8F8F8F border-1-C4C4C4">
+                      <select class="w-full flex h-5 text-xs cursor-pointer" name="name" id="videofilelist" onchange="changevideoSelect()">
+                        <option value="none" selected disabled>--</option>
+                        {{#each videofile}}
+                          <option name="videofile" value="{{this.name}}">{{this.name}}</option>
+                        {{/each}}
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!--1__B-1-->
+          <div class="Img-Del-Btn-Box flex items-end ml-8">
+            <div>
+              <div class="text-xs font-bold">
+                <span>Delete Button</span>
+              </div>
+              <div class="flex items-center ml-5">
+                <div class="text-sm c-8F8F8F">
+                  <span>추가된 URL (파일) 삭제</span>
+                </div>
+                <div>
+                  <input class="Flie-Del-Btn bg-3AAFE2 flex justify-center items-center text-white text-xs ml-2 cursor-pointer border-radius-50" type="submit" value="del" onclick='this.form.action= "/deleteimage"'>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!--Del 버튼 최상단-->
+        </div>
+        <!--버튼 시작-->
+      </form>
+      <!--2-->
+      <form class="Form-Area-Box-2 flex items-center" action="/processvideo" method="post" enctype="multipart/form-data">
+        <!--B-2-->
+        <div class="Img-Add-Btn-Box h-full flex items-center ml-8">
+          <div>
+            <div class="text-xs font-bold">
+              <span>Add Button</span>
+            </div>
+            <div class="flex items-center ml-5">
+              <div class="text-sm c-8F8F8F">
+                <span>상단 박스에 (파일) 추가</span>
+              </div>
+              <div>
+                  <label class="Flie-Add-Btn bg-3AAFE2 flex justify-center items-center text-white text-xs ml-2 cursor-pointer border-radius-50" for="file">add</label>
+                  <input type="file" id="file" name="photo">
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--B-3-->
+        <div class="Img-Up-Btn-Box h-full flex items-start">
+          <div>
+            <div class="text-xs font-bold">
+              <span>Up Button</span>
+            </div>
+            <div class="flex items-center ml-5">
+              <div class="text-sm c-8F8F8F ml-2">
+                <span>추가된 URL (파일) 업로드</span>
+              </div>
+              <div>
+                  <input class="Flie-Up-Btn bg-3AAFE2 flex justify-center items-center self-center text-white text-xs ml-2 cursor-pointer border-radius-50" type="submit" value="up" name="submit" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
     </div>
   </div>
+</div>
 
-    <script>
-
-      function changevideoSelect() {
+<script>
+  function changevideoSelect() {
     let selectedvideo = document.getElementById("videofilelist");
     let showvideo = document.getElementById("showvideo");
     let selectvideotext = selectedvideo.options[selectedvideo.selectedIndex].text;
     showvideo.src = "../smartmirror/video/" + selectvideotext
   }
 
-      function changeimageSelect() {
+  function changeimageSelect() {
     let selectedimage = document.getElementById("imgfilelist");
     let showimage = document.getElementById("showimage");
     let selectimage = selectedimage.options[selectedimage.selectedIndex].text;
