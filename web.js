@@ -1687,7 +1687,8 @@ Water.find(function (err, data) {
 let asdint = 0
 weekendWater.push(asdint)
 for (let index = 0; index < data.length; index++) {
-    weekendWater.push(parseInt(percent(data[index].Useage, maxValue)))
+    //weekendWater.push(parseInt(percent(data[index].Useage, maxValue)))
+    weekendWater.push(parseInt(data[index].Useage))
 }
 console.log(weekendWater)
 }).sort({ Year: -1 }).sort({ Month: -1 }).sort({ Day: -1 }).limit(6)
