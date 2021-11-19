@@ -1569,7 +1569,7 @@ let aaaaaa = 0
 app.get('/testwater_recieve', function (req, res) {
     watervalue = req.query.id
     console.log(plusvalue)
-    plusvalue = plusvalue + watervalue
+    plusvalue = parseInt(plusvalue) + parseInt(watervalue)
     //연결이 들어오면 실행되는 이벤트
     io.emit('messageh2', plusvalue)
     io.emit('messageh1', watervalue)
