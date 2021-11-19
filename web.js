@@ -1572,11 +1572,14 @@ res.render('esp32test', { layout: null, watervalue: watervalue, dlatlwatervalue:
 })
 
 var watervalue = 3
+let plusvalue = 0
 app.get('/testwater_recieve', function (req, res) {
 watervalue = req.query.id
+plusvalue += watervalue
+console.log(plusvalue)
 //연결이 들어오면 실행되는 이벤트
 io.emit('messageh1', watervalue)
-res.render('dkatk', { layout: null, watervalue: watervalue })
+res.render('dkatk', { layout: null, watervalue: watervalue, plusvalue : plusvalue })
 })
 
 //실시간 값 받아오는 영역
