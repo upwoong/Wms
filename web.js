@@ -1582,7 +1582,7 @@ if(plusvalue > maxValue)
 {
     maxValue = plusvalue
 }
-
+weekendWater[0] = plusvalue
 for (let index = 0; index < weekendWater.length; index++) {
     //weekendWater.push(percent(data[index].Useage, maxValue))
     percentArray[index] = Math.floor(percent(weekendWater[index], maxValue))
