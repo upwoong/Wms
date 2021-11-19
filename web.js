@@ -1571,7 +1571,7 @@ app.get('/testwater_recieve', function (req, res) {
     console.log(plusvalue)
     plusvalue = plusvalue + watervalue
     //연결이 들어오면 실행되는 이벤트
-    io.emit('messageh2', watervalue)
+    io.emit('messageh2', plusvalue)
     io.emit('messageh1', watervalue)
     res.render('dkatk', { layout: null, watervalue: watervalue, plusvalue: plusvalue })
 })
