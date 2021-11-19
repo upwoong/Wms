@@ -1588,7 +1588,7 @@ for (let index = 0; index < weekendWater.length; index++) {
     percentArray[index] = Math.floor(percent(weekendWater[index], maxValue))
 }
 //연결이 들어오면 실행되는 이벤트
-io.emit('weekendwater',weekendWater)
+io.emit('weekendwater',weekendWater[0])
 io.emit('waterpercent',percentArray)
 io.emit('messageh2', plusvalue)
 io.emit('messageh1', watervalue)
