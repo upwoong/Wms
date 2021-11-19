@@ -1563,12 +1563,13 @@ app.get('/ledtest', function (req, res) {
     res.render('esp32test', { layout: null, watervalue: watervalue, dlatlwatervalue: dlatlwatervalue })
 })
 
-var watervalue = 3
+let watervalue = 3
 let plusvalue = 0
 let aaaaaa = 0
 app.get('/testwater_recieve', function (req, res) {
     watervalue = req.query.id
     console.log(plusvalue)
+    plusvalue = plusvalue + watervalue
     //연결이 들어오면 실행되는 이벤트
     io.emit('messageh2', watervalue)
     io.emit('messageh1', watervalue)
@@ -1727,7 +1728,6 @@ io.on('connection', (socket) => {   //연결이 들어오면 실행되는 이벤
     });
     socket.on('messageh2', (msg) => {
         //msg에는 클라이언트에서 전송한 매개변수가 들어온다. 이러한 매개변수의 수에는 제한이 없다.
-        plusvalue = plusvalue + msg
         // io.emit으로 연결된 모든 소켓들에 신호를 보낼 수 있다.
         io.emit('messageh2', plusvalue);
     });
