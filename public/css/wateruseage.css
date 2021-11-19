@@ -1,0 +1,296 @@
+/*서울 남산체 폰트 가져오기*/
+@font-face {
+    font-family: "SeoulNamsanM";
+    src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_two@1.0/SeoulNamsanM.woff")
+      format("woff");
+    font-weight: normal;
+    font-style: normal;
+  }
+  html > body {
+    margin: 0;
+    font-family: SeoulNamsanM, sans-serif;
+    background-color: #e5ebf2;
+  }
+  /* 스크롤바 설정*/
+  html::-webkit-scrollbar {
+    width: 8px;
+  }
+  /* 스크롤바 막대 설정*/
+  html::-webkit-scrollbar-thumb {
+    height: 17%;
+    background-color: #4f6884;
+    border-radius: 10px;
+  }
+  /* 스크롤바 뒷 배경 설정*/
+  html::-webkit-scrollbar-track {
+    background-color: #e5ebf2;
+  }
+  /*미디어 Top-S*/
+  .border-r {
+    border: 2px solid red;
+  }
+  .border-o {
+    border: 2px solid orange;
+  }
+  .border-g {
+    border: 2px solid green;
+  }
+  .border-b {
+    border: 2px solid blue;
+  }
+  .border-i {
+    border: 2px solid indigo;
+  }
+  .bg-1A8FEC {
+    background-color: #4f6884;
+  }
+  .bg-6F8294 {
+    background-color: #6f8294;
+  }
+  .margin-t-20 {
+    margin-top: 20px;
+  }
+  .margin-t-40 {
+    margin-top: 40px;
+  }
+  .padding-t-3-p {
+    padding-top: 3%;
+  }
+  .margin-b-20 {
+    margin-bottom: 20px;
+  }
+  .margin-b-30 {
+    margin-bottom: 30px;
+  }
+  .padding-l-1-p {
+    padding-left: 1%;
+  }
+  .padding-r-1-p {
+    padding-right: 1%;
+  }
+  .wid-14-5-p {
+    width: 14.5%;
+  }
+  .hei-70 {
+    height: 70px;
+  }
+  .c-686868 {
+    color: #686868;
+  }
+  .logo-box {
+    box-shadow: 1px 1px 1px #d4d4d4;
+  }
+  .title-text {
+    font-size: 0.65rem;
+  }
+  .list-text > ul > li {
+    font-size: 0.85rem;
+  }
+  .img-profile-box > img {
+    width: 120px;
+    min-width: 100%;
+  }
+  
+  /*요소 시작*/
+  .border-radius-2 {
+    border-radius: 2px;
+  }
+  .hei-51 {
+    height: 51px;
+  }
+  .bg-4F6884 {
+    background-color: #4f6884;
+  }
+  .bg-3AAFE2 {
+    background-color: #3aafe2;
+  }
+  .c-A8A8A8 {
+    color: #a8a8a8;
+  }
+  .c-47525B {
+    color: #47525b;
+  }
+  .c-3AAFE2 {
+    color: #3aafe2;
+  }
+  .M-R-1 {
+    margin-right: 1px;
+  }
+  .Ele-All-Box {
+    height: calc(100% - 121px);
+    padding: 20px;
+    background-color: #E5EBF2;
+  }
+  .Use-List-Box {
+    height: calc(100% / 2.4);
+  }
+  .Wea-Ther-Icon > img {
+    width: 25px;
+  }
+  .Map-Pin-White > img {
+    width: 11px;
+  }
+  .fa-genderless {
+    font-size: 5px;
+  }
+  .Data-Text-Box {
+    height: 33%;
+  }
+  .Graph-Bar-All-Box {
+    height: calc(100% - 33%);
+  }
+  .Data-Text-Item {
+    background-color: #ffffff;
+  }
+  .Data-Text-Item > div:first-child {
+    height: 30%;
+  }
+  .Data-Text-Item > div:nth-child(2) {
+    width: 100%;
+    height: 0.5px;
+    background-color: #d7d7d7;
+  }
+  .Data-Text-Item > div:nth-child(3) {
+    height: calc(100% - 30%);
+  }
+  .Graph-Bar-Item-Box {
+    background-color: #ffffff;
+  }
+  .Graph-Bar-Item-Box > div:first-child {
+    height: 16%;
+  }
+  .Graph-Bar-Item-Box > div:nth-child(2) {
+    height: calc(100% - 16%);
+  }
+  .Graph-Bar-Item {
+    margin-bottom: -20px;
+    cursor: pointer;
+  }
+  .Gra-Bar-Ele-Box {
+    height: 200px;
+  }
+  .Gra-Back-Ele-Bar {
+    width: 14px;
+    background-color: #e7f4ff;
+  }
+  .Gra-Back-Ele-Bar > div {
+    background-color: #3aafe2;
+  }
+  .Graph-Bar-Text-Box {
+    border-bottom: 0.5px solid #d7d7d7;
+  }
+  .St-Pop-Up {
+    width: 45px;
+    height: 24px;
+    background-color: white;
+    border-radius: 8px;
+    border: 2px solid #3aafe2;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: -11%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #079e24;
+    font-weight: bold;
+    opacity: 0;
+    visibility: hidden;
+    transition: visibility 0.2s, opacity 0.3s;
+  }
+  .Graph-Bar-Item-1:hover > .Pop-Up-1 {
+    opacity: 1;
+    visibility: visible;
+  }
+  .Graph-Bar-Item-2:hover > .Pop-Up-2 {
+    opacity: 1;
+    visibility: visible;
+  }
+  .Graph-Bar-Item-3:hover > .Pop-Up-3 {
+    opacity: 1;
+    visibility: visible;
+  }
+  .Graph-Bar-Item-4:hover > .Pop-Up-4 {
+    opacity: 1;
+    visibility: visible;
+  }
+  .Graph-Bar-Item-5:hover > .Pop-Up-5 {
+    opacity: 1;
+    visibility: visible;
+  }
+  .Graph-Bar-Item-6:hover > .Pop-Up-6 {
+    opacity: 1;
+    visibility: visible;
+  }
+  .Graph-Bar-Item-7:hover > .Pop-Up-7 {
+    opacity: 1;
+    visibility: visible;
+  }
+  .Nd-Pop-Up {
+    width: 45px;
+    height: 24px;
+    background-color: white;
+    border-radius: 8px;
+    border: 2px solid #3aafe2;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: -11%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #079e24;
+    font-weight: bold;
+    opacity: 0;
+    visibility: hidden;
+    transition: visibility 0.2s, opacity 0.3s;
+  }
+  .Graph-Bar-Item-2-1:hover > .Pop-Up-2-1 {
+    opacity: 1;
+    visibility: visible;
+  }
+  .Graph-Bar-Item-2-2:hover > .Pop-Up-2-2 {
+    opacity: 1;
+    visibility: visible;
+  }
+  .Graph-Bar-Item-2-3:hover > .Pop-Up-2-3 {
+    opacity: 1;
+    visibility: visible;
+  }
+  .Graph-Bar-Item-2-4:hover > .Pop-Up-2-4 {
+    opacity: 1;
+    visibility: visible;
+  }
+  .Graph-Bar-Item-2-5:hover > .Pop-Up-2-5 {
+    opacity: 1;
+    visibility: visible;
+  }
+  .Graph-Bar-Item-2-6:hover > .Pop-Up-2-6 {
+    opacity: 1;
+    visibility: visible;
+  }
+  .Graph-Bar-Item-2-7:hover > .Pop-Up-2-7 {
+    opacity: 1;
+    visibility: visible;
+  }
+  .Graph-Bar-Item-2-8:hover > .Pop-Up-2-8 {
+    opacity: 1;
+    visibility: visible;
+  }
+  .Graph-Bar-Item-2-9:hover > .Pop-Up-2-9 {
+    opacity: 1;
+    visibility: visible;
+  }
+  .Graph-Bar-Item-2-10:hover > .Pop-Up-2-10 {
+    opacity: 1;
+    visibility: visible;
+  }
+  .Graph-Bar-Item-2-11:hover > .Pop-Up-2-11 {
+    opacity: 1;
+    visibility: visible;
+  }
+  .Graph-Bar-Item-2-12:hover > .Pop-Up-2-12 {
+    opacity: 1;
+    visibility: visible;
+  }
+  
