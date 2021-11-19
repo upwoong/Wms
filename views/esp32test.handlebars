@@ -32,6 +32,7 @@
     </ul>
 
 <h1>dawawd</h1>
+<h1 id="changeh2">cccc</h1>
 <h4 id="dlatlvalue">bbbb</h4>
 
 <h4 id="gassensor">gassensor</h4>
@@ -64,6 +65,12 @@
             var txt=document.getElementById('changeh1');
             txt.innerText=msg;
         });
+        socket.on('messageh2', (msg) => {
+            var txt=document.getElementById('changeh2');
+            txt.innerText=msg;
+        });
+
+
         socket.on('messageled', (msg) => {
             var txt=document.getElementById('changehled');
             var btn=document.getElementById("bluetooth");
