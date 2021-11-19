@@ -172,54 +172,21 @@
       </div>
       <div class="flex justify-center items-center">
         <!--G1-->
-        <div class="Graph-Bar-Item Graph-Bar-Item-1 relative inline-block">
-          <div class="St-Pop-Up Pop-Up-1 text-xs">
-            <span class="c-3AAFE2 mr-1">
-              <i class="fas fa-hand-holding-water"></i>
-            </span>
-            <span class="">
-              2
-            </span>
-            <span class="">
-              L
-            </span>
-          </div>
-          <!--박찬종-->
-          <div class="flex justify-center">
-            <span class="Gra-Per-Text text-xs c-A8A8A8" id="">
-              20
-            </span>
-            <span class="Gra-Per-Text text-xs c-A8A8A8">
-              %
-            </span>
-          </div>
-          <div class="Gra-Bar-Ele-Box flex justify-center items-end mb-1">
-            <div class="Gra-Back-Ele-Bar h-full flex items-end border-radius-2">
-              <div class="w-full border-radius-2" style="height: 20%;" id=""></div>
-            </div>
-          </div>
-          <div class="text-center text-xs c-A8A8A8">
-            <span>11.01</span>
-          </div>
-        </div>
-        <div class="w-4"></div>
-        <!--G2-->
-        {{#each data}}
         <div class="Graph-Bar-Item Graph-Bar-Item-2 relative inline-block">
           <div class="St-Pop-Up Pop-Up-2 text-xs">
             <span class="c-3AAFE2 mr-1">
               <i class="fas fa-hand-holding-water"></i>
             </span>
             <span class="">
-                {{this.Useage}}
+                {{data.0.Useage}}
             </span>
             <span class="">
               L
             </span>
           </div>
           <div class="flex justify-center">
-            <span class="Gra-Per-Text text-xs c-A8A8A8">
-              {{this.Persent}}
+            <span class="Gra-Per-Text text-xs c-A8A8A8" id="waterpercent">
+              {{data.0.Persent}}
             </span>
             <span class="Gra-Per-Text text-xs c-A8A8A8">
               %
@@ -227,15 +194,218 @@
           </div>
           <div class="Gra-Bar-Ele-Box flex justify-center items-end mb-1">
             <div class="Gra-Back-Ele-Bar h-full flex items-end border-radius-2">
-              <div class="w-full border-radius-2" style="height: {{this.Persent}}%;"></div>
+              <div class="w-full border-radius-2" style="height: {{data.0.Persent}}%;" id="waterpercent"></div>
             </div>
           </div>
           <div class="text-center text-xs c-A8A8A8">
-            <span>{{this.Month}}.{{this.Day}}</span>
+            <span>{{data.0.Month}}.{{data.0.Day}}</span>
           </div>
         </div>
         <div class="w-4"></div>
-        {{/each}}
+      </div>
+    </div>
+    <div class="w-4"></div>
+        <!--G2-->
+        <div class="Graph-Bar-Item Graph-Bar-Item-2 relative inline-block">
+          <div class="St-Pop-Up Pop-Up-2 text-xs">
+            <span class="c-3AAFE2 mr-1">
+              <i class="fas fa-hand-holding-water"></i>
+            </span>
+            <span class="">
+                {{data.1.Useage}}
+            </span>
+            <span class="">
+              L
+            </span>
+          </div>
+          <div class="flex justify-center">
+            <span class="Gra-Per-Text text-xs c-A8A8A8" id="waterpercent1">
+              {{data.1.Persent}}
+            </span>
+            <span class="Gra-Per-Text text-xs c-A8A8A8">
+              %
+            </span>
+          </div>
+          <div class="Gra-Bar-Ele-Box flex justify-center items-end mb-1">
+            <div class="Gra-Back-Ele-Bar h-full flex items-end border-radius-2">
+              <div class="w-full border-radius-2" style="height: {{data.1.Persent}}%;" id="waterpercent1"></div>
+            </div>
+          </div>
+          <div class="text-center text-xs c-A8A8A8">
+            <span>{{data.1.Month}}.{{data.1.Day}}</span>
+          </div>
+        </div>
+        <div class="w-4"></div>
+      </div>
+    </div>
+    <div class="w-4"></div>
+    <!--G2-->
+        <div class="Graph-Bar-Item Graph-Bar-Item-2 relative inline-block">
+          <div class="St-Pop-Up Pop-Up-2 text-xs">
+            <span class="c-3AAFE2 mr-1">
+              <i class="fas fa-hand-holding-water"></i>
+            </span>
+            <span class="">
+                {{data.2.Useage}}
+            </span>
+            <span class="">
+              L
+            </span>
+          </div>
+          <div class="flex justify-center">
+            <span class="Gra-Per-Text text-xs c-A8A8A8">
+              {{data.2.Persent}}
+            </span>
+            <span class="Gra-Per-Text text-xs c-A8A8A8">
+              %
+            </span>
+          </div>
+          <div class="Gra-Bar-Ele-Box flex justify-center items-end mb-1">
+            <div class="Gra-Back-Ele-Bar h-full flex items-end border-radius-2">
+              <div class="w-full border-radius-2" style="height: {{data.2.Persent}}%;"></div>
+            </div>
+          </div>
+          <div class="text-center text-xs c-A8A8A8">
+            <span>{{data.2.Month}}.{{data.2.Day}}</span>
+          </div>
+        </div>
+        <div class="w-4"></div>
+      </div>
+    </div>
+    <div class="w-4"></div>
+    <!--G2-->
+        <div class="Graph-Bar-Item Graph-Bar-Item-2 relative inline-block">
+          <div class="St-Pop-Up Pop-Up-2 text-xs">
+            <span class="c-3AAFE2 mr-1">
+              <i class="fas fa-hand-holding-water"></i>
+            </span>
+            <span class="">
+                {{data.3.Useage}}
+            </span>
+            <span class="">
+              L
+            </span>
+          </div>
+          <div class="flex justify-center">
+            <span class="Gra-Per-Text text-xs c-A8A8A8">
+              {{data.3.Persent}}
+            </span>
+            <span class="Gra-Per-Text text-xs c-A8A8A8">
+              %
+            </span>
+          </div>
+          <div class="Gra-Bar-Ele-Box flex justify-center items-end mb-1">
+            <div class="Gra-Back-Ele-Bar h-full flex items-end border-radius-2">
+              <div class="w-full border-radius-2" style="height: {{data.3.Persent}}%;"></div>
+            </div>
+          </div>
+          <div class="text-center text-xs c-A8A8A8">
+            <span>{{data.3.Month}}.{{data.3.Day}}</span>
+          </div>
+        </div>
+        <div class="w-4"></div>
+      </div>
+    </div>
+    <div class="w-4"></div>
+    <!--G2-->
+        <div class="Graph-Bar-Item Graph-Bar-Item-2 relative inline-block">
+          <div class="St-Pop-Up Pop-Up-2 text-xs">
+            <span class="c-3AAFE2 mr-1">
+              <i class="fas fa-hand-holding-water"></i>
+            </span>
+            <span class="">
+                {{data.4.Useage}}
+            </span>
+            <span class="">
+              L
+            </span>
+          </div>
+          <div class="flex justify-center">
+            <span class="Gra-Per-Text text-xs c-A8A8A8">
+              {{data.4.Persent}}
+            </span>
+            <span class="Gra-Per-Text text-xs c-A8A8A8">
+              %
+            </span>
+          </div>
+          <div class="Gra-Bar-Ele-Box flex justify-center items-end mb-1">
+            <div class="Gra-Back-Ele-Bar h-full flex items-end border-radius-2">
+              <div class="w-full border-radius-2" style="height: {{data.4.Persent}}%;"></div>
+            </div>
+          </div>
+          <div class="text-center text-xs c-A8A8A8">
+            <span>{{data.4.Month}}.{{data.4.Day}}</span>
+          </div>
+        </div>
+        <div class="w-4"></div>
+      </div>
+    </div>
+    <div class="w-4"></div>
+    <!--G2-->
+        <div class="Graph-Bar-Item Graph-Bar-Item-2 relative inline-block">
+          <div class="St-Pop-Up Pop-Up-2 text-xs">
+            <span class="c-3AAFE2 mr-1">
+              <i class="fas fa-hand-holding-water"></i>
+            </span>
+            <span class="">
+                {{data.5.Useage}}
+            </span>
+            <span class="">
+              L
+            </span>
+          </div>
+          <div class="flex justify-center">
+            <span class="Gra-Per-Text text-xs c-A8A8A8">
+              {{data.5.Persent}}
+            </span>
+            <span class="Gra-Per-Text text-xs c-A8A8A8">
+              %
+            </span>
+          </div>
+          <div class="Gra-Bar-Ele-Box flex justify-center items-end mb-1">
+            <div class="Gra-Back-Ele-Bar h-full flex items-end border-radius-2">
+              <div class="w-full border-radius-2" style="height: {{data.5.Persent}}%;"></div>
+            </div>
+          </div>
+          <div class="text-center text-xs c-A8A8A8">
+            <span>{{data.5.Month}}.{{data.5.Day}}</span>
+          </div>
+        </div>
+        <div class="w-4"></div>
+      </div>
+    </div>
+    <div class="w-4"></div>
+    <!--G2-->
+        <div class="Graph-Bar-Item Graph-Bar-Item-2 relative inline-block">
+          <div class="St-Pop-Up Pop-Up-2 text-xs">
+            <span class="c-3AAFE2 mr-1">
+              <i class="fas fa-hand-holding-water"></i>
+            </span>
+            <span class="">
+                {{data.6.Useage}}
+            </span>
+            <span class="">
+              L
+            </span>
+          </div>
+          <div class="flex justify-center">
+            <span class="Gra-Per-Text text-xs c-A8A8A8">
+              {{data.6.Persent}}
+            </span>
+            <span class="Gra-Per-Text text-xs c-A8A8A8">
+              %
+            </span>
+          </div>
+          <div class="Gra-Bar-Ele-Box flex justify-center items-end mb-1">
+            <div class="Gra-Back-Ele-Bar h-full flex items-end border-radius-2">
+              <div class="w-full border-radius-2" style="height: {{data.6.Persent}}%;"></div>
+            </div>
+          </div>
+          <div class="text-center text-xs c-A8A8A8">
+            <span>{{data.6.Month}}.{{data.6.Day}}</span>
+          </div>
+        </div>
+        <div class="w-4"></div>
       </div>
     </div>
     <div class="w-4"></div>
