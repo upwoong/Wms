@@ -224,7 +224,7 @@
           </div>
           <div class="Gra-Bar-Ele-Box flex justify-center items-end mb-1">
             <div class="Gra-Back-Ele-Bar h-full flex items-end border-radius-2">
-              <div class="w-full border-radius-2" style="height: {{data.1.Persent}}%;"  id=""></div>
+              <div class="w-full border-radius-2" style="height: {{data.1.Persent}}%;"  id="graphpercent2"></div>
             </div>
           </div>
           <div class="text-center text-xs c-A8A8A8">
@@ -255,7 +255,7 @@
           </div>
           <div class="Gra-Bar-Ele-Box flex justify-center items-end mb-1">
             <div class="Gra-Back-Ele-Bar h-full flex items-end border-radius-2">
-              <div class="w-full border-radius-2" style="height: {{data.2.Persent}}%;"  id=""></div>
+              <div class="w-full border-radius-2" style="height: {{data.2.Persent}}%;"  id="graphpercent3"></div>
             </div>
           </div>
           <div class="text-center text-xs c-A8A8A8">
@@ -286,7 +286,7 @@
           </div>
           <div class="Gra-Bar-Ele-Box flex justify-center items-end mb-1">
             <div class="Gra-Back-Ele-Bar h-full flex items-end border-radius-2">
-              <div class="w-full border-radius-2" style="height: {{data.3.Persent}}%;"  id=""></div>
+              <div class="w-full border-radius-2" style="height: {{data.3.Persent}}%;"  id="graphpercent4"></div>
             </div>
           </div>
           <div class="text-center text-xs c-A8A8A8">
@@ -317,7 +317,7 @@
           </div>
           <div class="Gra-Bar-Ele-Box flex justify-center items-end mb-1">
             <div class="Gra-Back-Ele-Bar h-full flex items-end border-radius-2">
-              <div class="w-full border-radius-2" style="height: {{data.4.Persent}}%;"  id=""></div>
+              <div class="w-full border-radius-2" style="height: {{data.4.Persent}}%;"  id="graphpercent5"></div>
             </div>
           </div>
           <div class="text-center text-xs c-A8A8A8">
@@ -348,7 +348,7 @@
           </div>
           <div class="Gra-Bar-Ele-Box flex justify-center items-end mb-1">
             <div class="Gra-Back-Ele-Bar h-full flex items-end border-radius-2">
-              <div class="w-full border-radius-2" style="height: {{data.5.Persent}}%;"  id=""></div>
+              <div class="w-full border-radius-2" style="height: {{data.5.Persent}}%;"  id="graphpercent6"></div>
             </div>
           </div>
           <div class="text-center text-xs c-A8A8A8">
@@ -379,7 +379,7 @@
           </div>
           <div class="Gra-Bar-Ele-Box flex justify-center items-end mb-1">
             <div class="Gra-Back-Ele-Bar h-full flex items-end border-radius-2">
-              <div class="w-full border-radius-2" style="height: {{data.6.Persent}}%;"></div>
+              <div class="w-full border-radius-2" style="height: {{data.6.Persent}}%;" id="graphpercent7"></div>
             </div>
           </div>
           <div class="text-center text-xs c-A8A8A8">
@@ -862,7 +862,21 @@
     var todaywaterpercent = document.getElementById('todaywaterpercent');
     var txt2 = document.getElementById('waterpercent1');
     var txt3 = document.getElementById('Arraypercent');
+    var graphpercent2 = document.getElementById("graphpercent2");
+    var graphpercent3 = document.getElementById("graphpercent3");
+    var graphpercent4 = document.getElementById("graphpercent4");
+    var graphpercent5 = document.getElementById("graphpercent5");
+    var graphpercent6 = document.getElementById("graphpercent6");
+    var graphpercent7 = document.getElementById("graphpercent7");
     
+    todaywaterpercent.style.height = msg[0]+ "%";
+    graphpercent2.style.height = msg[1]+ "%";
+    graphpercent3.style.height = msg[2]+ "%";
+    graphpercent4.style.height = msg[3]+ "%";
+    graphpercent5.style.height = msg[4]+ "%";
+    graphpercent6.style.height = msg[5]+ "%";
+    graphpercent7.style.height = msg[6]+ "%";
+
     txt1.innerText = msg[0];
     txt2.innerText = msg[1];
     txt3.innerText = msg;

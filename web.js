@@ -1662,7 +1662,7 @@ Water.find(function (err, data) {
     }
     res.render('wateruseage', { data: data, selectcityname: selectcityname, selectvillagename: selectvillagename, newArray: newArray })
 })
-})
+}).sort({ Year: -1 }).sort({ Month: -1 }).sort({ Day: -1 }).limit(7) 
 //const user = new Water({ 'name': "132", 'Date' : valuedata, 'Hour' : "18 : 10" })
 
 // 퍼센트 구하는 함수 ex) percetn(50,100) = 50
@@ -1678,7 +1678,7 @@ for (let index = 0; index < data.length; index++) {
     Valuedata.push(data[index].Useage)
 }
 maxValue = Math.max.apply(null, Valuedata)
-}).sort({ Year: -1 }).sort({ Month: -1 }).sort({ Day: -1 }).limit(6) //추후엔 Month 와 Day로 나누기 때문에 각각에 sort정렬을 해줘야 최신 데이터가 나옴
+}).sort({ Year: -1 }).sort({ Month: -1 }).sort({ Day: -1 }).limit(7) //추후엔 Month 와 Day로 나누기 때문에 각각에 sort정렬을 해줘야 최신 데이터가 나옴
 
 let weekendWater = new Array()
 
