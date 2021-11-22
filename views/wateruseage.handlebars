@@ -859,10 +859,12 @@
     var txt1 = document.getElementById('waterpercent');
     var todaywaterpercent = document.getElementById('todaywaterpercent')
     var txt2 = document.getElementById('waterpercent1');
+    var txt3 = document.getElementById('Arraypercent');
     
-    todaywaterpercent.innerText = msg[0]
+    todaywaterpercent.style.height = msg[0];
     txt1.innerText = msg[0];
     txt2.innerText = msg[1];
+    txt3.innerText = msg;
   });
   socket.on('messageh2', (msg) => {
     var txt = document.getElementById('messageh2');
