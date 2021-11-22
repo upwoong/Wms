@@ -1,226 +1,875 @@
-<!--테일윈드 불러오기-->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.16/tailwind.min.css">
-<!--폰트어썸 불러오기-->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css">
-<link rel="stylesheet" href="css/media.css">
-<div class="all-box p-12">
-  <div class="all-element-box bg-white">
-
-    <!--section-1-->
-    <div class="section section-1 flex items-center mb-1">
-      <div>
-        <div class="title-deck"></div>
-      </div>
-      <div class="title-text text-3xl font-bold">
-        <span>ConTents</span>
-      </div>
-      <div class="body-text text-sm font-bold" style="margin-top: 8px;">
-        <span>Detail Setting.</span>
-      </div>
-      <!--section-1 공통 부모-->
+<!--테일윈드-->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.17/tailwind.min.css">
+<!--폰트어썸-->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link rel="stylesheet" href="css/wateruseage.css">
+<!--요소 시작-->
+<div class="Side-Box hei-51 bg-4F6884 flex items-center px-6">
+  <div class="flex items-center text-white">
+    <div class="img-box Wea-Ther-Icon mr-1">
+      <img src="https://cdn.jsdelivr.net/gh/kimhyeji324/ICT_Resource@master/docs/top-cl.png" alt="">
     </div>
-
-    <!--section-2 시작-->
-    <div class="flex">
-      <div class="flex-1">
-        <!--영상 시작-->
-        <div class="w-full">
-          <video class="border-radius-5 w-full min-height-387" src="test.mp4" controls muted autoplay id="showvideo"></video>
-        </div>
-        <!--영상 끝-->
-        <!--버튼 시작-->
-        <div class="flex items-center mt-1">
-          <div class="video-title-text text-base font-bold text-white p-3 mr-1">
-            <span>
-              Video ConTents
-            </span>
-          </div>
-          <!--셀렉트-->
-          <form method="post">
-          <div class="flex-1 selection-box selection-box-1 h-full">
-            <select class="selection selection-1 text-gray-400 border-8D text-8D" name="name" id="videofilelist" onchange="chagevidoeSelect()">
-              <option value="" selected disabled>=== 동영상 url 선택 ===</option>
-              {{#each videofile}}
-              <option name="videofile" value="{{this.name}}">{{this.name}}
-              </option>
-              {{/each}}
-            </select>
-          </div>
-        </div>
-        <!--버튼 시작-->
-          <!--삭제-->
-          <div class="flex items-center">
-            <div class="Del-btn flex items-center w-full">
-              <div class="flex-1 flex items-center">
-                <div class="Vi-Icon img-box flex justify-center flex-1">
-                  <img src="https://cdn.jsdelivr.net/gh/kimhyeji324/ICT_Resource@master/docs/Vi__Url-Pl-icon.png" alt="">
-                </div>
-                <div class="Vi-Pl-text flex justify-center flex-1">
-                  <span>
-                    URL 삭제
-                  </span>
-                </div>
-                <div class="flex-1"></div>
-              </div>
-            </div>
-            <div>
-              <input class="flie-del-btn" type="submit" value="확인" onclick='this.form.action= "/deletevideo"'>
-            </div>
-          </form>
-            <!--버튼 끝-->
-          </div>
-          <!--추가-->
-          <form method="post" enctype="multipart/form-data" action="/process/video">
-          <div class="filebox flex items-center">
-            <div class="Del-btn flex items-center w-full">
-              <div class="flex-1 flex items-center">
-                <div class="Vi-Icon img-box flex justify-center flex-1">
-                  <img src="https://cdn.jsdelivr.net/gh/kimhyeji324/ICT_Resource@master/docs/Vi__Url-Pl-icon.png" alt="">
-                </div>
-                <div class="Vi-Pl-text flex justify-center flex-1">
-                  <span>
-                    URL 추가
-                  </span>
-                </div>
-                <div class="flex-1"></div>
-              </div>
-            </div>
-            <input class="file-up-btn" type="submit" value="확인" name="submit" />
-          </div>
-          <!--업로드-->
-          <div class="flex items-center">
-            <div class="Del-btn flex items-center w-full">
-              <div class="flex-1 flex items-center">
-                <div class="Vi-Icon img-box flex justify-center flex-1">
-                  <img src="https://cdn.jsdelivr.net/gh/kimhyeji324/ICT_Resource@master/docs/Vi__Url-Pl-icon.png" alt="">
-                </div>
-                <div class="Vi-Pl-text flex justify-center flex-1">
-                  <span>
-                    URL 업로드
-                  </span>
-                </div>
-                <div class="flex-1"></div>
-              </div>
-            </div>
-            <div>
-              <label class="h-full border-o" for="file">확인</label>
-              <input type="file" id="file" name="photo">
-            </div>
-          </div>
-          
-        </form>
-        <!--버튼 끝-->
-        <!--비디오 레이아웃 공통 부모-->
-      </div>
-      <!--영상 끝-->
-
-      <div style="width: 10%;"></div>
-
-      <!--이미지 시작-->
-      <div class="flex-1">
-        <div class="flex justify-center items-center">
-        <div class="preview-img max-height-387 max-width-273">
-          <img class="border-radius-5 min-height-387 w-full object-cover" src="https://i.postimg.cc/J4RrxMQL/Kakao-Talk-20211015-115032591.jpg" alt="" style="border-radius: 5px;" id="showimage">
-        </div>
-        </div>
-        <!--버튼 시작-->
-        <div class="flex items-center mt-1">
-          <div class="img-title-text text-base font-bold text-white p-3 mr-1">
-            <span>
-              Image ConTents
-            </span>
-          </div>
-          <!--셀렉트-->
-          <form method="post">
-          <div class="flex-1 selection-box selection-box-1 h-full">
-            <select class="selection selection-1 text-gray-400 border-8D text-8D" name="name" id="imgfilelist" onchange="chageimageSelect()">
-              <option value="" selected disabled>=== 이미지 url 선택 ===</option>
-              {{#each imgfile}}
-              <option name="videofile" value="{{this.name}}">{{this.name}}
-              </option>
-              {{/each}}
-            </select>
-          </div>
-        </div>
-        <!--버튼 시작-->
-        <form method="post" enctype="multipart/form-data" action="/process/image">
-          <!--삭제-->
-          <div class="flex items-center">
-            <div class="Del-btn flex items-center w-full">
-              <div class="flex-1 flex items-center">
-                <div class="Vi-Icon img-box flex justify-center flex-1">
-                  <img src="https://cdn.jsdelivr.net/gh/kimhyeji324/ICT_Resource@master/docs/Vi__Url-Pl-icon.png" alt="">
-                </div>
-                <div class="Vi-Pl-text flex justify-center flex-1">
-                  <span>
-                    URL 삭제
-                  </span>
-                </div>
-                <div class="flex-1"></div>
-              </div>
-            </div>
-            <div>
-              <input class="flie-del-btn" type="submit" value="확인" onclick='this.form.action= "/deleteimage"'>
-            </div>
-          </div>
-        </form>
-          <!--추가-->
-          <div class="filebox flex items-center">
-            <div class="Del-btn flex items-center w-full">
-              <div class="flex-1 flex items-center">
-                <div class="Vi-Icon img-box flex justify-center flex-1">
-                  <img src="https://cdn.jsdelivr.net/gh/kimhyeji324/ICT_Resource@master/docs/Vi__Url-Pl-icon.png" alt="">
-                </div>
-                <div class="Vi-Pl-text flex justify-center flex-1">
-                  <span>
-                    URL 추가
-                  </span>
-                </div>
-                <div class="flex-1"></div>
-              </div>
-            </div>
-            <input class="file-up-btn border-r" type="submit" value="확인" name="submit" />
-          </div>
-          <!--업로드-->
-          <div class="flex items-center">
-            <div class="Del-btn flex items-center w-full">
-              <div class="flex-1 flex items-center">
-                <div class="Vi-Icon img-box flex justify-center flex-1">
-                  <img src="https://cdn.jsdelivr.net/gh/kimhyeji324/ICT_Resource@master/docs/Vi__Url-Pl-icon.png" alt="">
-                </div>
-                <div class="Vi-Pl-text flex justify-center flex-1">
-                  <span>
-                    URL 업로드
-                  </span>
-                </div>
-                <div class="flex-1"></div>
-              </div>
-            </div>
-            <div>
-              <label class="file-up-btn border-r" for="selectimage">확인</label>
-              <input type="file" id="selectimage" name="photo" value="확인">
-            </div>
-          </div>
-        </form>
-        <!--section-2 공통 부모-->
-      </div>
-      <!--최상단 공통 조상-->
+    <div class="img-box Map-Pin-White M-R-1">
+      <img src="https://cdn.jsdelivr.net/gh/kimhyeji324/ICT_Resource@master/docs/Map-Pin-Whi.png" alt="">
+    </div>
+    <div class="text-sm text-white font-bold mr-1">
+<span>{{selectcityname}}</span>
+                  <span>{{selectvillagename}}</span>
+    </div>
+    <div class="flex text-sm text-white font-bold">
+      <span class="h-full flex M-R-1" id="currentT1H"></span>
+      <span class="h-full flex M-R-1">C</span>
+      <span class="h-full flex">
+        <i class="fas fa-genderless"></i>
+      </span>
     </div>
   </div>
+  <div class="flex-1"></div>
+  <div>
+    <div class="flex items-center">
+      <span class="text-base text-white mr-1">
+        <i class="fas fa-users"></i>
+      </span>
+      <span class="text-sm text-white font-bold">13</span>
+      <span class="text-sm text-white font-bold">명</span>
+    </div>
+  </div>
+  <div class="flex-1"></div>
+  <div class="flex">
+    <div class="flex text-sm text-white font-bold">
+      <div class="flex mr-1">
+        <span id="textday"></span>
+      </div>
 
-    <script>
+    </div>
+    <div class="text-sm text-white font-bold">
+      <span id="texthours"></span>
+    </div>
+  </div>
+</div>
+<div class="Ele-All-Box w-full">
+  <div class="Data-Text-Box flex" style="margin-bottom: 20px;">
+    <!--1-->
+    <div class="Data-Text-Item Data-Text-Item-1 flex-1">
+      <div class="flex justify-center items-center text-xs font-bold c-47525B">
+        <span>
+          11
+        </span>
+        <span>월</span>
+        <span>11</span>
+        <span>일</span>
+        <span>[</span>
+        <span>목</span>
+        <span class="mr-1">]</span>
+        <span>총 사용량</span>
+      </div>
+      <div></div>
+      <div class="flex justify-center items-center">
+        <div>
+          <div class="flex justify-center text-6xl c-3AAFE2">
+            <span>{{data.1.Useage}}</span>
+            <span>L</span>
+          </div>
+          <div class="flex justify-center items-center text-sm font-bold c-A8A8A8">
+            <span>
+              Yesterday Data
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="w-4"></div>
+    <!--2-->
+    <div class="Data-Text-Item Data-Text-Item-1 flex-1">
+      <div class="flex justify-center items-center text-xs font-bold c-47525B">
+        <span>
+          11
+        </span>
+        <span>월</span>
+        <span>12</span>
+        <span>일</span>
+        <span>[</span>
+        <span>금</span>
+        <span class="mr-1">]</span>
+        <span>총 사용량</span>
+      </div>
+      <div></div>
+      <div class="flex justify-center items-center">
+        <div>
+          <div class="flex justify-center text-6xl c-3AAFE2">
+            <span id="messageh2">3</span>
+            <span>L</span>
+          </div>
+          <div class="flex justify-center items-center text-sm font-bold c-A8A8A8">
+            <span>
+              Today Data
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="w-4"></div>
+    <!--3-->
+    <div class="Data-Text-Item Data-Text-Item-1 flex-1">
+      <div class="flex justify-center items-center text-xs font-bold c-47525B">
+        <span>
+          전달 총 사용량
+        </span>
+      </div>
+      <div></div>
+      <div class="flex justify-center items-center">
+        <div>
+          <div class="flex justify-center text-6xl c-3AAFE2">
+            <span>290</span>
+            <span>L</span>
+          </div>
+          <div class="flex justify-center items-center text-sm font-bold c-A8A8A8">
+            <span>
+              Last Month Data
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="w-4"></div>
+    <!--4-->
+    <div class="Data-Text-Item Data-Text-Item-1 flex-1">
+      <div class="flex justify-center items-center text-xs font-bold c-47525B">
+        <span>
+          이번달 총 사용량
+        </span>
+      </div>
+      <div></div>
+      <div class="flex justify-center items-center">
+        <div>
+          <div class="flex justify-center text-6xl c-3AAFE2">
+            <span>335</span>
+            <span>L</span>
+          </div>
+          <div class="flex justify-center items-center text-sm font-bold c-A8A8A8">
+            <span>
+              This Month Data
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--그래프-->
+  <div class="Graph-Bar-All-Box flex" style="margin-bottom: 20px;">
+    <!--1-->
+    <div class="Graph-Bar-Item-Box Graph-Bar-Box-Item-1 flex-1">
+      <div class="Graph-Bar-Text-Box flex justify-center items-center">
+        <div class="flex items-center">
+          <span class="text-xs font-bold c-47525B ml-4 mr-1">이번주 총 사용량</span>
+          <span class="text-lg font-bold c-3AAFE2">30</span>
+          <span class="text-lg font-bold c-3AAFE2">L</span>
+        </div>
+        <div class="flex-1"></div>
+        <div class="text-sm c-A8A8A8 mr-4">
+          <span>일주일 사용량 -</span>
+        </div>
+      </div>
+      <div class="flex justify-center items-center">
+        <!--G1-->
+        <div class="Graph-Bar-Item Graph-Bar-Item-1 relative inline-block">
+          <div class="St-Pop-Up Pop-Up-1 text-xs">
+            <span class="c-3AAFE2 mr-1">
+              <i class="fas fa-hand-holding-water"></i>
+            </span>
+            <span class="">
+              {{data.0.Useage}}
+            </span>
+            <span class="">
+              L
+            </span>
+          </div>
+          <div class="flex justify-center">
+            <span class="Gra-Per-Text text-xs c-A8A8A8" id="waterpercent">
+              {{data.0.Persent}}
+            </span>
+            <span class="Gra-Per-Text text-xs c-A8A8A8">
+              %
+            </span>
+          </div>
+          <div class="Gra-Bar-Ele-Box flex justify-center items-end mb-1">
+            <div class="Gra-Back-Ele-Bar h-full flex items-end border-radius-2">
+              <div class="w-full border-radius-2" style="height: {{data.0.Persent}}%;"  id="waterpercent"></div>
+            </div>
+          </div>
+          <div class="text-center text-xs c-A8A8A8">
+            <span>{{data.0.Month}}.{{data.0.Day}}</span>
+          </div>
+        </div>
+        <div class="w-4"></div>
+        <!--G2-->
+        <div class="Graph-Bar-Item Graph-Bar-Item-1 relative inline-block">
+          <div class="St-Pop-Up Pop-Up-1 text-xs">
+            <span class="c-3AAFE2 mr-1">
+              <i class="fas fa-hand-holding-water"></i>
+            </span>
+            <span class="">
+              {{data.0.Useage}}
+            </span>
+            <span class="">
+              L
+            </span>
+          </div>
+          <div class="flex justify-center">
+            <span class="Gra-Per-Text text-xs c-A8A8A8" id="waterpercent">
+              {{data.1.Persent}}
+            </span>
+            <span class="Gra-Per-Text text-xs c-A8A8A8">
+              %
+            </span>
+          </div>
+          <div class="Gra-Bar-Ele-Box flex justify-center items-end mb-1">
+            <div class="Gra-Back-Ele-Bar h-full flex items-end border-radius-2">
+              <div class="w-full border-radius-2" style="height: {{data.1.Persent}}%;"  id="waterpercent"></div>
+            </div>
+          </div>
+          <div class="text-center text-xs c-A8A8A8">
+            <span>{{data.1.Month}}.{{data.1.Day}}</span>
+          </div>
+        </div>
+        <div class="w-4"></div>
+        <!--G3-->
+        <div class="Graph-Bar-Item Graph-Bar-Item-1 relative inline-block">
+          <div class="St-Pop-Up Pop-Up-1 text-xs">
+            <span class="c-3AAFE2 mr-1">
+              <i class="fas fa-hand-holding-water"></i>
+            </span>
+            <span class="">
+              {{data.2.Useage}}
+            </span>
+            <span class="">
+              L
+            </span>
+          </div>
+          <div class="flex justify-center">
+            <span class="Gra-Per-Text text-xs c-A8A8A8" id="waterpercent">
+              {{data.2.Persent}}
+            </span>
+            <span class="Gra-Per-Text text-xs c-A8A8A8">
+              %
+            </span>
+          </div>
+          <div class="Gra-Bar-Ele-Box flex justify-center items-end mb-1">
+            <div class="Gra-Back-Ele-Bar h-full flex items-end border-radius-2">
+              <div class="w-full border-radius-2" style="height: {{data.2.Persent}}%;"  id="waterpercent"></div>
+            </div>
+          </div>
+          <div class="text-center text-xs c-A8A8A8">
+            <span>{{data.2.Month}}.{{data.2.Day}}</span>
+          </div>
+        </div>
+        <div class="w-4"></div>
+        <!--G4-->
+        <div class="Graph-Bar-Item Graph-Bar-Item-1 relative inline-block">
+          <div class="St-Pop-Up Pop-Up-1 text-xs">
+            <span class="c-3AAFE2 mr-1">
+              <i class="fas fa-hand-holding-water"></i>
+            </span>
+            <span class="">
+              {{data.3.Useage}}
+            </span>
+            <span class="">
+              L
+            </span>
+          </div>
+          <div class="flex justify-center">
+            <span class="Gra-Per-Text text-xs c-A8A8A8" id="waterpercent">
+              {{data.3.Persent}}
+            </span>
+            <span class="Gra-Per-Text text-xs c-A8A8A8">
+              %
+            </span>
+          </div>
+          <div class="Gra-Bar-Ele-Box flex justify-center items-end mb-1">
+            <div class="Gra-Back-Ele-Bar h-full flex items-end border-radius-2">
+              <div class="w-full border-radius-2" style="height: {{data.3.Persent}}%;"  id="waterpercent"></div>
+            </div>
+          </div>
+          <div class="text-center text-xs c-A8A8A8">
+            <span>{{data.3.Month}}.{{data.3.Day}}</span>
+          </div>
+        </div>
+        <div class="w-4"></div>
+        <!--G5-->
+        <div class="Graph-Bar-Item Graph-Bar-Item-1 relative inline-block">
+          <div class="St-Pop-Up Pop-Up-1 text-xs">
+            <span class="c-3AAFE2 mr-1">
+              <i class="fas fa-hand-holding-water"></i>
+            </span>
+            <span class="">
+              {{data.4.Useage}}
+            </span>
+            <span class="">
+              L
+            </span>
+          </div>
+          <div class="flex justify-center">
+            <span class="Gra-Per-Text text-xs c-A8A8A8" id="waterpercent">
+              {{data.4.Persent}}
+            </span>
+            <span class="Gra-Per-Text text-xs c-A8A8A8">
+              %
+            </span>
+          </div>
+          <div class="Gra-Bar-Ele-Box flex justify-center items-end mb-1">
+            <div class="Gra-Back-Ele-Bar h-full flex items-end border-radius-2">
+              <div class="w-full border-radius-2" style="height: {{data.4.Persent}}%;"  id="waterpercent"></div>
+            </div>
+          </div>
+          <div class="text-center text-xs c-A8A8A8">
+            <span>{{data.4.Month}}.{{data.4.Day}}</span>
+          </div>
+        </div>
+        <div class="w-4"></div>
+        <!--G6-->
+        <div class="Graph-Bar-Item Graph-Bar-Item-1 relative inline-block">
+          <div class="St-Pop-Up Pop-Up-1 text-xs">
+            <span class="c-3AAFE2 mr-1">
+              <i class="fas fa-hand-holding-water"></i>
+            </span>
+            <span class="">
+              {{data.5.Useage}}
+            </span>
+            <span class="">
+              L
+            </span>
+          </div>
+          <div class="flex justify-center">
+            <span class="Gra-Per-Text text-xs c-A8A8A8" id="waterpercent">
+              {{data.5.Persent}}
+            </span>
+            <span class="Gra-Per-Text text-xs c-A8A8A8">
+              %
+            </span>
+          </div>
+          <div class="Gra-Bar-Ele-Box flex justify-center items-end mb-1">
+            <div class="Gra-Back-Ele-Bar h-full flex items-end border-radius-2">
+              <div class="w-full border-radius-2" style="height: {{data.5.Persent}}%;"  id="waterpercent"></div>
+            </div>
+          </div>
+          <div class="text-center text-xs c-A8A8A8">
+            <span>{{data.5.Month}}.{{data.5.Day}}</span>
+          </div>
+        </div>
+        <div class="w-4"></div>
+        <!--G7-->
+        <div class="Graph-Bar-Item Graph-Bar-Item-7 relative inline-block">
+          <div class="St-Pop-Up Pop-Up-7 text-xs">
+            <span class="c-3AAFE2 mr-1">
+              <i class="fas fa-hand-holding-water"></i>
+            </span>
+            <span class="">
+              {{data.6.Useage}}
+            </span>
+            <span class="">
+              L
+            </span>
+          </div>
+          <div class="flex justify-center">
+            <span class="Gra-Per-Text text-xs c-A8A8A8">
+              {{data.6.Persent}}
+            </span>
+            <span class="Gra-Per-Text text-xs c-A8A8A8">
+              %
+            </span>
+          </div>
+          <div class="Gra-Bar-Ele-Box flex justify-center items-end mb-1">
+            <div class="Gra-Back-Ele-Bar h-full flex items-end border-radius-2">
+              <div class="w-full border-radius-2" style="height: {{data.6.Persent}}%;"></div>
+            </div>
+          </div>
+          <div class="text-center text-xs c-A8A8A8">
+            <span>{{data.6.Month}}.{{data.6.Day}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="w-4"></div>
+    <!--2-->
+    <div class="Graph-Bar-Item-Box Graph-Bar-Item-Box-2 flex-1">
+      <div class="Graph-Bar-ext-Box flex justify-center items-center">
+        <div class="flex items-center">
+          <span class="text-xs font-bold c-47525B ml-4 mr-1">올해 총 사용량</span>
+          <span class="text-lg font-bold c-3AAFE2">30</span>
+          <span class="text-lg font-bold c-3AAFE2">L</span>
+        </div>
+        <div class="flex-1"></div>
+        <div class="text-sm c-A8A8A8 mr-4">
+          <span>연도별 사용량 -</span>
+        </div>
+      </div>
+      <div class="flex justify-center items-center">
+        <!--G2-1-->
+        <div class="Graph-Bar-Item Graph-Bar-Item-2-1 relative inline-block">
+          <div class="Nd-Pop-Up Pop-Up-2-1 text-xs">
+            <span class="c-3AAFE2 mr-1">
+              <i class="fas fa-hand-holding-water"></i>
+            </span>
+            <span>
+              2
+            </span>
+            <span>
+              L
+            </span>
+          </div>
+          <div class="flex justify-center">
+            <span class="Gra-Per-Text text-xs c-A8A8A8">
+              70
+            </span>
+            <span class="Gra-Per-Text text-xs c-A8A8A8">
+              %
+            </span>
+          </div>
+          <div class="Gra-Bar-Ele-Box flex justify-center items-end mb-1">
+            <div class="Gra-Back-Ele-Bar h-full flex items-end border-radius-2">
+              <div class="w-full border-radius-2" style="height: 70%;"></div>
+            </div>
+          </div>
+          <div class="flex justify-center items-center text-xs c-A8A8A8">
+            <span>1</span>
+            <span>월</span>
+          </div>
+        </div>
+        <div class="w-4"></div>
+        <!--G2-2-->
+        <div class="Graph-Bar-Item Graph-Bar-Item-2-2 relative inline-block">
+          <div class="Nd-Pop-Up Pop-Up-2-2 text-xs">
+            <span class="c-3AAFE2 mr-1">
+              <i class="fas fa-hand-holding-water"></i>
+            </span>
+            <span>
+              2
+            </span>
+            <span>
+              L
+            </span>
+          </div>
+          <div class="flex justify-center">
+            <span class="Gra-Per-Text text-xs c-A8A8A8">
+              60
+            </span>
+            <span class="Gra-Per-Text text-xs c-A8A8A8">
+              %
+            </span>
+          </div>
+          <div class="Gra-Bar-Ele-Box flex justify-center items-end mb-1">
+            <div class="Gra-Back-Ele-Bar h-full flex items-end border-radius-2">
+              <div class="w-full border-radius-2" style="height: 60%;"></div>
+            </div>
+          </div>
+          <div class="flex justify-center items-center text-xs c-A8A8A8">
+            <span>2</span>
+            <span>월</span>
+          </div>
+        </div>
+        <div class="w-4"></div>
+        <!--G2-3-->
+        <div class="Graph-Bar-Item Graph-Bar-Item-2-3 relative inline-block">
+          <div class="Nd-Pop-Up Pop-Up-2-3 text-xs">
+            <span class="c-3AAFE2 mr-1">
+              <i class="fas fa-hand-holding-water"></i>
+            </span>
+            <span>
+              2
+            </span>
+            <span>
+              L
+            </span>
+          </div>
+          <div class="flex justify-center">
+            <span class="Gra-Per-Text text-xs c-A8A8A8">
+              40
+            </span>
+            <span class="Gra-Per-Text text-xs c-A8A8A8">
+              %
+            </span>
+          </div>
+          <div class="Gra-Bar-Ele-Box flex justify-center items-end mb-1">
+            <div class="Gra-Back-Ele-Bar h-full flex items-end border-radius-2">
+              <div class="w-full border-radius-2" style="height: 50%;"></div>
+            </div>
+          </div>
+          <div class="flex justify-center items-center text-xs c-A8A8A8">
+            <span>3</span>
+            <span>월</span>
+          </div>
+        </div>
+        <div class="w-4"></div>
+        <!--G2-4-->
+        <div class="Graph-Bar-Item Graph-Bar-Item-2-4 relative inline-block">
+          <div class="Nd-Pop-Up Pop-Up-2-4 text-xs">
+            <span class="c-3AAFE2 mr-1">
+              <i class="fas fa-hand-holding-water"></i>
+            </span>
+            <span>
+              2
+            </span>
+            <span>
+              L
+            </span>
+          </div>
+          <div class="flex justify-center">
+            <span class="Gra-Per-Text text-xs c-A8A8A8">
+              20
+            </span>
+            <span class="Gra-Per-Text text-xs c-A8A8A8">
+              %
+            </span>
+          </div>
+          <div class="Gra-Bar-Ele-Box flex justify-center items-end mb-1">
+            <div class="Gra-Back-Ele-Bar h-full flex items-end border-radius-2">
+              <div class="w-full border-radius-2" style="height: 20%;"></div>
+            </div>
+          </div>
+          <div class="flex justify-center items-center text-xs c-A8A8A8">
+            <span>4</span>
+            <span>월</span>
+          </div>
+        </div>
+        <div class="w-4"></div>
+        <!--G2-5-->
+        <div class="Graph-Bar-Item Graph-Bar-Item-2-5 relative inline-block">
+          <div class="Nd-Pop-Up Pop-Up-2-5 text-xs">
+            <span class="c-3AAFE2 mr-1">
+              <i class="fas fa-hand-holding-water"></i>
+            </span>
+            <span>
+              2
+            </span>
+            <span>
+              L
+            </span>
+          </div>
+          <div class="flex justify-center">
+            <span class="Gra-Per-Text text-xs c-A8A8A8">
+              70
+            </span>
+            <span class="Gra-Per-Text text-xs c-A8A8A8">
+              %
+            </span>
+          </div>
+          <div class="Gra-Bar-Ele-Box flex justify-center items-end mb-1">
+            <div class="Gra-Back-Ele-Bar h-full flex items-end border-radius-2">
+              <div class="w-full border-radius-2" style="height: 70%;"></div>
+            </div>
+          </div>
+          <div class="flex justify-center items-center text-xs c-A8A8A8">
+            <span>5</span>
+            <span>월</span>
+          </div>
+        </div>
+        <div class="w-4"></div>
+        <!--G2-6-->
+        <div class="Graph-Bar-Item Graph-Bar-Item-2-6 relative inline-block">
+          <div class="Nd-Pop-Up Pop-Up-2-6 text-xs">
+            <span class="c-3AAFE2 mr-1">
+              <i class="fas fa-hand-holding-water"></i>
+            </span>
+            <span>
+              2
+            </span>
+            <span>
+              L
+            </span>
+          </div>
+          <div class="flex justify-center">
+            <span class="Gra-Per-Text text-xs c-A8A8A8">
+              10
+            </span>
+            <span class="Gra-Per-Text text-xs c-A8A8A8">
+              %
+            </span>
+          </div>
+          <div class="Gra-Bar-Ele-Box flex justify-center items-end mb-1">
+            <div class="Gra-Back-Ele-Bar h-full flex items-end border-radius-2">
+              <div class="w-full border-radius-2" style="height: 10%;"></div>
+            </div>
+          </div>
+          <div class="flex justify-center items-center text-xs c-A8A8A8">
+            <span>6</span>
+            <span>월</span>
+          </div>
+        </div>
+        <div class="w-4"></div>
+        <!--G2-7-->
+        <div class="Graph-Bar-Item Graph-Bar-Item-2-7 relative inline-block">
+          <div class="Nd-Pop-Up Pop-Up-2-7 text-xs">
+            <span class="c-3AAFE2 mr-1">
+              <i class="fas fa-hand-holding-water"></i>
+            </span>
+            <span>
+              2
+            </span>
+            <span>
+              L
+            </span>
+          </div>
+          <div class="flex justify-center">
+            <span class="Gra-Per-Text text-xs c-A8A8A8">
+              100
+            </span>
+            <span class="Gra-Per-Text text-xs c-A8A8A8">
+              %
+            </span>
+          </div>
+          <div class="Gra-Bar-Ele-Box flex justify-center items-end mb-1">
+            <div class="Gra-Back-Ele-Bar h-full flex items-end border-radius-2">
+              <div class="w-full border-radius-2" style="height: 100%;"></div>
+            </div>
+          </div>
+          <div class="flex justify-center items-center text-xs c-A8A8A8">
+            <span>7</span>
+            <span>월</span>
+          </div>
+        </div>
+        <div class="w-4"></div>
+        <!--G2-8-->
+        <div class="Graph-Bar-Item Graph-Bar-Item-2-8 relative inline-block">
+          <div class="Nd-Pop-Up Pop-Up-2-8 text-xs">
+            <span class="c-3AAFE2 mr-1">
+              <i class="fas fa-hand-holding-water"></i>
+            </span>
+            <span>
+              2
+            </span>
+            <span>
+              L
+            </span>
+          </div>
+          <div class="flex justify-center">
+            <span class="Gra-Per-Text text-xs c-A8A8A8">
+              5
+            </span>
+            <span class="Gra-Per-Text text-xs c-A8A8A8">
+              %
+            </span>
+          </div>
+          <div class="Gra-Bar-Ele-Box flex justify-center items-end mb-1">
+            <div class="Gra-Back-Ele-Bar h-full flex items-end border-radius-2">
+              <div class="w-full border-radius-2" style="height: 5%;"></div>
+            </div>
+          </div>
+          <div class="flex justify-center items-center text-xs c-A8A8A8">
+            <span>8</span>
+            <span>월</span>
+          </div>
+        </div>
+        <div class="w-4"></div>
+        <!--G2-9-->
+        <div class="Graph-Bar-Item Graph-Bar-Item-2-9 relative inline-block">
+          <div class="Nd-Pop-Up Pop-Up-2-9 text-xs">
+            <span class="c-3AAFE2 mr-1">
+              <i class="fas fa-hand-holding-water"></i>
+            </span>
+            <span>
+              2
+            </span>
+            <span>
+              L
+            </span>
+          </div>
+          <div class="flex justify-center">
+            <span class="Gra-Per-Text text-xs c-A8A8A8">
+              30
+            </span>
+            <span class="Gra-Per-Text text-xs c-A8A8A8">
+              %
+            </span>
+          </div>
+          <div class="Gra-Bar-Ele-Box flex justify-center items-end mb-1">
+            <div class="Gra-Back-Ele-Bar h-full flex items-end border-radius-2">
+              <div class="w-full border-radius-2" style="height: 30%;"></div>
+            </div>
+          </div>
+          <div class="flex justify-center items-center text-xs c-A8A8A8">
+            <span>9</span>
+            <span>월</span>
+          </div>
+        </div>
+        <div class="w-4"></div>
+        <!--G2-10-->
+        <div class="Graph-Bar-Item Graph-Bar-Item-2-10 relative inline-block">
+          <div class="Nd-Pop-Up Pop-Up-2-10 text-xs">
+            <span class="c-3AAFE2 mr-1">
+              <i class="fas fa-hand-holding-water"></i>
+            </span>
+            <span>
+              2
+            </span>
+            <span>
+              L
+            </span>
+          </div>
+          <div class="flex justify-center">
+            <span class="Gra-Per-Text text-xs c-A8A8A8">
+              60
+            </span>
+            <span class="Gra-Per-Text text-xs c-A8A8A8">
+              %
+            </span>
+          </div>
+          <div class="Gra-Bar-Ele-Box flex justify-center items-end mb-1">
+            <div class="Gra-Back-Ele-Bar h-full flex items-end border-radius-2">
+              <div class="w-full border-radius-2" style="height: 60%;"></div>
+            </div>
+          </div>
+          <div class="flex justify-center items-center text-xs c-A8A8A8">
+            <span>10</span>
+            <span>월</span>
+          </div>
+        </div>
+        <div class="w-4"></div>
+        <!--G2-11-->
+        <div class="Graph-Bar-Item Graph-Bar-Item-2-11 relative inline-block">
+          <div class="Nd-Pop-Up Pop-Up-2-11 text-xs">
+            <span class="c-3AAFE2 mr-1">
+              <i class="fas fa-hand-holding-water"></i>
+            </span>
+            <span>
+              2
+            </span>
+            <span>
+              L
+            </span>
+          </div>
+          <div class="flex justify-center">
+            <span class="Gra-Per-Text text-xs c-A8A8A8">
+              87
+            </span>
+            <span class="Gra-Per-Text text-xs c-A8A8A8">
+              %
+            </span>
+          </div>
+          <div class="Gra-Bar-Ele-Box flex justify-center items-end mb-1">
+            <div class="Gra-Back-Ele-Bar h-full flex items-end border-radius-2">
+              <div class="w-full border-radius-2" style="height: 87%;"></div>
+            </div>
+          </div>
+          <div class="flex justify-center items-center text-xs c-A8A8A8">
+            <span>11</span>
+            <span>월</span>
+          </div>
+        </div>
+        <div class="w-4"></div>
+        <!--G2-12-->
+        <div class="Graph-Bar-Item Graph-Bar-Item-2-12 relative inline-block">
+          <div class="Nd-Pop-Up Pop-Up-2-12 text-xs">
+            <span class="c-3AAFE2 mr-1">
+              <i class="fas fa-hand-holding-water"></i>
+            </span>
+            <span>
+              2
+            </span>
+            <span>
+              L
+            </span>
+          </div>
+          <div class="flex justify-center">
+            <span class="Gra-Per-Text text-xs c-A8A8A8">
+              9
+            </span>
+            <span class="Gra-Per-Text text-xs c-A8A8A8">
+              %
+            </span>
+          </div>
+          <div class="Gra-Bar-Ele-Box flex justify-center items-end mb-1">
+            <div class="Gra-Back-Ele-Bar h-full flex items-end border-radius-2">
+              <div class="w-full border-radius-2" style="height: 9%;"></div>
+            </div>
+          </div>
+          <div class="flex justify-center items-center text-xs c-A8A8A8">
+            <span>12</span>
+            <span>월</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<p>1</p>
+<p id="weekendWater">daw</p>
+<p>2</p>
+<p id="waterpercent">dawdaw</p>
+<p>3</p>
+<p id="messageh2">dwadaw</p>
+<p>4</p>
+<p id="messageh1">daw</p>
+<p>5</p>
+<p id="waterpercent1">dawdaw</p>
 
-      function chagevidoeSelect() {
-    let selectedvideo = document.getElementById("videofilelist");
-    let showvideo = document.getElementById("showvideo");
-    let selectvideotext = selectedvideo.options[selectedvideo.selectedIndex].text;
-    showvideo.src = "../smartmirror/video/" + selectvideotext
+<script src="/socket.io/socket.io.js"></script>
+<script>
+      let txtday = document.getElementById('textday');
+  let txthours = document.getElementById('texthours');
+  function clock() {
+    let today = new Date();
+    let month = today.getMonth() + 1;
+    let date = today.getDate();
+    let day = today.getDay();
+    let charday = "";
+    switch (day) {
+      case 0: charday = "일요일";
+        break;
+      case 1: charday = "월요일";
+        break;
+      case 2: charday = "화요일";
+        break;
+      case 3: charday = "수요일";
+        break;
+      case 4: charday = "목요일";
+        break;
+      case 5: charday = "금요일";
+        break;
+      case 6: charday = "토요일";
+        break;
+    }
+    let hours = today.getHours();
+    let minutes = today.getMinutes();
+    let daytext = month + "월 " + date + "일 " + charday;
+
+    txtday.innerText = daytext;
   }
+  function clockminute() {
+    let today = new Date();
+    let hours = today.getHours();
+    let minutes = today.getMinutes();
+    let daytext = hours + " : " + minutes;
 
-      function chageimageSelect() {
-    let selectedimage = document.getElementById("imgfilelist");
-    let showimage = document.getElementById("showimage");
-    let selectimage = selectedimage.options[selectedimage.selectedIndex].text;
-    showimage.src = "../smartmirror/image/" + selectimage;
+    txthours.innerText = daytext;
   }
+  setInterval(clock, 1000);
+  setInterval(clockminute, 1000);
+
+    var socket = io();
+      socket.on('currentT1H', (msg) => {
+    var txt = document.getElementById('currentT1H');
+    txt.innerText = msg
+  });
+
+  socket.on('weekendwater', (msg) => {
+    var txt = document.getElementById('weekendwater');
+    txt.innerText = msg
+  });
+  socket.on('waterpercent', (msg) => {
+    var txt1 = document.getElementById('waterpercent');
+    var txt2 = document.getElementById('waterpercent1');
+    var height1 = document.getElementById('waterpercent1height')
+    
+    height1.style.height = msg[0]%
+    txt1.innerText = msg[0]
+    txt2.innerText = msg[1]
+  });
+  socket.on('messageh2', (msg) => {
+    var txt = document.getElementById('messageh2');
+    txt.innerText = msg
+  });
+  socket.on('messageh1', (msg) => {
+    var txt = document.getElementById('messageh1');
+    txt.innerText = msg
+  });
 </script>
