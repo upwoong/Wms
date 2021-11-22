@@ -196,7 +196,7 @@
           </div>
           <div class="Gra-Bar-Ele-Box flex justify-center items-end mb-1">
             <div class="Gra-Back-Ele-Bar h-full flex items-end border-radius-2">
-              <div class="w-full border-radius-2" style="height: {{data.0.Persent}}%;"  id="graphpercent1"></div>
+              <div class="w-full border-radius-2" style="height: {{data.0.Persent}}%;"  id="todaywaterpercent"></div>
             </div>
           </div>
           <div class="text-center text-xs c-A8A8A8">
@@ -865,7 +865,6 @@
     var todaywaterpercent = document.getElementById('todaywaterpercent');
     var txt2 = document.getElementById('waterpercent1');
     var txt3 = document.getElementById('Arraypercent');
-    var graphpercent1 = document.getElementById("graphpercent1");
     var graphpercent2 = document.getElementById("graphpercent2");
     var graphpercent3 = document.getElementById("graphpercent3");
     var graphpercent4 = document.getElementById("graphpercent4");
@@ -888,9 +887,7 @@
   socket.on('messageh2', (msg) => {
     var txt = document.getElementById('messageh2');
     var todaywateruseage = document.getElementById('todaywateruseage');
-    var monthwaterdata = document.getElementById('monthwaterdata');
 
-    monthwaterdata.innerText = msg;
     todaywateruseage.innerText = msg;
     txt.innerText = msg;
   });
