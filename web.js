@@ -1576,7 +1576,7 @@ app.get('/testwater_recieve', function (req, res) {
     if (plusvalue > maxValue) {
         maxValue = plusvalue
     }
-    weekendWater[0] = plusvalue
+    weekendWater[0] = weekendWater[0] + plusvalue
     for (let index = 0; index < weekendWater.length; index++) {
         //weekendWater.push(percent(data[index].Useage, maxValue))
         percentArray[index] = Math.floor(percent(weekendWater[index], maxValue))
