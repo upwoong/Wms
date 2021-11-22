@@ -1639,10 +1639,10 @@ app.get('/PM_10', function (req, res) {
     io.emit('ajswl', ajswl)
     res.render('dkatk', { layout: null })
 })
-let getnfc
+let getnfc = ""
 app.get('/nfc_recieve', function (req, res) {
     getnfc = req.query.id
-    console.log(ajswl)
+    console.log(getnfc)
     io.emit('getnfc', getnfc)
     res.render('dkatk', { layout: null })
 })
