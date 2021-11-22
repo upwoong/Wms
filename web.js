@@ -1661,7 +1661,7 @@ Water.find(function (err, data) {
         data[index].Persent = Math.floor(percent(data[index].Useage, maxValue))
     }
     res.render('wateruseage', { data: data, selectcityname: selectcityname, selectvillagename: selectvillagename, newArray: newArray })
-}).sort({ Year: -1 }).sort({ Month: -1 }).sort({ Day: -1 }).limit(7) 
+}).sort({ Year: -1 }).sort({ Month: -1 }).sort({ Day: 1 }).limit(7) 
 })
 //const user = new Water({ 'name': "132", 'Date' : valuedata, 'Hour' : "18 : 10" })
 
@@ -1719,7 +1719,7 @@ Water.find(function (err, data) {
     for (let index = 0; index < data.length; index++) {
         weekendWater.push(percent(data[index].Useage, maxValue))
     }
-}).sort({ Year: -1 }).sort({ Month: -1 }).sort({ Day: -1 }).limit(7)
+}).sort({ Year: -1 }).sort({ Month: -1 }).sort({ Day: 1 }).limit(7)
 
 //한달 데이터
 let Monthwater = 0
