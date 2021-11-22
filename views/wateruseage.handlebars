@@ -176,7 +176,7 @@
             <span class="c-3AAFE2 mr-1">
               <i class="fas fa-hand-holding-water"></i>
             </span>
-            <span class="" id="messageh2">
+            <span class="" id="todaywateruseage">
               {{data.0.Useage}}
             </span>
             <span class="">
@@ -193,7 +193,7 @@
           </div>
           <div class="Gra-Bar-Ele-Box flex justify-center items-end mb-1">
             <div class="Gra-Back-Ele-Bar h-full flex items-end border-radius-2">
-              <div class="w-full border-radius-2" style="height: {{data.0.Persent}}%;"  id="waterpercent"></div>
+              <div class="w-full border-radius-2" style="height: {{data.0.Persent}}%;"  id="todaywaterpercent"></div>
             </div>
           </div>
           <div class="text-center text-xs c-A8A8A8">
@@ -857,13 +857,18 @@
   });
   socket.on('waterpercent', (msg) => {
     var txt1 = document.getElementById('waterpercent');
+    var todaywaterpercent = document.getElementById('todaywaterpercent')
     var txt2 = document.getElementById('waterpercent1');
     
+    todaywaterpercent.innerText = msg[0]
     txt1.innerText = msg[0];
     txt2.innerText = msg[1];
   });
   socket.on('messageh2', (msg) => {
     var txt = document.getElementById('messageh2');
+    var todaywateruseage = document.getElementById('todaywateruseage')
+
+    todaywateruseage.innerText = msg
     txt.innerText = msg;
   });
   socket.on('messageh1', (msg) => {
