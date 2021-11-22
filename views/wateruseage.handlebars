@@ -858,6 +858,9 @@
 
   socket.on('weekendwater', (msg) => {
     var txt = document.getElementById('weekendwater');
+    var todaywateruseage = document.getElementById('todaywateruseage');
+
+    todaywateruseage.innerText = msg;
     txt.innerText = msg;
   });
   socket.on('waterpercent', (msg) => {
@@ -900,9 +903,6 @@
   });
   socket.on('messageh2', (msg) => {
     var txt = document.getElementById('messageh2');
-    var todaywateruseage = document.getElementById('todaywateruseage');
-
-    todaywateruseage.innerText = msg;
     txt.innerText = msg;
   });
   socket.on('messageh1', (msg) => {
