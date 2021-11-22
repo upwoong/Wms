@@ -13,6 +13,7 @@
       <img src="https://cdn.jsdelivr.net/gh/kimhyeji324/ICT_Resource@master/docs/Map-Pin-Whi.png" alt="">
     </div>
     <div class="text-sm text-white font-bold mr-1">
+      <!--박찬종 -->
 <span>{{selectcityname}}</span>
                   <span>{{selectvillagename}}</span>
     </div>
@@ -66,7 +67,7 @@
       <div class="flex justify-center items-center">
         <div>
           <div class="flex justify-center text-6xl c-3AAFE2">
-            <span>2</span>
+            <span>{{data.1.Useage}}</span>
             <span>L</span>
           </div>
           <div class="flex justify-center items-center text-sm font-bold c-A8A8A8">
@@ -96,7 +97,8 @@
       <div class="flex justify-center items-center">
         <div>
           <div class="flex justify-center text-6xl c-3AAFE2">
-            <span id="messageh2">3</span>
+            <!--박찬종 -->
+            <span id="messageh2">{{data.1.Useage}}</span>
             <span>L</span>
           </div>
           <div class="flex justify-center items-center text-sm font-bold c-A8A8A8">
@@ -155,6 +157,7 @@
     </div>
   </div>
   <!--그래프-->
+  <!--박찬종 -->
   <div class="Graph-Bar-All-Box flex" style="margin-bottom: 20px;">
     <!--1-->
     <div class="Graph-Bar-Item-Box Graph-Bar-Box-Item-1 flex-1">
@@ -193,7 +196,7 @@
           </div>
           <div class="Gra-Bar-Ele-Box flex justify-center items-end mb-1">
             <div class="Gra-Back-Ele-Bar h-full flex items-end border-radius-2">
-              <div class="w-full border-radius-2" style="height: {{data.0.Persent}}%;"  id="todaywaterpercent"></div>
+              <div class="w-full border-radius-2" style="height: {{data.0.Persent}}%;"  id="graphpercent1"></div>
             </div>
           </div>
           <div class="text-center text-xs c-A8A8A8">
@@ -862,6 +865,7 @@
     var todaywaterpercent = document.getElementById('todaywaterpercent');
     var txt2 = document.getElementById('waterpercent1');
     var txt3 = document.getElementById('Arraypercent');
+    var graphpercent1 = document.getElementById("graphpercent1");
     var graphpercent2 = document.getElementById("graphpercent2");
     var graphpercent3 = document.getElementById("graphpercent3");
     var graphpercent4 = document.getElementById("graphpercent4");
@@ -884,7 +888,9 @@
   socket.on('messageh2', (msg) => {
     var txt = document.getElementById('messageh2');
     var todaywateruseage = document.getElementById('todaywateruseage');
+    var monthwaterdata = document.getElementById('monthwaterdata');
 
+    monthwaterdata.innerText = msg;
     todaywateruseage.innerText = msg;
     txt.innerText = msg;
   });
