@@ -1573,7 +1573,7 @@ app.get('/testwater_recieve', function (req, res) {
     //plusvalue = parseInt(plusvalue) + (parseInt(watervalue) / 1000)
 
     plusvalue = parseInt(plusvalue) + parseInt(watervalue)
-    weekendWater[0] = weekendWater[0] + plusvalue
+    weekendWater[0] = weekendWater[0] + watervalue
     if (weekendWater[0] > maxValue) {
         maxValue = weekendWater[0]
     }
