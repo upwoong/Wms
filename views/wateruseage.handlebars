@@ -859,7 +859,7 @@
   });
   socket.on('waterpercent', (msg) => {
     var txt1 = document.getElementById('waterpercent');
-    var todaywaterpercent = document.getElementById('todaywaterpercent')
+    var todaywaterpercent = document.getElementById('todaywaterpercent');
     var txt2 = document.getElementById('waterpercent1');
     var txt3 = document.getElementById('Arraypercent');
     
@@ -870,9 +870,9 @@
   });
   socket.on('messageh2', (msg) => {
     var txt = document.getElementById('messageh2');
-    var todaywateruseage = document.getElementById('todaywateruseage')
+    var todaywateruseage = document.getElementById('todaywateruseage');
 
-    todaywateruseage.innerText = msg
+    todaywateruseage.innerText = msg;
     txt.innerText = msg;
   });
   socket.on('messageh1', (msg) => {
