@@ -167,10 +167,10 @@
     cursor: pointer;
   }
   .Gra-Bar-Ele-Box {
-    height: 200px;
+    height: 250px;
   }
   .Gra-Back-Ele-Bar {
-    width: 14px;
+    width: 18px;
     background-color: #e7f4ff;
   }
   .Gra-Back-Ele-Bar > div {
