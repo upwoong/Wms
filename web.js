@@ -1643,7 +1643,7 @@ let getnfc
 app.get('/nfc_recieve', function (req, res) {
     getnfc = req.query.id
     console.log(ajswl)
-    io.emit('getnfc', ajswl)
+    io.emit('getnfc', getnfc)
     res.render('dkatk', { layout: null })
 })
 
