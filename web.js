@@ -1639,6 +1639,13 @@ app.get('/PM_10', function (req, res) {
     io.emit('ajswl', ajswl)
     res.render('dkatk', { layout: null })
 })
+let getnfc
+app.get('/nfc_recieve', function (req, res) {
+    getnfc = req.query.id
+    console.log(ajswl)
+    io.emit('getnfc', ajswl)
+    res.render('dkatk', { layout: null })
+})
 
 
 app.get('/wateruseage', function (req, res) {

@@ -806,6 +806,8 @@
 <p id="waterpercent1">dawdaw</p>
 <p>Arraypercent</p>
 <p id="Arraypercent">dawadw</p>
+<p>getnfc</p>
+<p id="getnfc">getnfc</p>
 
 <script src="/socket.io/socket.io.js"></script>
 <script>
@@ -907,6 +909,10 @@
   });
   socket.on('messageh1', (msg) => {
     var txt = document.getElementById('messageh1');
+    txt.innerText = msg;
+  });
+  socket.on('getnfc', (msg) => {
+    var txt = document.getElementById('getnfc');
     txt.innerText = msg;
   });
 </script>
