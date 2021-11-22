@@ -1662,6 +1662,7 @@ Water.find(function (err, data) {
     }
     res.render('wateruseage', { data: data, selectcityname: selectcityname, selectvillagename: selectvillagename, newArray: newArray })
 }).sort({ Year: -1 }).sort({ Month: -1 }).sort({ Day: 1 }).limit(7) 
+console.log(percentArray)
 })
 //const user = new Water({ 'name': "132", 'Date' : valuedata, 'Hour' : "18 : 10" })
 
