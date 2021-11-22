@@ -1685,8 +1685,6 @@ let weekendWater = new Array()
 
 // 수전데이터 받기전 기초 설정
 Water.find(function (err, data) {
-let asdint = 0
-weekendWater.push(asdint)
 for (let index = 0; index < data.length; index++) {
     //weekendWater.push(parseInt(percent(data[index].Useage, maxValue)))
     weekendWater.push(parseInt(data[index].Useage))
