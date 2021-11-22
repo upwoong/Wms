@@ -1570,8 +1570,9 @@ let yearpercentArray = new Array()
 app.get('/testwater_recieve', function (req, res) {
     watervalue = req.query.id
     console.log(plusvalue)
-    plusvalue = parseInt(plusvalue) + (parseInt(watervalue) / 1000)
+    //plusvalue = parseInt(plusvalue) + (parseInt(watervalue) / 1000)
 
+    plusvalue = parseInt(plusvalue) + parseInt(watervalue)
     if (plusvalue > maxValue) {
         maxValue = plusvalue
     }
@@ -1581,7 +1582,8 @@ app.get('/testwater_recieve', function (req, res) {
         percentArray[index] = Math.floor(percent(weekendWater[index], maxValue))
     }
 
-    yearWater[0] = yearWater[0] + (parseInt(watervalue) / 1000)
+    //yearWater[0] = yearWater[0] + (parseInt(watervalue) / 1000)
+    yearWater[0] = yearWater[0] + parseInt(watervalue)
     if(yearWater[0] > maxyearValue)
     {
         maxyearValue = yearWater[0]
