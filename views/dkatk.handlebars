@@ -1,40 +1,21 @@
-<form class="Form-Area-Box-2 flex items-center" action="/processSmartmirror" method="post" enctype="multipart/form-data">
-        <!--B-2-->
-        <div class="Img-Add-Btn-Box h-full flex items-center ml-8">
-          <div>
-            <div class="text-xs font-bold">
-              <span>Add Button</span>
-            </div>
-            <div class="flex items-center ml-5">
-              <div class="text-sm c-8F8F8F">
-                <span>상단 박스에 (파일) 추가</span>
-              </div>
-              <div>
-                  <label class="Flie-Add-Btn bg-3AAFE2 flex justify-center items-center text-white text-xs ml-2 cursor-pointer border-radius-50" for="videofile">add</label>
-                  <input type="file" id="videofile" name="photo">
-              </div>
-            </div>
-          </div>
-        </div>
-        <!--B-3-->
-        <div class="Img-Up-Btn-Box h-full flex items-start">
-          <div>
-            <div class="text-xs font-bold">
-              <span>Up Button</span>
-            </div>
-            <div class="flex items-center ml-5">
-              <div class="text-sm c-8F8F8F ml-2">
-                <span>추가된 URL (파일) 업로드</span>
-              </div>
-              <div>
-                  <input class="Flie-Up-Btn bg-3AAFE2 flex justify-center items-center self-center text-white text-xs ml-2 cursor-pointer border-radius-50" type="submit" value="up" name="submit" />
-              </div>
-            </div>
-          </div>
-        </div>
-      </form>
 
-      {{watervalue}}
+<p>nfc</p>
+<p id="nfc">nfc</p>
+<p>gassensor</p>
+<p id="gassensor">gassensor</p>
 
-      <p>asdasdasd</p>
-      {{plusvalue}}
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  var socket = io();
+
+  socket.on('test_gassensor', (msg) => {
+    var txt = document.getElementById('nfc');
+    txt.innerText = msg;
+  });
+  socket.on('getgassensor', (msg) => {
+    var txt = document.getElementById('gassensor');
+    txt.innerText = msg;
+  });
+
+</script>

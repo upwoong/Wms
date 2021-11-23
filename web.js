@@ -595,9 +595,22 @@ let changefilename
 var j = schedule.scheduleJob("0 0 6 * * *", function () {
     let imagestate = false
     let videostate = false
+    const year = moment().format('YY')
+    const month = moment().format('MM')
+    const day = moment().format('DD')
     const date = moment().format('MMDD')
     const Hour = moment().format('HH:mm:ss')
     const yesterdaydate = date - 100
+
+    const newDaywateruseage = new Water({ 'Year' : year, 'Month' : month, 'Day' : day, 'Percent' : "", 'Useage' : ""})
+    newDaywateruseage.save(function (err, slience) {
+        if (err) {
+            console.log(err)
+            res.status(500).send('update error')
+            return
+        }
+        return console.log("새로운 수전사용 데이터 생성")
+    })
     Smartmirrorimagefile.deleteMany(function (err, data) {
         //기존에 있던 smartmirror 데이터베이스를 모두 삭제
         if (err) console.log(err)
@@ -644,9 +657,7 @@ var j = schedule.scheduleJob("0 0 6 * * *", function () {
                     console.log("이미지파일 저장 진행")
                 }
             }
-
         }
-
     })
 
     Videofilesave.find(function (err, data) {
@@ -817,7 +828,7 @@ Weather.find({}, imgProjection, function (err, data) {
 
 //기상청 엑셀정보 불러오기
 const excelFile = xlsx.readFile("/home/hosting_users/creativethon/apps/creativethon_wmsadmina/api/기상청41_단기예보 조회서비스_오픈API활용가이드_격자_위경도(20210401).xlsx")
-const firstSheet = excelFile.Sheets[excelFile.SheetNames[0]]
+const firstSheet = excelFile.Sheets[excelFile.SheetNames[0]]    
 
 var localselect
 var cityselect
@@ -1644,6 +1655,13 @@ app.get('/nfc_recieve', function (req, res) {
     getnfc = req.query.id
     console.log(getnfc)
     io.emit('getnfc', getnfc)
+    res.render('dkatk', { layout: null })
+})
+let gassensor = ""
+app.get('/test_gassensor', function (req, res) {
+    gassensor = req.query.id
+    console.log(gassensor)
+    io.emit('getgassensor', gassensor)
     res.render('dkatk', { layout: null })
 })
 
