@@ -1657,7 +1657,8 @@ app.get('/nfc_recieve', function (req, res) {
     io.emit('getnfc', getnfc)
     res.render('dkatk', { layout: null })
 })
-let gassensor = ""
+
+
 app.get('/test_gassensor', function (req, res) {
     gassensor = req.query.id
     console.log(gassensor)
