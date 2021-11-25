@@ -892,17 +892,7 @@
     txt2.innerText = msg[1];
     txt3.innerText = msg;
   });
-  socket.on('yearwaterpercent', (msg) => {
-    for (let index = 0; index = msg.length; index++) {
-      let graphyearpercent+index = document.getElementById("graphyearpercent" + index);
-      (graphyearpercent + index).style.height = msg[index] + "%";
-    }
-  });
-  socket.on('yearwater',(msg)=>{
-    var monthwateruseage = document.getElementById('monthwateruseage');
 
-    monthwateruseage.innerText = msg;
-  });
   
 
 </script>
