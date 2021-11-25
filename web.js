@@ -1679,7 +1679,6 @@ app.get('/test_gassensor', function (req, res) {
 
 app.get('/wateruseage', function (req, res) {
     Water.find(function (err, data) {
-        MonthUseage.find(function (err, yeardata) {
             for (let index = 0; index < data.length; index++) {
                 //weekendWater.push(percent(data[index].Useage, maxValue))
                 data[index].Persent = Math.floor(percent(data[index].Useage, maxValue))
