@@ -1666,23 +1666,9 @@ app.get('/test_gassensor', function (req, res) {
 
 
 app.get('/wateruseage', function (req, res) {
-    Water.find(function (err, data) {
-        MonthUseage.find(function (err, yeardata) {
-            const currentYear = moment().format('YY')
-            const currentMonth = moment().format('MM')
-            for (let index = 0; index < data.length; index++) {
-                //weekendWater.push(percent(data[index].Useage, maxValue))
-                data[index].Persent = Math.floor(percent(data[index].Useage, maxValue))
-            }
 
-                for (let index = 0; index < yeardata.length; index++) {
-                    if (yeardata[index].Month == currentMonth && yeardata[index].Year == currentYear) {
-                        yeardata[index].Persent = Math.floor(percent(yeardata[index].Useage, maxValue))
-                    }
-                }
-                res.render('wateruseage', { data : data, yeardata : yeardata, selectcityname: selectcityname, selectvillagename: selectvillagename })
-        })
-    })
+                res.render('wateruseage', { selectcityname: selectcityname, selectvillagename: selectvillagename })
+
     console.log(percentArray)
 })
 //const user = new Water({ 'name': "132", 'Date' : valuedata, 'Hour' : "18 : 10" })
