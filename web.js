@@ -1680,10 +1680,9 @@ app.get('/wateruseage', function (req, res) {
                         yeardata[index].Persent = Math.floor(percent(yeardata[index].Useage, maxValue))
                     }
                 }
-            
-            res.render('wateruseage', { data: data, yeardata : yeardata, selectcityname: selectcityname, selectvillagename: selectvillagename })
         })
-    }).sort({ Year: -1 }).sort({ Month: -1 }).sort({ Day: 1 }).limit(7)
+    })
+            res.render('wateruseage', {selectcityname: selectcityname, selectvillagename: selectvillagename })
     console.log(percentArray)
 })
 //const user = new Water({ 'name': "132", 'Date' : valuedata, 'Hour' : "18 : 10" })
