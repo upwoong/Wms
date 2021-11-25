@@ -827,6 +827,7 @@
 
     txtday.innerText = daytext;
   }
+  
   function clockminute() {
     let today = new Date();
     let hours = today.getHours();
@@ -851,6 +852,7 @@
     todaywateruseage.innerText = msg;
     txt.innerText = msg;
   });
+
   socket.on('waterpercent', (msg) => {
     var txt1 = document.getElementById('waterpercent');
     var todaywaterpercent = document.getElementById('todaywaterpercent');
@@ -893,6 +895,6 @@
     txt3.innerText = msg;
   });
 
-  
+
 
 </script>
