@@ -794,6 +794,11 @@
   </div>
 </div>
 
+<p>data</p>
+<p id="yeararray">daw</p>
+
+<p>Percent</p>
+<p id="yearpercent">adw</p>
 
 <script src="/socket.io/socket.io.js"></script>
 <script>
@@ -897,6 +902,14 @@
 
   socket.on('yearwater',(msg)=>{
     var monthwateruseage = document.getElementById('monthwateruseage');
+    var txt2 = document.getElementById("yeararray");
+
+    txt2.innerText = msg;
+
+    monthwateruseage.innerText = msg;
+  });
+    socket.on('wateryearpercent',(msg)=>{
+    var monthwateruseage = document.getElementById('yearpercent');
 
     monthwateruseage.innerText = msg;
   });
