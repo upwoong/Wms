@@ -793,7 +793,8 @@
     </div>
   </div>
 </div>
-
+<p>weekendwater</p>
+<p id="weekendwater1">ad</p>
 
 <script src="/socket.io/socket.io.js"></script>
 <script>
@@ -846,10 +847,12 @@
 
   socket.on('weekendwater', (msg) => {
     var txt = document.getElementById('weekendwater');
+    var txt1 = document.getElementById('weekendwater1');
     var todaywateruseage = document.getElementById('todaywateruseage');
 
     todaywateruseage.innerText = msg;
     txt.innerText = msg;
+    txt1.innerText = msg;
   });
   socket.on('waterpercent', (msg) => {
     var txt1 = document.getElementById('waterpercent');
@@ -892,17 +895,7 @@
     txt2.innerText = msg[1];
     txt3.innerText = msg;
   });
-  socket.on('yearwaterpercent', (msg) => {
-    for (let index = 0; index = msg.length; index++) {
-      let graphyearpercent+index = document.getElementById("graphyearpercent" + index);
-      (graphyearpercent + index).style.height = msg[index] + "%";
-    }
-  });
-  socket.on('yearwater',(msg)=>{
-    var monthwateruseage = document.getElementById('monthwateruseage');
 
-    monthwateruseage.innerText = msg;
-  });
   
 
 </script>
