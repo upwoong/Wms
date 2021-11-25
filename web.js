@@ -797,10 +797,17 @@ var m = schedule.scheduleJob("0 0 0 1 * *", function () {
 })
 
 app.get('/dkatk', function (req, res) {
-    Water.find(function (err, data) {
-        console.log(data[0].Useage)
-        res.render('dkatk', { layout: null, data: data })
-    })
+        MonthUseage.find(function (err, yeardata) {
+            const currentYear = moment().format('YY')
+            const currentMonth = moment().format('MM')
+            for (let index = 0; index < yeardata.length; index++) {
+                if (yeardata[index].Month == currentMonth && yeardata[index].Year == currentYear) {
+                    yeardata[index].Persent = Math.floor(percent(yeardata[index].Useage, maxValue))
+                }
+            }
+            res.render('wateruseage', { data: data, yeardata: yeardata, selectcityname: selectcityname, selectvillagename: selectvillagename })
+        })
+    console.log(percentArray)
 })
 //fs.unlink(`smartmirror/image/${name}`, function () { })
 app.use('/', router)
@@ -1667,7 +1674,18 @@ app.get('/test_gassensor', function (req, res) {
 app.get('/wateruseage', function (req, res) {
     Water.find(function (err, data) {
         MonthUseage.find(function (err, yeardata) {
+            const currentYear = moment().format('YY')
+            const currentMonth = moment().format('MM')
+            for (let index = 0; index < data.length; index++) {
+                //weekendWater.push(percent(data[index].Useage, maxValue))
+                data[index].Persent = Math.floor(percent(data[index].Useage, maxValue))
+            }
 
+            for (let index = 0; index < yeardata.length; index++) {
+                if (yeardata[index].Month == currentMonth && yeardata[index].Year == currentYear) {
+                    yeardata[index].Persent = Math.floor(percent(yeardata[index].Useage, maxValue))
+                }
+            }
             res.render('wateruseage', { data: data, yeardata: yeardata, selectcityname: selectcityname, selectvillagename: selectvillagename })
         })
     })
