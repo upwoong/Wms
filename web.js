@@ -600,7 +600,19 @@ var j = schedule.scheduleJob("0 0 6 * * *", function () {
     const day = moment().format('DD')
     const date = moment().format('MMDD')
     const Hour = moment().format('HH:mm:ss')
-    const yesterdaydate = date - 100
+
+    const currentDaywateruseage = new Water({ 'Year' : year, 'Month' : month, 'Day' : day-1, 'Percent' : "", 'Useage' : weekendWater[0]})
+    currentDaywateruseage.save(function (err, slience) {
+        if (err) {
+            console.log(err)
+            res.status(500).send('update error')
+            return
+        }
+        return console.log("일일 수전 데이터 저장 완료")
+    })
+
+    //수전 데이터 초기화
+    weekendWater[0] = 0
 
     const newDaywateruseage = new Water({ 'Year' : year, 'Month' : month, 'Day' : day, 'Percent' : "", 'Useage' : ""})
     newDaywateruseage.save(function (err, slience) {
@@ -1682,7 +1694,7 @@ app.get('/wateruseage', function (req, res) {
                 }
             
             res.render('wateruseage', { data: data, yeardata : yeardata, selectcityname: selectcityname, selectvillagename: selectvillagename })
-        })
+        }).sort({ Year: -1 }).sort({ Month: -1 }).limit(12)
     }).sort({ Year: -1 }).sort({ Month: -1 }).sort({ Day: 1 }).limit(7)
     console.log(percentArray)
 })
