@@ -897,12 +897,12 @@
       let graphyearpercent+index = document.getElementById("graphyearpercent" + index);
       (graphyearpercent + index).style.height = msg[index] + "%";
     }
-  })
+  });
   socket.on('yearwater',(msg)=>{
     var monthwateruseage = document.getElementById('monthwateruseage');
 
     monthwateruseage.innerText = msg;
-  })
+  });
   
 
 </script>
