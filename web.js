@@ -1684,7 +1684,7 @@ app.get('/wateruseage', function (req, res) {
                 data[index].Persent = Math.floor(percent(data[index].Useage, maxValue))
             }
 
-            res.render('wateruseage', { data: data, yeardata: yeardata, selectcityname: selectcityname, selectvillagename: selectvillagename })
+            res.render('wateruseage', { data: data, selectcityname: selectcityname, selectvillagename: selectvillagename })
         })
     console.log(percentArray)
 })
