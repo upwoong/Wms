@@ -105,7 +105,8 @@ const smartmodel = new mongoose.Schema({
 const monthuseage = new mongoose.Schema({
     Data: String,
     Year: String,
-    Month: String
+    Month: String,
+    Persent : String
 })
 const smartmirrorexe = new mongoose.Schema({
     name: String
@@ -791,13 +792,8 @@ var k = schedule.scheduleJob("*/10 * * * * *", function () {
 var m = schedule.scheduleJob("0 0 0 1 * *", function () {
     const todayYear = moment().format('YY')
     const todayMonth = moment().format('MM')
-    let finallyuseage = 0
-    Water.find({ 'Month': todayMonth }, function (err, data) {
-        for (let index = 0; index < data.length; index++) {
-            finallyuseage += data[index].Useage
-        }
-    })
-    const monthdata = new MonthUseage({ 'Data': finallyuseage, 'Year': todayYear, 'Month': todayMonth })
+
+    const monthdata = new MonthUseage({ 'Data': yearWater, 'Year': todayYear, 'Month': todayMonth })
     monthdata.save(function (err, slience) {
         if (err) {
             console.log(err)
@@ -806,14 +802,16 @@ var m = schedule.scheduleJob("0 0 0 1 * *", function () {
         }
         return console.log("한달 단위 수전사용량 업데이트 완료")
     })
+
+    console.log("현재 달 : " + todayMonth)
 })
 
-/*
-매년 1월에 발생하는 이벤트
+
+//매년 1월에 발생하는 이벤트
 var Y = schedule.scheduleJob("0 0 0 0 1 *",function() {
-    
+    yearWater[0] = 0 // 올해 총 사용량 초기화
 })
-*/
+
 
 app.get('/dkatk', function (req, res) {
     Water.find(function (err, data) {
@@ -1627,6 +1625,7 @@ app.get('/testwater_recieve', function (req, res) {
     io.emit('weekendwater', weekendWater[0])
     io.emit('waterpercent', percentArray)
     io.emit('wateryearpercent', yearpercentArray)
+    io.emit('yearWater',yearWater[0])
     res.render('dkatk', { layout: null, watervalue: watervalue, plusvalue: plusvalue })
 })
 
@@ -1747,16 +1746,16 @@ Water.find(function (err, data) {
         weekendWater.push(parseInt(data[index].Useage))
     }
     console.log(weekendWater)
-}).sort({ Year: -1 }).sort({ Month: -1 }).sort({ Day: 1 }).limit(7)
+}).sort({ Year: 1 }).sort({ Month: 1 }).sort({ Day: 1 }).limit(7)
 
 //수전데이터 받기전 1년 데이터 기초 설정
 let yearWater = new Array()
 MonthUseage.find(function (err, data) {
     for (let index = 0; index < data.length; index++) {
-        if (data[index].Month == todayMonth)
+        if (data[index].Month == todayMonth && data[index].Year == todayYear)
             yearWater.push(parseInt(data[index].Useage))
     }
-})
+}).sort({ Year: 1 }).sort({ Month: 1 }).limit(12)
 
 
 //nfc 태그(임시)

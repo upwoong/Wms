@@ -14,8 +14,8 @@
     </div>
     <div class="text-sm text-white font-bold mr-1">
       <!--박찬종 -->
-<span>{{selectcityname}}</span>
-                  <span>{{selectvillagename}}</span>
+      <span>{{selectcityname}}</span>
+      <span>{{selectvillagename}}</span>
     </div>
     <div class="flex text-sm text-white font-bold">
       <span class="h-full flex M-R-1" id="currentT1H">17</span>
@@ -144,7 +144,7 @@
       <div class="flex justify-center items-center">
         <div>
           <div class="flex justify-center text-6xl c-3AAFE2">
-            <span>335</span>
+            <span id="yearwater">{{yeardata.0.Data}}</span>
             <span>L</span>
           </div>
           <div class="flex justify-center items-center text-sm font-bold c-A8A8A8">
@@ -196,7 +196,7 @@
           </div>
           <div class="Gra-Bar-Ele-Box flex justify-center items-end mb-1">
             <div class="Gra-Back-Ele-Bar h-full flex items-end border-radius-2">
-              <div class="w-full border-radius-2" style="height: {{data.0.Persent}}%;"  id="todaywaterpercent"></div>
+              <div class="w-full border-radius-2" style="height: {{data.0.Persent}}%;" id="todaywaterpercent"></div>
             </div>
           </div>
           <div class="text-center text-xs c-A8A8A8">
@@ -227,7 +227,7 @@
           </div>
           <div class="Gra-Bar-Ele-Box flex justify-center items-end mb-1">
             <div class="Gra-Back-Ele-Bar h-full flex items-end border-radius-2">
-              <div class="w-full border-radius-2" style="height: {{data.1.Persent}}%;"  id="graphpercent2"></div>
+              <div class="w-full border-radius-2" style="height: {{data.1.Persent}}%;" id="graphpercent2"></div>
             </div>
           </div>
           <div class="text-center text-xs c-A8A8A8">
@@ -258,7 +258,7 @@
           </div>
           <div class="Gra-Bar-Ele-Box flex justify-center items-end mb-1">
             <div class="Gra-Back-Ele-Bar h-full flex items-end border-radius-2">
-              <div class="w-full border-radius-2" style="height: {{data.2.Persent}}%;"  id="graphpercent3"></div>
+              <div class="w-full border-radius-2" style="height: {{data.2.Persent}}%;" id="graphpercent3"></div>
             </div>
           </div>
           <div class="text-center text-xs c-A8A8A8">
@@ -289,7 +289,7 @@
           </div>
           <div class="Gra-Bar-Ele-Box flex justify-center items-end mb-1">
             <div class="Gra-Back-Ele-Bar h-full flex items-end border-radius-2">
-              <div class="w-full border-radius-2" style="height: {{data.3.Persent}}%;"  id="graphpercent4"></div>
+              <div class="w-full border-radius-2" style="height: {{data.3.Persent}}%;" id="graphpercent4"></div>
             </div>
           </div>
           <div class="text-center text-xs c-A8A8A8">
@@ -320,7 +320,7 @@
           </div>
           <div class="Gra-Bar-Ele-Box flex justify-center items-end mb-1">
             <div class="Gra-Back-Ele-Bar h-full flex items-end border-radius-2">
-              <div class="w-full border-radius-2" style="height: {{data.4.Persent}}%;"  id="graphpercent5"></div>
+              <div class="w-full border-radius-2" style="height: {{data.4.Persent}}%;" id="graphpercent5"></div>
             </div>
           </div>
           <div class="text-center text-xs c-A8A8A8">
@@ -351,7 +351,7 @@
           </div>
           <div class="Gra-Bar-Ele-Box flex justify-center items-end mb-1">
             <div class="Gra-Back-Ele-Bar h-full flex items-end border-radius-2">
-              <div class="w-full border-radius-2" style="height: {{data.5.Persent}}%;"  id="graphpercent6"></div>
+              <div class="w-full border-radius-2" style="height: {{data.5.Persent}}%;" id="graphpercent6"></div>
             </div>
           </div>
           <div class="text-center text-xs c-A8A8A8">
@@ -421,7 +421,7 @@
           </div>
           <div class="flex justify-center">
             <span class="Gra-Per-Text text-xs c-A8A8A8">
-              70
+              {{yeardata.0.Percent}}
             </span>
             <span class="Gra-Per-Text text-xs c-A8A8A8">
               %
@@ -429,7 +429,7 @@
           </div>
           <div class="Gra-Bar-Ele-Box flex justify-center items-end mb-1">
             <div class="Gra-Back-Ele-Bar h-full flex items-end border-radius-2">
-              <div class="w-full border-radius-2" style="height: 70%;"></div>
+              <div class="w-full border-radius-2" style="height: 70%;" id="graphyearpercent1"></div>
             </div>
           </div>
           <div class="flex justify-center items-center text-xs c-A8A8A8">
@@ -797,7 +797,7 @@
 
 <script src="/socket.io/socket.io.js"></script>
 <script>
-      let txtday = document.getElementById('textday');
+  let txtday = document.getElementById('textday');
   let txthours = document.getElementById('texthours');
   function clock() {
     let today = new Date();
@@ -838,8 +838,8 @@
   setInterval(clock, 1000);
   setInterval(clockminute, 1000);
 
-    var socket = io();
-      socket.on('currentT1H', (msg) => {
+  var socket = io();
+  socket.on('currentT1H', (msg) => {
     var txt = document.getElementById('currentT1H');
     txt.innerText = msg;
   });
@@ -863,21 +863,21 @@
     var graphpercent6 = document.getElementById("graphpercent6");
     var graphpercent7 = document.getElementById("graphpercent7");
 
-var showpercent1 = document.getElementById("showpercent1");
+    var showpercent1 = document.getElementById("showpercent1");
     var showpercent2 = document.getElementById("showpercent2");
     var showpercent3 = document.getElementById("showpercent3");
     var showpercent4 = document.getElementById("showpercent4");
     var showpercent5 = document.getElementById("showpercent5");
     var showpercent6 = document.getElementById("showpercent6");
     var showpercent7 = document.getElementById("showpercent7");
-    
-    todaywaterpercent.style.height = msg[0]+ "%";
-    graphpercent2.style.height = msg[1]+ "%";
-    graphpercent3.style.height = msg[2]+ "%";
-    graphpercent4.style.height = msg[3]+ "%";
-    graphpercent5.style.height = msg[4]+ "%";
-    graphpercent6.style.height = msg[5]+ "%";
-    graphpercent7.style.height = msg[6]+ "%";
+
+    todaywaterpercent.style.height = msg[0] + "%";
+    graphpercent2.style.height = msg[1] + "%";
+    graphpercent3.style.height = msg[2] + "%";
+    graphpercent4.style.height = msg[3] + "%";
+    graphpercent5.style.height = msg[4] + "%";
+    graphpercent6.style.height = msg[5] + "%";
+    graphpercent7.style.height = msg[6] + "%";
 
     showpercent1.innerText = msg[0];
 
@@ -892,4 +892,17 @@ var showpercent1 = document.getElementById("showpercent1");
     txt2.innerText = msg[1];
     txt3.innerText = msg;
   });
+  socket.on('yearwaterpercent', (msg) => {
+    for (let index = 0; index = msg.length; index++) {
+      let graphyearpercent+index = document.getElementById("graphyearpercent" + index);
+      (graphyearpercent + index).style.height = msg[index] + "%";
+    }
+  })
+  socket.on('yearwater',(msg)=>{
+    var monthwateruseage = document.getElementById('monthwateruseage');
+
+    monthwateruseage.innerText = msg;
+  })
+  
+
 </script>
