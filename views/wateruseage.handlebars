@@ -910,14 +910,6 @@
   });
     socket.on('wateryearpercent',(msg)=>{
     var monthwateruseage = document.getElementById('yearpercent');
-    for(let index = 0;index < msg.length; index++)
-    {
-      let yearpercent+index = document.getElementById('yearpercent'+index);
-      let showyearpercent+index = document.getElementById('showyearpercent'+index);
-
-      (showyearpercent+index).innerText = msg[index];
-      (yearpercent+index).style.height = msg[index] + "%";
-    }
 
     monthwateruseage.innerText = msg;
   });
