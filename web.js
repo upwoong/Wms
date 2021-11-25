@@ -106,7 +106,7 @@ const monthuseage = new mongoose.Schema({
     Data: String,
     Year: String,
     Month: String,
-    Persent : String
+    Persent: String
 })
 const smartmirrorexe = new mongoose.Schema({
     name: String
@@ -602,7 +602,7 @@ var j = schedule.scheduleJob("0 0 6 * * *", function () {
     const date = moment().format('MMDD')
     const Hour = moment().format('HH:mm:ss')
 
-    const currentDaywateruseage = new Water({ 'Year' : year, 'Month' : month, 'Day' : day-1, 'Percent' : "", 'Useage' : weekendWater[0]})
+    const currentDaywateruseage = new Water({ 'Year': year, 'Month': month, 'Day': day - 1, 'Percent': "", 'Useage': weekendWater[0] })
     currentDaywateruseage.save(function (err, slience) {
         if (err) {
             console.log(err)
@@ -615,7 +615,7 @@ var j = schedule.scheduleJob("0 0 6 * * *", function () {
     //수전 데이터 초기화
     weekendWater[0] = 0
 
-    const newDaywateruseage = new Water({ 'Year' : year, 'Month' : month, 'Day' : day, 'Percent' : "", 'Useage' : ""})
+    const newDaywateruseage = new Water({ 'Year': year, 'Month': month, 'Day': day, 'Percent': "", 'Useage': "" })
     newDaywateruseage.save(function (err, slience) {
         if (err) {
             console.log(err)
@@ -808,7 +808,7 @@ var m = schedule.scheduleJob("0 0 0 1 * *", function () {
 
 
 //매년 1월에 발생하는 이벤트
-var Y = schedule.scheduleJob("0 0 0 0 1 *",function() {
+var Y = schedule.scheduleJob("0 0 0 0 1 *", function () {
     yearWater[0] = 0 // 올해 총 사용량 초기화
 })
 
@@ -845,7 +845,7 @@ Weather.find({}, imgProjection, function (err, data) {
 
 //기상청 엑셀정보 불러오기
 const excelFile = xlsx.readFile("/home/hosting_users/creativethon/apps/creativethon_wmsadmina/api/기상청41_단기예보 조회서비스_오픈API활용가이드_격자_위경도(20210401).xlsx")
-const firstSheet = excelFile.Sheets[excelFile.SheetNames[0]]    
+const firstSheet = excelFile.Sheets[excelFile.SheetNames[0]]
 
 var localselect
 var cityselect
@@ -1599,7 +1599,7 @@ let yearpercentArray = new Array()
 app.get('/testwater_recieve', function (req, res) {
     watervalue = req.query.id
     const todayMonth = moment().format('MM')
-    const forMathMonth = todayMonth-1
+    const forMathMonth = todayMonth - 1
     //plusvalue = parseInt(plusvalue) + (parseInt(watervalue) / 1000)
 
     weekendWater[0] = weekendWater[0] + parseInt(watervalue)
@@ -1614,8 +1614,7 @@ app.get('/testwater_recieve', function (req, res) {
 
     //yearWater[0] = yearWater[0] + (parseInt(watervalue) / 1000)
     yearWater[forMathMonth] = yearWater[forMathMonth] + parseInt(watervalue)
-    if(yearWater[forMathMonth] > maxyearValue)
-    {
+    if (yearWater[forMathMonth] > maxyearValue) {
         maxyearValue = yearWater[forMathMonth]
     }
     for (let index = 0; index < yearWater.length; index++) {
@@ -1626,7 +1625,7 @@ app.get('/testwater_recieve', function (req, res) {
     io.emit('weekendwater', weekendWater[0])
     io.emit('waterpercent', percentArray)
     io.emit('wateryearpercent', yearpercentArray)
-    io.emit('yearWater',yearWater[forMathMonth])
+    io.emit('yearWater', yearWater[forMathMonth])
     res.render('dkatk', { layout: null, watervalue: watervalue })
 })
 
@@ -1694,12 +1693,12 @@ app.get('/wateruseage', function (req, res) {
                 data[index].Persent = Math.floor(percent(data[index].Useage, maxValue))
             }
 
-                for (let index = 0; index < yeardata.length; index++) {
-                    if ( yeardata[index].Year == currentYear) {
-                        yeardata[index].Persent = Math.floor(percent(yeardata[index].Data, maxyearValue))
-                    }
+            for (let index = 0; index < yeardata.length; index++) {
+                if (yeardata[index].Year == currentYear) {
+                    yeardata[index].Persent = Math.floor(percent(yeardata[index].Data, maxyearValue))
                 }
-            res.render('wateruseage', { data: data, yeardata : yeardata, selectcityname: selectcityname, selectvillagename: selectvillagename })
+            }
+            res.render('wateruseage', { data: data, yeardata: yeardata, selectcityname: selectcityname, selectvillagename: selectvillagename })
         }).sort({ Year: 1 }).sort({ Month: 1 }).limit(12)
     }).sort({ Year: -1 }).sort({ Month: -1 }).sort({ Day: 1 }).limit(7)
     console.log(yearWater)
@@ -1731,7 +1730,7 @@ MonthUseage.find(function (err, data) {
     //maxValue = Math.max(...data.Date) //ES6 문법이기 때문에 안되면 const maxValue = Math.max.apply(null, data) 를 사용
     let Valueyeardata = new Array()
     for (let index = 0; index < data.length; index++) {
-        if ( data[index].Year == todayYear)
+        if (data[index].Year == todayYear)
             Valueyeardata.push(data[index].Data)
     }
     maxyearValue = Math.max.apply(null, Valueyeardata)
