@@ -1685,7 +1685,7 @@ app.get('/test_gassensor', function (req, res) {
     io.emit('getgassensor', gassensor)
     res.render('dkatk', { layout: null })
 })
- 
+
 
 app.get('/wateruseage', function (req, res) {
     Water.find(function (err, data) {
@@ -1693,6 +1693,11 @@ app.get('/wateruseage', function (req, res) {
             for (let index = 0; index < weekendWater.length; index++) {
                 //weekendWater.push(percent(data[index].Useage, maxValue))
                 percentArray[index] = Math.floor(percent(weekendWater[index], maxValue))
+            }
+
+            for (let index = 0; index < yearWater.length; index++) {
+                //weekendWater.push(percent(data[index].Useage, maxValue))
+                yearpercentArray[index] = Math.floor(percent(yearWater[index], maxyearValue))
             }
 
 
