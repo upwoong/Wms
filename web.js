@@ -1598,6 +1598,8 @@ let percentArray = new Array()
 let yearpercentArray = new Array()
 app.get('/testwater_recieve', function (req, res) {
     watervalue = req.query.id
+    const todayMonth = moment().format('MM')
+    const forMathMonth = todayMonth-1
     //plusvalue = parseInt(plusvalue) + (parseInt(watervalue) / 1000)
 
     weekendWater[0] = weekendWater[0] + parseInt(watervalue)
@@ -1611,10 +1613,10 @@ app.get('/testwater_recieve', function (req, res) {
     }
 
     //yearWater[0] = yearWater[0] + (parseInt(watervalue) / 1000)
-    yearWater[0] = yearWater[0] + parseInt(watervalue)
-    if(yearWater[0] > maxyearValue)
+    yearWater[forMathMonth] = yearWater[forMathMonth] + parseInt(watervalue)
+    if(yearWater[forMathMonth] > maxyearValue)
     {
-        maxyearValue = yearWater[0]
+        maxyearValue = yearWater[forMathMonth]
     }
     for (let index = 0; index < yearWater.length; index++) {
         //weekendWater.push(percent(data[index].Useage, maxValue))
@@ -1624,7 +1626,7 @@ app.get('/testwater_recieve', function (req, res) {
     io.emit('weekendwater', weekendWater[0])
     io.emit('waterpercent', percentArray)
     io.emit('wateryearpercent', yearpercentArray)
-    io.emit('yearWater',yearWater[0])
+    io.emit('yearWater',yearWater[forMathMonth])
     res.render('dkatk', { layout: null, watervalue: watervalue })
 })
 
