@@ -1751,7 +1751,7 @@ Water.find(function (err, data) {
 let yearWater = new Array()
 MonthUseage.find(function (err, data) {
     for (let index = 0; index < data.length; index++) {
-        if (data[index].Month == todayMonth && data[index].Year == todayYear)
+        if (data[index].Year == todayYear)
             yearWater.push(parseInt(data[index].Data))
     }
 }).sort({ Year: 1 }).sort({ Month: 1 }).limit(12)
