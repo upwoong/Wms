@@ -1593,14 +1593,13 @@ app.get('/ledtest', function (req, res) {
 
 let watervalue = 3
 let plusvalue = 0
+let monthplusvlaue = 0
 let percentArray = new Array()
 let yearpercentArray = new Array()
 app.get('/testwater_recieve', function (req, res) {
     watervalue = req.query.id
-    console.log(plusvalue)
     //plusvalue = parseInt(plusvalue) + (parseInt(watervalue) / 1000)
 
-    plusvalue = parseInt(plusvalue) + parseInt(watervalue)
     weekendWater[0] = weekendWater[0] + parseInt(watervalue)
     if (weekendWater[0] > maxValue) {
         maxValue = weekendWater[0]
@@ -1612,7 +1611,7 @@ app.get('/testwater_recieve', function (req, res) {
     }
 
     //yearWater[0] = yearWater[0] + (parseInt(watervalue) / 1000)
-    yearWater[0] = parseInt(yearWater[0]) + parseInt(watervalue)
+    yearWater[0] = yearWater[0] + parseInt(watervalue)
     if(yearWater[0] > maxyearValue)
     {
         maxyearValue = yearWater[0]
@@ -1626,7 +1625,7 @@ app.get('/testwater_recieve', function (req, res) {
     io.emit('waterpercent', percentArray)
     io.emit('wateryearpercent', yearpercentArray)
     io.emit('yearWater',yearWater[0])
-    res.render('dkatk', { layout: null, watervalue: watervalue, plusvalue: plusvalue })
+    res.render('dkatk', { layout: null, watervalue: watervalue })
 })
 
 //실시간 값 받아오는 영역
@@ -1694,8 +1693,8 @@ app.get('/wateruseage', function (req, res) {
             }
 
                 for (let index = 0; index < yeardata.length; index++) {
-                    if (yeardata[index].Month == currentMonth && yeardata[index].Year == currentYear) {
-                        yeardata[index].Persent = Math.floor(percent(yeardata[index].Useage, maxyearValue))
+                    if ( yeardata[index].Year == currentYear) {
+                        yeardata[index].Persent = Math.floor(percent(yeardata[index].Data, maxyearValue))
                     }
                 }
             res.render('wateruseage', { data: data, yeardata : yeardata, selectcityname: selectcityname, selectvillagename: selectvillagename })
@@ -1730,8 +1729,8 @@ MonthUseage.find(function (err, data) {
     //maxValue = Math.max(...data.Date) //ES6 문법이기 때문에 안되면 const maxValue = Math.max.apply(null, data) 를 사용
     let Valueyeardata = new Array()
     for (let index = 0; index < data.length; index++) {
-        if (data[index].Month == todayMonth && data[index].Year == todayYear)
-            Valueyeardata.push(data[index].Useage)
+        if ( data[index].Year == todayYear)
+            Valueyeardata.push(data[index].Data)
     }
     maxyearValue = Math.max.apply(null, Valueyeardata)
 }).sort({ Year: 1 }).sort({ Month: 1 }).sort({ Day: 1 }).limit(12) //추후엔 Month 와 Day로 나누기 때문에 각각에 sort정렬을 해줘야 최신 데이터가 나옴
@@ -1753,7 +1752,7 @@ let yearWater = new Array()
 MonthUseage.find(function (err, data) {
     for (let index = 0; index < data.length; index++) {
         if (data[index].Month == todayMonth && data[index].Year == todayYear)
-            yearWater.push(parseInt(data[index].Useage))
+            yearWater.push(parseInt(data[index].Data))
     }
 }).sort({ Year: 1 }).sort({ Month: 1 }).limit(12)
 
