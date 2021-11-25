@@ -1612,7 +1612,7 @@ app.get('/testwater_recieve', function (req, res) {
     }
 
     //yearWater[0] = yearWater[0] + (parseInt(watervalue) / 1000)
-    yearWater[0] = yearWater[0] + parseInt(watervalue)
+    yearWater[0] = parseInt(yearWater[0]) + parseInt(watervalue)
     if(yearWater[0] > maxyearValue)
     {
         maxyearValue = yearWater[0]
@@ -1695,13 +1695,13 @@ app.get('/wateruseage', function (req, res) {
 
                 for (let index = 0; index < yeardata.length; index++) {
                     if (yeardata[index].Month == currentMonth && yeardata[index].Year == currentYear) {
-                        yeardata[index].Persent = Math.floor(percent(yeardata[index].Useage, maxValue))
+                        yeardata[index].Persent = Math.floor(percent(yeardata[index].Useage, maxyearValue))
                     }
                 }
             res.render('wateruseage', { data: data, yeardata : yeardata, selectcityname: selectcityname, selectvillagename: selectvillagename })
         }).sort({ Year: 1 }).sort({ Month: 1 }).limit(12)
     }).sort({ Year: -1 }).sort({ Month: -1 }).sort({ Day: 1 }).limit(7)
-    console.log(percentArray)
+    console.log(yearpercentArray)
 })
 //const user = new Water({ 'name': "132", 'Date' : valuedata, 'Hour' : "18 : 10" })
 
@@ -1721,7 +1721,7 @@ Water.find(function (err, data) {
         Valuedata.push(data[index].Useage)
     }
     maxValue = Math.max.apply(null, Valuedata)
-}).sort({ Year: -1 }).sort({ Month: -1 }).sort({ Day: -1 }).limit(7) //추후엔 Month 와 Day로 나누기 때문에 각각에 sort정렬을 해줘야 최신 데이터가 나옴
+}).sort({ Year: 1 }).sort({ Month: 1 }).sort({ Day: 1 }).limit(7) //추후엔 Month 와 Day로 나누기 때문에 각각에 sort정렬을 해줘야 최신 데이터가 나옴
 
 
 //초기 1년간 데이터중 가장 높은 달의 값 구하기 설정
@@ -1734,7 +1734,7 @@ MonthUseage.find(function (err, data) {
             Valueyeardata.push(data[index].Useage)
     }
     maxyearValue = Math.max.apply(null, Valueyeardata)
-}).sort({ Year: -1 }).sort({ Month: -1 }).sort({ Day: -1 }).limit(7) //추후엔 Month 와 Day로 나누기 때문에 각각에 sort정렬을 해줘야 최신 데이터가 나옴
+}).sort({ Year: 1 }).sort({ Month: 1 }).sort({ Day: 1 }).limit(12) //추후엔 Month 와 Day로 나누기 때문에 각각에 sort정렬을 해줘야 최신 데이터가 나옴
 
 
 
