@@ -1682,7 +1682,7 @@ app.get('/wateruseage', function (req, res) {
                 }
         })
     })
-            res.render('wateruseage', {selectcityname: selectcityname, selectvillagename: selectvillagename })
+            res.render('wateruseage', { data : data, yeardata : yeardata, selectcityname: selectcityname, selectvillagename: selectvillagename })
     console.log(percentArray)
 })
 //const user = new Water({ 'name': "132", 'Date' : valuedata, 'Hour' : "18 : 10" })
