@@ -1628,6 +1628,17 @@ app.get('/testwater_recieve', function (req, res) {
     res.render('dkatk', { layout: null, watervalue: watervalue })
 })
 
+for (let index = 0; index < weekendWater.length; index++) {
+    //weekendWater.push(percent(data[index].Useage, maxValue))
+    percentArray[index] = Math.floor(percent(weekendWater[index], maxValue))
+}
+
+for (let index = 0; index < yearWater.length; index++) {
+    //weekendWater.push(percent(data[index].Useage, maxValue))
+    yearpercentArray[index] = Math.floor(percent(yearWater[index], maxyearValue))
+}
+
+
 //실시간 값 받아오는 영역
 app.get('/testhanddryer_recieve', function (req, res) {
     handdryervalue = req.query.id
