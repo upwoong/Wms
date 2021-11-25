@@ -908,5 +908,65 @@
 
     monthwateruseage.innerText = msg;
   });
+    socket.on('wateryearpercent',(msg)=>{
+    var monthwateruseage = document.getElementById('yearpercent');
+
+      let yearpercent1 = document.getElementById('yearpercent1');
+      let yearpercent2 = document.getElementById('yearpercent2');
+      let yearpercent3 = document.getElementById('yearpercent3');
+      let yearpercent4 = document.getElementById('yearpercent4');
+      let yearpercent5 = document.getElementById('yearpercent5');
+      let yearpercent6 = document.getElementById('yearpercent6');
+      let yearpercent7 = document.getElementById('yearpercent7');
+      let yearpercent8 = document.getElementById('yearpercent8');
+      let yearpercent9 = document.getElementById('yearpercent9');
+      let yearpercent10 = document.getElementById('yearpercent10');
+      let yearpercent11 = document.getElementById('yearpercent11');
+      let yearpercent12 = document.getElementById('yearpercent12');
+
+      yearpercent1.innerText = msg[0];
+      yearpercent2.innerText = msg[1];
+      yearpercent3.innerText = msg[2];
+      yearpercent4.innerText = msg[3];
+      yearpercent5.innerText = msg[4];
+      yearpercent6.innerText = msg[5];
+      yearpercent7.innerText = msg[6];
+      yearpercent8.innerText = msg[7];
+      yearpercent9.innerText = msg[8];
+      yearpercent10.innerText = msg[9];
+      yearpercent11.innerText = msg[10];
+      yearpercent12.innerText = msg[11];
+
+      let showyearpercent1 = document.getElementById('showyearpercent1');
+      let showyearpercent2 = document.getElementById('showyearpercent2');
+      let showyearpercent3 = document.getElementById('showyearpercent3');
+      let showyearpercent4 = document.getElementById('showyearpercent4');
+      let showyearpercent5 = document.getElementById('showyearpercent5');
+      let showyearpercent6 = document.getElementById('showyearpercent6');
+      let showyearpercent7 = document.getElementById('showyearpercent7');
+      let showyearpercent8 = document.getElementById('showyearpercent8');
+      let showyearpercent9 = document.getElementById('showyearpercent9');
+      let showyearpercent10 = document.getElementById('showyearpercent10');
+      let showyearpercent11 = document.getElementById('showyearpercent11');
+      let showyearpercent12 = document.getElementById('showyearpercent12');
+
+      showyearpercent1.style.height = msg[0] + "%";
+      showyearpercent2.style.height = msg[1] + "%";
+      showyearpercent3.style.height = msg[2] + "%";
+      showyearpercent4.style.height = msg[3] + "%";
+      showyearpercent5.style.height = msg[4] + "%";
+      showyearpercent6.style.height = msg[5] + "%";
+      showyearpercent7.style.height = msg[6] + "%";
+      showyearpercent8.style.height = msg[7] + "%";
+      showyearpercent9.style.height = msg[8] + "%";
+      showyearpercent10.style.height = msg[9] + "%";
+      showyearpercent11.style.height = msg[10] + "%";
+      showyearpercent12.style.height = msg[11] + "%";
+
+      
+
     
+
+    monthwateruseage.innerText = msg;
+  });
 </script>
