@@ -1690,7 +1690,8 @@ app.get('/wateruseage', function (req, res) {
             percentArray : percentArray, yearWater : yearWater, yearpercentArray : yearpercentArray })
         }).sort({ Year: 1 }).sort({ Month: 1 }).limit(12)
     }).sort({ Year: -1 }).sort({ Month: -1 }).sort({ Day: 1 }).limit(7)
-    console.log(yearWater)
+    console.log("수치 : " + weekendWater)
+    console.log("percent : " + percentArray)
 })
 //const user = new Water({ 'name': "132", 'Date' : valuedata, 'Hour' : "18 : 10" })
 
