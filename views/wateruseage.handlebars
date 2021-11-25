@@ -895,6 +895,11 @@
     txt3.innerText = msg;
   });
 
+  socket.on('yearwater',(msg)=>{
+    var monthwateruseage = document.getElementById('monthwateruseage');
 
+    monthwateruseage.innerText = msg;
+  });
+  
 
 </script>
