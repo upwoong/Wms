@@ -816,7 +816,7 @@ var Y = schedule.scheduleJob("0 0 0 0 1 *",function() {
 app.get('/dkatk', function (req, res) {
     Water.find(function (err, data) {
         console.log(data[0].Useage)
-        res.render('dkatk', { layout: null, data: data })
+        res.render('dkatk', { layout: null, yeardata: yeardata })
     })
 })
 //fs.unlink(`smartmirror/image/${name}`, function () { })
@@ -1701,7 +1701,7 @@ app.get('/wateruseage', function (req, res) {
             res.render('wateruseage', { data: data, yeardata : yeardata, selectcityname: selectcityname, selectvillagename: selectvillagename })
         }).sort({ Year: 1 }).sort({ Month: 1 }).limit(12)
     }).sort({ Year: -1 }).sort({ Month: -1 }).sort({ Day: 1 }).limit(7)
-    console.log(yearpercentArray)
+    console.log(yearWater)
 })
 //const user = new Water({ 'name': "132", 'Date' : valuedata, 'Hour' : "18 : 10" })
 
