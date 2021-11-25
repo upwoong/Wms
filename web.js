@@ -1628,16 +1628,6 @@ app.get('/testwater_recieve', function (req, res) {
     res.render('dkatk', { layout: null, watervalue: watervalue })
 })
 
-for (let index = 0; index < weekendWater.length; index++) {
-    //weekendWater.push(percent(data[index].Useage, maxValue))
-    percentArray[index] = Math.floor(percent(weekendWater[index], maxValue))
-}
-
-for (let index = 0; index < yearWater.length; index++) {
-    //weekendWater.push(percent(data[index].Useage, maxValue))
-    yearpercentArray[index] = Math.floor(percent(yearWater[index], maxyearValue))
-}
-
 
 //실시간 값 받아오는 영역
 app.get('/testhanddryer_recieve', function (req, res) {
@@ -1790,6 +1780,16 @@ app.get('/nfctagging', function (req, res) {
     io.emit(Monthwater) // 1년간의 데이터중 이번달 데이터만 표시
     res.render('dkatk', { layout: null })
 })
+
+for (let index = 0; index < weekendWater.length; index++) {
+    //weekendWater.push(percent(data[index].Useage, maxValue))
+    percentArray[index] = Math.floor(percent(weekendWater[index], maxValue))
+}
+
+for (let index = 0; index < yearWater.length; index++) {
+    //weekendWater.push(percent(data[index].Useage, maxValue))
+    yearpercentArray[index] = Math.floor(percent(yearWater[index], maxyearValue))
+}
 
 io.on('connection', (socket) => {   //연결이 들어오면 실행되는 이벤트
     // socket 변수에는 실행 시점에 연결한 상대와 연결된 소켓의 객체가 들어있다.
