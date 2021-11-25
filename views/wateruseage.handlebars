@@ -144,7 +144,7 @@
       <div class="flex justify-center items-center">
         <div>
           <div class="flex justify-center text-6xl c-3AAFE2">
-            <span id="monthwateruseage">{{yearWater.[0]}}</span>
+            <span id="monthwateruseage">{{yearpercentArray.[10]}}</span>
             <span>L</span>
           </div>
           <div class="flex justify-center items-center text-sm font-bold c-A8A8A8">
@@ -908,6 +908,8 @@
     monthwateruseage.innerText = msg;
   });
     socket.on('wateryearpercent',(msg)=>{
+      var test = document.getElementById('test');
+      test.innerText = msg;
     var monthwateruseage = document.getElementById('yearpercent');
 
       var yearpercent1 = document.getElementById('yearpercent1');
