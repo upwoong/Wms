@@ -815,6 +815,10 @@ var Y = schedule.scheduleJob("0 0 0 0 1 *", function () {
 
 app.get('/dkatk', function (req, res) {
 
+    for (let index = 0; index < weekendWater.length; index++) {
+        //weekendWater.push(percent(data[index].Useage, maxValue))
+        percentArray[index] = Math.floor(percent(weekendWater[index], maxValue))
+    }
         res.render('dkatk', { layout: null, percentArray : percentArray, yearWater : yearWater, yearpercentArray : yearpercentArray, weekendWater : weekendWater})
 
 })
@@ -1686,6 +1690,12 @@ app.get('/test_gassensor', function (req, res) {
 app.get('/wateruseage', function (req, res) {
     Water.find(function (err, data) {
         MonthUseage.find(function (err, yeardata) {
+            for (let index = 0; index < weekendWater.length; index++) {
+                //weekendWater.push(percent(data[index].Useage, maxValue))
+                percentArray[index] = Math.floor(percent(weekendWater[index], maxValue))
+            }
+
+
             res.render('wateruseage', { data: data, yeardata: yeardata, selectcityname: selectcityname, selectvillagename: selectvillagename, weekendWater : weekendWater,
             percentArray : percentArray, yearWater : yearWater, yearpercentArray : yearpercentArray })
         }).sort({ Year: 1 }).sort({ Month: 1 }).limit(12)
