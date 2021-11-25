@@ -808,6 +808,13 @@ var m = schedule.scheduleJob("0 0 0 1 * *", function () {
     })
 })
 
+/*
+매년 1월에 발생하는 이벤트
+var Y = schedule.scheduleJob("0 0 0 0 1 *",function() {
+    
+})
+*/
+
 app.get('/dkatk', function (req, res) {
     Water.find(function (err, data) {
         console.log(data[0].Useage)
@@ -1692,9 +1699,8 @@ app.get('/wateruseage', function (req, res) {
                         yeardata[index].Persent = Math.floor(percent(yeardata[index].Useage, maxValue))
                     }
                 }
-            
             res.render('wateruseage', { data: data, yeardata : yeardata, selectcityname: selectcityname, selectvillagename: selectvillagename })
-        }).sort({ Year: -1 }).sort({ Month: -1 }).limit(12)
+        }).sort({ Year: 1 }).sort({ Month: 1 }).limit(12)
     }).sort({ Year: -1 }).sort({ Month: -1 }).sort({ Day: 1 }).limit(7)
     console.log(percentArray)
 })
