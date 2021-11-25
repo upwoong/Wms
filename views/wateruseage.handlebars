@@ -798,7 +798,21 @@
 <p id="yeararray">daw</p>
 
 <p>Percent</p>
-<p id="yearpercent">adw</p>
+<p id="asd">adw</p>
+
+
+<p>Percent</p>
+<p id="showpercent">adw</p>
+<p>Percent</p>
+<p id="showpercent">adw</p>
+<p>Percent</p>
+<p id="showpercent">adw</p>
+<p>Percent</p>
+<p id="showpercent">adw</p>
+<p>Percent</p>
+<p id="showpercent">adw</p>
+<p>Percent</p>
+<p id="showpercent">adw</p>
 
 <script src="/socket.io/socket.io.js"></script>
 <script>
@@ -909,7 +923,21 @@
     monthwateruseage.innerText = msg;
   });
     socket.on('wateryearpercent',(msg)=>{
-    var monthwateruseage = document.getElementById('yearpercent');
+    var monthwateruseage = document.getElementById('asd');
+
+      for(let index = 0;index < msg.length; index++)
+      {
+        let yearpercent = getElementById("showpercent");
+        yearpercent[index].style.height = msg[index] + "%";
+      }
+
+
+
+      let showyearpercent = document.getElementById('showyearpercent');
+
+      
+
+    
 
     monthwateruseage.innerText = msg;
   });
