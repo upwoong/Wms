@@ -602,7 +602,7 @@ var j = schedule.scheduleJob("0 0 6 * * *", function () {
     const Hour = moment().format('HH:mm:ss')
     const yesterdaydate = date - 100
 
-    const newDaywateruseage = new Water({ 'Year' : year, 'Month' : month, 'Day' : day, 'Percent' : "", 'Useage' : ""})
+    const newDaywateruseage = new Water({ 'Year': year, 'Month': month, 'Day': day, 'Percent': "", 'Useage': "" })
     newDaywateruseage.save(function (err, slience) {
         if (err) {
             console.log(err)
@@ -828,7 +828,7 @@ Weather.find({}, imgProjection, function (err, data) {
 
 //기상청 엑셀정보 불러오기
 const excelFile = xlsx.readFile("/home/hosting_users/creativethon/apps/creativethon_wmsadmina/api/기상청41_단기예보 조회서비스_오픈API활용가이드_격자_위경도(20210401).xlsx")
-const firstSheet = excelFile.Sheets[excelFile.SheetNames[0]]    
+const firstSheet = excelFile.Sheets[excelFile.SheetNames[0]]
 
 var localselect
 var cityselect
@@ -1596,8 +1596,7 @@ app.get('/testwater_recieve', function (req, res) {
 
     //yearWater[0] = yearWater[0] + (parseInt(watervalue) / 1000)
     yearWater[0] = yearWater[0] + parseInt(watervalue)
-    if(yearWater[0] > maxyearValue)
-    {
+    if (yearWater[0] > maxyearValue) {
         maxyearValue = yearWater[0]
     }
     for (let index = 0; index < yearWater.length; index++) {
@@ -1667,6 +1666,7 @@ app.get('/test_gassensor', function (req, res) {
 
 app.get('/wateruseage', function (req, res) {
     Water.find(function (err, data) {
+        MonthUseage.find(function (err, yeardata) {
             const currentYear = moment().format('YY')
             const currentMonth = moment().format('MM')
             for (let index = 0; index < data.length; index++) {
@@ -1674,7 +1674,13 @@ app.get('/wateruseage', function (req, res) {
                 data[index].Persent = Math.floor(percent(data[index].Useage, maxValue))
             }
 
-                res.render('wateruseage', { data : data, selectcityname: selectcityname, selectvillagename: selectvillagename })
+            for (let index = 0; index < yeardata.length; index++) {
+                if (yeardata[index].Month == currentMonth && yeardata[index].Year == currentYear) {
+                    yeardata[index].Persent = Math.floor(percent(yeardata[index].Useage, maxValue))
+                }
+            }
+            res.render('wateruseage', { data: data, yeardata: yeardata, selectcityname: selectcityname, selectvillagename: selectvillagename })
+        })
     })
     console.log(percentArray)
 })
