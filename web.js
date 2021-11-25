@@ -68,7 +68,7 @@ const usingwater = new mongoose.Schema({
     Year: String,
     Month: String,
     Day: String,
-    Persent: String
+    Percent: String
 })
 const clients = new mongoose.Schema({
     name: String,
@@ -106,7 +106,7 @@ const monthuseage = new mongoose.Schema({
     Data: String,
     Year: String,
     Month: String,
-    Persent: String
+    Percent: String
 })
 const smartmirrorexe = new mongoose.Schema({
     name: String
@@ -1690,12 +1690,12 @@ app.get('/wateruseage', function (req, res) {
             const currentMonth = moment().format('MM')
             for (let index = 0; index < data.length; index++) {
                 //weekendWater.push(percent(data[index].Useage, maxValue))
-                data[index].Persent = Math.floor(percent(data[index].Useage, maxValue))
+                data[index].Percent = Math.floor(percent(data[index].Useage, maxValue))
             }
 
             for (let index = 0; index < yeardata.length; index++) {
                 if (yeardata[index].Year == currentYear) {
-                    yeardata[index].Persent = Math.floor(percent(yeardata[index].Data, maxyearValue))
+                    yeardata[index].Percent = Math.floor(percent(yeardata[index].Data, maxyearValue))
                 }
             }
             res.render('wateruseage', { data: data, yeardata: yeardata, selectcityname: selectcityname, selectvillagename: selectvillagename })
