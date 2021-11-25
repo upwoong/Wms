@@ -815,8 +815,8 @@ var Y = schedule.scheduleJob("0 0 0 0 1 *",function() {
 
 app.get('/dkatk', function (req, res) {
     Water.find(function (err, data) {
-        console.log(data[0].Useage)
-        res.render('dkatk', { layout: null, yeardata: yeardata })
+        console.log(yearpercentArray)
+        res.render('dkatk', { layout: null, yearWater: yearWater })
     })
 })
 //fs.unlink(`smartmirror/image/${name}`, function () { })
