@@ -1681,7 +1681,7 @@ app.get('/test_gassensor', function (req, res) {
     io.emit('getgassensor', gassensor)
     res.render('dkatk', { layout: null })
 })
-
+ 
 
 app.get('/wateruseage', function (req, res) {
     Water.find(function (err, data) {
