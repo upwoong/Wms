@@ -602,7 +602,7 @@ var j = schedule.scheduleJob("0 0 6 * * *", function () {
     const Hour = moment().format('HH:mm:ss')
     const yesterdaydate = date - 100
 
-    const newDaywateruseage = new Water({ 'Year': year, 'Month': month, 'Day': day, 'Percent': "", 'Useage': "" })
+    const newDaywateruseage = new Water({ 'Year' : year, 'Month' : month, 'Day' : day, 'Percent' : "", 'Useage' : ""})
     newDaywateruseage.save(function (err, slience) {
         if (err) {
             console.log(err)
@@ -797,17 +797,10 @@ var m = schedule.scheduleJob("0 0 0 1 * *", function () {
 })
 
 app.get('/dkatk', function (req, res) {
-        MonthUseage.find(function (err, yeardata) {
-            const currentYear = moment().format('YY')
-            const currentMonth = moment().format('MM')
-            for (let index = 0; index < yeardata.length; index++) {
-                if (yeardata[index].Month == currentMonth && yeardata[index].Year == currentYear) {
-                    yeardata[index].Persent = Math.floor(percent(yeardata[index].Useage, maxValue))
-                }
-            }
-            res.render('wateruseage', { data: data, yeardata: yeardata, selectcityname: selectcityname, selectvillagename: selectvillagename })
-        })
-    console.log(percentArray)
+    Water.find(function (err, data) {
+        console.log(data[0].Useage)
+        res.render('dkatk', { layout: null, data: data })
+    })
 })
 //fs.unlink(`smartmirror/image/${name}`, function () { })
 app.use('/', router)
@@ -835,7 +828,7 @@ Weather.find({}, imgProjection, function (err, data) {
 
 //기상청 엑셀정보 불러오기
 const excelFile = xlsx.readFile("/home/hosting_users/creativethon/apps/creativethon_wmsadmina/api/기상청41_단기예보 조회서비스_오픈API활용가이드_격자_위경도(20210401).xlsx")
-const firstSheet = excelFile.Sheets[excelFile.SheetNames[0]]
+const firstSheet = excelFile.Sheets[excelFile.SheetNames[0]]    
 
 var localselect
 var cityselect
@@ -1603,7 +1596,8 @@ app.get('/testwater_recieve', function (req, res) {
 
     //yearWater[0] = yearWater[0] + (parseInt(watervalue) / 1000)
     yearWater[0] = yearWater[0] + parseInt(watervalue)
-    if (yearWater[0] > maxyearValue) {
+    if(yearWater[0] > maxyearValue)
+    {
         maxyearValue = yearWater[0]
     }
     for (let index = 0; index < yearWater.length; index++) {
@@ -1681,14 +1675,15 @@ app.get('/wateruseage', function (req, res) {
                 data[index].Persent = Math.floor(percent(data[index].Useage, maxValue))
             }
 
-            for (let index = 0; index < yeardata.length; index++) {
-                if (yeardata[index].Month == currentMonth && yeardata[index].Year == currentYear) {
-                    yeardata[index].Persent = Math.floor(percent(yeardata[index].Useage, maxValue))
+                for (let index = 0; index < yeardata.length; index++) {
+                    if (yeardata[index].Month == currentMonth && yeardata[index].Year == currentYear) {
+                        yeardata[index].Persent = Math.floor(percent(yeardata[index].Useage, maxValue))
+                    }
                 }
-            }
-            res.render('wateruseage', { data: data, yeardata: yeardata, selectcityname: selectcityname, selectvillagename: selectvillagename })
+            
+            res.render('wateruseage', { data: data, yeardata : yeardata, selectcityname: selectcityname, selectvillagename: selectvillagename })
         })
-    })
+    }).sort({ Year: -1 }).sort({ Month: -1 }).sort({ Day: 1 }).limit(7)
     console.log(percentArray)
 })
 //const user = new Water({ 'name': "132", 'Date' : valuedata, 'Hour' : "18 : 10" })
