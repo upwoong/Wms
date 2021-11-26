@@ -1634,8 +1634,8 @@ app.get('/testwater_recieve', function (req, res) {
     console.log(yearpercentArray)
     io.emit('weekendwater', weekendWater[0])
     io.emit('waterpercent', percentArray)
-    io.emit('wateryearpercent', percentArray)
-    io.emit('yearWater', weekendWater)
+    io.emit('wateryearpercent', yearpercentArray)
+    io.emit('yearWater', yearWater[11])
     res.render('dkatk', { layout: null, watervalue: watervalue })
 })
 
