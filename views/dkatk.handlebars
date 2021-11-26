@@ -10,7 +10,8 @@
 <p id="yeararray">aawd</p>
 <p>실시간 퍼센트</p>
 <p id="test">adwawd`</p>
-
+<p>실시간 퍼센트aaaaa</p>
+<p id="test1">adwawd`</p>
 <script src="/socket.io/socket.io.js"></script>
 <script>
   socket.on('yearWater',(msg)=>{
@@ -20,6 +21,10 @@
   });
     socket.on('wateryearpercent',(msg)=>{
       var test = document.getElementById('test');
+      test.innerText = msg;
+  });
+  socket.on('waterpercent',(msg)=>{
+      var test = document.getElementById('test1');
       test.innerText = msg;
   });
 </script>
