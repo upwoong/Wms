@@ -1,37 +1,21 @@
 
-{{percentArray}}
-<p>dawdaw</p>
-{{yearWater}}
-<p>adwawd</p>
-{{yearpercentArray}}
-<p>adwadw</p>
-{{weekendWater.[0]}}
-<p>실시간 배열</p>
-<p id="yeararray">aawd</p>
-<p>실시간 퍼센트</p>
-<p id="test">adwawd`</p>
-<p>실시간 퍼센트aaaaa</p>
-<p id="test1">adwawd`</p>
-<p>실시간 퍼센트aaaaawwwwww</p>
-<p id="test2">adwawd`</p>
+<p>nfc</p>
+<p id="nfc">nfc</p>
+<p>gassensor</p>
+<p id="gassensor">gassensor</p>
+
+
 <script src="/socket.io/socket.io.js"></script>
 <script>
-  socket.on('yearWater',(msg)=>{
-    var txt2 = document.getElementById("yeararray");
+  var socket = io();
 
-    txt2.innerText = msg;
+  socket.on('getnfc', (msg) => {
+    var txt = document.getElementById('nfc');
+    txt.innerText = msg;
   });
-    socket.on('wateryearpercent',(msg)=>{
-      var test = document.getElementById('test');
-      test.innerText = msg;
-  });
-  socket.on('waterpercent',(msg)=>{
-      var test = document.getElementById('test1');
-      test.innerText = msg;
+  socket.on('getgassensor', (msg) => {
+    var txt = document.getElementById('gassensor');
+    txt.innerText = msg;
   });
 
-  socket.on('weekendwater',(msg)=>{
-      var test = document.getElementById('test2');
-      test.innerText = msg;
-  });
 </script>
