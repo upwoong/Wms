@@ -1616,9 +1616,9 @@ app.get('/testwater_recieve', function (req, res) {
     }
 
     //yearWater[0] = yearWater[0] + (parseInt(watervalue) / 1000)
-    yearWater[forMathMonth] = yearWater[forMathMonth] + parseInt(watervalue)
-    if (yearWater[forMathMonth] > maxyearValue) {
-        maxyearValue = yearWater[forMathMonth]
+    yearWater[todayMonth] = yearWater[todayMonth] + parseInt(watervalue)
+    if (yearWater[todayMonth] > maxyearValue) {
+        maxyearValue = yearWater[todayMonth]
     }
     for (let index = 0; index < yearWater.length; index++) {
         //weekendWater.push(percent(data[index].Useage, maxValue))
