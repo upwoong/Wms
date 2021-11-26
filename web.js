@@ -175,7 +175,7 @@ app.use('/smartmirror', static(path.join(__dirname, 'smartmirror')));
 
 let arraywater = []
 const endpoint = 'http://localhost:8080/graphql/waterinput'
-var schema = buildSchema(`
+var schema = Graphql.buildSchema(`
 
 scalar DateTime
 
