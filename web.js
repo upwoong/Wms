@@ -403,7 +403,11 @@ class Comment {
 }
 
 
-
+app.use('/graphql', GraphqlHttp({
+    schema: schema,
+    rootValue: root,
+    graphiql: true,
+  }))
 
 // 라우터 사용하여 라우팅 함수 등록
 var router = express.Router()
