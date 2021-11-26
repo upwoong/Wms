@@ -202,14 +202,14 @@ type WashiSupport {
   id: ID!,
   title: String!,
   mainSentense: String!,
-  nickname: [MemberList]!,
+  nickname: String,
   date: DateTime!
 }
 
 input WashiSupportRequest {
   title: String!,
   mainSentense: String!,
-  nickname: [MemberList]!,
+  nickname: String!,
   date: DateTime!
 }
 
@@ -218,7 +218,7 @@ type WashiNotice {
   title: String,
   image: String,
   mainSentense: String,
-  user: [MemberList]!,
+  user: String!,
   date: DateTime!
 }
 
@@ -226,21 +226,21 @@ input WashiNoticeInput {
   title: String,
   image: String,
   mainSentense: String,
-  user: [MemberList]!,
+  user: String!,
   date: DateTime!
 }
 
 type WashiComment {
   id: ID!,
   title: String,
-  from: [MemberList]!,
+  from: String!,
   message: String,
   date: DateTime!
 }
 
 input WashiCommentInput {
   title: String,
-  from: [MemberList]!,
+  from: String!,
   message: String,
   date: DateTime!
 }
