@@ -819,6 +819,11 @@ app.get('/dkatk', function (req, res) {
         //weekendWater.push(percent(data[index].Useage, maxValue))
         percentArray[index] = Math.floor(percent(weekendWater[index], maxValue))
     }
+
+    for (let index = 0; index < yearWater.length; index++) {
+        //weekendWater.push(percent(data[index].Useage, maxValue))
+        yearpercentArray[index] = Math.floor(percent(yearWater[index], maxyearValue))
+    }
         res.render('dkatk', { layout: null, percentArray : percentArray, yearWater : yearWater, yearpercentArray : yearpercentArray, weekendWater : weekendWater})
 
 })

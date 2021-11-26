@@ -12,6 +12,8 @@
 <p id="test">adwawd`</p>
 <p>실시간 퍼센트aaaaa</p>
 <p id="test1">adwawd`</p>
+<p>실시간 퍼센트aaaaawwwwww</p>
+<p id="test2">adwawd`</p>
 <script src="/socket.io/socket.io.js"></script>
 <script>
   socket.on('yearWater',(msg)=>{
@@ -25,6 +27,11 @@
   });
   socket.on('waterpercent',(msg)=>{
       var test = document.getElementById('test1');
+      test.innerText = msg;
+  });
+
+  socket.on('weekendwater',(msg)=>{
+      var test = document.getElementById('test2');
       test.innerText = msg;
   });
 </script>
