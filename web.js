@@ -124,7 +124,7 @@ const supportDB = new mongoose.Schema({
     id: String,
     title: String,
     mainSentense: String,
-    user: String,
+    nickname: String,
     date: Date
 });
 const noticeDB = new mongoose.Schema({
@@ -202,14 +202,14 @@ type WashiSupport {
   id: ID!,
   title: String!,
   mainSentense: String!,
-  user: [MemberList]!,
+  nickname: [MemberList]!,
   date: DateTime!
 }
 
 input WashiSupportRequest {
   title: String!,
   mainSentense: String!,
-  user: [MemberList]!,
+  nickname: [MemberList]!,
   date: DateTime!
 }
 
