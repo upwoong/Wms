@@ -124,7 +124,7 @@ const supportDB = new mongoose.Schema({
     id: String,
     title: String,
     mainSentense: String,
-    nickname: String,
+    nickname : String,
     date: Date
 });
 const noticeDB = new mongoose.Schema({
