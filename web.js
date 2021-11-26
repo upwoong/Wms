@@ -1621,15 +1621,17 @@ app.get('/testwater_recieve', function (req, res) {
     }
 
     //yearWater[0] = yearWater[0] + (parseInt(watervalue) / 1000)
-    yearWater[11] = parseInt(yearWater[11]) + parseInt(watervalue)
-    if (yearWater[11] > maxyearValue) {
-        maxyearValue = yearWater[11]
+    yearWater[10] = parseInt(yearWater[10]) + parseInt(watervalue)
+    if (yearWater[10] > maxyearValue) {
+        maxyearValue = yearWater[10]
     }
     for (let index = 0; index < yearWater.length; index++) {
         //weekendWater.push(percent(data[index].Useage, maxValue))
         yearpercentArray[index] = Math.floor(percent(yearWater[index], maxyearValue))
     }
     //연결이 들어오면 실행되는 이벤트
+    console.log(yearWater)
+    console.log(yearpercentArray)
     io.emit('weekendwater', weekendWater[0])
     io.emit('waterpercent', percentArray)
     io.emit('wateryearpercent', yearpercentArray)
