@@ -1632,8 +1632,7 @@ app.get('/testwater_recieve', function (req, res) {
     //연결이 들어오면 실행되는 이벤트
     console.log(yearWater)
     console.log(yearpercentArray)
-    io.emit('weekendwater', weekendWater[0])
-    io.emit('waterpercent', percentArray)
+
     io.emit('wateryearpercent', yearpercentArray)
     io.emit('yearWater', yearWater[11])
     res.render('dkatk', { layout: null, watervalue: watervalue })

@@ -849,55 +849,7 @@
     txt.innerText = msg;
   });
 
-  socket.on('weekendwater', (msg) => {
-    var txt = document.getElementById('weekendwater');
-    var todaywateruseage = document.getElementById('todaywateruseage');
-
-    todaywateruseage.innerText = msg;
-    txt.innerText = msg;
-  });
-
-  socket.on('waterpercent', (msg) => {
-    var txt1 = document.getElementById('waterpercent');
-    var todaywaterpercent = document.getElementById('todaywaterpercent');
-    var txt2 = document.getElementById('waterpercent1');
-    var txt3 = document.getElementById('Arraypercent');
-    var graphpercent2 = document.getElementById("graphpercent2");
-    var graphpercent3 = document.getElementById("graphpercent3");
-    var graphpercent4 = document.getElementById("graphpercent4");
-    var graphpercent5 = document.getElementById("graphpercent5");
-    var graphpercent6 = document.getElementById("graphpercent6");
-    var graphpercent7 = document.getElementById("graphpercent7");
-
-    var showpercent1 = document.getElementById("showpercent1");
-    var showpercent2 = document.getElementById("showpercent2");
-    var showpercent3 = document.getElementById("showpercent3");
-    var showpercent4 = document.getElementById("showpercent4");
-    var showpercent5 = document.getElementById("showpercent5");
-    var showpercent6 = document.getElementById("showpercent6");
-    var showpercent7 = document.getElementById("showpercent7");
-
-    todaywaterpercent.style.height = msg[0] + "%";
-    graphpercent2.style.height = msg[1] + "%";
-    graphpercent3.style.height = msg[2] + "%";
-    graphpercent4.style.height = msg[3] + "%";
-    graphpercent5.style.height = msg[4] + "%";
-    graphpercent6.style.height = msg[5] + "%";
-    graphpercent7.style.height = msg[6] + "%";
-
-    showpercent1.innerText = msg[0];
-
-    showpercent2.innerText = msg[1];
-    showpercent3.innerText = msg[2];
-    showpercent4.innerText = msg[3];
-    showpercent5.innerText = msg[4];
-    showpercent6.innerText = msg[5];
-    showpercent7.innerText = msg[6];
-
-    txt1.innerText = msg[0];
-    txt2.innerText = msg[1];
-    txt3.innerText = msg;
-  });
+ 
 
   socket.on('yearWater',(msg)=>{
     var monthwateruseage = document.getElementById('monthwateruseage');
