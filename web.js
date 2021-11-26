@@ -1608,11 +1608,9 @@ app.get('/testwater_recieve', function (req, res) {
     watervalue = req.query.id
     const todayMonth = moment().format('MM')
     const forMathMonth = todayMonth - 1
-    plusvalue = parseInt(plusvalue) + parseInt(watervalue)
     //plusvalue = parseInt(plusvalue) + (parseInt(watervalue) / 1000)
-
-    /*
-    weekendWater[0] = weekendWater[0] + parseInt(watervalue)
+    
+    weekendWater[0] = parseInt(weekendWater[0]) + parseInt(watervalue)
     if (weekendWater[0] > maxValue) {
         maxValue = weekendWater[0]
     }
@@ -1623,7 +1621,7 @@ app.get('/testwater_recieve', function (req, res) {
     }
 
     //yearWater[0] = yearWater[0] + (parseInt(watervalue) / 1000)
-    yearWater[11] = yearWater[11] + parseInt(watervalue)
+    yearWater[11] = parseInt(yearWater[11]) + parseInt(watervalue)
     if (yearWater[11] > maxyearValue) {
         maxyearValue = yearWater[11]
     }
@@ -1631,15 +1629,12 @@ app.get('/testwater_recieve', function (req, res) {
         //weekendWater.push(percent(data[index].Useage, maxValue))
         yearpercentArray[index] = Math.floor(percent(yearWater[index], maxyearValue))
     }
-    */
     //연결이 들어오면 실행되는 이벤트
-    console.log(watervalue)
-    console.log(plusvalue)
-    io.emit('weekendwater', watervalue)
-    io.emit('waterpercent', watervalue)
-    io.emit('wateryearpercent', plusvalue)
-    io.emit('yearWater', plusvalue)
-    res.render('dkatk', { layout: null})
+    io.emit('weekendwater', weekendWater[0])
+    io.emit('waterpercent', percentArray)
+    io.emit('wateryearpercent', yearpercentArray)
+    io.emit('yearWater', yearWater[11])
+    res.render('dkatk', { layout: null, watervalue: watervalue })
 })
 
 
@@ -1715,6 +1710,8 @@ app.get('/wateruseage', function (req, res) {
             percentArray : percentArray, yearWater : yearWater, yearpercentArray : yearpercentArray })
         }).sort({ Year: 1 }).sort({ Month: 1 }).limit(12)
     }).sort({ Year: -1 }).sort({ Month: -1 }).sort({ Day: 1 }).limit(7)
+    console.log("수치 : " + weekendWater)
+    console.log("percent : " + percentArray)
 })
 //const user = new Water({ 'name': "132", 'Date' : valuedata, 'Hour' : "18 : 10" })
 
