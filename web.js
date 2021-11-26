@@ -1631,6 +1631,7 @@ app.get('/testwater_recieve', function (req, res) {
         yearpercentArray[index] = Math.floor(percent(yearWater[index], maxyearValue))
     }
     */
+   console.log(watervalue)
     //연결이 들어오면 실행되는 이벤트
     io.emit('weekendwater', watervalue)
     io.emit('waterpercent', watervalue)
