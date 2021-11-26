@@ -1608,7 +1608,7 @@ app.get('/testwater_recieve', function (req, res) {
     watervalue = req.query.id
     const todayMonth = moment().format('MM')
     const forMathMonth = todayMonth - 1
-    plusvalue = plusvalue + parseInt(watervalue)
+    plusvalue = parseInt(plusvalue) + parseInt(watervalue)
     //plusvalue = parseInt(plusvalue) + (parseInt(watervalue) / 1000)
 
     /*
@@ -1633,6 +1633,8 @@ app.get('/testwater_recieve', function (req, res) {
     }
     */
     //연결이 들어오면 실행되는 이벤트
+    console.log(watervalue)
+    console.log(plusvalue)
     io.emit('weekendwater', watervalue)
     io.emit('waterpercent', watervalue)
     io.emit('wateryearpercent', plusvalue)
