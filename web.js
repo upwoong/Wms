@@ -1632,14 +1632,12 @@ app.get('/testwater_recieve', function (req, res) {
         yearpercentArray[index] = Math.floor(percent(yearWater[index], maxyearValue))
     }
     */
-   console.log("plus : " + plusvalue)
-   console.log("value : " + watervalue)
     //연결이 들어오면 실행되는 이벤트
-    io.emit('weekendwater', plusvalue)
-    io.emit('waterpercent', plusvalue)
+    io.emit('weekendwater', watervalue)
+    io.emit('waterpercent', watervalue)
     io.emit('wateryearpercent', plusvalue)
     io.emit('yearWater', plusvalue)
-    res.render('dkatk', { layout: null, watervalue: watervalue })
+    res.render('dkatk', { layout: null})
 })
 
 
@@ -1715,8 +1713,6 @@ app.get('/wateruseage', function (req, res) {
             percentArray : percentArray, yearWater : yearWater, yearpercentArray : yearpercentArray })
         }).sort({ Year: 1 }).sort({ Month: 1 }).limit(12)
     }).sort({ Year: -1 }).sort({ Month: -1 }).sort({ Day: 1 }).limit(7)
-    console.log("수치 : " + weekendWater)
-    console.log("percent : " + percentArray)
 })
 //const user = new Water({ 'name': "132", 'Date' : valuedata, 'Hour' : "18 : 10" })
 
