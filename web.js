@@ -1608,6 +1608,7 @@ app.get('/testwater_recieve', function (req, res) {
     watervalue = req.query.id
     const todayMonth = moment().format('MM')
     const forMathMonth = todayMonth - 1
+    plusvalue = parseInt(plusvalue) + parseInt(watervalue)
     //plusvalue = parseInt(plusvalue) + (parseInt(watervalue) / 1000)
 
     /*
@@ -1631,12 +1632,12 @@ app.get('/testwater_recieve', function (req, res) {
         yearpercentArray[index] = Math.floor(percent(yearWater[index], maxyearValue))
     }
     */
-   console.log(watervalue)
+   console.log(plusvalue)
     //연결이 들어오면 실행되는 이벤트
-    io.emit('weekendwater', watervalue)
-    io.emit('waterpercent', watervalue)
-    io.emit('wateryearpercent', watervalue)
-    io.emit('yearWater', watervalue)
+    io.emit('weekendwater', plusvalue)
+    io.emit('waterpercent', plusvalue)
+    io.emit('wateryearpercent', plusvalue)
+    io.emit('yearWater', plusvalue)
     res.render('dkatk', { layout: null, watervalue: watervalue })
 })
 
