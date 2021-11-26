@@ -1,633 +1,85 @@
-<!--테일윈드-->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.17/tailwind.min.css">
-<!--폰트어썸-->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-<link rel="stylesheet" href="css/maincss.css">
+const schema = Graphql.buildSchema(`
+type usingwater{
+name : String,
+password : String,
+username : String,
+sex : String
+}
+type Person {
+_id : ID
+name : String
+username : String
+Sex : String
+}
+input inputusingwater {
+name : String,
+password : String,
+username : String,
+sex : String
+}
+type Query {
+getusingwater(name : String, password : String, username : String, sex : String) : usingwater
+people(name : String) : [Person]
+}
 
-<!--요소 시작-->
-<div class="Side-Box hei-43 bg-4F6884 flex items-center px-6">
-  <div class="flex items-center text-white">
-    <div class="img-box Wea-Ther-Icon mr-1">
-      <img src="https://cdn.jsdelivr.net/gh/kimhyeji324/ICT_Resource@master/docs/top-cl.png" alt="">
-    </div>
-    <div class="img-box Map-Pin-White M-R-1">
-      <img src="https://cdn.jsdelivr.net/gh/kimhyeji324/ICT_Resource@master/docs/Map-Pin-Whi.png" alt="">
-    </div>
-    <div class="text-sm text-white font-bold mr-1">
-      <span>{{selectcityname}}</span>
-                  <span>{{selectvillagename}}</span>
-    </div>
-    <div class="flex text-sm text-white font-bold">
-      <span class="h-full flex M-R-1" id="currentT1H"></span>
-      <span class="h-full flex M-R-1">C</span>
-      <span class="h-full flex">
-        <i class="fas fa-genderless"></i>
-      </span>
-    </div>
-  </div>
-  <div class="flex-1"></div>
-  <div class="flex">
-    <div class="flex text-sm text-white font-bold">
-      <div class="flex mr-1">
-        <span id="textday"></span>
-      </div>
-    </div>
-    <div class="text-sm text-white font-bold">
-      <span id="texthours"></span>
-    </div>
-  </div>
-</div>
-<div class="Ele-All-Box w-full">
-  <form method="post" class="Weat-Box flex mb-4">
-    <div class="flex-1 bg-white flex justify-center items-center border-05-787878 border-radius-50">
-      <div class="text-sm">
-        <span class="c-6F8294 font-bold">Weather Up</span>
-        <span class="c-696969">*날씨 업데이트*</span>
-      </div>
-    </div>
-    <div class="wid-10"></div>
-    <div class="bg-white flex flex-1 justify-center items-center border-05-787878 border-radius-50">
-      <select name="name" id="localname" class="bg-white bg-opacity-0 c-6F8294">
-        <option selected hidden>{{localselected}}</option>
-        {{#each contents}}
-        <option name='adw' value="{{this}}">{{this}}</option>
-        {{/each}}
-      </select>
-      <input type='submit' value='add' onclick='this.form.action= "/weatherlista"'
-        class="Btn Flie-Add-Btn flex justify-center items-center text-white text-xs cursor-pointer border-radius-50">
-    </div>
-    <div class="wid-10"></div>
-    <div class="bg-white flex flex-1 justify-center items-center border-05-787878 border-radius-50">
-      <select name="city" class="bg-white bg-opacity-0 c-6F8294">
-        <option selected hidden>{{cityselected}}</option>
-        {{#each cityname}}
-        <option value="{{this}}">{{this}}</option>
-        {{/each}}
-      </select>
-      <input type='submit' value='add' onclick='this.form.action= "/weatherlista"'
-        class="Btn Flie-Add-Btn bg-3AAFE2 flex justify-center items-center text-white text-xs cursor-pointer border-radius-50">
-    </div>
-    <div class="wid-10"></div>
-    <div class="bg-white flex flex-1 justify-center items-center border-05-787878 border-radius-50">
-      <select name="village" class="bg-white bg-opacity-0 c-6F8294">
-        {{#each village}}
-        <option value="{{this}}">{{this}}</option>
-        {{/each}}
-      </select>
-      <input type='submit' value='add' onclick='this.form.action= "/weather"'
-        class="Btn Flie-Add-Btn bg-3AAFE2 flex justify-center items-center text-white text-xs cursor-pointer border-radius-50">
-    </div>
-  </form>
-  <div class="Ele-Box flex mb-4">
-    <!--그래프-->
-    <div class="h-full bg-white flex-1">
-      <div class="h-9 flex">
-        <div class="bg-637484 flex items-center text-white text-sm font-bold px-6">
-          <span>Graph</span>
-        </div>
-        <div class=" bg-6F8294 flex justify-end items-center flex-1">
-          <div class="text-xs c-6F8294 mr-1">
-            <a href="#">
-              <span class="Btn Detail-Move-Btn inline-block py-1 px-4 border-radius-50">DETAIL PAGE</span>
-            </a>
-          </div>
-        </div>
-      </div>
-      <div class="flex justify-center text-sm c-686868 mt-3">
-        <span>
-          월별 사용량
-        </span>
-      </div>
-      <div class="Graph-Box flex items-center">
-        <div class="h_graph w-full">
-          <ul>
-            <!--월-->
-            <li>
-              <span class="g_term">11.01</span>
-              <span class="g_bar" style="width:30%">
-                <span>30%</span>
-              </span>
-            </li>
-            <!--화-->
-            <li>
-              <span class="g_term">11.02</span>
-              <span class="g_bar" style="width:20%">
-                <span>20%</span>
-              </span>
-            </li>
-            <!--수-->
-            <li>
-              <span class="g_term">11.03</span>
-              <span class="g_bar" style="width:30%">
-                <span>30%</span>
-              </span>
-            </li>
-            <!--목-->
-            <li>
-              <span class="g_term">11.04</span>
-              <span class="g_bar" style="width:40%">
-                <span>40%</span>
-              </span>
-            </li>
-            <!--금-->
-            <li>
-              <span class="g_term">11.05</span>
-              <span class="g_bar" style="width:50%">
-                <span>50%</span>
-              </span>
-            </li>
-            <!--토-->
-            <li>
-              <span class="g_term">11.06</span>
-              <span class="g_bar" style="width:60%">
-                <span>60%</span>
-              </span>
-            </li>
-            <!--일-->
-            <li>
-              <span class="g_term">11.07</span>
-              <span class="g_bar" style="width:100%">
-                <span>100%</span>
-              </span>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
-    <div class="w-5"></div>
-    <!--이미지-->
-    <div class="flex-1">
-      <div class="h-9 flex">
-        <div class="bg-637484 flex items-center text-white text-sm font-bold px-6">
-          <span>Image</span>
-        </div>
-        <div class=" bg-6F8294 flex justify-end items-center flex-1">
-          <div class="text-xs c-6F8294 mr-1">
-            <a href="#">
-              <span class="Btn Detail-Move-Btn inline-block py-1 px-4 border-radius-50">DETAIL PAGE</span>
-            </a>
-          </div>
-        </div>
-      </div>
-      <div class="Url-Box img-box Img-Poster bg-white flex justify-center M-B-2">
-        <img src="https://i.postimg.cc/JzRZD81j/Kakao-Talk-20211015-115032591.jpg" alt="" id="showimage">
-      </div>
-      <div class="Sel-Box w-full bg-white flex items-cneter">
-        <div class="Img-Del-Btn-Box w-full flex items-center mx-1">
-          <div class="w-full">
-            <div class="text-xs font-bold">
-              <span>Select</span>
-            </div>
-            <div class="flex items-center ml-5">
-              <div class="text-sm c-8F8F8F">
-                <span class="whitespace-nowrap">추가된 파일 : </span>
-              </div>
-              <form method="post">
-                <div class="Img-Url-Box w-full text-sm c-8F8F8F border-1-C4C4C4">
-                  <select class="w-full h-5 text-xs ml-1 cursor-pointer border" name="name" id="imgfilelist"
-                    onchange="changeimageSelect()">
-                    <option value="" selected disabled>--</option>
-                    {{#each imgfile}}
-                    <option name="videofile" value="{{this.name}}">{{this.name}}</option>
-                    {{/each}}
-                  </select>
-                </div>
-                <div>
-                  <input
-                    class="Btn Flie-Del-Btn bg-3AAFE2 flex justify-center items-center text-white text-xs ml-2 cursor-pointer border-radius-50"
-                    type="submit" value="del" onclick='this.form.action= "/deletevideo"'>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="w-5"></div>
-    <!--영상-->
-    <div class="flex-1">
-      <div class="h-9 flex">
-        <div class="bg-637484 flex items-center text-white text-sm font-bold px-6">
-          <span>Video</span>
-        </div>
-        <div class=" bg-6F8294 flex justify-end items-center flex-1">
-          <div class="text-xs c-6F8294 mr-1">
-            <a href="#">
-              <span class="Btn Detail-Move-Btn inline-block py-1 px-4 border-radius-50">DETAIL PAGE</span>
-            </a>
-          </div>
-        </div>
-      </div>
-      <div class="Url-Box Video-Box bg-white flex justify-center M-R-2">
-        <video width="300px;" src="test.mp4" controls muted autoplay id="showvideo" class="py-2"></video>
-      </div>
-      <div class="Sel-Box w-full bg-white flex items-cneter">
-        <div class="Img-Del-Btn-Box w-full flex items-center mx-1">
-          <div class="w-full">
-            <div class="text-xs font-bold">
-              <span>Select</span>
-            </div>
-            <div class="flex items-center ml-5">
-              <div class="text-sm c-8F8F8F">
-                <span class="whitespace-nowrap">추가된 파일 : </span>
-              </div>
-              <form method="post">
-                <div class="Img-Url-Box w-full text-sm c-8F8F8F border-1-C4C4C4">
-                  <select class="w-full h-5 text-xs ml-1 cursor-pointer border" name="name" id="videofilelist"
-                    onchange="changevideoSelect()">
-                    <option value="" selected disabled>--</option>
-                    {{#each videofile}}
-                    <option name="videofile" value="{{this.name}}">{{this.name}}</option>
-                    {{/each}}
-                  </select>
-                </div>
-                <div>
-                  <input
-                    class="Btn Flie-Del-Btn bg-3AAFE2 flex justify-center items-center text-white text-xs ml-2 cursor-pointer border-radius-50"
-                    type="submit" value="del" onclick='this.form.action= "/deletevideo"'>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="Use-List-Box">
-    <div class="h-9 flex">
-      <div class="bg-637484 flex flex-1 justify-center items-center">
-        <span class="text-sm text-white font-bold">
-          Management
-        </span>
-      </div>
-      <div class="bg-6F8294 flex flex-1 justify-center items-center">
-        <span class="text-sm text-white">
-          사용량&오염량
-        </span>
-      </div>
-      <div class="bg-6F8294 flex flex-1 justify-center items-center">
-        <span class="text-sm text-white">
-          알람
-        </span>
-      </div>
-      <div class="bg-6F8294 flex flex-1 justify-center items-center">
-        <span class="text-sm text-white">
-          교체 여부
-        </span>
-      </div>
-      <div class="bg-6F8294 flex flex-1 justify-center items-center">
-        <span class="text-sm text-white">
-          수치
-        </span>
-      </div>
-      <div class="bg-6F8294 flex flex-1 justify-center items-center">
-        <div class="text-xs c-6F8294 mr-1">
-          <a href="#">
-            <span class="Btn Detail-Move-Btn inline-block py-1 px-4 border-radius-50">DETAIL PAGE</span>
-          </a>
-        </div>
-      </div>
-    </div>
-    <div class="Use-List bg-white">
-      <!--1-->
-      <div class="Use-List-Item-Box flex">
-        <div class="flex flex-1 justify-center items-center">
-          <span class="text-sm c-565656">
-            수전 사용량
-          </span>
-        </div>
-        <div class="flex flex-1 justify-center items-center">
-          <span class="text-sm c-565656">
-            20
-          </span>
-          <span class="text-sm c-565656">
-            L
-          </span>
-        </div>
-        <div class="flex flex-1 justify-center items-center">
-          <div style="display: none;">
-            <span class="c-079E24">
-              Change
-            </span>
-            <span class="text-xs c-079E24 M-B--2">
-              <i class="fas fa-exclamation-triangle"></i>
-            </span>
-          </div>
-        </div>
-        <div class="flex flex-1 justify-center items-center">
-          <div class="poll-btn inline-block">
-            <div class="relative flex">
-              <div class="Use-Move-Btn" style="left: 0;">
-                <span class="h-full flex justify-center items-center">
-                  btn
-                </span>
-              </div>
-              <div class="btn-text-off hei-34 bg-white flex justify-center items-center" style="width: 60px;">
-                <span class="text-xs c-FD7B32">
-                  <i class="fas fa-exclamation-triangle"></i>
-                </span>
-              </div>
-              <div class="btn-text-danger bg-white flex" style="width: 60px;">
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="flex flex-1 justify-center items-center border-radius-50">
-          <div class="Graph-Back-Bar wid-80-p h-2 mx-2 border-radius-50">
-            <div class="Percent-Bar h-full border-radius-50" style="width: 20%;"></div>
-          </div>
-        </div>
-        <div class="flex flex-1 justify-center items-center"></div>
-      </div>
-      <!--2-->
-      <div class="Use-List-Item-Box flex">
-        <div class="flex flex-1 justify-center items-center">
-          <span class="text-sm c-565656">
-            핸드타올 사용량 (1)
-          </span>
-        </div>
-        <div class="flex flex-1 justify-center items-center">
-          <span class="text-sm c-565656">
-            85
-          </span>
-          <span class="text-sm c-565656">
-            %
-          </span>
-        </div>
-        <div class="flex flex-1 justify-center items-center">
-          <div>
-            <span class="c-079E24">
-              Change
-            </span>
-            <span class="text-xs c-079E24 M-B--2 ml-1">
-              <i class="fas fa-exclamation-triangle"></i>
-            </span>
-          </div>
-        </div>
-        <div class="flex flex-1 justify-center items-center">
-          <div class="poll-btn inline-block">
-            <div class="relative flex">
-              <div class="Use-Move-Btn" style="right: 0;">
-                <span class="h-full flex justify-center items-center">
-                  btn
-                </span>
-              </div>
-              <div class="btn-text-off hei-34 bg-white flex justify-center items-center" style="width: 60px;">
-                <span class="text-xs c-FD7B32">
-                  <i class="fas fa-exclamation-triangle"></i>
-                </span>
-              </div>
-              <div class="btn-text-danger bg-white flex" style="width: 60px;">
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="flex flex-1 justify-center items-center border-radius-50">
-          <div class="Graph-Back-Bar wid-80-p h-2 mx-2 border-radius-50">
-            <div class="Percent-Bar h-full border-radius-50" style="width: 85%;"></div>
-          </div>
-        </div>
-        <div class="flex flex-1 justify-center items-center"></div>
-      </div>
-      <!--3-->
-      <div class="Use-List-Item-Box flex">
-        <div class="flex flex-1 justify-center items-center">
-          <span class="text-sm c-565656">
-            핸드타올 사용량 (2)
-          </span>
-        </div>
-        <div class="flex flex-1 justify-center items-center">
-          <span class="text-sm c-565656">
-            30
-          </span>
-          <span class="text-sm c-565656">
-            %
-          </span>
-        </div>
-        <div class="flex flex-1 justify-center items-center">
-          <div style="display:none;">
-            <span class="c-079E24">
-              Change
-            </span>
-            <span class="text-xs c-079E24 M-B--2 ml-1">
-              <i class="fas fa-exclamation-triangle"></i>
-            </span>
-          </div>
-        </div>
-        <div class="flex flex-1 justify-center items-center">
-          <div class="poll-btn inline-block">
-            <div class="relative flex">
-              <div class="Use-Move-Btn" style="left: 0;">
-                <span class="h-full flex justify-center items-center">
-                  btn
-                </span>
-              </div>
-              <div class="btn-text-off hei-34 bg-white flex justify-center items-center" style="width: 60px;">
-                <span class="text-xs c-FD7B32">
-                  <i class="fas fa-exclamation-triangle"></i>
-                </span>
-              </div>
-              <div class="btn-text-danger bg-white flex" style="width: 60px;">
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="flex flex-1 justify-center items-center border-radius-50">
-          <div class="Graph-Back-Bar wid-80-p h-2 mx-2 border-radius-50">
-            <div class="Percent-Bar h-full border-radius-50" style="width: 30%;"></div>
-          </div>
-        </div>
-        <div class="flex flex-1 justify-center items-center"></div>
-      </div>
-      <!--4-->
-      <div class="Use-List-Item-Box flex">
-        <div class="flex flex-1 justify-center items-center">
-          <span class="text-sm c-565656">
-            필터 오염량 (1)
-          </span>
-        </div>
-        <div class="flex flex-1 justify-center items-center">
-          <span class="text-sm c-565656">
-            90
-          </span>
-          <span class="text-sm c-565656">
-            %
-          </span>
-        </div>
-        <div class="flex flex-1 justify-center items-center">
-          <div>
-            <span class="c-079E24">
-              Change
-            </span>
-            <span class="text-xs c-079E24 M-B--2 ml-1">
-              <i class="fas fa-exclamation-triangle"></i>
-            </span>
-          </div>
-        </div>
-        <div class="flex flex-1 justify-center items-center">
-          <div class="poll-btn inline-block">
-            <div class="relative flex">
-              <div class="Use-Move-Btn" style="right: 0;">
-                <span class="h-full flex justify-center items-center">
-                  btn
-                </span>
-              </div>
-              <div class="btn-text-off hei-34 bg-white flex justify-center items-center" style="width: 60px;">
-                <span class="text-xs c-FD7B32">
-                  <i class="fas fa-exclamation-triangle"></i>
-                </span>
-              </div>
-              <div class="btn-text-danger bg-white flex" style="width: 60px;">
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="flex flex-1 justify-center items-center border-radius-50">
-          <div class="Graph-Back-Bar wid-80-p h-2 mx-2 border-radius-50">
-            <div class="Percent-Bar h-full border-radius-50" style="width: 90%;"></div>
-          </div>
-        </div>
-        <div class="flex flex-1 justify-center items-center"></div>
-      </div>
-      <!--5-->
-      <div class="Use-List-Item-Box flex">
-        <div class="flex flex-1 justify-center items-center">
-          <span class="text-sm c-565656">
-            필터 오염량 (2)
-          </span>
-        </div>
-        <div class="flex flex-1 justify-center items-center">
-          <span class="text-sm c-565656">
-            95
-          </span>
-          <span class="text-sm c-565656">
-            %
-          </span>
-        </div>
-        <div class="flex flex-1 justify-center items-center">
-          <div>
-            <span class="c-079E24">
-              Change
-            </span>
-            <span class="text-xs c-079E24 M-B--2 ml-1">
-              <i class="fas fa-exclamation-triangle"></i>
-            </span>
-          </div>
-        </div>
-        <div class="flex flex-1 justify-center items-center">
-          <div class="poll-btn inline-block">
-            <div class="relative flex">
-              <div class="Use-Move-Btn" style="right: 0;">
-                <span class="h-full flex justify-center items-center">
-                  btn
-                </span>
-              </div>
-              <div class="btn-text-off hei-34 bg-white flex justify-center items-center" style="width: 60px;">
-                <span class="text-xs c-FD7B32">
-                  <i class="fas fa-exclamation-triangle"></i>
-                </span>
-              </div>
-              <div class="btn-text-danger bg-white flex" style="width: 60px;">
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="flex flex-1 justify-center items-center border-radius-50">
-          <div class="Graph-Back-Bar wid-80-p h-2 mx-2 border-radius-50">
-            <div class="Percent-Bar h-full border-radius-50" style="width: 95%;"></div>
-          </div>
-        </div>
-        <div class="flex flex-1 justify-center items-center"></div>
-      </div>
-    </div>
-  </div>
-</div>
+type Mutation {
+addusingwater(name : String, password : String, username : String, Sex : String) : usingwater
+createuser(input : inputusingwater) : usingwater
+}
 
 
-<script src="/socket.io/socket.io.js"></script>
-<script>
-  function changevideoSelect() {
-    let selectedvideo = document.getElementById("videofilelist");
-    let showvideo = document.getElementById("showvideo");
-    let selectvideotext = selectedvideo.options[selectedvideo.selectedIndex].text;
-    showvideo.src = "../smartmirror/image/" + selectvideotext
+`)
+
+
+
+
+
+const root = {
+  //홈페이지에서 값을 입력하면 이곳에서 데이터 저장
+  //http://localhost:8080/graphql?query={getusingwater(name:"이곳에 입력", username:"이곳에 입력", password:"이곳에 입력", sex : "이곳에 입력"){name}}
+  async getusingwater(input) {
+      const token = jwt.sign({
+          name: input.name
+      }, "secretKey", {
+          expiresIn: '1m',
+          issuer: 'tokenuser',
+      })
+      console.log(token)
+      return input
+  },
+
+  async people(input) {
+      let dataArray = new Array()
+      const people = await Client.find(function (err, data) {
+          for (let index = 0; index < data.length; index++) {
+              if (data[index].name == input.name) {
+                  dataArray.push(data[index])
+              }
+          }
+      });
+      return dataArray;
+  },
+  //graphql 페이지에서 값을 입력하면 페이지 저장
+  addusingwater: (input) => {
+      console.log(input)
+      const saveusingwater = new Client({ 'name': input.name, 'password': input.password, 'username': input.username, 'Sex': input.sex })
+      saveusingwater.save(function (err, slience) {
+          if (err) {
+              console.log(err)
+              res.send('update error,adawaaaa')
+              return
+          }
+      })
+      return response.redirect('main')
+  },
+  async createwater({ input }) {
+      console.log(arraywater)
+      return arraywater.push(input.name)
   }
+}
 
-  function changeimageSelect() {
-    let selectedimage = document.getElementById("imgfilelist");
-    let showimage = document.getElementById("showimage");
-    let selectimage = selectedimage.options[selectedimage.selectedIndex].text;
-    showimage.src = "../smartmirror/image/" + selectimage;
-  }
-
-
-
-  let txtday = document.getElementById('textday');
-  let txthours = document.getElementById('texthours');
-  function clock() {
-    let today = new Date();
-    let month = today.getMonth() + 1;
-    let date = today.getDate();
-    let day = today.getDay();
-    let charday = "";
-    switch (day) {
-      case 0: charday = "일요일";
-        break;
-      case 1: charday = "월요일";
-        break;
-      case 2: charday = "화요일";
-        break;
-      case 3: charday = "수요일";
-        break;
-      case 4: charday = "목요일";
-        break;
-      case 5: charday = "금요일";
-        break;
-      case 6: charday = "토요일";
-        break;
-    }
-    let hours = today.getHours();
-    let minutes = today.getMinutes();
-    let daytext = month + "월 " + date + "일 " + charday;
-
-    txtday.innerText = daytext;
-  }
-  function clockminute() {
-    let today = new Date();
-    let hours = today.getHours();
-    let minutes = today.getMinutes();
-    let daytext = hours + " : " + minutes;
-
-    txthours.innerText = daytext;
-  }
-  setInterval(clock, 1000);
-  setInterval(clockminute, 1000);
-
-  //실시간 값 받기
-
-  var socket = io();
-  socket.on('messageled', (msg) => {
-    var handdryercheck = document.getElementById("handdryercheck");
-    if (msg == "checked") {
-      handdryercheck.style.right = "1px";
-    }
-    else {
-      handdryercheck.style.right = "";
-    }
-  });
-
-  socket.on('messageh1', (msg) => {
-    var txt = document.getElementById('changeh1');
-    txt.style.width = msg + "%"
-  });
-
-  socket.on('currentimage', (msg) => {
-    var txt = document.getElementById('currentimage');
-    txt.src = msg
-  });
-  socket.on('currentT1H', (msg) => {
-    var txt = document.getElementById('currentT1H');
-    txt.innerText = msg
-  });
-
-</script>
+app.use('/graphql', GraphqlHttp({
+  schema: schema,
+  rootValue: root,
+  graphiql: true,
+}))

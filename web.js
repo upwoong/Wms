@@ -111,7 +111,39 @@ const monthuseage = new mongoose.Schema({
 const smartmirrorexe = new mongoose.Schema({
     name: String
 })
+const membership = new mongoose.Schema({
+    id: String,
+    loginmember: String,
+    password: String,
+    username: String,
+    sex: String,
+    nfcnumber: String,
+    date: String
+});
+const supportDB = new mongoose.Schema({
+    id: String,
+    title: String,
+    mainSentense: String,
+    user: String,
+    date: Date
+});
+const noticeDB = new mongoose.Schema({
+    id: String,
+    title: String,
+    image: String,
+    mainSentense: String,
+    user: String,
+    date: Date
+});
+const commentDB = new mongoose.Schema({
+    id: String,
+    title: String,
+    image: String,
+    from: String,
+    message: String,
+    date: Date
 
+});
 const User = mongoose.model('users', adminuser)
 const Water = mongoose.model('water', usingwater)
 const Client = mongoose.model('client', clients)
@@ -123,6 +155,10 @@ const Smartmirrorimagefile = mongoose.model('smartmirrorimagefile', smartmirrori
 const Smartmirrorvideofile = mongoose.model('smartmirrorvideofile', smartmirrorvideofile)
 const MonthUseage = mongoose.model('monthuseage', monthuseage)
 const SmartmirrorExe = mongoose.model('smartmirrorexe', smartmirrorexe)
+const CommentDB = mongoose.model('commentDB',commentDB)
+const Membership = mongoose.model('membership',membership)
+const SupportDB = mongoose.model('supportDB',supportDB)
+const NoticeDB = mongoose.model('noticeDB',noticeDB)
 
 
 var videoProjection = {
@@ -139,95 +175,235 @@ app.use('/smartmirror', static(path.join(__dirname, 'smartmirror')));
 
 let arraywater = []
 const endpoint = 'http://localhost:8080/graphql/waterinput'
-const schema = Graphql.buildSchema(`
-type usingwater{
-name : String,
-password : String,
-username : String,
-sex : String
+var schema = buildSchema(`
+
+scalar DateTime
+
+type MemberList {
+  id: ID!,
+  loginmember: String!,
+  password: String!,
+  username: String!,
+  sex: String!,
+  nfcnumber: String!,
+  date: DateTime!
 }
-type Person {
-_id : ID
-name : String
-username : String
-Sex : String
+
+input MemberJoin {
+  loginmember: String!,
+  password: String!,
+  username: String!,
+  sex: String!,
+  nfcnumber: String!
 }
-input inputusingwater {
-name : String,
-password : String,
-username : String,
-sex : String
+
+
+type WashiSupport {
+  id: ID!,
+  title: String!,
+  mainSentense: String!,
+  user: [MemberList]!,
+  date: DateTime!
 }
+
+input WashiSupportRequest {
+  title: String!,
+  mainSentense: String!,
+  user: [MemberList]!,
+  date: DateTime!
+}
+
+type WashiNotice {
+  id: ID!,
+  title: String,
+  image: String,
+  mainSentense: String,
+  user: [MemberList]!,
+  date: DateTime!
+}
+
+input WashiNoticeInput {
+  title: String,
+  image: String,
+  mainSentense: String,
+  user: [MemberList]!,
+  date: DateTime!
+}
+
+type WashiComment {
+  id: ID!,
+  title: String,
+  from: [MemberList]!,
+  message: String,
+  date: DateTime!
+}
+
+input WashiCommentInput {
+  title: String,
+  from: [MemberList]!,
+  message: String,
+  date: DateTime!
+}
+
 type Query {
-getusingwater(name : String, password : String, username : String, sex : String) : usingwater
-people(name : String) : [Person]
-}
+    getMember(id: ID!) : MemberList,
+    getSupport(id: ID!) : WashiSupport,
+    getNotice(id: ID!) : WashiNotice,
+    getComment(id: ID!) : WashiComment
+  }
 
-type Mutation {
-addusingwater(name : String, password : String, username : String, Sex : String) : usingwater
-createuser(input : inputusingwater) : usingwater
-}
+  type Mutation {
+    updateMember(id: ID!, input: MemberJoin) : MemberList,
+    createMember(input: MemberJoin) : MemberList,
+    deleteMember(id: ID!) : String,
+    updateSupport(id: ID!, input: WashiSupportRequest) : WashiSupport,
+    createSupport(input: WashiSupportRequest) : WashiSupport,
+    deleteSupport(id: ID!) : String,
+    updateNotice(id: ID!, input: WashiNoticeInput) : WashiNotice,
+    createNotice(input: WashiNoticeInput) : WashiNotice,
+    deleteNotice(id: ID!) : String,
+    updateComment(id: ID!, input: WashiCommentInput) : WashiComment,
+    createComment(input: WashiCommentInput) : WashiComment,
+    deleteComment(id: ID!) : String
+  }
+`);
 
+//Custom Schema setup line
+Object.assign(schema._typeMap.DateTime, {
+    name: "DateTime",
+    description: "DateTime type definition line",
+    serialize: (value) => {
+        const dateTime = new Date(value);
+        if (dateTime.toString() === "invalid Date") {
+            return null;
+        }
+        return dateTime;
+    }
+}); //DateTime setup
 
-`)
-/*
-let selectdata
-User.find(function(err,data){
-let currentdata = {data}
-selectdata = currentdata.data[0].name
-console.log(currentdata.data[0].name)
-})
-return await selectdata
-*/
-const root = {
-    //홈페이지에서 값을 입력하면 이곳에서 데이터 저장
-    //http://localhost:8080/graphql?query={getusingwater(name:"이곳에 입력", username:"이곳에 입력", password:"이곳에 입력", sex : "이곳에 입력"){name}}
-    async getusingwater(input) {
-        const token = jwt.sign({
-            name: input.name
-        }, "secretKey", {
-            expiresIn: '1m',
-            issuer: 'tokenuser',
-        })
-        console.log(token)
-        return input
+// Main Resolver
+var root = {
+    //Member
+    createMember: ({ input }) => {
+        const id = require('crypto').randomBytes(4).toString('hex');
+        membership[id] = new Member(id, input);
+        return membership[id];
     },
+    getMember: ({ id }) => {
+        console.log(membership);
+        return membership[id];
+    },
+    updateMember: ({ id, input }) => {
+        membership[id] = new Member(id, input);
+        return membership[id];
+    },
+    deleteMember: ({ id }) => {
+        delete membership[id];
+        return "delete";
+    },
+    //Support
+    createSupport: ({ input }) => {
+        const id = require('crypto').randomBytes(10).toString('hex');
+        SupportDB[id] = new Support(id, input);
 
-    async people(input) {
-        let dataArray = new Array()
-        const people = await Client.find(function (err, data) {
-            for (let index = 0; index < data.length; index++) {
-                if (data[index].name == input.name) {
-                    dataArray.push(data[index])
-                }
-            }
-        });
-        return dataArray;
+        return SupportDB[id];
     },
-    //graphql 페이지에서 값을 입력하면 페이지 저장
-    addusingwater: (input) => {
-        console.log(input)
-        const saveusingwater = new Client({ 'name': input.name, 'password': input.password, 'username': input.username, 'Sex': input.sex })
-        saveusingwater.save(function (err, slience) {
-            if (err) {
-                console.log(err)
-                res.send('update error,adawaaaa')
-                return
-            }
-        })
-        return response.redirect('main')
+    getSupport: ({ id }) => {
+        console.log(supportDB);
+        return supportDB[id];
     },
-    async createwater({ input }) {
-        console.log(arraywater)
-        return arraywater.push(input.name)
+    updateSupport: ({ id, input }) => {
+        supportDB[id] = new Support(id, input);
+        return supportDB[id];
+    },
+    deleteSupport: ({ id }) => {
+        delete supportDB[id];
+        return "delete";
+    },
+    //Notice
+    createNotice: ({ input }) => {
+        const id = require('crypto').randomBytes(10).toString('hex');
+        noticeDB[id] = new Notice(id, input);
+        return noticeDB[id];
+    },
+    getNotice: ({ id }) => {
+        console.log(noticeDB);
+        return noticeDB[id];
+    },
+    updateNotice: ({ id, input }) => {
+        noticeDB[id] = new Notice(id, input);
+        return noticeDB[id];
+    },
+    deleteNotice: ({ id }) => {
+        delete noticeDB[id];
+        return "delete";
+    },
+    //Comment
+    createComment: ({ input }) => {
+        const id = require('crypto').randomBytes(10).toString('hex');
+        commentDB[id] = new Comment(id, input);
+        return commentDB[id];
+    },
+    getComment: ({ id }) => {
+        console.log(commentDB);
+        return commentDB[id];
+    },
+    updateComment: ({ id, input }) => {
+        commentDB[id] = new Comment(id, input);
+        return commentDB[id];
+    },
+    deleteComment: ({ id }) => {
+        delete commentDB[id];
+        return "delete";
+    }
+};
+
+//data constructor
+class Member {
+    constructor(id, { loginmember, password, username, sex, nfcnumber, date }) {
+        this.id = id;
+        this.loginmember = loginmember;
+        this.password = password;
+        this.username = username;
+        this.sex = sex;
+        this.nfcnumber = nfcnumber;
+        this.date = date;
     }
 }
 
-app.use('/graphql', GraphqlHttp({
-    schema: schema,
-    rootValue: root,
-    graphiql: true,
-}))
+class Support {
+    constructor(id, { title, mainSentense, user, date }) {
+        this.id = id;
+        this.title = title;
+        this.mainSentense = mainSentense;
+        this.user = user;
+        this.date = date;
+    }
+}
+
+class Notice {
+    constructor(id, { title, image, mainSentense, user, date }) {
+        this.id = id;
+        this.title = title;
+        this.image = image;
+        this.mainSentense = mainSentense;
+        this.user = user;
+        this.date = date;
+    }
+}
+
+class Comment {
+    constructor(id, { title, from, message, date }) {
+        this.id = id;
+        this.title = title;
+        this.from = from;
+        this.message = message;
+        this.date = date;
+    }
+}
+
+
+
 
 // 라우터 사용하여 라우팅 함수 등록
 var router = express.Router()
@@ -824,7 +1000,7 @@ app.get('/dkatk', function (req, res) {
         //weekendWater.push(percent(data[index].Useage, maxValue))
         yearpercentArray[index] = Math.floor(percent(yearWater[index], maxyearValue))
     }
-        res.render('dkatk', { layout: null, percentArray : percentArray, yearWater : yearWater, yearpercentArray : yearpercentArray, weekendWater : weekendWater})
+    res.render('dkatk', { layout: null, percentArray: percentArray, yearWater: yearWater, yearpercentArray: yearpercentArray, weekendWater: weekendWater })
 
 })
 //fs.unlink(`smartmirror/image/${name}`, function () { })
@@ -1609,7 +1785,7 @@ app.get('/testwater_recieve', function (req, res) {
     const todayMonth = moment().format('MM')
     const forMathMonth = todayMonth - 1
     //plusvalue = parseInt(plusvalue) + (parseInt(watervalue) / 1000)
-    
+
     weekendWater[0] = parseInt(weekendWater[0]) + parseInt(watervalue)
     if (weekendWater[0] > maxValue) {
         maxValue = weekendWater[0]
@@ -1635,7 +1811,7 @@ app.get('/testwater_recieve', function (req, res) {
     io.emit('weekendwater', weekendWater[0])
     io.emit('waterpercent', percentArray)
     io.emit('wateryearpercent', yearpercentArray)
-    io.emit('yearWater', yearWater[11])
+    io.emit('yearWater', yearWater[10])
     res.render('dkatk', { layout: null, watervalue: watervalue })
 })
 
@@ -1708,8 +1884,10 @@ app.get('/wateruseage', function (req, res) {
             }
 
 
-            res.render('wateruseage', { data: data, yeardata: yeardata, selectcityname: selectcityname, selectvillagename: selectvillagename, weekendWater : weekendWater,
-            percentArray : percentArray, yearWater : yearWater, yearpercentArray : yearpercentArray })
+            res.render('wateruseage', {
+                data: data, yeardata: yeardata, selectcityname: selectcityname, selectvillagename: selectvillagename, weekendWater: weekendWater,
+                percentArray: percentArray, yearWater: yearWater, yearpercentArray: yearpercentArray
+            })
         }).sort({ Year: 1 }).sort({ Month: 1 }).limit(12)
     }).sort({ Year: -1 }).sort({ Month: -1 }).sort({ Day: 1 }).limit(7)
     console.log("수치 : " + weekendWater)
