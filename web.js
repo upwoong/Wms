@@ -2030,18 +2030,6 @@ socket.on('sensor', (msg) => {
     io.emit('sensor', msg);
 });
 
-socket.on('ajswl', (msg) => {
-    //msg에는 클라이언트에서 전송한 매개변수가 들어온다. 이러한 매개변수의 수에는 제한이 없다.
-
-    // io.emit으로 연결된 모든 소켓들에 신호를 보낼 수 있다.
-    io.emit('ajswl', msg);
-});
-socket.on('currentimage', (msg) => {
-    //msg에는 클라이언트에서 전송한 매개변수가 들어온다. 이러한 매개변수의 수에는 제한이 없다.
-
-    // io.emit으로 연결된 모든 소켓들에 신호를 보낼 수 있다.
-    io.emit('currentimage', msg);
-});
 
 });
 
@@ -2059,5 +2047,3 @@ res.type('text/plain')
 res.status(500)
 res.send('500 - Server Error')
 })
-
-//adww
