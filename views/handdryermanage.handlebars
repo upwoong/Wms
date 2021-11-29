@@ -1,406 +1,745 @@
-<!--테일윈드 불러오기-->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.16/tailwind.min.css">
-<!--폰트어썸 불러오기-->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css">
+<!--테일윈드-->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.17/tailwind.min.css">
+<!--폰트어썸-->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 <link rel="stylesheet" href="css/handdryermanage.css">
-<div class="all-box h-full overflow-hidden">
-  <div class="hei-50"></div>
 
-  <div class="flex justify-center items-center">
-    <div class="wid-40-p h-40 bg-white flex justify-center items-center overflow-hidden">
-      <div class="h-full w-2 bg-158AE7"></div>
-      <div class="flex-1"></div>
-      <div class="img-box title-graph-icon">
-        <img src="https://cdn.jsdelivr.net/gh/kimhyeji324/ICT_Resource@master/docs/title-graph-.png" alt>
+<!--요소 시작-->
+<div class="Side-Box hei-51 bg-4F6884 flex items-center px-6">
+  <div class="flex items-center text-white">
+    <div class="img-box Wea-Ther-Icon mr-1">
+      <img src="https://cdn.jsdelivr.net/gh/kimhyeji324/ICT_Resource@master/docs/top-cl.png" alt="">
+    </div>
+    <div class="img-box Map-Pin-White M-R-1">
+      <img src="https://cdn.jsdelivr.net/gh/kimhyeji324/ICT_Resource@master/docs/Map-Pin-Whi.png" alt="" id="currentimage">
+    </div>
+    <div class="text-sm text-white font-bold mr-1">
+      <span>{{selectcityname}}</span>
+      <span>{{selectvillagename}}</span>
+    </div>
+    <div class="flex text-sm text-white font-bold">
+      <span class="h-full flex M-R-1" id="currentT1H">17</span>
+      <span class="h-full flex M-R-1">C</span>
+      <span class="h-full flex">
+        <i class="fas fa-genderless"></i>
+      </span>
+    </div>
+  </div>
+  <div class="flex-1"></div>
+  <div>
+    <div class="flex items-center">
+      <span class="text-base text-white mr-1">
+        <i class="fas fa-users"></i>
+      </span>
+      <span class="text-sm text-white font-bold">13</span>
+      <span class="text-sm text-white font-bold">명</span>
+    </div>
+  </div>
+  <div class="flex-1"></div>
+  <div class="flex">
+        <div class="flex text-sm text-white font-bold">
+          <div class="flex mr-1">
+            <span id="textday"></span>
+          </div>
+        </div>
+        <div class="text-sm text-white font-bold">
+          <span id="texthours"></span>
+        </div>
       </div>
-      <div class="font-32 font-bold c-198EEB">
-        <span>
-          Management Page
+</div>
+
+<div class="Ele-All-Box w-full">
+  <!--1-->
+  <div class="HandDrier-All-Box">
+    <!---->
+    <div class="Management-Text-Box bg-white flex">
+      <div class="flex flex-1 justify-center items-center">
+        <span class="font-bold">
+          Management
         </span>
       </div>
-      <div class="flex-1"></div>
+      <div class="flex flex-1 justify-center items-center">
+        <span>
+          사용량&오염량
+        </span>
+      </div>
+      <div class="flex flex-1 justify-center items-center">
+        <span>
+          %
+        </span>
+      </div>
+      <div class="flex flex-1 justify-center items-center">
+        <span>
+          알람
+        </span>
+      </div>
+      <div class="flex flex-1 justify-center items-center">
+        <span>
+          교체 여부
+        </span>
+      </div>
+      <div class="flex flex-1 justify-center items-center">
+        <span>
+          수치
+        </span>
+      </div>
+    </div>
+    <!---->
+    <div class="Management-List-Box">
+      <!--L1-->
+      <div class="Use-List-Item-Box flex">
+        <div class="BathRoom-Text flex flex-1 justify-center items-center">
+          <i class="fas fa-restroom c-4F6884"></i>
+          <span class="ml-1">화장실(1)</span>
+        </div>
+        <div class="flex flex-1 justify-center items-center">
+          <span class="Management__Use-Text c-565656">
+            핸드드라이어 사용량
+          </span>
+        </div>
+        <div class="Management__Use-Text flex flex-1 justify-center items-center">
+          <span class="c-565656">
+            20
+          </span>
+          <span class="c-565656">
+            %
+          </span>
+        </div>
+        <div class="flex flex-1 justify-center items-center">
+          <div style="display: none;">
+            <span class="Change-Text c-079E24">
+              Change
+            </span>
+            <span class="c-079E24 M-B--2">
+              <i class="fas fa-exclamation-triangle"></i>
+            </span>
+          </div>
+        </div>
+        <div class="flex flex-1 justify-center items-center">
+          <div class="poll-btn inline-block">
+            <div class="relative flex">
+              <!--움직이는 버튼-->
+              <div class="Use-Move-Btn" style="left: 0;">
+                <span class="h-full flex justify-center items-center">
+                  btn
+                </span>
+              </div>
+              <div class="btn-text-off hei-34 bg-white flex justify-center items-center">
+                <span class="text-xs c-FD7B32">
+                  <i class="fas fa-exclamation-triangle"></i>
+                </span>
+              </div>
+              <div class="btn-text-danger bg-white flex">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="flex flex-1 justify-center items-center border-radius-50">
+          <div class="Graph-Back-Bar wid-80-p mx-2 border-radius-50">
+            <div class="Percent-Bar h-full border-radius-50" style="width: 20%;"></div>
+          </div>
+        </div>
+      </div>
+      <!--L2-->
+      <div class="Use-List-Item-Box flex">
+        <div class="BathRoom-Text flex flex-1 justify-center items-center">
+          <i class="fas fa-restroom c-4F6884"></i>
+          <span class="ml-1">화장실(2)</span>
+        </div>
+        <div class="flex flex-1 justify-center items-center">
+          <span class="Management__Use-Text c-565656">
+            핸드드라이어 사용량
+          </span>
+        </div>
+        <div class="Management__Use-Text flex flex-1 justify-center items-center">
+          <span class="c-565656">
+            20
+          </span>
+          <span class="c-565656">
+            %
+          </span>
+        </div>
+        <div class="flex flex-1 justify-center items-center">
+          <div style="display: none;">
+            <span class="Change-Text c-079E24">
+              Change
+            </span>
+            <span class="c-079E24 M-B--2">
+              <i class="fas fa-exclamation-triangle"></i>
+            </span>
+          </div>
+        </div>
+        <div class="flex flex-1 justify-center items-center">
+          <div class="poll-btn inline-block">
+            <div class="relative flex">
+              <!--움직이는 버튼-->
+              <div class="Use-Move-Btn" style="left: 0;">
+                <span class="h-full flex justify-center items-center">
+                  btn
+                </span>
+              </div>
+              <div class="btn-text-off hei-34 bg-white flex justify-center items-center">
+                <span class="text-xs c-FD7B32">
+                  <i class="fas fa-exclamation-triangle"></i>
+                </span>
+              </div>
+              <div class="btn-text-danger bg-white flex">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="flex flex-1 justify-center items-center border-radius-50">
+          <div class="Graph-Back-Bar wid-80-p mx-2 border-radius-50">
+            <div class="Percent-Bar h-full border-radius-50" style="width: 20%;"></div>
+          </div>
+        </div>
+      </div>
+      <!--L3-->
+      <div class="Use-List-Item-Box flex">
+        <div class="BathRoom-Text flex flex-1 justify-center items-center">
+          <i class="fas fa-restroom c-4F6884"></i>
+          <span class="ml-1">화장실(3)</span>
+        </div>
+        <div class="flex flex-1 justify-center items-center">
+          <span class="Management__Use-Text c-565656">
+            핸드드라이어 사용량
+          </span>
+        </div>
+        <div class="Management__Use-Text flex flex-1 justify-center items-center">
+          <span class="c-565656">
+            100
+          </span>
+          <span class="c-565656">
+            %
+          </span>
+        </div>
+        <div class="flex flex-1 justify-center items-center">
+          <div style="display: block;">
+            <span class="Change-Text c-079E24">
+              Change
+            </span>
+            <span class="c-079E24 M-B--2">
+              <i class="fas fa-exclamation-triangle"></i>
+            </span>
+          </div>
+        </div>
+        <div class="flex flex-1 justify-center items-center">
+          <div class="poll-btn inline-block">
+            <div class="relative flex">
+              <!--움직이는 버튼-->
+              <div class="Use-Move-Btn" style="right: 0;">
+                <span class="h-full flex justify-center items-center">
+                  btn
+                </span>
+              </div>
+              <div class="btn-text-off hei-34 bg-white flex justify-center items-center">
+                <span class="text-xs c-FD7B32">
+                  <i class="fas fa-exclamation-triangle"></i>
+                </span>
+              </div>
+              <div class="btn-text-danger bg-white flex">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="flex flex-1 justify-center items-center border-radius-50">
+          <div class="Graph-Back-Bar wid-80-p mx-2 border-radius-50">
+            <div class="Percent-Bar h-full border-radius-50" style="width: 100%;"></div>
+          </div>
+        </div>
+      </div>
+      <!--L4-->
+      <div class="Use-List-Item-Box flex">
+        <div class="BathRoom-Text flex flex-1 justify-center items-center">
+          <i class="fas fa-restroom c-4F6884"></i>
+          <span class="ml-1">화장실(4)</span>
+        </div>
+        <div class="flex flex-1 justify-center items-center">
+          <span class="Management__Use-Text c-565656">
+            핸드드라이어 사용량
+          </span>
+        </div>
+        <div class="Management__Use-Text flex flex-1 justify-center items-center">
+          <span class="c-565656">
+            85
+          </span>
+          <span class="c-565656">
+            %
+          </span>
+        </div>
+        <div class="flex flex-1 justify-center items-center">
+          <div style="display: block;">
+            <span class="Change-Text c-079E24">
+              Change
+            </span>
+            <span class="c-079E24 M-B--2">
+              <i class="fas fa-exclamation-triangle"></i>
+            </span>
+          </div>
+        </div>
+        <div class="flex flex-1 justify-center items-center">
+          <div class="poll-btn inline-block">
+            <div class="relative flex">
+              <!--움직이는 버튼-->
+              <div class="Use-Move-Btn" style="right: 0;">
+                <span class="h-full flex justify-center items-center">
+                  btn
+                </span>
+              </div>
+              <div class="btn-text-off hei-34 bg-white flex justify-center items-center">
+                <span class="text-xs c-FD7B32">
+                  <i class="fas fa-exclamation-triangle"></i>
+                </span>
+              </div>
+              <div class="btn-text-danger bg-white flex">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="flex flex-1 justify-center items-center border-radius-50">
+          <div class="Graph-Back-Bar wid-80-p mx-2 border-radius-50">
+            <div class="Percent-Bar h-full border-radius-50" style="width: 85%;"></div>
+          </div>
+        </div>
+      </div>
+      <!--L5-->
+      <div class="Use-List-Item-Box flex">
+        <div class="BathRoom-Text flex flex-1 justify-center items-center">
+          <i class="fas fa-restroom c-4F6884"></i>
+          <span class="ml-1">화장실(5)</span>
+        </div>
+        <div class="flex flex-1 justify-center items-center">
+          <span class="Management__Use-Text c-565656">
+            핸드드라이어 사용량
+          </span>
+        </div>
+        <div class="Management__Use-Text flex flex-1 justify-center items-center">
+          <span class="c-565656">
+            20
+          </span>
+          <span class="c-565656">
+            %
+          </span>
+        </div>
+        <div class="flex flex-1 justify-center items-center">
+          <div style="display: none;">
+            <span class="Change-Text c-079E24">
+              Change
+            </span>
+            <span class="c-079E24 M-B--2">
+              <i class="fas fa-exclamation-triangle"></i>
+            </span>
+          </div>
+        </div>
+        <div class="flex flex-1 justify-center items-center">
+          <div class="poll-btn inline-block">
+            <div class="relative flex">
+              <!--움직이는 버튼-->
+              <div class="Use-Move-Btn" style="left: 0;">
+                <span class="h-full flex justify-center items-center">
+                  btn
+                </span>
+              </div>
+              <div class="btn-text-off hei-34 bg-white flex justify-center items-center">
+                <span class="text-xs c-FD7B32">
+                  <i class="fas fa-exclamation-triangle"></i>
+                </span>
+              </div>
+              <div class="btn-text-danger bg-white flex">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="flex flex-1 justify-center items-center border-radius-50">
+          <div class="Graph-Back-Bar wid-80-p mx-2 border-radius-50">
+            <div class="Percent-Bar h-full border-radius-50" style="width: 20%;"></div>
+          </div>
+        </div>
+      </div>
+      <!--L6-->
+      <div class="Use-List-Item-Box flex">
+        <div class="BathRoom-Text flex flex-1 justify-center items-center">
+          <i class="fas fa-restroom c-4F6884"></i>
+          <span class="ml-1">화장실(6)</span>
+        </div>
+        <div class="flex flex-1 justify-center items-center">
+          <span class="Management__Use-Text c-565656">
+            핸드드라이어 사용량
+          </span>
+        </div>
+        <div class="Management__Use-Text flex flex-1 justify-center items-center">
+          <span class="c-565656">
+            80
+          </span>
+          <span class="c-565656">
+            %
+          </span>
+        </div>
+        <div class="flex flex-1 justify-center items-center">
+          <div style="display: block;">
+            <span class="Change-Text c-079E24">
+              Change
+            </span>
+            <span class="c-079E24 M-B--2">
+              <i class="fas fa-exclamation-triangle"></i>
+            </span>
+          </div>
+        </div>
+        <div class="flex flex-1 justify-center items-center">
+          <div class="poll-btn inline-block">
+            <div class="relative flex">
+              <!--움직이는 버튼-->
+              <div class="Use-Move-Btn" style="right: 0;">
+                <span class="h-full flex justify-center items-center">
+                  btn
+                </span>
+              </div>
+              <div class="btn-text-off hei-34 bg-white flex justify-center items-center">
+                <span class="text-xs c-FD7B32">
+                  <i class="fas fa-exclamation-triangle"></i>
+                </span>
+              </div>
+              <div class="btn-text-danger bg-white flex">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="flex flex-1 justify-center items-center border-radius-50">
+          <div class="Graph-Back-Bar wid-80-p mx-2 border-radius-50">
+            <div class="Percent-Bar h-full border-radius-50" style="width: 80%;"></div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
+  <div class="Center-Line">
 
-  <div class="tt-btn-m-box"></div>
-  <!--오염량-->
-  <div>
-    <div class="text-base font-bold c-7D8FA0">
-      <span>
-        공기필터 오염량
-      </span>
+  </div>
+  <!--2-->
+  <div class="Poll-All-Box">
+    <!--L1-->
+    <div class="Use-List-Item-Box flex">
+      <div class="BathRoom-Text flex flex-1 justify-center items-center">
+        <i class="fas fa-restroom c-4F6884"></i>
+        <span class="ml-1">화장실(1)</span>
+      </div>
+      <div class="flex flex-1 justify-center items-center">
+        <span class="Management__Use-Text c-565656">
+          공기필터 오염량
+        </span>
+      </div>
+      <div class="Management__Use-Text flex flex-1 justify-center items-center">
+        <span class="c-565656">
+          20
+        </span>
+        <span class="c-565656">
+          %
+        </span>
+      </div>
+      <div class="flex flex-1 justify-center items-center">
+        <div style="display: none;">
+          <span class="Change-Text c-079E24">
+            Change
+          </span>
+          <span class="c-079E24 M-B--2">
+            <i class="fas fa-exclamation-triangle"></i>
+          </span>
+        </div>
+      </div>
+      <div class="flex flex-1 justify-center items-center">
+        <div class="poll-btn inline-block">
+          <div class="relative flex">
+            <!--움직이는 버튼-->
+            <div class="Use-Move-Btn" style="left: 0;">
+              <span class="h-full flex justify-center items-center">
+                btn
+              </span>
+            </div>
+            <div class="btn-text-off hei-34 bg-white flex justify-center items-center">
+              <span class="text-xs c-FD7B32">
+                <i class="fas fa-exclamation-triangle"></i>
+              </span>
+            </div>
+            <div class="btn-text-danger bg-white flex">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="flex flex-1 justify-center items-center border-radius-50">
+        <div class="Graph-Back-Bar wid-80-p mx-2 border-radius-50">
+          <div class="Percent-Bar h-full border-radius-50" style="width: 20%;"></div>
+        </div>
+      </div>
     </div>
-    <!--1-->
-    <div class="flex items-center items-center">
-      <div class="flex flex-1 items-center justify-start">
-        <div class="bg-1A8FEC hei-188 text-white mr-1 flex items-center">
-          <span class="padding-x-14">1</span>
+    <!--L2-->
+    <div class="Use-List-Item-Box flex">
+      <div class="BathRoom-Text flex flex-1 justify-center items-center">
+        <i class="fas fa-restroom c-4F6884"></i>
+        <span class="ml-1">화장실(2)</span>
+      </div>
+      <div class="flex flex-1 justify-center items-center">
+        <span class="Management__Use-Text c-565656">
+          공기필터 오염량
+        </span>
+      </div>
+      <div class="Management__Use-Text flex flex-1 justify-center items-center">
+        <span class="c-565656">
+          20
+        </span>
+        <span class="c-565656">
+          %
+        </span>
+      </div>
+      <div class="flex flex-1 justify-center items-center">
+        <div style="display: none;">
+          <span class="Change-Text c-079E24">
+            Change
+          </span>
+          <span class="c-079E24 M-B--2">
+            <i class="fas fa-exclamation-triangle"></i>
+          </span>
         </div>
-        <div class="w-full">
-          <div class="hei-92 bg-white flex items-center justify-center">
-            <div class="w-full px-5">
-              <div class="flex">
-                <div class="font-16 c-565656">
-                  <span>
-                    공기필터 오염량
-                  </span>
-                </div>
-                <div class="flex-1"></div>
-                <div class="font-16 c-565656">
-                  <span>20</span>
-                  <span>%</span>
-                </div>
-              </div>
-              <div class="graph-back-bar hei-10 border-radius-5">
-                <div class="percent-bar h-full border-radius-50" style="width: 20%;"></div>
-              </div>
+      </div>
+      <div class="flex flex-1 justify-center items-center">
+        <div class="poll-btn inline-block">
+          <div class="relative flex">
+            <!--움직이는 버튼-->
+            <div class="Use-Move-Btn" style="left: 0;">
+              <span class="h-full flex justify-center items-center">
+                btn
+              </span>
             </div>
-          </div>
-          <div class="h-1"></div>
-          <div class="hei-92 bg-white px-5 flex justify-start items-center">
-            <div>
-              <div class="font-16 c-FF4921">
-                <span class="hidden">
-                  필터를 교체 해주세요
-                </span>
-              </div>
-              <div class="font-14 c-A7A7A7">
-                90%이상 오염시 알람이 활성화 됩니다
-              </div>
+            <div class="btn-text-off hei-34 bg-white flex justify-center items-center">
+              <span class="text-xs c-FD7B32">
+                <i class="fas fa-exclamation-triangle"></i>
+              </span>
             </div>
-            <div class="flex-1 mr-5"></div>
-            <div class="img-box change-alarm-icon hidden">
-              <img src="https://cdn.jsdelivr.net/gh/kimhyeji324/ICT_Resource@master/docs/change-alarm.png" alt="">
+            <div class="btn-text-danger bg-white flex">
             </div>
           </div>
         </div>
       </div>
-      <div class="w-9"></div>
-      <!--2-->
-      <div class="flex flex-1 items-center justify-start">
-        <div class="bg-1A8FEC hei-188 text-white mr-1 flex items-center">
-          <span class="padding-x-14">2</span>
+      <div class="flex flex-1 justify-center items-center border-radius-50">
+        <div class="Graph-Back-Bar wid-80-p mx-2 border-radius-50">
+          <div class="Percent-Bar h-full border-radius-50" style="width: 20%;"></div>
         </div>
-        <div class="w-full">
-          <div class="hei-92 bg-white flex items-center justify-center">
-            <div class="w-full px-5">
-              <div class="flex">
-                <div class="font-16 c-565656">
-                  <span>
-                    공기필터 오염량
-                  </span>
-                </div>
-                <div class="flex-1"></div>
-                <div class="font-16 c-565656">
-                  <span>90</span>
-                  <span>%</span>
-                </div>
-              </div>
-              <div class="graph-back-bar hei-10 border-radius-5">
-                <div class="percent-bar h-full border-radius-50" style="width: 90%;"></div>
-              </div>
+      </div>
+    </div>
+    <!--L3-->
+    <div class="Use-List-Item-Box flex">
+      <div class="BathRoom-Text flex flex-1 justify-center items-center">
+        <i class="fas fa-restroom c-4F6884"></i>
+        <span class="ml-1">화장실(3)</span>
+      </div>
+      <div class="flex flex-1 justify-center items-center">
+        <span class="Management__Use-Text c-565656">
+          공기필터 오염량
+        </span>
+      </div>
+      <div class="Management__Use-Text flex flex-1 justify-center items-center">
+        <span class="c-565656">
+          100
+        </span>
+        <span class="c-565656">
+          %
+        </span>
+      </div>
+      <div class="flex flex-1 justify-center items-center">
+        <div style="display: block;">
+          <span class="Change-Text c-079E24">
+            Change
+          </span>
+          <span class="c-079E24 M-B--2">
+            <i class="fas fa-exclamation-triangle"></i>
+          </span>
+        </div>
+      </div>
+      <div class="flex flex-1 justify-center items-center">
+        <div class="poll-btn inline-block">
+          <div class="relative flex">
+            <!--움직이는 버튼-->
+            <div class="Use-Move-Btn" style="right: 0;">
+              <span class="h-full flex justify-center items-center">
+                btn
+              </span>
             </div>
-          </div>
-          <div class="h-1"></div>
-          <div class="hei-92 bg-white px-5 flex justify-start items-center">
-            <div>
-              <div class="font-16 c-FF4921">
-                <span>
-                  필터를 교체 해주세요
-                </span>
-              </div>
-              <div class="font-14 c-A7A7A7">
-                90%이상 오염시 알람이 활성화 됩니다
-              </div>
+            <div class="btn-text-off hei-34 bg-white flex justify-center items-center">
+              <span class="text-xs c-FD7B32">
+                <i class="fas fa-exclamation-triangle"></i>
+              </span>
             </div>
-            <div class="flex-1 mr-5"></div>
-            <div class="img-box change-alarm-icon">
-              <img src="https://cdn.jsdelivr.net/gh/kimhyeji324/ICT_Resource@master/docs/change-alarm.png" alt="">
+            <div class="btn-text-danger bg-white flex">
             </div>
           </div>
         </div>
       </div>
-      <div class="w-9"></div>
-      <!--3-->
-      <div class="flex flex-1 items-center justify-start">
-        <div class="bg-1A8FEC hei-188 text-white mr-1 flex items-center">
-          <span class="padding-x-14">3</span>
+      <div class="flex flex-1 justify-center items-center border-radius-50">
+        <div class="Graph-Back-Bar wid-80-p mx-2 border-radius-50">
+          <div class="Percent-Bar h-full border-radius-50" style="width: 100%;"></div>
         </div>
-        <div class="w-full">
-          <div class="hei-92 bg-white flex items-center justify-center">
-            <div class="w-full px-5">
-              <div class="flex">
-                <div class="font-16 c-565656">
-                  <span>
-                    공기필터 오염량
-                  </span>
-                </div>
-                <div class="flex-1"></div>
-                <div class="font-16 c-565656">
-                  <span>20</span>
-                  <span>%</span>
-                </div>
-              </div>
-              <div class="graph-back-bar hei-10 border-radius-5">
-                <div class="percent-bar h-full border-radius-50" style="width: 20%;"></div>
-              </div>
+      </div>
+    </div>
+    <!--L4-->
+    <div class="Use-List-Item-Box flex">
+      <div class="BathRoom-Text flex flex-1 justify-center items-center">
+        <i class="fas fa-restroom c-4F6884"></i>
+        <span class="ml-1">화장실(4)</span>
+      </div>
+      <div class="flex flex-1 justify-center items-center">
+        <span class="Management__Use-Text c-565656">
+          공기필터 오염량
+        </span>
+      </div>
+      <div class="Management__Use-Text flex flex-1 justify-center items-center">
+        <span class="c-565656">
+          85
+        </span>
+        <span class="c-565656">
+          %
+        </span>
+      </div>
+      <div class="flex flex-1 justify-center items-center">
+        <div style="display: block;">
+          <span class="Change-Text c-079E24">
+            Change
+          </span>
+          <span class="c-079E24 M-B--2">
+            <i class="fas fa-exclamation-triangle"></i>
+          </span>
+        </div>
+      </div>
+      <div class="flex flex-1 justify-center items-center">
+        <div class="poll-btn inline-block">
+          <div class="relative flex">
+            <!--움직이는 버튼-->
+            <div class="Use-Move-Btn" style="right: 0;">
+              <span class="h-full flex justify-center items-center">
+                btn
+              </span>
             </div>
-          </div>
-          <div class="h-1"></div>
-          <div class="hei-92 bg-white px-5 flex justify-start items-center">
-            <div>
-              <div class="font-16 c-FF4921">
-                <span class="hidden">
-                  필터를 교체 해주세요
-                </span>
-              </div>
-              <div class="font-14 c-A7A7A7">
-                90%이상 오염시 알람이 활성화 됩니다
-              </div>
+            <div class="btn-text-off hei-34 bg-white flex justify-center items-center">
+              <span class="text-xs c-FD7B32">
+                <i class="fas fa-exclamation-triangle"></i>
+              </span>
             </div>
-            <div class="flex-1 mr-5"></div>
-            <div class="img-box change-alarm-icon hidden">
-              <img src="https://cdn.jsdelivr.net/gh/kimhyeji324/ICT_Resource@master/docs/change-alarm.png" alt="">
+            <div class="btn-text-danger bg-white flex">
             </div>
           </div>
         </div>
       </div>
-      <div class="w-9"></div>
-      <!--4-->
-      <div class="flex flex-1 items-center justify-start">
-        <div class="bg-1A8FEC hei-188 text-white mr-1 flex items-center">
-          <span class="padding-x-14">4</span>
+      <div class="flex flex-1 justify-center items-center border-radius-50">
+        <div class="Graph-Back-Bar wid-80-p mx-2 border-radius-50">
+          <div class="Percent-Bar h-full border-radius-50" style="width: 85%;"></div>
         </div>
-        <div class="w-full">
-          <div class="hei-92 bg-white flex items-center justify-center">
-            <div class="w-full px-5">
-              <div class="flex">
-                <div class="font-16 c-565656">
-                  <span>
-                    공기필터 오염량
-                  </span>
-                </div>
-                <div class="flex-1"></div>
-                <div class="font-16 c-565656">
-                  <span>90</span>
-                  <span>%</span>
-                </div>
-              </div>
-              <div class="graph-back-bar hei-10 border-radius-5">
-                <div class="percent-bar h-full border-radius-50" style="width: 90%;"></div>
-              </div>
+      </div>
+    </div>
+    <!--L5-->
+    <div class="Use-List-Item-Box flex">
+      <div class="BathRoom-Text flex flex-1 justify-center items-center">
+        <i class="fas fa-restroom c-4F6884"></i>
+        <span class="ml-1">화장실(5)</span>
+      </div>
+      <div class="flex flex-1 justify-center items-center">
+        <span class="Management__Use-Text c-565656">
+          공기필터 오염량
+        </span>
+      </div>
+      <div class="Management__Use-Text flex flex-1 justify-center items-center">
+        <span class="c-565656">
+          20
+        </span>
+        <span class="c-565656">
+          %
+        </span>
+      </div>
+      <div class="flex flex-1 justify-center items-center">
+        <div style="display: none;">
+          <span class="Change-Text c-079E24">
+            Change
+          </span>
+          <span class="c-079E24 M-B--2">
+            <i class="fas fa-exclamation-triangle"></i>
+          </span>
+        </div>
+      </div>
+      <div class="flex flex-1 justify-center items-center">
+        <div class="poll-btn inline-block">
+          <div class="relative flex">
+            <!--움직이는 버튼-->
+            <div class="Use-Move-Btn" style="left: 0;">
+              <span class="h-full flex justify-center items-center">
+                btn
+              </span>
+            </div>
+            <div class="btn-text-off hei-34 bg-white flex justify-center items-center">
+              <span class="text-xs c-FD7B32">
+                <i class="fas fa-exclamation-triangle"></i>
+              </span>
+            </div>
+            <div class="btn-text-danger bg-white flex">
             </div>
           </div>
-          <div class="h-1"></div>
-          <div class="hei-92 bg-white px-5 flex justify-start items-center">
-            <div>
-              <div class="font-16 c-FF4921">
-                <span>
-                  필터를 교체 해주세요
-                </span>
-              </div>
-              <div class="font-14 c-A7A7A7">
-                90%이상 오염시 알람이 활성화 됩니다
-              </div>
+        </div>
+      </div>
+      <div class="flex flex-1 justify-center items-center border-radius-50">
+        <div class="Graph-Back-Bar wid-80-p mx-2 border-radius-50">
+          <div class="Percent-Bar h-full border-radius-50" style="width: 20%;"></div>
+        </div>
+      </div>
+    </div>
+    <!--L6-->
+    <div class="Use-List-Item-Box flex">
+      <div class="BathRoom-Text flex flex-1 justify-center items-center">
+        <i class="fas fa-restroom c-4F6884"></i>
+        <span class="ml-1">화장실(6)</span>
+      </div>
+      <div class="flex flex-1 justify-center items-center">
+        <span class="Management__Use-Text c-565656">
+          공기필터 오염량
+        </span>
+      </div>
+      <div class="Management__Use-Text flex flex-1 justify-center items-center">
+        <span class="c-565656">
+          80
+        </span>
+        <span class="c-565656">
+          %
+        </span>
+      </div>
+      <div class="flex flex-1 justify-center items-center">
+        <div style="display: block;">
+          <span class="Change-Text c-079E24">
+            Change
+          </span>
+          <span class="c-079E24 M-B--2">
+            <i class="fas fa-exclamation-triangle"></i>
+          </span>
+        </div>
+      </div>
+      <div class="flex flex-1 justify-center items-center">
+        <div class="poll-btn inline-block">
+          <div class="relative flex">
+            <!--움직이는 버튼-->
+            <div class="Use-Move-Btn" style="right: 0;">
+              <span class="h-full flex justify-center items-center">
+                btn
+              </span>
             </div>
-            <div class="flex-1 mr-5"></div>
-            <div class="img-box change-alarm-icon">
-              <img src="https://cdn.jsdelivr.net/gh/kimhyeji324/ICT_Resource@master/docs/change-alarm.png" alt="">
+            <div class="btn-text-off hei-34 bg-white flex justify-center items-center">
+              <span class="text-xs c-FD7B32">
+                <i class="fas fa-exclamation-triangle"></i>
+              </span>
+            </div>
+            <div class="btn-text-danger bg-white flex">
             </div>
           </div>
+        </div>
+      </div>
+      <div class="flex flex-1 justify-center items-center border-radius-50">
+        <div class="Graph-Back-Bar wid-80-p mx-2 border-radius-50">
+          <div class="Percent-Bar h-full border-radius-50" style="width: 80%;"></div>
         </div>
       </div>
     </div>
   </div>
-  <!--핸드타올-->
-  <div class="mt-5">
-    <div class="text-base font-bold c-7D8FA0">
-      <span>
-        핸드타올 사용량
-      </span>
-    </div>
-    <!--1-->
-    <div class="flex items-center items-center">
-      <div class="flex flex-1 items-center justify-start">
-        <div class="bg-98D1FE hei-188 text-white mr-1 flex items-center">
-          <span class="padding-x-14">1</span>
-        </div>
-        <div class="w-full">
-          <div class="hei-92 bg-white flex items-center justify-center">
-            <div class="w-full px-5">
-              <div class="flex">
-                <div class="font-16 c-565656">
-                  <span>
-                    핸드타올 사용량
-                  </span>
-                </div>
-                <div class="flex-1"></div>
-                <div class="font-16 c-565656">
-                  <span>20</span>
-                  <span>%</span>
-                </div>
-              </div>
-              <div class="graph-back-bar hei-10 border-radius-5">
-                <div class="percent-bar h-full border-radius-50" style="width: 20%;"></div>
-              </div>
-            </div>
-          </div>
-          <div class="h-1"></div>
-          <div class="hei-92 bg-white px-5 flex justify-start items-center">
-            <div>
-              <div class="font-16 c-FF4921">
-                <span class="hidden">
-                  필터를 교체 해주세요
-                </span>
-              </div>
-              <div class="font-14 c-A7A7A7">
-                90%이상 사용시 알람이 활성화 됩니다
-              </div>
-            </div>
-            <div class="flex-1 mr-5"></div>
-            <div class="img-box change-alarm-icon hidden">
-              <img src="https://cdn.jsdelivr.net/gh/kimhyeji324/ICT_Resource@master/docs/change-alarm.png" alt="">
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="w-9"></div>
-      <!--2-->
-      <div class="flex flex-1 items-center justify-start">
-        <div class="bg-98D1FE hei-188 text-white mr-1 flex items-center">
-          <span class="padding-x-14">2</span>
-        </div>
-        <div class="w-full">
-          <div class="hei-92 bg-white flex items-center justify-center">
-            <div class="w-full px-5">
-              <div class="flex">
-                <div class="font-16 c-565656">
-                  <span>
-                    핸드타올 사용량
-                  </span>
-                </div>
-                <div class="flex-1"></div>
-                <div class="font-16 c-565656">
-                  <span>90</span>
-                  <span>%</span>
-                </div>
-              </div>
-              <div class="graph-back-bar hei-10 border-radius-5">
-                <div class="percent-bar h-full border-radius-50" style="width: 90%;"></div>
-              </div>
-            </div>
-          </div>
-          <div class="h-1"></div>
-          <div class="hei-92 bg-white px-5 flex justify-start items-center">
-            <div>
-              <div class="font-16 c-FF4921">
-                <span>
-                  필터를 교체 해주세요
-                </span>
-              </div>
-              <div class="font-14 c-A7A7A7">
-                90%이상 사용시 알람이 활성화 됩니다
-              </div>
-            </div>
-            <div class="flex-1 mr-5"></div>
-            <div class="img-box change-alarm-icon">
-              <img src="https://cdn.jsdelivr.net/gh/kimhyeji324/ICT_Resource@master/docs/change-alarm.png" alt="">
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="w-9"></div>
-      <!--3-->
-      <div class="flex flex-1 items-center justify-start">
-        <div class="bg-98D1FE hei-188 text-white mr-1 flex items-center">
-          <span class="padding-x-14">3</span>
-        </div>
-        <div class="w-full">
-          <div class="hei-92 bg-white flex items-center justify-center">
-            <div class="w-full px-5">
-              <div class="flex">
-                <div class="font-16 c-565656">
-                  <span>
-                    핸드타올 사용량
-                  </span>
-                </div>
-                <div class="flex-1"></div>
-                <div class="font-16 c-565656">
-                  <span>90</span>
-                  <span>%</span>
-                </div>
-              </div>
-              <div class="graph-back-bar hei-10 border-radius-5">
-                <div class="percent-bar h-full border-radius-50" style="width: 90%;"></div>
-              </div>
-            </div>
-          </div>
-          <div class="h-1"></div>
-          <div class="hei-92 bg-white px-5 flex justify-start items-center">
-            <div>
-              <div class="font-16 c-FF4921">
-                <span>
-                  필터를 교체 해주세요
-                </span>
-              </div>
-              <div class="font-14 c-A7A7A7">
-                90%이상 사용시 알람이 활성화 됩니다
-              </div>
-            </div>
-            <div class="flex-1 mr-5"></div>
-            <div class="img-box change-alarm-icon">
-              <img src="https://cdn.jsdelivr.net/gh/kimhyeji324/ICT_Resource@master/docs/change-alarm.png" alt="">
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="w-9"></div>
-      <!--4-->
-      <div class="flex flex-1 items-center justify-start">
-        <div class="bg-98D1FE hei-188 text-white mr-1 flex items-center">
-          <span class="padding-x-14">4</span>
-        </div>
-        <div class="w-full">
-          <div class="hei-92 bg-white flex items-center justify-center">
-            <div class="w-full px-5">
-              <div class="flex">
-                <div class="font-16 c-565656">
-                  <span>
-                    핸드타올 사용량
-                  </span>
-                </div>
-                <div class="flex-1"></div>
-                <div class="font-16 c-565656">
-                  <span>90</span>
-                  <span>%</span>
-                </div>
-              </div>
-              <div class="graph-back-bar hei-10 border-radius-5">
-                <div class="percent-bar h-full border-radius-50" style="width: 90%;"></div>
-              </div>
-            </div>
-          </div>
-          <div class="h-1"></div>
-          <div class="hei-92 bg-white px-5 flex justify-start items-center">
-            <div>
-              <div class="font-16 c-FF4921">
-                <span>
-                  필터를 교체 해주세요
-                </span>
-              </div>
-              <div class="font-14 c-A7A7A7">
-                90%이상 사용시 알람이 활성화 됩니다
-              </div>
-            </div>
-            <div class="flex-1 mr-5"></div>
-            <div class="img-box change-alarm-icon">
-              <img src="https://cdn.jsdelivr.net/gh/kimhyeji324/ICT_Resource@master/docs/change-alarm.png" alt="">
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="footer-bar w-full bg-158AE7"></div>
 </div>
-<!--footer-->

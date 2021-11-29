@@ -1819,44 +1819,6 @@ app.get('/testwater_recieve', function (req, res) {
     res.render('dkatk', { layout: null, watervalue: watervalue })
 })
 
-
-//실시간 값 받아오는 영역
-app.get('/testhanddryer_recieve', function (req, res) {
-    handdryervalue = req.query.id
-    if (handdryervalue == "0") {
-        state = ""
-    }
-    else {
-        state = "checked"
-    }
-    io.emit('messageled', state)
-    res.render("dkatk", { layout: null })
-})
-let dlatlwatervalue = ""
-app.get('/Water', function (req, res) {
-    dlatlwatervalue = req.query.id
-    io.emit('dlatlwatervalue', dlatlwatervalue)
-    res.render('dkatk', { layout: null })
-})
-let gassensor = ""
-app.get('/PM_2.5', function (req, res) {
-    gassensor = req.query.two
-    io.emit('gassensor', gassensor)
-    res.render('dkatk', { layout: null })
-})
-let sensor = ""
-app.get('/PM_1.0', function (req, res) {
-    sensor = req.query.one
-    io.emit('sensor', sensor)
-    res.render('dkatk', { layout: null })
-})
-let ajswl = ""
-app.get('/PM_10', function (req, res) {
-    ajswl = req.query.three
-    console.log(ajswl)
-    io.emit('ajswl', ajswl)
-    res.render('dkatk', { layout: null })
-})
 let getnfc = ""
 app.get('/nfc_recieve', function (req, res) {
     getnfc = req.query.id
