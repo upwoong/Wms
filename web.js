@@ -855,7 +855,7 @@ app.set('views', __dirname + '/views')
 app.use(express.static(__dirname + '/api'))
 
 //기상청 엑셀정보 불러오기
-const excelFile = xlsx.readFile("/home/hosting_users/creativethon/apps/creativethon_wmsadmin/api/기상청41_단기예보 조회서비스_오픈API활용가이드_격자_위경도(20210401).xlsx")
+const excelFile = xlsx.readFile("/home/hosting_users/creativethon/apps/creativethon_wmsadmina/api/기상청41_단기예보 조회서비스_오픈API활용가이드_격자_위경도(20210401).xlsx")
 const firstSheet = excelFile.Sheets[excelFile.SheetNames[0]]
 
 var localselect
