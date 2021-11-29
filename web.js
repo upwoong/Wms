@@ -1903,6 +1903,7 @@ Water.find(function (err, data) {
         Valuedata.push(data[index].Useage)
     }
     maxValue = Math.max.apply(null, Valuedata)
+    console.log("최신 7개의 데이터 : " + data)
 }).sort({ Year: 1 }).sort({ Month: 1 }).sort({ Day: -1 }).limit(7) //추후엔 Month 와 Day로 나누기 때문에 각각에 sort정렬을 해줘야 최신 데이터가 나옴
 
 
@@ -2059,8 +2060,3 @@ app.use((err, req, res, next) => {
     res.send('500 - Server Error')
 })
 
-
-server.listen(port, () => console.log(
-    `Express started on http://localhost:${port}; ` +
-    `press Ctrl-C to terminate.`)
-)
