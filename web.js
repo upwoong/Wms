@@ -414,7 +414,7 @@ var router = express.Router()
 
 var storagevideo = multer.diskStorage({
     destination: function (req, file, callback) {
-        callback(null, '/home/hosting_users/creativethon/apps/creativethon_wmsadmina/smartmirror/video')
+        callback(null, '/home/hosting_users/creativethon/apps/creativethon_wmsadmin/smartmirror/video')
     },
     filename: function (req, file, callback) {
         var extension = path.extname(file.originalname);
@@ -559,7 +559,7 @@ router.route('/processbookingvideo').post(upload.array('photo', 1), function (re
 
 var storageimg = multer.diskStorage({
     destination: function (req, file, callback) {
-        callback(null, '/home/hosting_users/creativethon/apps/creativethon_wmsadmina/smartmirror/image')
+        callback(null, '/home/hosting_users/creativethon/apps/creativethon_wmsadmin/smartmirror/image')
     },
     filename: function (req, file, callback) {
         var extension = path.extname(file.originalname);
@@ -713,7 +713,7 @@ router.route('/processbookingimage').post(uploadimg.array('photo', 1), function 
 
 var storageSmartmirror = multer.diskStorage({
     destination: function (req, file, callback) {
-        callback(null, '/home/hosting_users/creativethon/apps/creativethon_wmsadmina/smartmirror/item')
+        callback(null, '/home/hosting_users/creativethon/apps/creativethon_wmsadmin/smartmirror/item')
     },
     filename: function (req, file, callback) {
         var extension = path.extname(file.originalname);
@@ -733,7 +733,7 @@ var uploadSmartmirror = multer({
 });
 //기본 비디오 파일 저장
 router.route('/processSmartmirror').post(uploadSmartmirror.array('photo', 1), function (req, res) {
-    fs.unlink(`/home/hosting_users/creativethon/apps/creativethon_wmsadmina/smartmirror/item/Smartmirror.exe`, function (err) {
+    fs.unlink(`/home/hosting_users/creativethon/apps/creativethon_wmsadmin/smartmirror/item/Smartmirror.exe`, function (err) {
         if (err) console.log(err)
     })
     try {
@@ -1032,7 +1032,7 @@ Weather.find({}, imgProjection, function (err, data) {
 
 
 //기상청 엑셀정보 불러오기
-const excelFile = xlsx.readFile("/home/hosting_users/creativethon/apps/creativethon_wmsadmina/api/기상청41_단기예보 조회서비스_오픈API활용가이드_격자_위경도(20210401).xlsx")
+const excelFile = xlsx.readFile("/home/hosting_users/creativethon/apps/creativethon_wmsadmin/api/기상청41_단기예보 조회서비스_오픈API활용가이드_격자_위경도(20210401).xlsx")
 const firstSheet = excelFile.Sheets[excelFile.SheetNames[0]]
 
 var localselect
@@ -1378,7 +1378,7 @@ app.post('/deleteimage', function (req, res, next) {
     const name = req.body.name
     const image = Imgfile.find({ "name": name })
     version++
-    fs.unlink(`s/home/hosting_users/creativethon/apps/creativethon_wmsadmina/smartmirror/image/${name}`, function (err) {
+    fs.unlink(`s/home/hosting_users/creativethon/apps/creativethon_wmsadmin/smartmirror/image/${name}`, function (err) {
         if (err) console.log(err)
     })
     Smartmirrorimagefile.find(function (err, data) {
@@ -1409,7 +1409,7 @@ app.post('/deletereservationvideo', function (req, res, next) {
     const name = req.body.name
     const video = Videofilesave.find({ "name": name })
     version++
-    fs.unlink(`/home/hosting_users/creativethon/apps/creativethon_wmsadmina/smartmirror/video/${name}`, function (err) {
+    fs.unlink(`/home/hosting_users/creativethon/apps/creativethon_wmsadmin/smartmirror/video/${name}`, function (err) {
         if (err) console.log(err)
     })
     Smartmirrorvideofile.find(function (err, data) {
