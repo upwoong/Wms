@@ -858,7 +858,7 @@ var j = schedule.scheduleJob("0 0 6 * * *", function () {
         for (let i = 0; i < data.length; i++) {
             if (data[i].Date == date && data[i].type == "reservation") {
                 changefilename = data[i].name
-                const changefile = new Smartmirrorvideofile({ 'name': changefilename, 'Date': date, 'type': "None" })
+                const changefile = new Smartmirrorvideofile({ 'name': changefilename, 'Date': date, 'type': "reservation" })
                 changefile.save(function (err, slience) {
                     if (err) {
                         console.log(err)
@@ -875,7 +875,7 @@ var j = schedule.scheduleJob("0 0 6 * * *", function () {
             for (let i = 0; i < data.length; i++) {
                 if (data[i].type == "None") {
                     changefilename = data[i].name
-                    const changefile = new Smartmirrorimagefile({ 'name': changefilename, 'type': "None" })
+                    const changefile = new Smartmirrorvideofile({ 'name': changefilename, 'type': "None" })
                     changefile.save(function (err, slience) {
                         if (err) {
                             console.log(err)
@@ -1839,6 +1839,20 @@ app.get('/test_gassensor', function (req, res) {
 app.get('/wateruseage', function (req, res) {
     Water.find(function (err, data) {
         MonthUseage.find(function (err, yeardata) {
+            let Valuedata = new Array()
+            for (let index = 0; index < data.length; index++) {
+                Valuedata.push(data[index].Useage)
+            }
+            maxValue = Math.max.apply(null, Valuedata)
+            let Valueyeardata = new Array()
+            for (let index = 0; index < data.length; index++) {
+                if (data[index].Year == todayYear)
+                    Valueyeardata.push(data[index].Data)
+            }
+            maxyearValue = Math.max.apply(null, Valueyeardata)
+
+
+
             weekendWater[0] = parseInt(weekendWater[0]) + parseInt(watervalue)
             if (weekendWater[0] > maxValue) {
                 maxValue = weekendWater[0]
@@ -1880,6 +1894,7 @@ function percent(par, total) {
 const todayYear = moment().format('YY')
 const todayMonth = moment().format('MM')
 //초기 7일간 데이터중 가장 높은 일자의 값 구하기 설정
+//찾았다.... 네녀석이구나
 let maxValue = 0
 Water.find(function (err, data) {
     //maxValue = Math.max(...data.Date) //ES6 문법이기 때문에 안되면 const maxValue = Math.max.apply(null, data) 를 사용
