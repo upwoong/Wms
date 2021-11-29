@@ -1855,7 +1855,7 @@ app.get('/wateruseage', function (req, res) {
                 percentArray: percentArray, yearWater: yearWater, yearpercentArray: yearpercentArray
             })
         }).sort({ Year: 1 }).sort({ Month: 1 }).limit(12)
-    }).sort({ Year: -1 }).sort({ Month: -1 }).sort({ Day: 1 }).limit(7)
+    }).sort({ Year: -1 }).sort({ Month: -1 }).sort({ Day: -1 }).limit(7)
     console.log("수치 : " + weekendWater)
     console.log("percent : " + percentArray)
 })
@@ -1877,7 +1877,7 @@ Water.find(function (err, data) {
         Valuedata.push(data[index].Useage)
     }
     maxValue = Math.max.apply(null, Valuedata)
-}).sort({ Year: 1 }).sort({ Month: 1 }).sort({ Day: 1 }).limit(7) //추후엔 Month 와 Day로 나누기 때문에 각각에 sort정렬을 해줘야 최신 데이터가 나옴
+}).sort({ Year: 1 }).sort({ Month: 1 }).sort({ Day: -1 }).limit(7) //추후엔 Month 와 Day로 나누기 때문에 각각에 sort정렬을 해줘야 최신 데이터가 나옴
 
 
 //초기 1년간 데이터중 가장 높은 달의 값 구하기 설정
