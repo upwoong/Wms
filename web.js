@@ -2043,8 +2043,3 @@ app.use((err, req, res, next) => {
     res.status(500)
     res.send('500 - Server Error')
 })
-
-server.listen(port, () => console.log(
-    `Express started on http://localhost:${port}; ` +
-    `press Ctrl-C to terminate.`)
-)
