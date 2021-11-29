@@ -155,10 +155,10 @@ const Smartmirrorimagefile = mongoose.model('smartmirrorimagefile', smartmirrori
 const Smartmirrorvideofile = mongoose.model('smartmirrorvideofile', smartmirrorvideofile)
 const MonthUseage = mongoose.model('monthuseage', monthuseage)
 const SmartmirrorExe = mongoose.model('smartmirrorexe', smartmirrorexe)
-const CommentDB = mongoose.model('commentDB',commentDB)
-const Membership = mongoose.model('membership',membership)
-const SupportDB = mongoose.model('supportDB',supportDB)
-const NoticeDB = mongoose.model('noticeDB',noticeDB)
+const CommentDB = mongoose.model('commentDB', commentDB)
+const Membership = mongoose.model('membership', membership)
+const SupportDB = mongoose.model('supportDB', supportDB)
+const NoticeDB = mongoose.model('noticeDB', noticeDB)
 
 
 var videoProjection = {
@@ -407,7 +407,7 @@ app.use('/graphql', GraphqlHttp({
     schema: schema,
     rootValue: root,
     graphiql: true,
-  }))
+}))
 
 // 라우터 사용하여 라우팅 함수 등록
 var router = express.Router()
@@ -1509,7 +1509,7 @@ app.use('/bookmedia', function (req, res) {
     })
 })
 
-const port = process.env.PORT || 8002
+const port = process.env.PORT || 8001
 app.engine('handlebars', expressHandlebars({
     defaultLayout: 'main',
     runtimeOptions: {
@@ -1839,6 +1839,17 @@ app.get('/test_gassensor', function (req, res) {
 app.get('/wateruseage', function (req, res) {
     Water.find(function (err, data) {
         MonthUseage.find(function (err, yeardata) {
+            weekendWater[0] = parseInt(weekendWater[0]) + parseInt(watervalue)
+            if (weekendWater[0] > maxValue) {
+                maxValue = weekendWater[0]
+            }
+            yearWater[10] = parseInt(yearWater[10]) + parseInt(watervalue)
+            if (yearWater[10] > maxyearValue) {
+                maxyearValue = yearWater[10]
+            }
+
+
+
             for (let index = 0; index < weekendWater.length; index++) {
                 //weekendWater.push(percent(data[index].Useage, maxValue))
                 percentArray[index] = Math.floor(percent(weekendWater[index], maxValue))
