@@ -1509,7 +1509,7 @@ app.use('/bookmedia', function (req, res) {
     })
 })
 
-const port = process.env.PORT || 8002
+const port = process.env.PORT || 8001
 app.engine('handlebars', expressHandlebars({
     defaultLayout: 'main',
     runtimeOptions: {
@@ -2065,5 +2065,3 @@ server.listen(port, () => console.log(
     `press Ctrl-C to terminate.`)
 );
 
-
-//adaw
