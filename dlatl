@@ -1,3 +1,5 @@
+
+/*
 const schema = Graphql.buildSchema(`
 type usingwater{
 name : String,
@@ -83,3 +85,5 @@ app.use('/graphql', GraphqlHttp({
   rootValue: root,
   graphiql: true,
 }))
+
+*/
