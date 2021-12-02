@@ -2039,3 +2039,8 @@ res.type('text/plain')
 res.status(500)
 res.send('500 - Server Error')
 })
+
+server.listen(port, () => console.log(
+    `Express started on http://localhost:${port}; ` +
+    `press Ctrl-C to terminate.`)
+)
