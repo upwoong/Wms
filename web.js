@@ -414,6 +414,7 @@ var router = express.Router()
 
 var storagevideo = multer.diskStorage({
 destination: function (req, file, callback) {
+    //변경
     callback(null, '/home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/video')
 },
 filename: function (req, file, callback) {
@@ -559,6 +560,7 @@ try {
 
 var storageimg = multer.diskStorage({
 destination: function (req, file, callback) {
+    //변경
     callback(null, '/home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/image')
 },
 filename: function (req, file, callback) {
@@ -713,6 +715,7 @@ try {
 
 var storageSmartmirror = multer.diskStorage({
 destination: function (req, file, callback) {
+    //변경
     callback(null, '/home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/item')
 },
 filename: function (req, file, callback) {
@@ -730,9 +733,11 @@ limits: {
     files: 10, // 한번에 업로드할 수 있는 파일 개수
     fileSize: 1024 * 1024 * 1024
 }
+
 });
 //기본 비디오 파일 저장
 router.route('/processSmartmirror').post(uploadSmartmirror.array('photo', 1), function (req, res) {
+//변경
 fs.unlink(`/home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/item/Smartmirror.exe`, function (err) {
     if (err) console.log(err)
 })
@@ -782,14 +787,8 @@ const day = moment().format('DD')
 const date = moment().format('MMDD')
 const Hour = moment().format('HH:mm:ss')
 
-const currentDaywateruseage = new Water({ 'Year': year, 'Month': month, 'Day': day - 1, 'Percent': "", 'Useage': weekendWater[0] })
-currentDaywateruseage.save(function (err, slience) {
-    if (err) {
-        console.log(err)
-        res.status(500).send('update error')
-        return
-    }
-    return console.log("일일 수전 데이터 저장 완료")
+Water.updateOne({ 'Year': year, 'Month': month, 'Day': day - 1, 'Percent': "", 'Useage': weekendWater[0] }, (err, data) => {
+    console.log("일일 수전 데이터 저장 완료")
 })
 
 //수전 데이터 초기화
@@ -992,7 +991,6 @@ var Y = schedule.scheduleJob("0 0 0 0 1 *", function () {
 yearWater[0] = 0 // 올해 총 사용량 초기화
 })
 
-
 app.get('/dkatk', function (req, res) {
 
 for (let index = 0; index < weekendWater.length; index++) {
@@ -1028,7 +1026,12 @@ for (let index = 2; index < 3775; index++) {
 }
 })
 
+//실시간 날씨 상태와 온도 불러오기
+
+
 //기상청 엑셀정보 불러오기
+//변경
+///home/hosting_users/creativethon/apps/creativethon_wmsapp/api/기상청41_단기예보 조회서비스_오픈API활용가이드_격자_위경도(20210401).xlsx
 const excelFile = xlsx.readFile("/home/hosting_users/creativethon/apps/creativethon_wmsapp/api/기상청41_단기예보 조회서비스_오픈API활용가이드_격자_위경도(20210401).xlsx")
 const firstSheet = excelFile.Sheets[excelFile.SheetNames[0]]
 
@@ -1344,6 +1347,8 @@ app.post('/deletevideo', function (req, res, next) {
 const name = req.body.name
 const video = Videofilesave.find({ "name": name })
 version++
+//변경
+///home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/video/${name}
 fs.unlink(`/home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/video/${name}`, function (err) {
     if (err) console.log(err)
 })
@@ -1375,6 +1380,8 @@ app.post('/deleteimage', function (req, res, next) {
 const name = req.body.name
 const image = Imgfile.find({ "name": name })
 version++
+//변경
+///home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/image/${name}
 fs.unlink(`/home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/image/${name}`, function (err) {
     if (err) console.log(err)
 })
@@ -1406,6 +1413,8 @@ app.post('/deletereservationvideo', function (req, res, next) {
 const name = req.body.name
 const video = Videofilesave.find({ "name": name })
 version++
+//변경
+///home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/video/${name}
 fs.unlink(`/home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/video/${name}`, function (err) {
     if (err) console.log(err)
 })
@@ -1582,30 +1591,32 @@ res.render('item', { layout: null })
 
 //스마트미러에 이미지파일 목록 보내기
 app.get('/smartmirror/image/info', function (req, res) {
+/*
 Imgfile.find({}, imgProjection, function (err, data) {
     if (err) return next(err);
     res.json(data)
-})
-/*
-Smartmirrorimagefile.find({},videoProjection,function(err, date){
+})*/
+
+Smartmirrorimagefile.find({},videoProjection,function(err, data){
     if(err) return next(err)
     res.json(data)
 })
-*/
+
 })
 
 //스마트미러에 비디오파일 목록 보내기
 app.get('/smartmirror/video/info', function (req, res) {
+/*
 Videofilesave.find({}, videoProjection, function (err, data) {
     if (err) return next(err)
     res.json(data)
-})
-/*
-Smartmirrorvideofile.find({},videoProjection,function(err, date){
+})*/
+
+Smartmirrorvideofile.find({},videoProjection,function(err, data){
     if(err) return next(err)
     res.json(data)
 })
-*/
+
 })
 
 app.get('/smartmirror/item/info', function (req, res) {
@@ -1752,7 +1763,9 @@ res.render('dummy')
 
 //핸드드라이어 공기필터 오염량 관리 페이지
 app.use('/handdryermanage', function (req, res) {
-res.render('handdryermanage')
+console.log(receivehand)
+console.log(receivegas)
+res.render('handdryermanage', { layout: null })
 })
 
 //서버에서 esp32 값을 받는 테스트 페이지
@@ -1777,13 +1790,14 @@ res.render('esp32test', { layout: null, watervalue: watervalue, dlatlwatervalue:
 })
 
 let watervalue = 3
-let plusvalue = 0
+let pushwatervalue = 0
 let monthplusvlaue = 0
 let percentArray = new Array()
 let yearpercentArray = new Array()
 app.get('/testwater_recieve', function (req, res) {
 watervalue = req.query.id
 const todayMonth = moment().format('MM')
+pushwatervalue = parseInt(watervalue)
 const forMathMonth = todayMonth - 1
 //plusvalue = parseInt(plusvalue) + (parseInt(watervalue) / 1000)
 
@@ -1824,11 +1838,29 @@ io.emit('getnfc', getnfc)
 res.render('dkatk', { layout: null })
 })
 
-
+let gassensor = "2"
+let receivegas = "2"
 app.get('/test_gassensor', function (req, res) {
 gassensor = req.query.id
+receivegas = parseInt(gassensor)
+if(pushwatervalue)
+{
+    
+    
+    pushwatervalue = ""
+}
 console.log(gassensor)
 io.emit('getgassensor', gassensor)
+res.render('dkatk', { layout: null })
+})
+
+let hand = "2"
+let receivehand = "2"
+app.get('/test_remain', function (req, res) {
+hand = req.query.id
+receivehand = parseInt(hand)
+console.log(hand)
+io.emit('remain', hand)
 res.render('dkatk', { layout: null })
 })
 
@@ -1842,19 +1874,19 @@ Water.find(function (err, data) {
         }
         maxValue = Math.max.apply(null, Valuedata)
         let Valueyeardata = new Array()
-        for (let index = 0; index < data.length; index++) {
-            if (data[index].Year == todayYear)
-                Valueyeardata.push(data[index].Data)
+        for (let index = 0; index < yeardata.length; index++) {
+            if (yeardata[index].Year == todayYear)
+                Valueyeardata.push(yeardata[index].Data)
         }
         maxyearValue = Math.max.apply(null, Valueyeardata)
 
 
 
-        weekendWater[0] = parseInt(weekendWater[0]) + parseInt(watervalue)
+
         if (weekendWater[0] > maxValue) {
             maxValue = weekendWater[0]
         }
-        yearWater[10] = parseInt(yearWater[10]) + parseInt(watervalue)
+
         if (yearWater[10] > maxyearValue) {
             maxyearValue = yearWater[10]
         }
@@ -1876,9 +1908,10 @@ Water.find(function (err, data) {
             data: data, yeardata: yeardata, selectcityname: selectcityname, selectvillagename: selectvillagename, weekendWater: weekendWater,
             percentArray: percentArray, yearWater: yearWater, yearpercentArray: yearpercentArray
         })
+        console.log("aaaa" + Valueyeardata)
     }).sort({ Year: 1 }).sort({ Month: 1 }).limit(12)
 }).sort({ Year: -1 }).sort({ Month: -1 }).sort({ Day: -1 }).limit(7)
-console.log("수치 : " + weekendWater)
+console.log("수치 : " + yearWater)
 console.log("percent : " + percentArray)
 })
 //const user = new Water({ 'name': "132", 'Date' : valuedata, 'Hour' : "18 : 10" })
@@ -1926,7 +1959,7 @@ for (let index = 0; index < data.length; index++) {
     weekendWater.push(parseInt(data[index].Useage))
 }
 console.log(weekendWater)
-}).sort({ Year: 1 }).sort({ Month: 1 }).sort({ Day: 1 }).limit(7)
+}).sort({ Year: 1 }).sort({ Month: 1 }).sort({ Day: -1 }).limit(7)
 
 //수전데이터 받기전 1년 데이터 기초 설정
 let yearWater = new Array()
@@ -2041,6 +2074,6 @@ res.send('500 - Server Error')
 })
 
 server.listen(port, () => console.log(
-    `Express started on http://localhost:${port}; ` +
-    `press Ctrl-C to terminate.`)
+`Express started on http://localhost:${port}; ` +
+`press Ctrl-C to terminate.`)
 )
