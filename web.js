@@ -414,7 +414,7 @@ var router = express.Router()
 
 var storagevideo = multer.diskStorage({
 destination: function (req, file, callback) {
-    callback(null, '/home/hosting_users/creativethon/apps/creativethon_wmsadmin/smartmirror/video')
+    callback(null, '/home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/video')
 },
 filename: function (req, file, callback) {
     var extension = path.extname(file.originalname);
@@ -559,7 +559,7 @@ try {
 
 var storageimg = multer.diskStorage({
 destination: function (req, file, callback) {
-    callback(null, '/home/hosting_users/creativethon/apps/creativethon_wmsadmin/smartmirror/image')
+    callback(null, '/home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/image')
 },
 filename: function (req, file, callback) {
     var extension = path.extname(file.originalname);
@@ -713,7 +713,7 @@ try {
 
 var storageSmartmirror = multer.diskStorage({
 destination: function (req, file, callback) {
-    callback(null, '/home/hosting_users/creativethon/apps/creativethon_wmsadmin/smartmirror/item')
+    callback(null, '/home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/item')
 },
 filename: function (req, file, callback) {
     var extension = path.extname(file.originalname);
@@ -733,7 +733,7 @@ limits: {
 });
 //기본 비디오 파일 저장
 router.route('/processSmartmirror').post(uploadSmartmirror.array('photo', 1), function (req, res) {
-fs.unlink(`/home/hosting_users/creativethon/apps/creativethon_wmsadmin/smartmirror/item/Smartmirror.exe`, function (err) {
+fs.unlink(`/home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/item/Smartmirror.exe`, function (err) {
     if (err) console.log(err)
 })
 try {
@@ -1028,11 +1028,8 @@ for (let index = 2; index < 3775; index++) {
 }
 })
 
-//실시간 날씨 상태와 온도 불러오기
-
-
 //기상청 엑셀정보 불러오기
-const excelFile = xlsx.readFile("/home/hosting_users/creativethon/apps/creativethon_wmsadmin/api/기상청41_단기예보 조회서비스_오픈API활용가이드_격자_위경도(20210401).xlsx")
+const excelFile = xlsx.readFile("/home/hosting_users/creativethon/apps/creativethon_wmsapp/api/기상청41_단기예보 조회서비스_오픈API활용가이드_격자_위경도(20210401).xlsx")
 const firstSheet = excelFile.Sheets[excelFile.SheetNames[0]]
 
 var localselect
@@ -1378,7 +1375,7 @@ app.post('/deleteimage', function (req, res, next) {
 const name = req.body.name
 const image = Imgfile.find({ "name": name })
 version++
-fs.unlink(`s/home/hosting_users/creativethon/apps/creativethon_wmsadmin/smartmirror/image/${name}`, function (err) {
+fs.unlink(`s/home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/image/${name}`, function (err) {
     if (err) console.log(err)
 })
 Smartmirrorimagefile.find(function (err, data) {
@@ -1409,7 +1406,7 @@ app.post('/deletereservationvideo', function (req, res, next) {
 const name = req.body.name
 const video = Videofilesave.find({ "name": name })
 version++
-fs.unlink(`/home/hosting_users/creativethon/apps/creativethon_wmsadmin/smartmirror/video/${name}`, function (err) {
+fs.unlink(`/home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/video/${name}`, function (err) {
     if (err) console.log(err)
 })
 Smartmirrorvideofile.find(function (err, data) {
@@ -1509,7 +1506,7 @@ Videofilesave.find(function (err, videofile) {
 })
 })
 
-const port = process.env.PORT || 8002
+const port = process.env.PORT || 8001
 app.engine('handlebars', expressHandlebars({
 defaultLayout: 'main',
 runtimeOptions: {
