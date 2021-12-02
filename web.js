@@ -1344,7 +1344,7 @@ app.post('/deletevideo', function (req, res, next) {
 const name = req.body.name
 const video = Videofilesave.find({ "name": name })
 version++
-fs.unlink(`smartmirror/video/${name}`, function (err) {
+fs.unlink(`/home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/video/${name}`, function (err) {
     if (err) console.log(err)
 })
 Smartmirrorvideofile.find(function (err, data) {
@@ -1375,7 +1375,7 @@ app.post('/deleteimage', function (req, res, next) {
 const name = req.body.name
 const image = Imgfile.find({ "name": name })
 version++
-fs.unlink(`s/home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/image/${name}`, function (err) {
+fs.unlink(`/home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/image/${name}`, function (err) {
     if (err) console.log(err)
 })
 Smartmirrorimagefile.find(function (err, data) {
