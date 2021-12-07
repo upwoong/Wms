@@ -794,7 +794,7 @@ var storageSmartmirror = multer.diskStorage({
 destination: function (req, file, callback) {
     
     callback(null, '/home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/item')
-    //callback(null, 'smartmirror/item')
+    
 },
 filename: function (req, file, callback) {
     var extension = path.extname(file.originalname);
@@ -815,7 +815,7 @@ limits: {
 //스마트 미러 구동파일 교체
 router.route('/home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/item/Smartmirror.exe').post(uploadSmartmirror.array('photo', 1), function (req, res) {
 
-//
+
 try {
     var files = req.files;
     if (files == "SmartMirror.exe") {
@@ -1141,7 +1141,7 @@ for (let index = 2; index < 3775; index++) {
 
 //기상청 엑셀정보 불러오기
 
-//
+
 const excelFile = xlsx.readFile("/home/hosting_users/creativethon/apps/creativethon_wmsapp/api/기상청41_단기예보 조회서비스_오픈API활용가이드_격자_위경도(20210401).xlsx")
 const firstSheet = excelFile.Sheets[excelFile.SheetNames[0]]
 
@@ -1474,7 +1474,7 @@ const name = req.body.name
 const video = Videofilesave.find({ "name": name })
 version++
 
-///home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/video/${name}
+
 fs.unlink(`/home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/video/${name}`, function (err) {
     if (err) console.log(err)
 })
@@ -1507,7 +1507,7 @@ const name = req.body.name
 const image = Imgfile.find({ "name": name })
 version++
 
-///home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/image/${name}
+
 fs.unlink(`/home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/image/${name}`, function (err) {
     if (err) console.log(err)
 })
@@ -1958,7 +1958,7 @@ for (let index = 0; index < weekendWater.length; index++) {
 }
 
 //yearWater[0] = yearWater[0] + (parseInt(watervalue) / 1000)
-yearWater[10] = parseInt(yearWater[todayMonth]) + parseInt(watervalue)
+yearWater[todayMonth] = parseInt(yearWater[todayMonth]) + parseInt(watervalue)
 if (yearWater[todayMonth] > maxyearValue) {
     maxyearValue = yearWater[todayMonth]
 }
@@ -2015,11 +2015,14 @@ console.log(hand)
 io.emit('remain', hand)
 res.render('dkatk', { layout: null })
 })
-
+console.log(moment().format("MM")-1)
 app.get('/wateruseage', function (req, res) {
 Water.find(function (err, data) {
     MonthUseage.find(function (err, yeardata) {
+        const todayYear = moment().format('YY')
         const currentmonth = moment().format('MM')
+        let lastMonth = ""
+        let currentMonth = ""
         let Valuedata = new Array()
         for (let index = 0; index < data.length; index++) {
             Valuedata.push(data[index].Useage)
@@ -2032,6 +2035,15 @@ Water.find(function (err, data) {
         }
         maxyearValue = Math.max.apply(null, Valueyeardata)
 
+        //저번달 총,이번달 총 사용량 구하기
+        for (let index = 0; index < yeardata.length; index++) {
+            if (yeardata[index].Month == currentmonth-1)
+            {
+                lastMonth = yeardata[index].Data
+                currentMonth = yeardata[index+1].Data
+                console.log(index)
+            }
+        }
         if (weekendWater[0] > maxValue) {
             maxValue = weekendWater[0]
         }
@@ -2049,10 +2061,10 @@ Water.find(function (err, data) {
             //weekendWater.push(percent(data[index].Useage, maxValue))
             yearpercentArray[index] = Math.floor(percent(yearWater[index], maxyearValue))
         }
-
+        console.log(currentMonth)
         res.render('wateruseage', {
             data: data, yeardata: yeardata, selectcityname: selectcityname, selectvillagename: selectvillagename, weekendWater: weekendWater,
-            percentArray: percentArray, yearWater: yearWater, yearpercentArray: yearpercentArray
+            percentArray: percentArray, yearWater: yearWater, yearpercentArray: yearpercentArray, lastMonth : lastMonth, currentMonth : currentMonth
         })
         console.log("aaaa" + Valueyeardata)
     }).sort({ Year: 1 }).sort({ Month: 1 }).limit(12)
