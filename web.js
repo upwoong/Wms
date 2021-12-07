@@ -111,39 +111,7 @@ Percent: String
 const smartmirrorexe = new mongoose.Schema({
 name: String
 })
-const membership = new mongoose.Schema({
-id: String,
-loginmember: String,
-password: String,
-username: String,
-sex: String,
-nfcnumber: String,
-date: String
-});
-const supportDB = new mongoose.Schema({
-id: String,
-title: String,
-mainSentense: String,
-nickname: String,
-date: Date
-});
-const noticeDB = new mongoose.Schema({
-id: String,
-title: String,
-image: String,
-mainSentense: String,
-user: String,
-date: Date
-});
-const commentDB = new mongoose.Schema({
-id: String,
-title: String,
-image: String,
-from: String,
-message: String,
-date: Date
 
-});
 const User = mongoose.model('users', adminuser)
 const Water = mongoose.model('water', usingwater)
 const Client = mongoose.model('client', clients)
@@ -155,11 +123,71 @@ const Smartmirrorimagefile = mongoose.model('smartmirrorimagefile', smartmirrori
 const Smartmirrorvideofile = mongoose.model('smartmirrorvideofile', smartmirrorvideofile)
 const MonthUseage = mongoose.model('monthuseage', monthuseage)
 const SmartmirrorExe = mongoose.model('smartmirrorexe', smartmirrorexe)
-const CommentDB = mongoose.model('commentDB', commentDB)
-const Membership = mongoose.model('membership', membership)
-const SupportDB = mongoose.model('supportDB', supportDB)
-const NoticeDB = mongoose.model('noticeDB', noticeDB)
 
+const MemberSchema = new mongoose.Schema({
+id: { type: String, required: true, unique: true },
+loginmember: String,
+password: String,
+username: String,
+sex: String,
+nfcnumber: String,
+syncTime: { type: Date, default: Date.now }
+}, { collection: 'member' });
+
+const MemberModel = mongoose.model("member", MemberSchema);
+
+const SupportSchema = new mongoose.Schema({
+id: { type: String, required: true, unique: true },
+title: String,
+sentense: String,
+username: String,
+syncTime: { type: Date, default: Date.now },
+checksum: Boolean,
+}, { collection: 'support' });
+
+const SupportModel = mongoose.model("support", SupportSchema);
+
+const NoticeSchema = new mongoose.Schema({
+id: { type: String, required: true, unique: true },
+title: String,
+image: String,
+sentense: String,
+username: String,
+syncTime: { type: Date, default: Date.now }
+}, { collection: 'notice' });
+
+const NoticeModel = mongoose.model("notice", NoticeSchema);
+
+const CommentSchema = new mongoose.Schema({
+id: { type: String, required: true, unique: true },
+title: String,
+image: String,
+from: String,
+message: String,
+syncTime: { type: Date, default: Date.now }
+}, { collection: 'comment' });
+
+const CommentModel = mongoose.model("comment", CommentSchema);
+
+const TagSchema = new mongoose.Schema({
+id: { type: String, required: true, unique: true },
+loginmember: String,
+password: String,
+username: String,
+sex: String,
+nfcnumber: String,
+syncTime: { type: Date, default: Date.now }
+}, { collection: 'tag' });
+
+const TagModel = mongoose.model("tag", TagSchema);
+
+const CalSchema = new mongoose.Schema({
+id: { type: String, required: true, unique: true },
+syncTime: { type: Date, default: Date.now },
+timezone: { type: Date, default: Date.now },
+}, { collection: 'cal' });
+
+const CalModel = mongoose.model("cal", CalSchema);
 
 var videoProjection = {
 __v: false,
@@ -175,7 +203,22 @@ app.use('/smartmirror', static(path.join(__dirname, 'smartmirror')));
 
 let arraywater = []
 const endpoint = 'http://localhost:8080/graphql/waterinput'
+//Event set
+let databaseEvent = mongoose.connection;
+
+
+//Mongo Schema
+//databaseEvent.on('error', console.error.bind(console, 'mongoose connection error'));
+//databaseEvent.on('open', function(){
+
+
+//});
+
+//수전 및 핸드드라이어 스키마, 달력데이터 스키마
+
+//Main Schema
 var schema = Graphql.buildSchema(`
+
 
 scalar DateTime
 
@@ -202,15 +245,14 @@ type WashiSupport {
 id: ID!,
 title: String!,
 mainSentense: String!,
-nickname: String,
+user: [MemberList]!,
 date: DateTime!
 }
 
 input WashiSupportRequest {
 title: String!,
 mainSentense: String!,
-nickname: String!,
-date: DateTime!
+user: String!,
 }
 
 type WashiNotice {
@@ -218,7 +260,7 @@ id: ID!,
 title: String,
 image: String,
 mainSentense: String,
-user: String!,
+user: [MemberList]!,
 date: DateTime!
 }
 
@@ -227,29 +269,51 @@ title: String,
 image: String,
 mainSentense: String,
 user: String!,
-date: DateTime!
 }
 
 type WashiComment {
 id: ID!,
 title: String,
-from: String!,
+image: String,
+from: [MemberList]!,
 message: String,
 date: DateTime!
 }
 
 input WashiCommentInput {
 title: String,
+image: String,
 from: String!,
 message: String,
-date: DateTime!
 }
+
+type WashiTagRead {
+id: ID!,
+faucet: String,
+handdryer: String,
+nfcnumber: String,
+username: String,
+}
+
+input WashiTagWrite {
+nfcnumber: String,
+username: String,
+}
+
+type WashiCalendar {
+date: DateTime,
+timezone: String
+}
+
+
 
 type Query {
 getMember(id: ID!) : MemberList,
 getSupport(id: ID!) : WashiSupport,
 getNotice(id: ID!) : WashiNotice,
-getComment(id: ID!) : WashiComment
+getComment(id: ID!) : WashiComment,
+getTag(id: ID!) : WashiTagRead,
+getCalendar(id: ID!) : WashiCalendar
 }
 
 type Mutation {
@@ -265,7 +329,12 @@ deleteNotice(id: ID!) : String,
 updateComment(id: ID!, input: WashiCommentInput) : WashiComment,
 createComment(input: WashiCommentInput) : WashiComment,
 deleteComment(id: ID!) : String
+updateTag(id: ID!, input: WashiTagWrite) : WashiTagRead,
+createTag(input: WashiTagWrite) : WashiTagRead,
+deleteTag(id: ID!) : String
 }
+
+
 `);
 
 //Custom Schema setup line
@@ -281,126 +350,131 @@ serialize: (value) => {
 }
 }); //DateTime setup
 
+//data constructor
+
+/*let Member = class Member {
+constructor(id, {loginmember, password, username, sex, nfcnumber, date}) {
+this.id = id;
+this.loginmember = loginmember;
+this.password = password;
+this.username = username;
+this.sex = sex;
+this.nfcnumber = nfcnumber;
+this.date = date == Date.now();
+}
+}
+
+let Support = class Support {
+constructor(id, {title, mainSentense, user, date}) {
+this.id = id;
+this.title = title;
+this.mainSentense = mainSentense;
+this.user = user;
+this.date = date;
+}
+}
+
+let Notice = class Notice {
+constructor(id, {title, image, mainSentense, user, date}) {
+this.id = id;
+this.title = title;
+this.image = image;
+this.mainSentense = mainSentense;
+this.user = user;
+this.date = date;
+}
+}
+
+let Comment = class Comment {
+constructor(id, {title, from, message, date}) {
+this.id = id;
+this.title = title;
+this.from = from;
+this.message = message;
+this.date = date;
+}
+}*/
+
 // Main Resolver
 var root = {
 //Member
 createMember: ({ input }) => {
-    const id = require('crypto').randomBytes(4).toString('hex');
-    membership[id] = new Member(id, input);
-    return membership[id];
+    const id = require('crypto').randomBytes(10).toString('hex');
+    const newMember = new Water({ 'loginmember': input.loginmember, 'password': input.password, 'username': input.username, 'sex': input.sex, 'nfcnumber': input.nfcnumber })
+    MemberModel.syncTime = Date.now();
+    //return MemberModel.create(id, input);
+    return newMember.save(function (err, slience) {
+        if (err) {
+            console.log(err)
+            res.status(500).send('update error')
+        }
+    })
 },
 getMember: ({ id }) => {
-    console.log(membership);
-    return membership[id];
+    console.log(MemberModel.id);
+    return MemberModel.findById(id);
 },
 updateMember: ({ id, input }) => {
-    membership[id] = new Member(id, input);
-    return membership[id];
+    return MemberModel.updateOne(id, input);
 },
 deleteMember: ({ id }) => {
-    delete membership[id];
+    MemberModel.findOneAndDelete(id);
     return "delete";
 },
 //Support
 createSupport: ({ input }) => {
     const id = require('crypto').randomBytes(10).toString('hex');
-    SupportDB[id] = new Support(id, input);
-
-    return SupportDB[id];
+    SupportModel.syncTime = Date.now();
+    //Support.syncTime = Date.now();
+    return SupportModel.create(id, input);
 },
 getSupport: ({ id }) => {
-    console.log(supportDB);
-    return supportDB[id];
+    console.log(SupportModel.find(id));
+    return SupportModel.findById(id);
 },
 updateSupport: ({ id, input }) => {
-    supportDB[id] = new Support(id, input);
-    return supportDB[id];
+    return SupportModel.update(id, input);
 },
 deleteSupport: ({ id }) => {
-    delete supportDB[id];
+    SupportModel.findOneAndDelete(id);
     return "delete";
 },
 //Notice
 createNotice: ({ input }) => {
     const id = require('crypto').randomBytes(10).toString('hex');
-    noticeDB[id] = new Notice(id, input);
-    return noticeDB[id];
+    NoticeModel.syncTime = Date.now();
+    return NoticeModel.create(id, input);
 },
 getNotice: ({ id }) => {
-    console.log(noticeDB);
-    return noticeDB[id];
+    console.log(NoticeModel.find(id));
+    return NoticeModel.findById(id);
 },
 updateNotice: ({ id, input }) => {
-    noticeDB[id] = new Notice(id, input);
-    return noticeDB[id];
+    return NoticeModel.update(id, input);
 },
 deleteNotice: ({ id }) => {
-    delete noticeDB[id];
+    NoticeModel.findOneAndDelete(id);
     return "delete";
 },
 //Comment
 createComment: ({ input }) => {
     const id = require('crypto').randomBytes(10).toString('hex');
-    commentDB[id] = new Comment(id, input);
-    return commentDB[id];
+    CommentModel.syncTime = Date.now();
+    return CommentModel.create(id, input);
 },
 getComment: ({ id }) => {
-    console.log(commentDB);
-    return commentDB[id];
+    console.log(CommentModel.find(id));
+    return CommentModel.findById(id);
 },
 updateComment: ({ id, input }) => {
-    commentDB[id] = new Comment(id, input);
-    return commentDB[id];
+    return CommentModel.update(id, input);
 },
 deleteComment: ({ id }) => {
-    delete commentDB[id];
+    CommentModel.findOneAndDelete(id);
     return "delete";
 }
 };
 
-//data constructor
-class Member {
-constructor(id, { loginmember, password, username, sex, nfcnumber, date }) {
-    this.id = id;
-    this.loginmember = loginmember;
-    this.password = password;
-    this.username = username;
-    this.sex = sex;
-    this.nfcnumber = nfcnumber;
-    this.date = date;
-}
-}
-
-class Support {
-constructor(id, { title, mainSentense, user, date }) {
-    this.id = id;
-    this.title = title;
-    this.mainSentense = mainSentense;
-    this.user = user;
-    this.date = date;
-}
-}
-
-class Notice {
-constructor(id, { title, image, mainSentense, user, date }) {
-    this.id = id;
-    this.title = title;
-    this.image = image;
-    this.mainSentense = mainSentense;
-    this.user = user;
-    this.date = date;
-}
-}
-
-class Comment {
-constructor(id, { title, from, message, date }) {
-    this.id = id;
-    this.title = title;
-    this.from = from;
-    this.message = message;
-    this.date = date;
-}
-}
 
 
 app.use('/graphql', GraphqlHttp({
@@ -416,6 +490,7 @@ var storagevideo = multer.diskStorage({
 destination: function (req, file, callback) {
     //변경
     callback(null, '/home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/video')
+    //callback(null, 'smartmirror/video')
 },
 filename: function (req, file, callback) {
     var extension = path.extname(file.originalname);
@@ -562,6 +637,7 @@ var storageimg = multer.diskStorage({
 destination: function (req, file, callback) {
     //변경
     callback(null, '/home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/image')
+    //callback(null, 'smartmirror/image')
 },
 filename: function (req, file, callback) {
     var extension = path.extname(file.originalname);
@@ -717,6 +793,7 @@ var storageSmartmirror = multer.diskStorage({
 destination: function (req, file, callback) {
     //변경
     callback(null, '/home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/item')
+    //callback(null, 'smartmirror/item')
 },
 filename: function (req, file, callback) {
     var extension = path.extname(file.originalname);
@@ -733,40 +810,45 @@ limits: {
     files: 10, // 한번에 업로드할 수 있는 파일 개수
     fileSize: 1024 * 1024 * 1024
 }
-
 });
 //기본 비디오 파일 저장
-router.route('/processSmartmirror').post(uploadSmartmirror.array('photo', 1), function (req, res) {
+router.route('/home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/item/Smartmirror.exe').post(uploadSmartmirror.array('photo', 1), function (req, res) {
 //변경
-fs.unlink(`/home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/item/Smartmirror.exe`, function (err) {
-    if (err) console.log(err)
-})
+///home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/item/Smartmirror.exe
 try {
     var files = req.files;
+    if (files == "SmartMirror.exe") {
 
-    version++
 
-    if (files.length > 0) {
-        console.dir(files[0]);
+        fs.unlink(`smartmirror/item/SmartMirror.exe`, function (err) {
+            if (err) console.log(err)
+        })
 
-        // 현재의 파일 정보를 저장할 변수 선언
-        var originalname = '',
-            filename = '',
-            mimetype = '',
-            size = 0;
 
-        if (Array.isArray(files)) {   // 배열에 들어가 있는 경우 (설정에서 1개의 파일도 배열에 넣게 했음)
+        version++
 
-            for (var i = 0; i < files.length; i++) {
-                originalname = files[i].originalname;
-                filename = files[i].filename;
-                mimetype = files[i].mimetype;
-                size = files[i].size;
+        if (files.length > 0) {
+            console.dir(files[0]);
+
+            // 현재의 파일 정보를 저장할 변수 선언
+            var originalname = '',
+                filename = '',
+                mimetype = '',
+                size = 0;
+
+            if (Array.isArray(files)) {   // 배열에 들어가 있는 경우 (설정에서 1개의 파일도 배열에 넣게 했음)
+
+                for (var i = 0; i < files.length; i++) {
+                    originalname = files[i].originalname;
+                    filename = files[i].filename;
+                    mimetype = files[i].mimetype;
+                    size = files[i].size;
+                }
             }
+            res.redirect('mediacontents')
+        } else {
+            console.log('파일이 없습니다');
         }
-        res.redirect('mediacontents')
-    } else {
-        console.log('파일이 없습니다');
     }
 } catch (err) {
     console.dir(err.stack);
@@ -984,7 +1066,6 @@ monthdata.save(function (err, slience) {
 
 console.log("현재 달 : " + todayMonth)
 })
-
 
 //매년 1월에 발생하는 이벤트
 var Y = schedule.scheduleJob("0 0 0 0 1 *", function () {
@@ -1231,12 +1312,12 @@ User.findOne({ name: req.body.name, password: req.body.password }, (err, user) =
                         authorized: true
                     }
                     res.render('sub', {
-                        accessmanage: water, videofile: videofile, imgfile: imgfile, water: usewater, remainwater: remainwater,
+                        accessmanage: water, percentArray: percentArray, weekendWater: weekendWater, videofile: videofile, imgfile: imgfile, water: usewater, remainwater: remainwater,
                         contents: localname, cityname: cityname, village: villagename, selectcityname: selectcityname, selectvillagename: selectvillagename
                     })
                 })
             })
-        }).sort({ Date: -1 }).sort({ Hour: -1 }).limit(7)
+        }).sort({ Date: -1 }).sort({ Hour: -1 }).sort({ Day: -1 }).limit(7)
     }
     else return res.status(404).send({ message: '유저 없음!' });
 });
@@ -1510,6 +1591,15 @@ Videofilesave.find(function (err, videofile) {
                 imageArray.push(imgfile[index])
             }
         }
+        if (req.session.logindata) {
+            res.render('sub', {
+                accessmanage: water, percentArray: percentArray, weekendWater: weekendWater, videofile: videofile, imgfile: imgfile, water: usewater, remainwater: remainwater,
+                contents: localname, cityname: cityname, village: villagename, selectcityname: selectcityname, selectvillagename: selectvillagename
+            })
+        }
+        else {
+            res.render('login', { layout: null })
+        }
         res.render('bookmedia', { videofile: videoArray, imgfile: imageArray })
     })
 })
@@ -1530,11 +1620,25 @@ app.use(express.static(__dirname + '/api'))
 //메인페이지
 app.get('/main', function (req, res) {
 Water.find(function (err, water) {
+    let Valuedata = new Array()
+    for (let index = 0; index < water.length; index++) {
+        Valuedata.push(water[index].Useage)
+    }
+    maxValue = Math.max.apply(null, Valuedata)
+
+    if (weekendWater[0] > maxValue) {
+        maxValue = weekendWater[0]
+    }
+    for (let index = 0; index < weekendWater.length; index++) {
+        //weekendWater.push(percent(data[index].Useage, maxValue))
+        percentArray[index] = Math.floor(percent(weekendWater[index], maxValue))
+    }
+    console.log(percentArray)
     Smartmirrorvideofile.find(function (err, videofile) {
         Smartmirrorimagefile.find(function (err, imgfile) {
             if (req.session.logindata) {
                 res.render('sub', {
-                    accessmanage: water, videofile: videofile, imgfile: imgfile, water: usewater, remainwater: remainwater,
+                    accessmanage: water, percentArray: percentArray, weekendWater: weekendWater, videofile: videofile, imgfile: imgfile, water: usewater, remainwater: remainwater,
                     contents: localname, cityname: cityname, village: villagename, selectcityname: selectcityname, selectvillagename: selectvillagename
                 })
             }
@@ -1543,7 +1647,7 @@ Water.find(function (err, water) {
             }
         })
     })
-}).sort({ Date: -1 }).sort({ Hour: -1 }).limit(7)
+}).sort({ Year: -1 }).sort({ Month: -1 }).sort({ Day: -1 }).limit(7)
 })
 
 /*
@@ -1597,8 +1701,8 @@ Imgfile.find({}, imgProjection, function (err, data) {
     res.json(data)
 })*/
 
-Smartmirrorimagefile.find({},videoProjection,function(err, data){
-    if(err) return next(err)
+Smartmirrorimagefile.find({}, videoProjection, function (err, data) {
+    if (err) return next(err)
     res.json(data)
 })
 
@@ -1612,8 +1716,8 @@ Videofilesave.find({}, videoProjection, function (err, data) {
     res.json(data)
 })*/
 
-Smartmirrorvideofile.find({},videoProjection,function(err, data){
-    if(err) return next(err)
+Smartmirrorvideofile.find({}, videoProjection, function (err, data) {
+    if (err) return next(err)
     res.json(data)
 })
 
@@ -1765,7 +1869,7 @@ res.render('dummy')
 app.use('/handdryermanage', function (req, res) {
 console.log(receivehand)
 console.log(receivegas)
-res.render('handdryermanage', { layout: null })
+res.render('handdryermanage')
 })
 
 //서버에서 esp32 값을 받는 테스트 페이지
@@ -1798,7 +1902,6 @@ app.get('/testwater_recieve', function (req, res) {
 watervalue = req.query.id
 const todayMonth = moment().format('MM')
 pushwatervalue = parseInt(watervalue)
-const forMathMonth = todayMonth - 1
 //plusvalue = parseInt(plusvalue) + (parseInt(watervalue) / 1000)
 
 weekendWater[0] = parseInt(weekendWater[0]) + parseInt(watervalue)
@@ -1812,9 +1915,9 @@ for (let index = 0; index < weekendWater.length; index++) {
 }
 
 //yearWater[0] = yearWater[0] + (parseInt(watervalue) / 1000)
-yearWater[10] = parseInt(yearWater[10]) + parseInt(watervalue)
-if (yearWater[10] > maxyearValue) {
-    maxyearValue = yearWater[10]
+yearWater[10] = parseInt(yearWater[todayMonth]) + parseInt(watervalue)
+if (yearWater[todayMonth] > maxyearValue) {
+    maxyearValue = yearWater[todayMonth]
 }
 for (let index = 0; index < yearWater.length; index++) {
     //weekendWater.push(percent(data[index].Useage, maxValue))
@@ -1826,14 +1929,21 @@ console.log(yearpercentArray)
 io.emit('weekendwater', weekendWater[0])
 io.emit('waterpercent', percentArray)
 io.emit('wateryearpercent', yearpercentArray)
-io.emit('yearWater', yearWater[10])
+io.emit('yearWater', yearWater[todayMonth])
 res.render('dkatk', { layout: null, watervalue: watervalue })
 })
 
 let getnfc = ""
+let count = 0
+let testvalue = ""
 app.get('/nfc_recieve', function (req, res) {
 getnfc = req.query.id
 console.log(getnfc)
+if (testvalue) {
+    count++
+    testvalue = ""
+}
+io.emit('testcount', count)
 io.emit('getnfc', getnfc)
 res.render('dkatk', { layout: null })
 })
@@ -1843,10 +1953,9 @@ let receivegas = "2"
 app.get('/test_gassensor', function (req, res) {
 gassensor = req.query.id
 receivegas = parseInt(gassensor)
-if(pushwatervalue)
-{
-    
-    
+if (pushwatervalue) {
+
+
     pushwatervalue = ""
 }
 console.log(gassensor)
@@ -1864,10 +1973,10 @@ io.emit('remain', hand)
 res.render('dkatk', { layout: null })
 })
 
-
 app.get('/wateruseage', function (req, res) {
 Water.find(function (err, data) {
     MonthUseage.find(function (err, yeardata) {
+        const currentmonth = moment().format('MM')
         let Valuedata = new Array()
         for (let index = 0; index < data.length; index++) {
             Valuedata.push(data[index].Useage)
@@ -1880,18 +1989,13 @@ Water.find(function (err, data) {
         }
         maxyearValue = Math.max.apply(null, Valueyeardata)
 
-
-
-
         if (weekendWater[0] > maxValue) {
             maxValue = weekendWater[0]
         }
 
-        if (yearWater[10] > maxyearValue) {
-            maxyearValue = yearWater[10]
+        if (yearWater[currentmonth] > maxyearValue) {
+            maxyearValue = yearWater[currentmonth]
         }
-
-
 
         for (let index = 0; index < weekendWater.length; index++) {
             //weekendWater.push(percent(data[index].Useage, maxValue))
@@ -1903,7 +2007,6 @@ Water.find(function (err, data) {
             yearpercentArray[index] = Math.floor(percent(yearWater[index], maxyearValue))
         }
 
-
         res.render('wateruseage', {
             data: data, yeardata: yeardata, selectcityname: selectcityname, selectvillagename: selectvillagename, weekendWater: weekendWater,
             percentArray: percentArray, yearWater: yearWater, yearpercentArray: yearpercentArray
@@ -1913,6 +2016,7 @@ Water.find(function (err, data) {
 }).sort({ Year: -1 }).sort({ Month: -1 }).sort({ Day: -1 }).limit(7)
 console.log("수치 : " + yearWater)
 console.log("percent : " + percentArray)
+testvalue = "aaaa"
 })
 //const user = new Water({ 'name': "132", 'Date' : valuedata, 'Hour' : "18 : 10" })
 
@@ -1924,7 +2028,6 @@ return (par / total) * 100
 const todayYear = moment().format('YY')
 const todayMonth = moment().format('MM')
 //초기 7일간 데이터중 가장 높은 일자의 값 구하기 설정
-//찾았다.... 네녀석이구나
 let maxValue = 0
 Water.find(function (err, data) {
 //maxValue = Math.max(...data.Date) //ES6 문법이기 때문에 안되면 const maxValue = Math.max.apply(null, data) 를 사용
@@ -1933,8 +2036,7 @@ for (let index = 0; index < data.length; index++) {
     Valuedata.push(data[index].Useage)
 }
 maxValue = Math.max.apply(null, Valuedata)
-console.log("최신 7개의 데이터 : " + data)
-}).sort({ Year: 1 }).sort({ Month: 1 }).sort({ Day: -1 }).limit(7) //추후엔 Month 와 Day로 나누기 때문에 각각에 sort정렬을 해줘야 최신 데이터가 나옴
+}).sort({ Year: 1 }).sort({ Month: -1 }).sort({ Day: -1 }).limit(7) //추후엔 Month 와 Day로 나누기 때문에 각각에 sort정렬을 해줘야 최신 데이터가 나옴
 
 
 //초기 1년간 데이터중 가장 높은 달의 값 구하기 설정
@@ -1958,8 +2060,7 @@ for (let index = 0; index < data.length; index++) {
     //weekendWater.push(parseInt(percent(data[index].Useage, maxValue)))
     weekendWater.push(parseInt(data[index].Useage))
 }
-console.log(weekendWater)
-}).sort({ Year: 1 }).sort({ Month: 1 }).sort({ Day: -1 }).limit(7)
+}).sort({ Year: 1 }).sort({ Month: -1 }).sort({ Day: -1 }).limit(7)
 
 //수전데이터 받기전 1년 데이터 기초 설정
 let yearWater = new Array()
@@ -2053,10 +2154,38 @@ socket.on('gassensor', (msg) => {
     // io.emit으로 연결된 모든 소켓들에 신호를 보낼 수 있다.
     io.emit('gassensor', msg);
 });
-
-
-
 });
+
+
+let listint = []
+let clientpage
+app.get('/clientlist/:page', function (req, res) {
+clientpage = req.params.page
+if (clientpage == null) { clientpage = 1 }
+let skipsize = (clientpage - 1) * 10
+let limitsize = 14
+let pagenum = 1
+
+Water.countDocuments(function (err, water) {
+    if (err) throw err
+
+    pagenum = Math.ceil(water / limitsize)
+    for (let i = 1; i <= pagenum; i++) {
+        listint[i] = i
+    }
+    Water.find({}).sort({ Date: -1 }).skip(skipsize).limit(limitsize).exec(function (err, pageContents) {
+        if (err) throw err
+        res.render('clientlist', { contents: pageContents, pagination: pagenum, count: listint })
+    })
+})
+})
+
+app.post('/clientlist', function (req, res) {
+let divisionpage = clientpage / 5
+
+})
+
+
 
 // custom 404 page
 app.use((req, res) => {
