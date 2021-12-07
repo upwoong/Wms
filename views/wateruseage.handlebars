@@ -412,7 +412,7 @@
             <span class="c-3AAFE2 mr-1">
               <i class="fas fa-hand-holding-water"></i>
             </span>
-            <span>
+            <span id="graphmonth0">
               {{yearWater.[0]}}
             </span>
             <span>
@@ -444,7 +444,7 @@
             <span class="c-3AAFE2 mr-1">
               <i class="fas fa-hand-holding-water"></i>
             </span>
-            <span>
+            <span id="graphmonth1">
               {{yearWater.[1]}}
             </span>
             <span>
@@ -476,7 +476,7 @@
             <span class="c-3AAFE2 mr-1">
               <i class="fas fa-hand-holding-water"></i>
             </span>
-            <span>
+            <span id="graphmonth2">
               {{yearWater.[2]}}
             </span>
             <span>
@@ -508,7 +508,7 @@
             <span class="c-3AAFE2 mr-1">
               <i class="fas fa-hand-holding-water"></i>
             </span>
-            <span>
+            <span id="graphmonth3">
               {{yearWater.[3]}}
             </span>
             <span>
@@ -540,7 +540,7 @@
             <span class="c-3AAFE2 mr-1">
               <i class="fas fa-hand-holding-water"></i>
             </span>
-            <span>
+            <span id="graphmonth4">
               {{yearWater.[4]}}
             </span>
             <span>
@@ -572,7 +572,7 @@
             <span class="c-3AAFE2 mr-1">
               <i class="fas fa-hand-holding-water"></i>
             </span>
-            <span>
+            <span id="graphmonth5">
               {{yearWater.[5]}}
             </span>
             <span>
@@ -604,7 +604,7 @@
             <span class="c-3AAFE2 mr-1">
               <i class="fas fa-hand-holding-water"></i>
             </span>
-            <span>
+            <span id="graphmonth6">
               {{yearWater.[6]}}
             </span>
             <span>
@@ -636,7 +636,7 @@
             <span class="c-3AAFE2 mr-1">
               <i class="fas fa-hand-holding-water"></i>
             </span>
-            <span>
+            <span id="graphmonth7">
               {{yearWater.[7]}}
             </span>
             <span>
@@ -668,7 +668,7 @@
             <span class="c-3AAFE2 mr-1">
               <i class="fas fa-hand-holding-water"></i>
             </span>
-            <span>
+            <span id="graphmonth8">
               {{yearWater.[8]}}
             </span>
             <span>
@@ -700,7 +700,7 @@
             <span class="c-3AAFE2 mr-1">
               <i class="fas fa-hand-holding-water"></i>
             </span>
-            <span>
+            <span id="graphmonth9">
               {{yearWater.[9]}}
             </span>
             <span>
@@ -732,7 +732,7 @@
             <span class="c-3AAFE2 mr-1">
               <i class="fas fa-hand-holding-water"></i>
             </span>
-            <span>
+            <span id="graphmonth10">
               {{yearWater.[10]}}
             </span>
             <span>
@@ -764,7 +764,7 @@
             <span class="c-3AAFE2 mr-1">
               <i class="fas fa-hand-holding-water"></i>
             </span>
-            <span>
+            <span id="graphmonth11">
               {{yearWater.[11]}}
             </span>
             <span>
@@ -793,7 +793,6 @@
     </div>
   </div>
 </div>
-
 
 <script src="/socket.io/socket.io.js"></script>
 <script>
@@ -896,7 +895,11 @@
   });
 
   socket.on('yearWater',(msg)=>{
+    let today = new Date();
+    let month = today.getMonth();
     var monthwateruseage = document.getElementById('monthwateruseage');
+    var graphmonth = document.getElementById('graphmonth'+month);
+    graphmonth.innerText = msg
 
     monthwateruseage.innerText = msg;
   });
