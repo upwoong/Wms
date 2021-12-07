@@ -1958,9 +1958,9 @@ for (let index = 0; index < weekendWater.length; index++) {
 }
 
 //yearWater[0] = yearWater[0] + (parseInt(watervalue) / 1000)
-yearWater[todayMonth] = parseInt(yearWater[todayMonth]) + parseInt(watervalue)
-if (yearWater[todayMonth] > maxyearValue) {
-    maxyearValue = yearWater[todayMonth]
+yearWater[todayMonth-1] = parseInt(yearWater[todayMonth-1]) + parseInt(watervalue)
+if (yearWater[todayMonth-1] > maxyearValue) {
+    maxyearValue = yearWater[todayMonth-1]
 }
 for (let index = 0; index < yearWater.length; index++) {
     //weekendWater.push(percent(data[index].Useage, maxValue))
