@@ -48,6 +48,7 @@ const mongoose = require('mongoose')
 const { WSATYPE_NOT_FOUND } = require('constants')
 const { response } = require('express')
 const { next } = require('cheerio/lib/api/traversing')
+const { constants } = require('http2')
 //const { arrayParentSymbol } = require('mongose/lib/helpers/symbools')
 mongoose.connect('mongodb+srv://upwoong:ehdrhd12@cluster0.ahlcp.mongodb.net/test', { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.set('useCreateIndex', true)
@@ -74,7 +75,12 @@ const clients = new mongoose.Schema({
 name: String,
 Sex: String,
 password: String,
-username: String
+username: String,
+comment: [{
+    text: String,
+    username : String,
+    Date : String
+}]
 })
 const videofilesave = new mongoose.Schema({
 name: String,
@@ -124,71 +130,6 @@ const Smartmirrorvideofile = mongoose.model('smartmirrorvideofile', smartmirrorv
 const MonthUseage = mongoose.model('monthuseage', monthuseage)
 const SmartmirrorExe = mongoose.model('smartmirrorexe', smartmirrorexe)
 
-const MemberSchema = new mongoose.Schema({
-id: { type: String, required: true, unique: true },
-loginmember: String,
-password: String,
-username: String,
-sex: String,
-nfcnumber: String,
-syncTime: { type: Date, default: Date.now }
-}, { collection: 'member' });
-
-const MemberModel = mongoose.model("member", MemberSchema);
-
-const SupportSchema = new mongoose.Schema({
-id: { type: String, required: true, unique: true },
-title: String,
-sentense: String,
-username: String,
-syncTime: { type: Date, default: Date.now },
-checksum: Boolean,
-}, { collection: 'support' });
-
-const SupportModel = mongoose.model("support", SupportSchema);
-
-const NoticeSchema = new mongoose.Schema({
-id: { type: String, required: true, unique: true },
-title: String,
-image: String,
-sentense: String,
-username: String,
-syncTime: { type: Date, default: Date.now }
-}, { collection: 'notice' });
-
-const NoticeModel = mongoose.model("notice", NoticeSchema);
-
-const CommentSchema = new mongoose.Schema({
-id: { type: String, required: true, unique: true },
-title: String,
-image: String,
-from: String,
-message: String,
-syncTime: { type: Date, default: Date.now }
-}, { collection: 'comment' });
-
-const CommentModel = mongoose.model("comment", CommentSchema);
-
-const TagSchema = new mongoose.Schema({
-id: { type: String, required: true, unique: true },
-loginmember: String,
-password: String,
-username: String,
-sex: String,
-nfcnumber: String,
-syncTime: { type: Date, default: Date.now }
-}, { collection: 'tag' });
-
-const TagModel = mongoose.model("tag", TagSchema);
-
-const CalSchema = new mongoose.Schema({
-id: { type: String, required: true, unique: true },
-syncTime: { type: Date, default: Date.now },
-timezone: { type: Date, default: Date.now },
-}, { collection: 'cal' });
-
-const CalModel = mongoose.model("cal", CalSchema);
-
 var videoProjection = {
 __v: false,
 _id: false,
@@ -201,18 +142,89 @@ _id: false,
 };
 app.use('/smartmirror', static(path.join(__dirname, 'smartmirror')));
 
-let arraywater = []
-const endpoint = 'http://localhost:8080/graphql/waterinput'
 //Event set
 let databaseEvent = mongoose.connection;
+
+//Main Schema set
+let MemberSchema;
+let SupportSchema;
+let NoticeSchema;
+let CommentSchema;
+let TagSchema;
+let CalSchema;
+
 
 
 //Mongo Schema
 //databaseEvent.on('error', console.error.bind(console, 'mongoose connection error'));
 //databaseEvent.on('open', function(){
+MemberSchema = mongoose.Schema({
+id: { type: String, required: true, unique: true },
+loginmember: String,
+password: String,
+username: String,
+sex: String,
+nfcnumber: String,
+syncTime: { type: Date, default: Date.now }
+}, { collection: 'member' });
 
+const MemberModel = mongoose.model("member", MemberSchema);
+
+SupportSchema = mongoose.Schema({
+id: { type: String, required: true, unique: true },
+title: String,
+sentense: String,
+username: String,
+syncTime: { type: Date, default: Date.now },
+checksum: Boolean,
+}, { collection: 'support' });
+
+const SupportModel = mongoose.model("support", SupportSchema);
+
+NoticeSchema = mongoose.Schema({
+id: { type: String, required: true, unique: true },
+title: String,
+image: String,
+sentense: String,
+username: String,
+syncTime: { type: Date, default: Date.now }
+}, { collection: 'notice' });
+
+const NoticeModel = mongoose.model("notice", NoticeSchema);
+
+CommentSchema = mongoose.Schema({
+id: { type: String, required: true, unique: true },
+title: String,
+image: String,
+from: String,
+message: String,
+syncTime: { type: Date, default: Date.now }
+}, { collection: 'comment' });
+
+const CommentModel = mongoose.model("comment", CommentSchema);
+
+TagSchema = mongoose.Schema({
+id: { type: String, required: true, unique: true },
+loginmember: String,
+password: String,
+username: String,
+sex: String,
+nfcnumber: String,
+syncTime: { type: Date, default: Date.now }
+}, { collection: 'tag' });
+
+const TagModel = mongoose.model("tag", TagSchema);
+
+CalSchema = mongoose.Schema({
+id: { type: String, required: true, unique: true },
+syncTime: { type: Date, default: Date.now },
+timezone: { type: Date, default: Date.now },
+}, { collection: 'cal' });
+
+const CalModel = mongoose.model("cal", CalSchema);
 
 //});
+
 
 //수전 및 핸드드라이어 스키마, 달력데이터 스키마
 
@@ -229,7 +241,7 @@ password: String!,
 username: String!,
 sex: String!,
 nfcnumber: String!,
-date: DateTime!
+syncTime: DateTime!
 }
 
 input MemberJoin {
@@ -246,7 +258,7 @@ id: ID!,
 title: String!,
 mainSentense: String!,
 user: [MemberList]!,
-date: DateTime!
+syncTime: DateTime!
 }
 
 input WashiSupportRequest {
@@ -261,7 +273,7 @@ title: String,
 image: String,
 mainSentense: String,
 user: [MemberList]!,
-date: DateTime!
+syncTime: DateTime!
 }
 
 input WashiNoticeInput {
@@ -277,7 +289,7 @@ title: String,
 image: String,
 from: [MemberList]!,
 message: String,
-date: DateTime!
+syncTime: DateTime!
 }
 
 input WashiCommentInput {
@@ -301,7 +313,7 @@ username: String,
 }
 
 type WashiCalendar {
-date: DateTime,
+syncTime: DateTime,
 timezone: String
 }
 
@@ -328,10 +340,8 @@ createNotice(input: WashiNoticeInput) : WashiNotice,
 deleteNotice(id: ID!) : String,
 updateComment(id: ID!, input: WashiCommentInput) : WashiComment,
 createComment(input: WashiCommentInput) : WashiComment,
-deleteComment(id: ID!) : String
-updateTag(id: ID!, input: WashiTagWrite) : WashiTagRead,
-createTag(input: WashiTagWrite) : WashiTagRead,
-deleteTag(id: ID!) : String
+deleteComment(id: ID!) : String,
+inputTag(input: WashiTagWrite) : WashiTagRead,
 }
 
 
@@ -351,131 +361,99 @@ serialize: (value) => {
 }); //DateTime setup
 
 //data constructor
-
-/*let Member = class Member {
-constructor(id, {loginmember, password, username, sex, nfcnumber, date}) {
-this.id = id;
-this.loginmember = loginmember;
-this.password = password;
-this.username = username;
-this.sex = sex;
-this.nfcnumber = nfcnumber;
-this.date = date == Date.now();
-}
-}
-
-let Support = class Support {
-constructor(id, {title, mainSentense, user, date}) {
-this.id = id;
-this.title = title;
-this.mainSentense = mainSentense;
-this.user = user;
-this.date = date;
-}
-}
-
-let Notice = class Notice {
-constructor(id, {title, image, mainSentense, user, date}) {
-this.id = id;
-this.title = title;
-this.image = image;
-this.mainSentense = mainSentense;
-this.user = user;
-this.date = date;
-}
-}
-
-let Comment = class Comment {
-constructor(id, {title, from, message, date}) {
-this.id = id;
-this.title = title;
-this.from = from;
-this.message = message;
-this.date = date;
-}
-}*/
-
+let Member = new MemberModel();
+let Support = new SupportModel();
+let Notice = new NoticeModel();
+let Comment = new CommentModel();
+let Tag = new TagModel();
+let Cal = new CalModel();
 // Main Resolver
+
+
 var root = {
 //Member
-createMember: ({ input }) => {
-    const id = require('crypto').randomBytes(10).toString('hex');
-    const newMember = new Water({ 'loginmember': input.loginmember, 'password': input.password, 'username': input.username, 'sex': input.sex, 'nfcnumber': input.nfcnumber })
-    MemberModel.syncTime = Date.now();
-    //return MemberModel.create(id, input);
-    return newMember.save(function (err, slience) {
-        if (err) {
-            console.log(err)
-            res.status(500).send('update error')
+createMember: async ({ input }) => {
+    const id = require('crypto').randomBytes(2).toString('hex');
+    const momenta = moment();
+    MemberModel.find(function (err, data) {
+        for (let index = 0; index < data.length; index++) {
+            if (data[index].loginmember == input.loginmember) {
+                state = ""
+            }
+            else {
+                state = "continue"
+            }
+        }
+        if (state == "continue") {
+            console.log("state : " + state)
+            const Members = new MemberModel({ 'id': id, 'loginmember': input.loginmember, 'username': input.username, 'password': input.password, 'sex': input.sex, 'nfcnumber': input.nfcnumber })
+            Members.save(function (err, slience) {
+                if (err) {
+                    console.log(err)
+                    res.send('update error,aaaaa')
+                    return
+                }
+                return
+            })
+        }
+        else {
+            console.log("Already member existed")
         }
     })
+    state = ""
 },
-getMember: ({ id }) => {
-    console.log(MemberModel.id);
-    return MemberModel.findById(id);
+getMember: async function ({ id }) {
+    const Members = await MemberModel.findOne({ id });
+    if (!Members) {
+        throw new Error("No items");
+    }
+    return {
+        ...Members._doc,
+        id: Members.id.toString(),
+    }
 },
-updateMember: ({ id, input }) => {
-    return MemberModel.updateOne(id, input);
+updateMember: async function ({ id, input }) {
+    const Members = await MemberModel.findOne({ id });
+    if (!Members) {
+        throw new Error("No items");
+    }
+
+    Members.loginmember = input.loginmember;
+    Members.username = input.username;
+    Members.password = input.password;
+    Members.sex = input.sex;
+    Members.nfcnumber = input.nfcnumber;
+    const upMembers = await MemberModel.save();
+    return {
+        ...upMembers._doc,
+        id: upMembers.id.toString(),
+    };
 },
-deleteMember: ({ id }) => {
-    MemberModel.findOneAndDelete(id);
-    return "delete";
+deleteMember: async function ({ id }) {
+    const Members = await MemberModel.findOne({ id });
+    if (!Members) {
+        throw new Error("No items");
+    }
+
+    await MemberModel.findOneAndDelete({ id });
+    return {
+        ...MemberModel._doc,
+        id: MemberModel.id,
+
+    }, "delete Complete";
 },
-//Support
-createSupport: ({ input }) => {
-    const id = require('crypto').randomBytes(10).toString('hex');
-    SupportModel.syncTime = Date.now();
-    //Support.syncTime = Date.now();
-    return SupportModel.create(id, input);
+//Tag
+inputTag: ({ input }) => {
+    c
 },
-getSupport: ({ id }) => {
-    console.log(SupportModel.find(id));
-    return SupportModel.findById(id);
+getTag: ({ id }) => {
+    c
 },
-updateSupport: ({ id, input }) => {
-    return SupportModel.update(id, input);
-},
-deleteSupport: ({ id }) => {
-    SupportModel.findOneAndDelete(id);
-    return "delete";
-},
-//Notice
-createNotice: ({ input }) => {
-    const id = require('crypto').randomBytes(10).toString('hex');
-    NoticeModel.syncTime = Date.now();
-    return NoticeModel.create(id, input);
-},
-getNotice: ({ id }) => {
-    console.log(NoticeModel.find(id));
-    return NoticeModel.findById(id);
-},
-updateNotice: ({ id, input }) => {
-    return NoticeModel.update(id, input);
-},
-deleteNotice: ({ id }) => {
-    NoticeModel.findOneAndDelete(id);
-    return "delete";
-},
-//Comment
-createComment: ({ input }) => {
-    const id = require('crypto').randomBytes(10).toString('hex');
-    CommentModel.syncTime = Date.now();
-    return CommentModel.create(id, input);
-},
-getComment: ({ id }) => {
-    console.log(CommentModel.find(id));
-    return CommentModel.findById(id);
-},
-updateComment: ({ id, input }) => {
-    return CommentModel.update(id, input);
-},
-deleteComment: ({ id }) => {
-    CommentModel.findOneAndDelete(id);
-    return "delete";
+//calendar
+getCalendar: ({ id }) => {
+    c
 }
 };
-
-
 
 app.use('/graphql', GraphqlHttp({
 schema: schema,
@@ -488,9 +466,9 @@ var router = express.Router()
 
 var storagevideo = multer.diskStorage({
 destination: function (req, file, callback) {
-    //변경
+    
     callback(null, '/home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/video')
-    //callback(null, 'smartmirror/video')
+    
 },
 filename: function (req, file, callback) {
     var extension = path.extname(file.originalname);
@@ -512,56 +490,61 @@ limits: {
 router.route('/processvideo').post(upload.array('photo', 1), function (req, res) {
 try {
     var files = req.files;
+    if (files[0].mimetype == "mp4" || files[0].mimetype == "avi" || files[0].mimetype == "wmv") {
+        version++
 
-    version++
+        if (files.length > 0) {
+            console.dir(files[0]);
 
-    if (files.length > 0) {
-        console.dir(files[0]);
+            // 현재의 파일 정보를 저장할 변수 선언
+            var originalname = '',
+                filename = '',
+                mimetype = '',
+                size = 0;
 
-        // 현재의 파일 정보를 저장할 변수 선언
-        var originalname = '',
-            filename = '',
-            mimetype = '',
-            size = 0;
+            if (Array.isArray(files)) {   // 배열에 들어가 있는 경우 (설정에서 1개의 파일도 배열에 넣게 했음)
 
-        if (Array.isArray(files)) {   // 배열에 들어가 있는 경우 (설정에서 1개의 파일도 배열에 넣게 했음)
-
-            for (var i = 0; i < files.length; i++) {
-                originalname = files[i].originalname;
-                filename = files[i].filename;
-                mimetype = files[i].mimetype;
-                size = files[i].size;
+                for (var i = 0; i < files.length; i++) {
+                    originalname = files[i].originalname;
+                    filename = files[i].filename;
+                    mimetype = files[i].mimetype;
+                    size = files[i].size;
+                }
             }
-        }
 
-        //만약 현재 보여주는 미디어들의 type 이 None일 경우 smartmirrorvideofile 데이터베이스가 비어있을 경우
-        //Smartmirrorvideofile 데이터베이스에도 추가하여 바로 반영되도록 추가
-        Smartmirrorvideofile.find(function (err, data) {
-            if (data == "" || data[0].type == "None") {
-                const videofile = new Smartmirrorvideofile({ 'name': filename, 'Date': new Date(), 'type': "None" })
-                videofile.save(function (err, slience) {
-                    if (err) {
-                        console.log(err)
-                        res.send('update error')
+            //만약 현재 보여주는 미디어들의 type 이 None일 경우 smartmirrorvideofile 데이터베이스가 비어있을 경우
+            //Smartmirrorvideofile 데이터베이스에도 추가하여 바로 반영되도록 추가
+            Smartmirrorvideofile.find(function (err, data) {
+                if (data == "" || data[0].type == "None") {
+                    const videofile = new Smartmirrorvideofile({ 'name': filename, 'Date': new Date(), 'type': "None" })
+                    videofile.save(function (err, slience) {
+                        if (err) {
+                            console.log(err)
+                            res.send('update error')
+                            return
+                        }
                         return
-                    }
-                    return
-                })
-            }
-        })
+                    })
+                }
+            })
 
-        const videofile = new Videofilesave({ 'name': filename, 'Date': new Date(), 'type': "None" })
-        videofile.save(function (err, slience) {
-            if (err) {
-                console.log(err)
-                res.send('update error')
+            const videofile = new Videofilesave({ 'name': filename, 'Date': new Date(), 'type': "None" })
+            videofile.save(function (err, slience) {
+                if (err) {
+                    console.log(err)
+                    res.send('update error')
+                    return
+                }
                 return
-            }
-            return
-        })
-        res.redirect('mediacontents')
-    } else {
-        console.log('파일이 없습니다');
+            })
+            res.redirect('mediacontents')
+        } else {
+            console.log('파일이 없습니다');
+        }
+    }
+    else {
+        console.log("옳바른 확장자가 아닙니다.")
+        res.send("<script>alert('옳바른 확장자가 아닙니다.');location.href='mediacontents';</script>");
     }
 } catch (err) {
     console.dir(err.stack);
@@ -571,60 +554,66 @@ try {
 router.route('/processbookingvideo').post(upload.array('photo', 1), function (req, res) {
 try {
     var files = req.files;
-    var selectday = req.body.chooseimageday
-    const strArr = selectday.split('-')
-    const month = strArr[1]
-    const day = strArr[2]
-    const currentday = strArr[1] + strArr[2]
-    console.log("month :" + month + "day :" + day)
-    version++
+    if (files[0].mimetype == "mp4" || files[0].mimetype == "avi" || files[0].mimetype == "wmv") {
+        var selectday = req.body.chooseimageday
+        const strArr = selectday.split('-')
+        const month = strArr[1]
+        const day = strArr[2]
+        const currentday = strArr[1] + strArr[2]
+        console.log("month :" + month + "day :" + day)
+        version++
 
-    if (files.length > 0) {
-        console.dir(files[0]);
+        if (files.length > 0) {
+            console.dir(files[0]);
 
-        // 현재의 파일 정보를 저장할 변수 선언
-        var originalname = '',
-            filename = '',
-            mimetype = '',
-            size = 0;
+            // 현재의 파일 정보를 저장할 변수 선언
+            var originalname = '',
+                filename = '',
+                mimetype = '',
+                size = 0;
 
-        if (Array.isArray(files)) {   // 배열에 들어가 있는 경우 (설정에서 1개의 파일도 배열에 넣게 했음)
+            if (Array.isArray(files)) {   // 배열에 들어가 있는 경우 (설정에서 1개의 파일도 배열에 넣게 했음)
 
-            for (var i = 0; i < files.length; i++) {
-                originalname = files[i].originalname;
-                filename = files[i].filename;
-                mimetype = files[i].mimetype;
-                size = files[i].size;
+                for (var i = 0; i < files.length; i++) {
+                    originalname = files[i].originalname;
+                    filename = files[i].filename;
+                    mimetype = files[i].mimetype;
+                    size = files[i].size;
+                }
             }
-        }
 
-        //만약 현재 보여주는 미디어들의 type 이 reservation이고 날짜가 현재 날짜와 같다면 smartmirrorvideofile 데이터베이스에도 추가
-        Smartmirrorvideofile.find(function (err, data) {
-            if (data[0].type == "reservation" && data[0].Date == currentday) {
-                const videofile = new Smartmirrorvideofile({ 'name': filename, 'Date': currentday, 'type': "reservation" })
-                videofile.save(function (err, slience) {
-                    if (err) {
-                        console.log(err)
-                        res.send('update error,aaaaa')
+            //만약 현재 보여주는 미디어들의 type 이 reservation이고 날짜가 현재 날짜와 같다면 smartmirrorvideofile 데이터베이스에도 추가
+            Smartmirrorvideofile.find(function (err, data) {
+                if (data[0].type == "reservation" && data[0].Date == currentday) {
+                    const videofile = new Smartmirrorvideofile({ 'name': filename, 'Date': currentday, 'type': "reservation" })
+                    videofile.save(function (err, slience) {
+                        if (err) {
+                            console.log(err)
+                            res.send('update error,aaaaa')
+                            return
+                        }
                         return
-                    }
-                    return
-                })
-            }
-        })
+                    })
+                }
+            })
 
-        const videofile = new Videofilesave({ 'name': filename, 'Date': currentday, 'type': "reservation" })
-        videofile.save(function (err, slience) {
-            if (err) {
-                console.log(err)
-                res.send('update error')
+            const videofile = new Videofilesave({ 'name': filename, 'Date': currentday, 'type': "reservation" })
+            videofile.save(function (err, slience) {
+                if (err) {
+                    console.log(err)
+                    res.send('update error')
+                    return
+                }
                 return
-            }
-            return
-        })
-        res.redirect('bookmedia')
-    } else {
-        console.log('파일이 없습니다');
+            })
+            res.redirect('bookmedia')
+        } else {
+            console.log('파일이 없습니다');
+        }
+    }
+    else {
+        console.log("옳바른 확장자가 아닙니다.")
+        res.send("<script>alert('옳바른 확장자가 아닙니다.');location.href='bookmedia';</script>");
     }
 } catch (err) {
     console.dir(err.stack);
@@ -635,9 +624,9 @@ try {
 
 var storageimg = multer.diskStorage({
 destination: function (req, file, callback) {
-    //변경
+    
     callback(null, '/home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/image')
-    //callback(null, 'smartmirror/image')
+    
 },
 filename: function (req, file, callback) {
     var extension = path.extname(file.originalname);
@@ -659,61 +648,67 @@ limits: {
 router.route('/processimage').post(uploadimg.array('photo', 1), function (req, res) {
 try {
     var files = req.files;
+    if (files[0].mimetype == "jpg" || files[0].mimetype == "png" || files[0].mimetype == "gif" || files[0].mimetype == "jpeg") {
 
-    version++
+        version++
 
-    if (files.length > 0) {
-        console.dir(files[0]);
+        if (files.length > 0) {
+            console.dir(files[0]);
 
-        // 현재의 파일 정보를 저장할 변수 선언
-        var originalname = '',
-            filename = '',
-            mimetype = '',
-            size = 0;
+            // 현재의 파일 정보를 저장할 변수 선언
+            var originalname = '',
+                filename = '',
+                mimetype = '',
+                size = 0;
 
-        if (Array.isArray(files)) {   // 배열에 들어가 있는 경우 (설정에서 1개의 파일도 배열에 넣게 했음)
+            if (Array.isArray(files)) {   // 배열에 들어가 있는 경우 (설정에서 1개의 파일도 배열에 넣게 했음)
 
 
-            for (var i = 0; i < files.length; i++) {
-                originalname = files[i].originalname;
-                filename = files[i].filename;
-                mimetype = files[i].mimetype;
-                size = files[i].size;
+                for (var i = 0; i < files.length; i++) {
+                    originalname = files[i].originalname;
+                    filename = files[i].filename;
+                    mimetype = files[i].mimetype;
+                    size = files[i].size;
+                }
             }
-        }
 
 
-        // 클라이언트에 응답 전송
+            // 클라이언트에 응답 전송
 
-        //만약 현재 보여주는 미디어들의 type 이 None일 경우 또는 smartmirrorimagefile 데이터베이스가 비어있을경우
-        //Smartmirror 데이터베이스에도 추가하여 바로 반영되도록 추가
-        Smartmirrorimagefile.find(function (err, data) {
-            if (data == "" || data[0].type == "None") {
-                const imgfile = new Smartmirrorimagefile({ 'name': filename, 'Date': new Date(), 'type': "None" })
-                imgfile.save(function (err, slience) {
-                    if (err) {
-                        console.log(err)
-                        res.send('update error,aaaaa')
+            //만약 현재 보여주는 미디어들의 type 이 None일 경우 또는 smartmirrorimagefile 데이터베이스가 비어있을경우
+            //Smartmirror 데이터베이스에도 추가하여 바로 반영되도록 추가
+            Smartmirrorimagefile.find(function (err, data) {
+                if (data == "" || data[0].type == "None") {
+                    const imgfile = new Smartmirrorimagefile({ 'name': filename, 'Date': new Date(), 'type': "None" })
+                    imgfile.save(function (err, slience) {
+                        if (err) {
+                            console.log(err)
+                            res.send('update error,aaaaa')
+                            return
+                        }
                         return
-                    }
-                    return
-                })
-            }
-        })
+                    })
+                }
+            })
 
-        const imgfile = new Imgfile({ 'name': filename, 'Date': new Date(), 'type': "None" })
-        imgfile.save(function (err, slience) {
-            if (err) {
-                console.log(err)
-                res.send('update error,aaaaa')
+            const imgfile = new Imgfile({ 'name': filename, 'Date': new Date(), 'type': "None" })
+            imgfile.save(function (err, slience) {
+                if (err) {
+                    console.log(err)
+                    res.send('update error,aaaaa')
+                    return
+                }
                 return
-            }
-            return
-        })
-        // 삭제 예정 2021-11-11 Imgfile.find({}, null, { sort: '-name' }, function (err, docs) { })
-        res.redirect('mediacontents')
-    } else {
-        console.log('파일이 없습니다');
+            })
+            // 삭제 예정 2021-11-11 Imgfile.find({}, null, { sort: '-name' }, function (err, docs) { })
+            res.redirect('mediacontents')
+        } else {
+            console.log('파일이 없습니다');
+        }
+    }
+    else {
+        console.log("옳바른 확장자가 아닙니다.")
+        res.send("<script>alert('옳바른 확장자가 아닙니다.');location.href='mediacontents';</script>");
     }
 } catch (err) {
     console.dir(err.stack);
@@ -724,64 +719,70 @@ try {
 router.route('/processbookingimage').post(uploadimg.array('photo', 1), function (req, res) {
 try {
     var files = req.files;
-    var selectday = req.body.chooseimageday
-    const strArr = selectday.split('-');
-    const month = strArr[1]
-    const day = strArr[2]
-    const currentday = strArr[1] + strArr[2]
-    console.log("month :" + month + "day :" + day)
-    version++
+    if (files[0].mimetype == "jpg" || files[0].mimetype == "png" || files[0].mimetype == "gif" || files[0].mimetype == "jpeg") {
+        var selectday = req.body.chooseimageday
+        const strArr = selectday.split('-');
+        const month = strArr[1]
+        const day = strArr[2]
+        const currentday = strArr[1] + strArr[2]
+        console.log("month :" + month + "day :" + day)
+        version++
 
-    if (files.length > 0) {
-        console.dir(files[0]);
+        if (files.length > 0) {
+            console.dir(files[0]);
 
-        // 현재의 파일 정보를 저장할 변수 선언
-        var originalname = '',
-            filename = '',
-            mimetype = '',
-            size = 0;
+            // 현재의 파일 정보를 저장할 변수 선언
+            var originalname = '',
+                filename = '',
+                mimetype = '',
+                size = 0;
 
-        if (Array.isArray(files)) {   // 배열에 들어가 있는 경우 (설정에서 1개의 파일도 배열에 넣게 했음)
+            if (Array.isArray(files)) {   // 배열에 들어가 있는 경우 (설정에서 1개의 파일도 배열에 넣게 했음)
 
 
-            for (var i = 0; i < files.length; i++) {
-                originalname = files[i].originalname;
-                filename = files[i].filename;
-                mimetype = files[i].mimetype;
-                size = files[i].size;
+                for (var i = 0; i < files.length; i++) {
+                    originalname = files[i].originalname;
+                    filename = files[i].filename;
+                    mimetype = files[i].mimetype;
+                    size = files[i].size;
+                }
             }
-        }
 
 
-        // 클라이언트에 응답 전송
-        //만약 현재 보여주는 미디어들의 type 이 reservation이고 날짜가 현재 날짜와 같다면 smartmirrorimagefile 데이터베이스에도 추가
-        Smartmirrorimagefile.find(function (err, data) {
-            if (data[0].type == "reservation" && data[0].Date == currentday) {
-                const imgfile = new Smartmirrorimagefile({ 'name': filename, 'Date': currentday, 'type': "reservation" })
-                imgfile.save(function (err, slience) {
-                    if (err) {
-                        console.log(err)
-                        res.send('update error,aaaaa')
+            // 클라이언트에 응답 전송
+            //만약 현재 보여주는 미디어들의 type 이 reservation이고 날짜가 현재 날짜와 같다면 smartmirrorimagefile 데이터베이스에도 추가
+            Smartmirrorimagefile.find(function (err, data) {
+                if (data[0].type == "reservation" && data[0].Date == currentday) {
+                    const imgfile = new Smartmirrorimagefile({ 'name': filename, 'Date': currentday, 'type': "reservation" })
+                    imgfile.save(function (err, slience) {
+                        if (err) {
+                            console.log(err)
+                            res.send('update error,aaaaa')
+                            return
+                        }
                         return
-                    }
-                    return
-                })
-            }
-        })
+                    })
+                }
+            })
 
-        const imgfile = new Imgfile({ 'name': filename, 'Date': currentday, 'type': "reservation" })
-        imgfile.save(function (err, slience) {
-            if (err) {
-                console.log(err)
-                res.send('update error')
+            const imgfile = new Imgfile({ 'name': filename, 'Date': currentday, 'type': "reservation" })
+            imgfile.save(function (err, slience) {
+                if (err) {
+                    console.log(err)
+                    res.send('update error')
+                    return
+                }
                 return
-            }
-            return
-        })
-        Imgfile.find({}, null, { sort: '-name' }, function (err, docs) { })
-        res.redirect('bookmedia')
-    } else {
-        console.log('파일이 없습니다');
+            })
+            Imgfile.find({}, null, { sort: '-name' }, function (err, docs) { })
+            res.redirect('bookmedia')
+        } else {
+            console.log('파일이 없습니다');
+        }
+    }
+    else {
+        console.log("옳바른 확장자가 아닙니다.")
+        res.send("<script>alert('옳바른 확장자가 아닙니다.');location.href='mediacontents';</script>");
     }
 } catch (err) {
     console.dir(err.stack);
@@ -791,7 +792,7 @@ try {
 
 var storageSmartmirror = multer.diskStorage({
 destination: function (req, file, callback) {
-    //변경
+    
     callback(null, '/home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/item')
     //callback(null, 'smartmirror/item')
 },
@@ -811,10 +812,10 @@ limits: {
     fileSize: 1024 * 1024 * 1024
 }
 });
-//기본 비디오 파일 저장
+//스마트 미러 구동파일 교체
 router.route('/home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/item/Smartmirror.exe').post(uploadSmartmirror.array('photo', 1), function (req, res) {
-//변경
-///home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/item/Smartmirror.exe
+
+//
 try {
     var files = req.files;
     if (files == "SmartMirror.exe") {
@@ -849,6 +850,10 @@ try {
         } else {
             console.log('파일이 없습니다');
         }
+    }
+    else {
+        console.log("Smartmirror.exe 구동파일이 아닙니다.")
+        res.send("<script>alert('Smartmirror.exe 구동파일이 아닙니다.');location.href='smartmirrormanage';</script>");
     }
 } catch (err) {
     console.dir(err.stack);
@@ -1073,19 +1078,43 @@ yearWater[0] = 0 // 올해 총 사용량 초기화
 })
 
 app.get('/dkatk', function (req, res) {
-
-for (let index = 0; index < weekendWater.length; index++) {
-    //weekendWater.push(percent(data[index].Useage, maxValue))
-    percentArray[index] = Math.floor(percent(weekendWater[index], maxValue))
-}
-
-for (let index = 0; index < yearWater.length; index++) {
-    //weekendWater.push(percent(data[index].Useage, maxValue))
-    yearpercentArray[index] = Math.floor(percent(yearWater[index], maxyearValue))
-}
-res.render('dkatk', { layout: null, percentArray: percentArray, yearWater: yearWater, yearpercentArray: yearpercentArray, weekendWater: weekendWater })
-
+let commentarray = new Array()
+Client.find(function (err, data) {
+    for (let index = 0; index < data.length; index++) {
+        if (data[index].name == "박찬종") {
+            for (let i = 0; i < data[index].comment.length; i++) {
+                let object = new Object()
+                object.name = data[index].comment[i].username
+                object.text = data[index].comment[i].text
+                object.Date = data[index].comment[i].Date
+                commentarray.push(object)
+            }
+            console.log(commentarray)
+            res.render('dkatk', { layout: null, commentarray: commentarray })
+        }
+    }
 })
+})
+
+app.post('/addcomment', (req, res) => {
+const todayDay = moment().format("DD")
+const todayMonth = moment().format("MM")
+Client.updateOne({'name' : '박찬종'}, {$push :{comment:{'text' : req.body.commentText , 'username' : "coolpaper" , "Date" : todayMonth + todayDay}}}, function(err){
+    if(err){
+        console.log('댓글 추가 중 에러 발생 : ' +err.stack);
+
+        res.writeHead('200', {'Content-Type':'text/html;charset=utf8'});
+        res.write('<h2>게시판 댓글 추가 중 에러 발생</h2>');
+        res.end();
+        
+        return;           
+    }
+    
+    console.log('댓글 추가 완료 ');
+    res.redirect('dkatk')
+});
+});
+
 //fs.unlink(`smartmirror/image/${name}`, function () { })
 app.use('/', router)
 
@@ -1111,8 +1140,8 @@ for (let index = 2; index < 3775; index++) {
 
 
 //기상청 엑셀정보 불러오기
-//변경
-///home/hosting_users/creativethon/apps/creativethon_wmsapp/api/기상청41_단기예보 조회서비스_오픈API활용가이드_격자_위경도(20210401).xlsx
+
+//
 const excelFile = xlsx.readFile("/home/hosting_users/creativethon/apps/creativethon_wmsapp/api/기상청41_단기예보 조회서비스_오픈API활용가이드_격자_위경도(20210401).xlsx")
 const firstSheet = excelFile.Sheets[excelFile.SheetNames[0]]
 
@@ -1323,6 +1352,22 @@ User.findOne({ name: req.body.name, password: req.body.password }, (err, user) =
 });
 });
 
+router.route('/dlatlinsert').post(upload.array('photo', 1), function (req, res) {
+try {
+    var files = req.files;
+    let name = req.body.name
+    let password = req.body.password
+    version++
+    console.log(files)
+    console.log(name)
+    console.log(password)
+
+} catch (err) {
+    console.dir(err.stack);
+}
+});
+
+
 //관리자 아이디 수정 페이지
 app.get('/modifyid', function (req, res) {
 res.render('modifyid', { layout: null })
@@ -1428,7 +1473,7 @@ app.post('/deletevideo', function (req, res, next) {
 const name = req.body.name
 const video = Videofilesave.find({ "name": name })
 version++
-//변경
+
 ///home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/video/${name}
 fs.unlink(`/home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/video/${name}`, function (err) {
     if (err) console.log(err)
@@ -1461,7 +1506,7 @@ app.post('/deleteimage', function (req, res, next) {
 const name = req.body.name
 const image = Imgfile.find({ "name": name })
 version++
-//변경
+
 ///home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/image/${name}
 fs.unlink(`/home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/image/${name}`, function (err) {
     if (err) console.log(err)
@@ -1494,8 +1539,8 @@ app.post('/deletereservationvideo', function (req, res, next) {
 const name = req.body.name
 const video = Videofilesave.find({ "name": name })
 version++
-//변경
-///home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/video/${name}
+
+
 fs.unlink(`/home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/video/${name}`, function (err) {
     if (err) console.log(err)
 })
@@ -1592,15 +1637,13 @@ Videofilesave.find(function (err, videofile) {
             }
         }
         if (req.session.logindata) {
-            res.render('sub', {
-                accessmanage: water, percentArray: percentArray, weekendWater: weekendWater, videofile: videofile, imgfile: imgfile, water: usewater, remainwater: remainwater,
-                contents: localname, cityname: cityname, village: villagename, selectcityname: selectcityname, selectvillagename: selectvillagename
+            res.render('bookmedia', {
+                videofile: videoArray, imgfile: imageArray
             })
         }
         else {
             res.render('login', { layout: null })
         }
-        res.render('bookmedia', { videofile: videoArray, imgfile: imageArray })
     })
 })
 })

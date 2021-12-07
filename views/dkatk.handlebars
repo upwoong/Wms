@@ -1,21 +1,31 @@
+<form class="Form-Area-Box-2 flex items-center" action="/dlatlinsert" method="post" enctype="multipart/form-data">
+  <!--B-2-->
+  <input type="text" name='name' placeholder="제목" autofocus />
+  <input type="password" name='password' placeholder="내용" />
 
-<p>nfc</p>
-<p id="nfc">nfc</p>
-<p>gassensor</p>
-<p id="gassensor">gassensor</p>
+  <label
+    class="Flie-Add-Btn bg-3AAFE2 flex justify-center items-center text-white text-xs ml-2 cursor-pointer border-radius-50"
+    for="videofile">add</label>
+  <input type="file" id="videofile" name="photo">
+
+  <input type="submit" value="up" name="submit" />
+</form>
 
 
-<script src="/socket.io/socket.io.js"></script>
-<script>
-  var socket = io();
+<!-- 댓글 -->
+<br>
+<form method="post" action="/addcomment">
+    <label>댓글 </label>
+    <br>
+    <input type="text" name="commentText" value="">
+    <input type="submit" value="입력완료">
 
-  socket.on('getnfc', (msg) => {
-    var txt = document.getElementById('nfc');
-    txt.innerText = msg;
-  });
-  socket.on('getgassensor', (msg) => {
-    var txt = document.getElementById('gassensor');
-    txt.innerText = msg;
-  });
+</form>
 
-</script>
+{{#each commentarray}}
+<div>이름 : {{this.name}}</div>
+<div>댓글 : {{this.text}}</div>
+<div>시간 : {{this.Date}}</div>
+<div>------</div>
+{{/each}}
+
