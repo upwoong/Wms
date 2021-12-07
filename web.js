@@ -1972,7 +1972,7 @@ console.log(yearpercentArray)
 io.emit('weekendwater', weekendWater[0])
 io.emit('waterpercent', percentArray)
 io.emit('wateryearpercent', yearpercentArray)
-io.emit('yearWater', yearWater[todayMonth])
+io.emit('yearWater', yearWater[todayMonth-1])
 res.render('dkatk', { layout: null, watervalue: watervalue })
 })
 
