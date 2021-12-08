@@ -375,33 +375,43 @@ var root = {
 createMember: async ({ input }) => {
     const id = require('crypto').randomBytes(2).toString('hex');
     const momenta = moment();
-    MemberModel.find(function (err, data) {
-        for (let index = 0; index < data.length; index++) {
-            if (data[index].loginmember == input.loginmember) {
-                state = ""
-            }
-            else {
-                state = "continue"
-            }
+    const Member = new MemberModel({
+    'id': id,
+    'loginmember': input.loginmember,
+    'username': input.username,
+    'password': input.password,
+    'sex': input.sex,
+    'nfcnumber': input.nfcnumber,
+    'syncTime': momenta,
+    });
+    const memName = await MemberModel.findOne({'loginmemeber': input.loginmember});
+    const memID = await MemberModel.findOne({'id': id});
+    if(!memName)
+    {
+      if(!memID)
+      {
+        const Members = await Member.save();
+         
+        return {
+          ...Members._doc,
+          id: Members.id.toString(), 
         }
-        if (state == "continue") {
-            console.log("state : " + state)
-            const Members = new MemberModel({ 'id': id, 'loginmember': input.loginmember, 'username': input.username, 'password': input.password, 'sex': input.sex, 'nfcnumber': input.nfcnumber })
-            Members.save(function (err, slience) {
-                if (err) {
-                    console.log(err)
-                    res.send('update error,aaaaa')
-                    return
-                }
-                return
-            })
+      }
+      else if(memID) {
+        throw new Error("Already member existed");
+      }
+    } else if(memName) {
+        if(memID)
+        {
+          throw new Error("Already member existed");
         }
         else {
-            console.log("Already member existed")
+          throw new Error("Already member existed");
         }
-    })
-    state = ""
-},
+        
+    }
+     
+  },
 getMember: async function ({ id }) {
     const Members = await MemberModel.findOne({ id });
     if (!Members) {
