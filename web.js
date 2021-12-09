@@ -368,102 +368,346 @@ let Comment = new CommentModel();
 let Tag = new TagModel();
 let Cal = new CalModel();
 // Main Resolver
-
-
 var root = {
-//Member
-createMember: async ({ input }) => {
-    const id = require('crypto').randomBytes(2).toString('hex');
-    const momenta = moment();
-    const Member = new MemberModel({
-    'id': id,
-    'loginmember': input.loginmember,
-    'username': input.username,
-    'password': input.password,
-    'sex': input.sex,
-    'nfcnumber': input.nfcnumber,
-    'syncTime': momenta,
-    });
-    const memName = await MemberModel.findOne({'loginmemeber': input.loginmember});
-    const memID = await MemberModel.findOne({'id': id});
-    if(!memName)
-    {
-      if(!memID)
+    //Member
+    createMember: async ({ input }) => {
+      //Create crypto hash code
+      const id = require('crypto').randomBytes(2).toString('hex');
+      //Create date.now(); == moment();
+      const momenta = moment();
+      //Main Collection
+      const Member = new MemberModel({
+      'id': id,
+      'loginmember': input.loginmember,
+      'username': input.username,
+      'password': input.password,
+      'sex': input.sex,
+      'nfcnumber': input.nfcnumber,
+      'syncTime': momenta,
+      });
+      //Data de-duplication. Key set : id(hash), loginmember: loginID
+      const memName = await MemberModel.findOne({'loginmember': input.loginmember});
+      const memID = await MemberModel.findOne({'id': id});
+      if(!memName)
       {
-        const Members = await Member.save();
-         
-        return {
-          ...Members._doc,
-          id: Members.id.toString(), 
-        }
-      }
-      else if(memID) {
-        throw new Error("Already member existed");
-      }
-    } else if(memName) {
-        if(memID)
+        if(!memID)
         {
+          const Members = await Member.save();
+           
+          return {
+            ...Members._doc,
+            id: Members.id.toString(), 
+          }
+        }
+        else if(memID) {
           throw new Error("Already member existed");
         }
-        else {
-          throw new Error("Already member existed");
-        }
-        
-    }
-     
-  },
-getMember: async function ({ id }) {
-    const Members = await MemberModel.findOne({ id });
-    if (!Members) {
+      } else if(memName) {
+          if(memID)
+          {
+            throw new Error("Already member existed");
+          }
+          else {
+            throw new Error("Already member existed");
+          }
+          
+      }
+       
+    },
+    getMember: async function ({ id }) {
+      //Find id(hash) key set
+      const Members = await MemberModel.findOne({id});
+      if(!Members) {
         throw new Error("No items");
-    }
-    return {
+      }
+      return {
         ...Members._doc,
-        id: Members.id.toString(),
-    }
-},
-updateMember: async function ({ id, input }) {
-    const Members = await MemberModel.findOne({ id });
-    if (!Members) {
+        id: Members.id.toString(), 
+      }
+    },
+    updateMember: async function ({ id, input }) {
+      //Find id(hash) key set
+      const Members = await MemberModel.findOne({id});
+      if(!Members) {
         throw new Error("No items");
-    }
-
-    Members.loginmember = input.loginmember;
-    Members.username = input.username;
-    Members.password = input.password;
-    Members.sex = input.sex;
-    Members.nfcnumber = input.nfcnumber;
-    const upMembers = await MemberModel.save();
-    return {
+      }
+      //Update method
+      Members.loginmember = input.loginmember;
+      Members.username = input.username;
+      Members.password = input.password;
+      Members.sex = input.sex;
+      Members.nfcnumber = input.nfcnumber;
+      const upMembers = await MemberModel.save();
+      return {
         ...upMembers._doc,
         id: upMembers.id.toString(),
-    };
-},
-deleteMember: async function ({ id }) {
-    const Members = await MemberModel.findOne({ id });
-    if (!Members) {
+      };
+    },
+    deleteMember: async function ({ id }) {
+      //Find id(hash) key set
+      const Members = await MemberModel.findOne({id});
+      if(!Members) {
         throw new Error("No items");
-    }
-
-    await MemberModel.findOneAndDelete({ id });
-    return {
+      }
+  
+      await MemberModel.findOneAndDelete({id});
+      return {
         ...MemberModel._doc,
         id: MemberModel.id,
-
+        
+      }, "delete Complete";
+    },
+  //Support
+  createSupport: async ({ input }) => {
+    //Create crypto hash code
+    const id = require('crypto').randomBytes(2).toString('hex');
+    //MemberList Connection => go to 'user' data set
+    const Members = await MemberModel.findOne({'username': input.username});
+    //Create date.now(); == moment();
+    const momenta = moment();
+    //Main Collection
+    const Support = new SupportModel({
+    'id': id,
+    'title': input.title,
+    'mainSentense': input.mainSentense,
+    'user': Members.username,
+    'syncTime': momenta,
+    });
+    //Data de-duplication. Key set : id(hash)
+    const supID = await MemberModel.findOne({'id': id});
+    if(!supID)
+    {
+      const Supporter = await Support.save();
+    return {
+      ...Supporter._doc,
+      id: Supporter.id.toString(), 
+    }
+      
+    } else if(supID) {
+      throw new Error("Already registered");
+    }
+    
+  },
+  getSupport: async function ({ id }) {
+    //Find id(hash) key set
+    const Supporter = await SupportModel.findOne({id});
+    if(!Supporter) {
+      throw new Error("No records");
+    }
+    return {
+      ...Supporter._doc,
+      id: Supporter.id.toString(), 
+    }
+  },
+  updateSupport: async function ({ id, input }) {
+    //Find id(hash) key set
+    const Supporter = await SupportModel.findOne({id});
+    if(!Supporter) {
+      throw new Error("No records");
+    }
+    //Update method
+    Supporter.title = input.title;
+    Supporter.mainSentense = input.mainSentense;
+    const upSupport = await SupportModel.save();
+    return {
+      ...upSupport._doc,
+      id: upSupport.id.toString(),
+    };
+  },
+  deleteSupport: async function ({ id }) {
+    //Find id(hash) key set
+    const Supporter = await SupportModel.findOne({id});
+    if(!Supporter) {
+      throw new Error("No records");
+    }
+  
+    await SupportModel.findOneAndDelete({id});
+    return {
+      ...SupportModel._doc,
+      id: SupportModel.id,
+      
     }, "delete Complete";
-},
-//Tag
-inputTag: ({ input }) => {
-    c
-},
-getTag: ({ id }) => {
-    c
-},
-//calendar
-getCalendar: ({ id }) => {
-    c
-}
-};
+  },
+    //Notice
+    createNotice: async ({ input }) => {
+    //Create crypto hash code
+      const id = require('crypto').randomBytes(2).toString('hex'); 
+    //Find MemberList Connection => go to 'user' data set
+      const Members = await MemberModel.findOne({'username': input.username});
+    //Create date.now(); == moment();
+      const momenta = moment();
+      if(!Members){
+        throw new Error("No member");
+      }
+  
+    //Main Collection
+      const Notice = new NoticeModel({
+      'id': id,
+      'title': input.title,
+      'image': input.image,
+      'mainSentense': input.mainSentense,
+      'user': Members.username,
+      'syncTime': momenta,
+      });
+    //Data de-duplication. Key set : id(hash)
+      const notID = await NoticeModel.findOne({'id': id});
+      if(!notID)  {
+        const Notices = await Notice.save();
+      return {
+        ...Notices._doc,
+        id: Notices.id.toString(), 
+      }
+        
+      } else if(notID) {
+        throw new Error("Already registered");
+      }
+      
+    },
+    getNotice: async function ({ id }) {
+      //Find id(hash) key set
+      const Notices = await NoticeModel.findOne({id});
+      if(!Notices) {
+        throw new Error("No records");
+      }
+      return {
+        ...Notices._doc,
+        id: Notices.id.toString(), 
+      }
+    },
+    updateNotice: async function ({ id, input }) {
+      //Find id(hash) key set
+      const Notices = await NoticeModel.findOne({id});
+      if(!Notices) {
+        throw new Error("No records");
+      }
+    //Update method
+      Notices.title = input.title;
+      Notices.image = input.image;
+      Notices.mainSentense = input.mainSentense;
+      const upNotices = await NoticeModel.save();
+      return {
+        ...upNotices._doc,
+        id: upNotices.id.toString(),
+      };
+    },
+    deleteNotice: async function ({ id }) {
+      //Find id(hash) key set
+      const Notices = await NoticeModel.findOne({id});
+      if(!Notices) {
+        throw new Error("No records");
+      }
+  
+      await NoticeModel.findOneAndDelete({id});
+      return {
+        ...NoticeModel._doc,
+        id: NoticeModel.id,
+        
+      }, "delete Complete";
+    },
+    //Comment
+    createComment: async ({ input }) => {
+        //Create crypto hash code
+      const id = require('crypto').randomBytes(2).toString('hex');
+      //Find MemberList Connection => go to 'from' data set
+      const Members = await MemberModel.findOne({'username': input.username});
+      //Create date.now(); == moment();
+      const momenta = moment();
+      if(!Members){
+        throw new Error("No member");
+      }
+  
+    //Main Collection
+      const Comment = new CommentModel({
+      'id': id,
+      'title': input.title,
+      'image': input.image,
+      'from': Members.username,
+      'message': input.message,
+      'syncTime': momenta,
+      });
+      //Data de-duplication. Key set : id(hash)
+      const comID = await CommentModel.findOne({'id': id});
+      if(!comID)  {
+        const Comments = await Comment.save();
+      return {
+        ...Comments._doc,
+        id: Comments.id.toString(), 
+      }
+      } else if(comID) {
+        throw new Error("Already registered");
+      }
+      
+    },
+    getComment: async function ({ id }) {
+      //Find id(hash) key set
+      const Comments = await CommentModel.findOne({id});
+      if(!Comments) {
+        throw new Error("No records");
+      }
+      return {
+        ...Comments._doc,
+        id: Comments.id.toString(), 
+      }
+    },
+    updateComment: async function ({ id, input }) {
+      //Find id(hash) key set
+      const Comments = await CommentModel.findOne({id});
+      if(!Comments) {
+        throw new Error("No records");
+      }
+      //Update method
+      Comments.title = input.title;
+      Comments.image = input.image;
+      Comments.message = input.message;
+      const upComments = await CommentModel.save();
+      return {
+        ...upComments._doc,
+        id: upComments.id.toString(),
+      };
+    },
+    deleteComment: async function ({ id }) {
+      //Find id(hash) key set
+      const Comments = await CommentModel.findOne({id});
+      if(!Comments) {
+        throw new Error("No records");
+      }
+  
+      await CommentModel.findOneAndDelete({id});
+      return {
+        ...CommentModel._doc,
+        id: CommentModel.id,
+        
+      }, "delete Complete";
+    },
+    //Tag
+    getTag:({ username }) => {
+      //Find id(hash) key set
+      const Tags = await MemberModel.findOne({username});
+      if(!Tags) {
+        throw new Error("No records");
+      }
+      return {
+        ...Comments._doc,
+        id: Comments.id.toString(), 
+      }
+    },
+    //calendar
+    getCalendar: () => {
+      const getState = moment();
+      const setState = getState;
+      const firstWeek = today.clone().startOf('month').week();
+    const lastWeek = today.clone().endOf('month').week() === 1 ? 53 : today.clone().endOf('month').week();
+  
+    CalModel.syncTime = setState;
+    CalModel.timezone = getState;
+    CalModel.firstWeek = firstWeek;
+    CalModel.lastWeek = lastWeek;
+    return {
+      ...CalModel._doc,
+      syncTime: CalModel.syncTime.toString(), 
+    }
+    }
+  };
 
 app.use('/graphql', GraphqlHttp({
 schema: schema,
@@ -478,7 +722,7 @@ var storagevideo = multer.diskStorage({
 destination: function (req, file, callback) {
     
     callback(null, '/home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/video')
-    
+    //callback(null, 'smartmirror/video')
 },
 filename: function (req, file, callback) {
     var extension = path.extname(file.originalname);
@@ -636,7 +880,7 @@ var storageimg = multer.diskStorage({
 destination: function (req, file, callback) {
     
     callback(null, '/home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/image')
-    
+    //callback(null, 'smartmirror/image')
 },
 filename: function (req, file, callback) {
     var extension = path.extname(file.originalname);
@@ -804,7 +1048,7 @@ var storageSmartmirror = multer.diskStorage({
 destination: function (req, file, callback) {
     
     callback(null, '/home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/item')
-    
+    //callback(null, 'smartmirror/item')
 },
 filename: function (req, file, callback) {
     var extension = path.extname(file.originalname);
