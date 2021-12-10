@@ -679,18 +679,7 @@ var root = {
         
       }, "delete Complete";
     },
-    //Tag
-    getTag:({ username }) => {
-      //Find id(hash) key set
-      const Tags = await MemberModel.findOne({username});
-      if(!Tags) {
-        throw new Error("No records");
-      }
-      return {
-        ...Comments._doc,
-        id: Comments.id.toString(), 
-      }
-    },
+
     //calendar
     getCalendar: () => {
       const getState = moment();
