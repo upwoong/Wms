@@ -790,7 +790,7 @@ limits: {
 router.route('/processvideo').post(upload.array('photo', 1), function (req, res) {
 try {
     var files = req.files;
-    if (files[0].mimetype == "mp4" || files[0].mimetype == "avi" || files[0].mimetype == "wmv") {
+    
         version++
 
         if (files.length > 0) {
@@ -841,11 +841,7 @@ try {
         } else {
             console.log('파일이 없습니다');
         }
-    }
-    else {
-        console.log("옳바른 확장자가 아닙니다.")
-        res.send("<script>alert('옳바른 확장자가 아닙니다.');location.href='mediacontents';</script>");
-    }
+    
 } catch (err) {
     console.dir(err.stack);
 }
@@ -854,7 +850,6 @@ try {
 router.route('/processbookingvideo').post(upload.array('photo', 1), function (req, res) {
 try {
     var files = req.files;
-    if (files[0].mimetype == "mp4" || files[0].mimetype == "avi" || files[0].mimetype == "wmv") {
         var selectday = req.body.chooseimageday
         const strArr = selectday.split('-')
         const month = strArr[1]
@@ -910,11 +905,6 @@ try {
         } else {
             console.log('파일이 없습니다');
         }
-    }
-    else {
-        console.log("옳바른 확장자가 아닙니다.")
-        res.send("<script>alert('옳바른 확장자가 아닙니다.');location.href='bookmedia';</script>");
-    }
 } catch (err) {
     console.dir(err.stack);
 }
@@ -948,7 +938,6 @@ limits: {
 router.route('/processimage').post(uploadimg.array('photo', 1), function (req, res) {
 try {
     var files = req.files;
-    if (files[0].mimetype == "jpg" || files[0].mimetype == "png" || files[0].mimetype == "gif" || files[0].mimetype == "jpeg") {
 
         version++
 
@@ -1005,11 +994,6 @@ try {
         } else {
             console.log('파일이 없습니다');
         }
-    }
-    else {
-        console.log("옳바른 확장자가 아닙니다.")
-        res.send("<script>alert('옳바른 확장자가 아닙니다.');location.href='mediacontents';</script>");
-    }
 } catch (err) {
     console.dir(err.stack);
 }
@@ -1019,7 +1003,6 @@ try {
 router.route('/processbookingimage').post(uploadimg.array('photo', 1), function (req, res) {
 try {
     var files = req.files;
-    if (files[0].mimetype == "jpg" || files[0].mimetype == "png" || files[0].mimetype == "gif" || files[0].mimetype == "jpeg") {
         var selectday = req.body.chooseimageday
         const strArr = selectday.split('-');
         const month = strArr[1]
@@ -1079,11 +1062,6 @@ try {
         } else {
             console.log('파일이 없습니다');
         }
-    }
-    else {
-        console.log("옳바른 확장자가 아닙니다.")
-        res.send("<script>alert('옳바른 확장자가 아닙니다.');location.href='mediacontents';</script>");
-    }
 } catch (err) {
     console.dir(err.stack);
 }
