@@ -1621,10 +1621,7 @@ User.findOne({ name: req.body.name, password: req.body.password }, (err, user) =
                         name: 'username',
                         authorized: true
                     }
-                    res.render('sub', {
-                        accessmanage: water, percentArray: percentArray, weekendWater: weekendWater, videofile: videofile, imgfile: imgfile, water: usewater, remainwater: remainwater,
-                        contents: localname, cityname: cityname, village: villagename, selectcityname: selectcityname, selectvillagename: selectvillagename
-                    })
+                    res.redirect('main')
                 })
             })
         }).sort({ Date: -1 }).sort({ Hour: -1 }).sort({ Day: -1 }).limit(7)
@@ -2552,6 +2549,9 @@ Water.countDocuments(function (err, water) {
         res.render('noticelist', {layout : null, contents: pageContents, pagination: pagenum, count: listint })
     })
 })
+})
+app.get('/inquirylist',function(req,res){
+    res.render('inquirylist',{layout : null})
 })
 
 // custom 404 page
