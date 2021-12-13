@@ -1,0 +1,187 @@
+/*서울 남산체 폰트 가져오기*/
+@font-face {
+    font-family: "SeoulNamsanM";
+    src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_two@1.0/SeoulNamsanM.woff")
+      format("woff");
+    font-weight: normal;
+    font-style: normal;
+  }
+  html > body {
+    margin: 0;
+    font-family: SeoulNamsanM, sans-serif;
+  }
+  /* 스크롤바 설정*/
+  .List-Write-Page::-webkit-scrollbar {
+    width: 8px;
+  }
+  /* 스크롤바 막대 설정*/
+  .List-Write-Page::-webkit-scrollbar-thumb {
+    height: 17%;
+    background-color: #4f6884;
+    border-radius: 10px;
+  }
+  /* 스크롤바 뒷 배경 설정*/
+  .List-Write-Page::-webkit-scrollbar-track {
+    background-color: #e5ebf2;
+  }
+  /*미디어 Top-S*/
+  .border-r {
+    border: 2px solid red;
+  }
+  .border-o {
+    border: 2px solid orange;
+  }
+  .border-g {
+    border: 2px solid green;
+  }
+  .border-b {
+    border: 2px solid blue;
+  }
+  .border-i {
+    border: 2px solid indigo;
+  }
+  .img-box > img {
+    display: block;
+    width: 100%;
+  }
+  .bg-1A8FEC {
+    background-color: #4f6884;
+  }
+  .bg-6F8294 {
+    background-color: #6f8294;
+  }
+  .margin-t-20 {
+    margin-top: 20px;
+  }
+  .margin-t-40 {
+    margin-top: 40px;
+  }
+  .padding-t-3-p {
+    padding-top: 3%;
+  }
+  .margin-b-20 {
+    margin-bottom: 20px;
+  }
+  .margin-b-30 {
+    margin-bottom: 30px;
+  }
+  .padding-l-1-p {
+    padding-left: 1%;
+  }
+  .padding-r-1-p {
+    padding-right: 1%;
+  }
+  .wid-14-5-p {
+    width: 14.5%;
+  }
+  .hei-70 {
+    height: 70px;
+  }
+  .c-686868 {
+    color: #686868;
+  }
+  .logo-box {
+    box-shadow: 1px 1px 1px #d4d4d4;
+  }
+  .title-text {
+    font-size: 0.65rem;
+  }
+  .list-text > ul > li {
+    font-size: 0.85rem;
+  }
+  .img-profile-box > img {
+    width: 120px;
+    min-width: 100%;
+  }
+  
+  /*스타일 시작*/
+  .List-Write-Page {
+    height: calc(100% - 70px);
+    color: #010101;
+    overflow-y: scroll;
+    padding: 0 20px;
+  }
+  .List-Write-Page > .Title {
+    min-height: 7%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #191919;
+    font-size: 1.25rem;
+  }
+  .List-Write-Page > .Title > span {
+    display: inline-block;
+  }
+  .List-Write-Page > .Title-Write {
+    height: 3%;
+    margin-bottom: 10px;
+    border: 1px solid #7d7d7d;
+  }
+  .List-Write-Page > .Title-Write > input {
+    height: 100%;
+    width: 100%;
+  }
+  .List-Write-Page > .File-Add {
+    border: 1px solid #7d7d7d;
+    height: 19%;
+    background-color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .List-Write-Page > .File-Add > label {
+    cursor: pointer;
+  }
+  .List-Write-Page > .File-Add > .Flie-Add-Btn > span {
+    display: block;
+    text-align: center;
+  }
+  .List-Write-Page > .File-Add > .Flie-Add-Btn > .Icon {
+    font-size: 25px;
+    color: #747474;
+  }
+  .List-Write-Page > .File-Add > .Flie-Add-Btn > .Text {
+    color: #a0a0a0;
+    font-size: 0.75rem;
+  }
+  .List-Write-Page > .File-Add > .Flie-Add-Btn > .Icon > .fa-folder-plus {
+    display: inline-block;
+  }
+  input[type="file"] {
+    position: absolute;
+    width: 0;
+    height: 0;
+    padding: 0;
+    overflow: hidden;
+    border: 0;
+  }
+  .List-Write-Page > .Content {
+    border: 1px solid #7d7d7d;
+    height: calc(62% - 20px);
+    margin-top: 10px;
+  }
+  .List-Write-Page > .Content > textarea {
+    overflow-y: scroll;
+    height: 100%;
+    width: 100%;
+    display: inline-block;
+    text-align: center;
+  }
+  .List-Write-Page > .Up-Btn {
+    height: 9%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .List-Write-Page > .Up-Btn > input {
+    background-color: #ffb287;
+    padding: 2px 40px;
+    color: #ffffff;
+    font-size: 0.875rem;
+    font-weight: 100;
+    cursor: pointer;
+  }
+  .List-Write-Page > .Up-Btn > input:hover {
+    background-color: #4f6884;
+  }
+  

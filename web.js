@@ -210,6 +210,7 @@ title: String,
 image: String,
 sentense: String,
 username: String,
+Number : Number,
 syncTime: {type: Date, default: Date.now}
 }, { collection: 'notice' });
 
@@ -765,7 +766,7 @@ var router = express.Router()
 
 var storagevideo = multer.diskStorage({
 destination: function (req, file, callback) {
-    
+    //변경
     callback(null, '/home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/video')
     //callback(null, 'smartmirror/video')
 },
@@ -1114,6 +1115,7 @@ limits: {
 //스마트 미러 구동파일 교체
 router.route('/home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/item/Smartmirror.exe').post(uploadSmartmirror.array('photo', 1), function (req, res) {
 //변경
+
 try {
     var files = req.files;
     if (files == "SmartMirror.exe") {
@@ -1439,6 +1441,7 @@ for (let index = 2; index < 3775; index++) {
 
 //기상청 엑셀정보 불러오기
 //변경
+
 const excelFile = xlsx.readFile("/home/hosting_users/creativethon/apps/creativethon_wmsapp/api/기상청41_단기예보 조회서비스_오픈API활용가이드_격자_위경도(20210401).xlsx")
 const firstSheet = excelFile.Sheets[excelFile.SheetNames[0]]
 
@@ -1525,7 +1528,10 @@ for (var index = 2; index <= 3775; index++) {
             codename.push(data)
             locationcodename = codename[0]
             codename = new Array();
-
+            if(data == "")
+            {
+                data = "2824561400"
+            }
             const weather = new Weather({ 'name': data })
             weather.save(function (err, slience) {
                 if (err) {
@@ -1771,6 +1777,7 @@ const name = req.body.name
 const video = Videofilesave.find({ "name": name })
 version++
 //변경
+
 fs.unlink(`/home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/video/${name}`, function (err) {
     if (err) console.log(err)
 })
@@ -1803,6 +1810,7 @@ const name = req.body.name
 const image = Imgfile.find({ "name": name })
 version++
 //변경
+
 fs.unlink(`/home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/image/${name}`, function (err) {
     if (err) console.log(err)
 })
@@ -1835,6 +1843,7 @@ const name = req.body.name
 const video = Videofilesave.find({ "name": name })
 version++
 //변경
+
 fs.unlink(`/home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/video/${name}`, function (err) {
     if (err) console.log(err)
 })
@@ -2062,14 +2071,12 @@ Smartmirrorvideofile.find({}, videoProjection, function (err, data) {
 app.get('/smartmirror/item/info', function (req, res) {
 SmartmirrorExe.find({}, imgProjection, function (err, data) {
     if (err) return next(err)
-    console.log(data)
     res.json(data)
 })
 })
 //스마트미러에 기상청 행정구역코드 보내기
 app.get('/smartmirror/weather', function (req, res) {
 Weather.find({}, imgProjection, function (err, weather) {
-    console.log(moment().format('MMDD:hh:mm') + " " + weather[0].name)
     res.render('weather', { contents: weather[0].name, layout: null })
 })
 });
@@ -2272,7 +2279,7 @@ let count = 0
 let testvalue = ""
 app.get('/nfc_recieve', function (req, res) {
 getnfc = req.query.id
-console.log(console.log(moment().format('MMDD:hh:mm:ss')) + getnfc)
+console.log(console.log(moment().format('MMDD:hh:mm:ss')) + "adwwad")
 if (testvalue) {
     count++
     testvalue = ""
@@ -2545,7 +2552,29 @@ Client.find(function (err, data) {
     }
 })
 })
+app.get('/noticecreate',function(req,res){
+res.render('noticecreate')
+})
+app.get('/noticelist',function(req,res){
+clientpage = req.params.page
+if (clientpage == null) { clientpage = 1 }
+let skipsize = (clientpage - 1) * 10
+let limitsize = 14
+let pagenum = 1
 
+Water.countDocuments(function (err, water) {
+    if (err) throw err
+
+    pagenum = Math.ceil(water / limitsize)
+    for (let i = 1; i <= pagenum; i++) {
+        listint[i] = i
+    }
+    Water.find({}).sort({ Date: -1 }).skip(skipsize).limit(limitsize).exec(function (err, pageContents) {
+        if (err) throw err
+        res.render('noticelist', {layout : null, contents: pageContents, pagination: pagenum, count: listint })
+    })
+})
+})
 
 // custom 404 page
 app.use((req, res) => {

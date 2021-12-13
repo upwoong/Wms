@@ -1,0 +1,588 @@
+
+<!--테일윈드-->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.17/tailwind.min.css">
+<!--폰트어썸-->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link rel="stylesheet" href="css/inquiry.css">
+
+<div class="All-box flex text-white">
+  <!--top-bar-->
+  <div class="top-bar wid-14-5-p min-h-screen bg-1A8FEC padding-t-3-p padding-l-1-p padding-r-1-p">
+    <div class="title-text text-white font-bold text-opacity-50 margin-b-20">
+      INTERFACE
+    </div>
+    <nav class="list-text text-opacity-80">
+      <ul>
+        <!--1-->
+        <li class="margin-b-20">
+          <a href="#">
+            <i class="fas fa-fw fa-house-user text-white"></i>
+            <span class="font-bold text-white text-opacity-100">HOME</span>
+          </a>
+        </li>
+        <div class="border border-white border-opacity-10 margin-b-30"></div>
+        <!--2-->
+        <li class="margin-b-30">
+          <a href="#">
+            <i class="fas fa-fw fa-address-card text-white text-opacity-50"></i>
+            <span>출입관리</span>
+          </a>
+        </li>
+        <!--3-->
+        <li class="margin-b-30">
+          <a href="#">
+            <i class="fas fa-fw fa-hand-holding-water text-white text-opacity-50"></i>
+            <span>수전사용량</span>
+          </a>
+        </li>
+        <!--4-->
+        <li class="margin-b-30">
+          <a href="#">
+            <i class="fas fa-fw fa-hand-sparkles text-white text-opacity-50"></i>
+            <span>핸드 드라이어 관리</span>
+          </a>
+        </li>
+        <!--5-->
+        <li class="margin-b-30">
+          <a href="#">
+            <i class="fas fa-fw fa-list text-white text-opacity-50"></i>
+            <span>회원목록</span>
+          </a>
+        </li>
+        <!--6-->
+        <li class="margin-b-30">
+          <a href="#">
+            <i class="fas fa-exclamation-triangle text-white text-opacity-50"></i>
+            <span>스마트미러 관리</span>
+          </a>
+        </li>
+        <!--7-->
+        <li class="margin-b-30">
+          <a href="#">
+            <i class="fas fa-folder text-white text-opacity-50"></i>
+            <span>미디어 관리</span>
+          </a>
+        </li>
+        <!--8-->
+        <li class="margin-b-30">
+          <a href="#">
+            <i class="fab fa-orcid text-white text-opacity-50"></i>
+            <span>관리자 정보 수정</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <div class="border border-white border-opacity-10"></div>
+  </div>
+  <!--logo-->
+  <div class="w-full">
+    <div class="logo-box hei-70 bg-white flex items-center border">
+      <!--로고-->
+      <div class="img-box img-profile-box ml-5">
+        <img class="img-profile rounded-circle" src="https://i.postimg.cc/MXJnGQ7w/image.png">
+      </div>
+      <!--중앙.빈공간-->
+      <div class="flex-1"></div>
+      <!--관리자-->
+      <div>
+        <a class="nav-link dropdown-toggle flex items-center c-686868 mr-5" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <span class="text-2xl mr-1">
+            <i class="fas fa-user-circle"></i>
+          </span>
+          <span class="d-none d-lg-inline small text-xs font-bold">관리자님</span>
+        </a>
+      </div>
+    </div>
+
+    <!--요소 시작-->
+    <div class="Contents-Box">
+      <!--제목-->
+      <form class="Form-Box Title-And-Del">
+        <div class="Title">
+          <span>
+            1:1문의
+          </span>
+        </div>
+        <div class="Sel-And-Del-Btn">
+          <select name="city">
+          </select>
+          <input class="Del-Btn" type="submit" value="삭제" onclick='this.form.action= "/deleteimage"'>
+        </div>
+      </form>
+      <!--목록-->
+      <div class="List-Box">
+        <ul>
+          <li>
+            <span>
+              목록
+            </span>
+          </li>
+          <li>
+            <span>
+              ID
+            </span>
+          </li>
+          <li>
+            <span>
+              제목
+            </span>
+          </li>
+          <li>
+            <span>
+              답변여부
+            </span>
+          </li>
+          <li>
+            <span></span>
+          </li>
+          <li>
+            <span>
+              작성일
+            </span>
+          </li>
+        </ul>
+        <!--1-->
+        <!--{{#each contents}}-->
+        <a href="#" class="List-1 flex">
+          <div>
+            <span>
+              01
+            </span>
+          </div>
+          <div>
+            <span>
+              facere
+            </span>
+          </div>
+          <div>
+            <span>
+              게시판 제목이 표출됩니다.
+            </span>
+          </div>
+          <div style="opacity: 0;">
+            <span>
+              <i class="fas fa-check-circle"></i>
+            </span>
+          </div>
+          <div></div>
+          <div>
+            <span>
+              2021.09.27 15 : 00
+            </span>
+          </div>
+        </a>
+        <!--2-->
+        <a href="#" class="List-1 flex">
+          <div>
+            <span>
+              02
+            </span>
+          </div>
+          <div>
+            <span>
+              Lorem
+            </span>
+          </div>
+          <div>
+            <span>
+              게시판 제목이 표출됩니다.
+            </span>
+          </div>
+          <div>
+            <span>
+              <i class="fas fa-check-circle"></i>
+            </span>
+          </div>
+          <div></div>
+          <div>
+            <span>
+              2021.09.27 15 : 00
+            </span>
+          </div>
+        </a>
+        <!--3-->
+        <a href="#" class="List-1 flex">
+          <div>
+            <span>
+              03
+            </span>
+          </div>
+          <div>
+            <span>
+              ipsum
+            </span>
+          </div>
+          <div>
+            <span>
+              게시판 제목이 표출됩니다.
+            </span>
+          </div>
+          <div>
+            <span>
+              <i class="fas fa-check-circle"></i>
+            </span>
+          </div>
+          <div></div>
+          <div>
+            <span>
+              2021.09.27 15 : 00
+            </span>
+          </div>
+        </a>
+        <!--4-->
+        <a href="#" class="List-1 flex">
+          <div>
+            <span>
+              04
+            </span>
+          </div>
+          <div>
+            <span>
+              dolor
+            </span>
+          </div>
+          <div>
+            <span>
+              게시판 제목이 표출됩니다.
+            </span>
+          </div>
+          <div>
+            <span>
+              <i class="fas fa-check-circle"></i>
+            </span>
+          </div>
+          <div></div>
+          <div>
+            <span>
+              2021.09.27 15 : 00
+            </span>
+          </div>
+        </a>
+        <!--5-->
+        <a href="#" class="List-1 flex">
+          <div>
+            <span>
+              05
+            </span>
+          </div>
+          <div>
+            <span>
+              amet
+            </span>
+          </div>
+          <div>
+            <span>
+              게시판 제목이 표출됩니다.
+            </span>
+          </div>
+          <div>
+            <span>
+              <i class="fas fa-check-circle"></i>
+            </span>
+          </div>
+          <div></div>
+          <div>
+            <span>
+              2021.09.27 15 : 00
+            </span>
+          </div>
+        </a>
+        <!--6-->
+        <a href="#" class="List-1 flex">
+          <div>
+            <span>
+              06
+            </span>
+          </div>
+          <div>
+            <span>
+              consectetur
+            </span>
+          </div>
+          <div>
+            <span>
+              게시판 제목이 표출됩니다.
+            </span>
+          </div>
+          <div>
+            <span>
+              <i class="fas fa-check-circle"></i>
+            </span>
+          </div>
+          <div></div>
+          <div>
+            <span>
+              2021.09.27 15 : 00
+            </span>
+          </div>
+        </a>
+        <!--7-->
+        <a href="#" class="List-1 flex">
+          <div>
+            <span>
+              07
+            </span>
+          </div>
+          <div>
+            <span>
+              adipisicing
+            </span>
+          </div>
+          <div>
+            <span>
+              게시판 제목이 표출됩니다.
+            </span>
+          </div>
+          <div>
+            <span>
+              <i class="fas fa-check-circle"></i>
+            </span>
+          </div>
+          <div></div>
+          <div>
+            <span>
+              2021.09.27 15 : 00
+            </span>
+          </div>
+        </a>
+        <!--8-->
+        <a href="#" class="List-1 flex">
+          <div>
+            <span>
+              08
+            </span>
+          </div>
+          <div>
+            <span>
+              Neque
+            </span>
+          </div>
+          <div>
+            <span>
+              게시판 제목이 표출됩니다.
+            </span>
+          </div>
+          <div>
+            <span>
+              <i class="fas fa-check-circle"></i>
+            </span>
+          </div>
+          <div></div>
+          <div>
+            <span>
+              2021.09.27 15 : 00
+            </span>
+          </div>
+        </a>
+        <!--9-->
+        <a href="#" class="List-1 flex">
+          <div>
+            <span>
+              09
+            </span>
+          </div>
+          <div>
+            <span>
+              provident
+            </span>
+          </div>
+          <div>
+            <span>
+              게시판 제목이 표출됩니다.
+            </span>
+          </div>
+          <div>
+            <span>
+              <i class="fas fa-check-circle"></i>
+            </span>
+          </div>
+          <div></div>
+          <div>
+            <span>
+              2021.09.27 15 : 00
+            </span>
+          </div>
+        </a>
+        <!--10-->
+        <a href="#" class="List-1 flex">
+          <div>
+            <span>
+              10
+            </span>
+          </div>
+          <div>
+            <span>
+              autem
+            </span>
+          </div>
+          <div>
+            <span>
+              게시판 제목이 표출됩니다.
+            </span>
+          </div>
+          <div>
+            <span>
+              <i class="fas fa-check-circle"></i>
+            </span>
+          </div>
+          <div></div>
+          <div>
+            <span>
+              2021.09.27 15 : 00
+            </span>
+          </div>
+        </a>
+        <!--11-->
+        <a href="#" class="List-1 flex">
+          <div>
+            <span>
+              11
+            </span>
+          </div>
+          <div>
+            <span>
+              autem
+            </span>
+          </div>
+          <div>
+            <span>
+              게시판 제목이 표출됩니다.
+            </span>
+          </div>
+          <div>
+            <span>
+              <i class="fas fa-check-circle"></i>
+            </span>
+          </div>
+          <div></div>
+          <div>
+            <span>
+              2021.09.27 15 : 00
+            </span>
+          </div>
+        </a>
+        <!--12-->
+        <a href="#" class="List-1 flex">
+          <div>
+            <span>
+              12
+            </span>
+          </div>
+          <div>
+            <span>
+              magnam
+            </span>
+          </div>
+          <div>
+            <span>
+              게시판 제목이 표출됩니다.
+            </span>
+          </div>
+          <div>
+            <span>
+              <i class="fas fa-check-circle"></i>
+            </span>
+          </div>
+          <div></div>
+          <div>
+            <span>
+              2021.09.27 15 : 00
+            </span>
+          </div>
+        </a>
+        <!--13-->
+        <a href="#" class="List-1 flex">
+          <div>
+            <span>
+              13
+            </span>
+          </div>
+          <div>
+            <span>
+              magnam
+            </span>
+          </div>
+          <div>
+            <span>
+              게시판 제목이 표출됩니다.
+            </span>
+          </div>
+          <div>
+            <span>
+              <i class="fas fa-check-circle"></i>
+            </span>
+          </div>
+          <div></div>
+          <div>
+            <span>
+              2021.09.27 15 : 00
+            </span>
+          </div>
+        </a>
+        <!--14-->
+        <a href="#" class="List-1">
+          <div>
+            <span>
+              14
+            </span>
+          </div>
+          <div>
+            <span>
+              autem
+            </span>
+          </div>
+          <div>
+            <span>
+              게시판 제목이 표출됩니다.
+            </span>
+          </div>
+          <div>
+            <span>
+              <i class="fas fa-check-circle"></i>
+            </span>
+          </div>
+          <div></div>
+          <div>
+            <span>
+              2021.09.27 15 : 00
+            </span>
+          </div>
+        </a>
+        <!--{{/each}}-->
+      </div>
+      <!--숫자-->
+      <form class="Form-Box List-Move-Number" method="post">
+        <div class="Number">
+          <!--1-->
+          <div class="mave-btn-1" onclick='test({{this}})'>
+            <div class="page-text 1-page-text">
+              <span id="li{{this}}">
+                <!--{{this}}-->
+                1
+              </span>
+            </div>
+          </div>
+          <!--2-->
+          <div class="mave-btn-2" onclick='test({{this}})'>
+            <div class="page-text 1-page-text">
+              <span id="li{{this}}">
+                <!--{{this}}-->
+                2
+              </span>
+            </div>
+          </div>
+          <!--3-->
+          <div class="mave-btn-3" onclick='test({{this}})'>
+            <div class="page-text 1-page-text">
+              <span id="li{{this}}">
+                <!--{{this}}-->
+                3
+              </span>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,249 @@
+/*서울 남산체 폰트 가져오기*/
+@font-face {
+    font-family: "SeoulNamsanM";
+    src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_two@1.0/SeoulNamsanM.woff")
+      format("woff");
+    font-weight: normal;
+    font-style: normal;
+  }
+  html > body {
+    margin: 0;
+    font-family: SeoulNamsanM, sans-serif;
+  }
+  /* 스크롤바 설정*/
+  .Contents-Box::-webkit-scrollbar {
+    width: 8px;
+  }
+  /* 스크롤바 막대 설정*/
+  .Contents-Box::-webkit-scrollbar-thumb {
+    height: 17%;
+    background-color: #4f6884;
+    border-radius: 10px;
+  }
+  /* 스크롤바 뒷 배경 설정*/
+  .Contents-Box::-webkit-scrollbar-track {
+    background-color: #e5ebf2;
+  }
+  /*미디어 Top-S*/
+  .border-r {
+    border: 2px solid red;
+  }
+  .border-o {
+    border: 2px solid orange;
+  }
+  .border-g {
+    border: 2px solid green;
+  }
+  .border-b {
+    border: 2px solid blue;
+  }
+  .border-i {
+    border: 2px solid indigo;
+  }
+  .img-box > img {
+    display: block;
+    width: 100%;
+  }
+  .bg-1A8FEC {
+    background-color: #4f6884;
+  }
+  .bg-6F8294 {
+    background-color: #6f8294;
+  }
+  .margin-t-20 {
+    margin-top: 20px;
+  }
+  .margin-t-40 {
+    margin-top: 40px;
+  }
+  .padding-t-3-p {
+    padding-top: 3%;
+  }
+  .margin-b-20 {
+    margin-bottom: 20px;
+  }
+  .margin-b-30 {
+    margin-bottom: 30px;
+  }
+  .padding-l-1-p {
+    padding-left: 1%;
+  }
+  .padding-r-1-p {
+    padding-right: 1%;
+  }
+  .wid-14-5-p {
+    width: 14.5%;
+  }
+  .hei-70 {
+    height: 70px;
+  }
+  .c-686868 {
+    color: #686868;
+  }
+  .logo-box {
+    box-shadow: 1px 1px 1px #d4d4d4;
+  }
+  .title-text {
+    font-size: 0.65rem;
+  }
+  .list-text > ul > li {
+    font-size: 0.85rem;
+  }
+  .img-profile-box > img {
+    width: 120px;
+    min-width: 100%;
+  }
+  /*스타일 시작*/
+  .Contents-Box {
+    height: calc(100% - 70px);
+    color: #010101;
+    padding: 0 20px;
+  }
+  /*제목, 삭제버튼*/
+  .Contents-Box > .Title-And-Del {
+    height: 10%;
+    display: flex;
+  }
+  .Contents-Box > .Title-And-Del > .Title {
+    width: 50%;
+    display: flex;
+    justify-content: end;
+    align-items: center;
+  }
+  .Contents-Box > .Title-And-Del > .Title > span {
+    margin-right: -5%;
+    font-size: 1.25rem;
+  }
+  .Contents-Box > .Title-And-Del > .Sel-And-Del-Btn {
+    width: 50%;
+    display: flex;
+    justify-content: end;
+    align-items: end;
+    padding: 0 10px 8px 0;
+  }
+  .Contents-Box > .Title-And-Del > .Sel-And-Del-Btn > select {
+    border: 1px solid #7d7d7d;
+    cursor: pointer;
+    padding: 2px 0;
+    width: 20%;
+  }
+  .Contents-Box > .Title-And-Del > .Sel-And-Del-Btn > input {
+    background-color: #FFB287;
+    padding: 3px 30px;
+    color: #ffffff;
+    font-size: 0.75rem;
+    font-weight: 100;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  .Contents-Box > .Title-And-Del > .Sel-And-Del-Btn > input:hover {
+    background-color: #4F6884;
+  }
+  /*목록*/
+  .Contents-Box > .List-Box {
+    height: 80%;
+  }
+  .Contents-Box > .List-Box > ul {
+    display: flex;
+    height: calc(100% / 15);
+    background-color: #f3f3f3;
+    color: #7d7d7d;
+    font-size: 0.875rem;
+  }
+  .Contents-Box > .List-Box > ul > li {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .Contents-Box > .List-Box > ul > li:first-child {
+    width: 13%;
+  }
+  .Contents-Box > .List-Box > ul > li:nth-child(2) {
+    width: 10%;
+    justify-content: start;
+    padding: 0 40px;
+  }
+  .Contents-Box > .List-Box > ul > li:nth-child(3) {
+    width: 60%;
+  }
+  .Contents-Box > .List-Box > ul > li:last-child {
+    width: 17%;
+  }
+  .Contents-Box > .List-Box > .List-1 {
+    height: calc(100% / 15);
+    display: flex;
+    border-bottom: 1px solid #eaeaea;
+  }
+  .Contents-Box > .List-Box > .List-1 > div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: left;
+    font-size: 0.875rem;
+  }
+  .Contents-Box > .List-Box > .List-1 > div:first-child {
+    width: 13%;
+    color: #4f6884;
+  }
+  .Contents-Box > .List-Box > .List-1 > div:nth-child(2) {
+    width: 10%;
+    justify-content: left;
+    padding-left: 40px;
+    color: #696969;
+  }
+  .Contents-Box > .List-Box > .List-1 > div:nth-child(3) {
+    width: 60%;
+    justify-content: start;
+    padding-left: 100px;
+    color: #696969;
+  }
+  .Contents-Box > .List-Box > .List-1 > div:last-child {
+    width: 17%;
+    color: #a0a0a0;
+  }
+  /*페이지 이동 숫자*/
+  .Contents-Box > .List-Move-Number {
+    height: 10%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.875rem;
+  }
+  .Contents-Box > .List-Move-Number > .Number {
+    width: 52%;
+    display: flex;
+    justify-content: end;
+  }
+  .Contents-Box > .List-Move-Number > .Up-Btn {
+    width: 48%;
+    display: flex;
+    justify-content: end;
+    align-items: start;
+    height: 100%;
+    padding: 8px 10px 0 0;
+  }
+  .Contents-Box > .List-Move-Number > .Number > div {
+    padding-right: 20px;
+    font-weight: 900;
+    color: #4f6884;
+    cursor: pointer;
+  }
+  .Contents-Box > .List-Move-Number > .Number > div:hover {
+    color: #fd7b32;
+  }
+  .Contents-Box > .List-Move-Number > .Number > div:nth-child(3) {
+    padding-right: 0;
+    font-weight: 900;
+  }
+  .Contents-Box > .List-Move-Number > .Up-Btn > input {
+    background-color: #FFB287;
+    padding: 3px 30px;
+    color: #ffffff;
+    font-size: 0.75rem;
+    font-weight: 100;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  .Contents-Box > .List-Move-Number > .Up-Btn > input:hover {
+    background-color: #4F6884;
+  }
