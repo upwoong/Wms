@@ -12,7 +12,6 @@ html > body {
   body {
     font-family: "Open Sans", sans-serif;
     height: 100vh;
-    background: url("../img/background.jpg") 50% fixed;
     background-size: cover;
       margin: 0;
   }
