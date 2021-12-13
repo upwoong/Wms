@@ -1,0 +1,189 @@
+/*서울 남산체 폰트 가져오기*/
+@font-face {
+    font-family: "SeoulNamsanM";
+    src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_two@1.0/SeoulNamsanM.woff")
+      format("woff");
+    font-weight: normal;
+    font-style: normal;
+  }
+  html > body {
+    margin: 0;
+    font-family: SeoulNamsanM, sans-serif;
+  }
+  /* 스크롤바 설정*/
+  .Body-Text-Box::-webkit-scrollbar {
+    width: 8px;
+  }
+  /* 스크롤바 막대 설정*/
+  .Body-Text-Box::-webkit-scrollbar-thumb {
+    height: 17%;
+    background-color: #4f6884;
+    border-radius: 10px;
+  }
+  /* 스크롤바 뒷 배경 설정*/
+  .Body-Text-Box::-webkit-scrollbar-track {
+    background-color: #e5ebf2;
+  }
+  
+  /*스타일 시작*/
+  .Body-Text-Box {
+    height: calc( 100vh - 75px );
+    padding: 0 40px;
+    overflow-y: scroll;
+  }
+  .Body-Text-Box > div:first-child {
+    min-height: 12%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .Body-Text-Box > div:first-child > span {
+    font-size: 1.25rem;
+    color: #191919;
+  }
+  .Body-Text-Box > div:nth-child(2) {
+    min-height: 20%;
+    display: flex;
+    justify-content: center;
+    align-items: start;
+  }
+  .Body-Text-Box > div:nth-child(2) > div > .Title-Text {
+    text-align: center;
+  }
+  .Body-Text-Box > div:nth-child(2) > div > .Title-Text > span {
+    display: inline-block;
+    font-size: 1.875rem;
+    color: #191919;
+  }
+  .Body-Text-Box > div:nth-child(2) > div > .Data-Text {
+    text-align: center;
+    color: #5c5c5c;
+  }
+  .Body-Text-Box > div:nth-child(2) > div > .Data-Text > span {
+    font-size: 0.875rem;
+  }
+  .Body-Text-Box > div:nth-child(2) > div > .Data-Text > span:nth-child(2) {
+    margin-right: 10px;
+  }
+  .Body-Text-Box > div:nth-child(3) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 20px;
+    font-size: 0.875rem;
+  }
+  .Body-Text-Box > div:nth-child(3) > div {
+    text-align: center;
+  }
+  .Body-Text-Box > div:nth-child(3) > div > div {
+    display: flex;
+    justify-content: center;
+    padding-top: 129px;
+  }
+  .Body-Text-Box > div:nth-child(4) {
+    height: 10%;
+    border-bottom: 1px solid #626262;
+  }
+  
+  .Comment-Box {
+    height: calc(80% - 1%);
+    margin-left: 97px;
+  }
+  .Comment-Box > div:first-child {
+    border-bottom: 1px solid #c2c2c2;
+    height: 23%;
+    display: flex;
+    align-items: center;
+  }
+  .Use-Comment > div:first-child {
+    color: #191919;
+    font-size: 0.875rem;
+  }
+  .Use-Comment > div:nth-child(2) {
+    color: #a0a0a0;
+    font-size: 0.75rem;
+  }
+  .Use-Comment > div:last-child {
+    color: #404040;
+    font-size: 0.875rem;
+  }
+  .Comment-Box > div:nth-child(2) {
+    border-bottom: 1px solid #c2c2c2;
+    height: 21%;
+    margin-left: 20px;
+    display: flex;
+  }
+  .Del-Btn-Box > input {
+    background-color: #ffffff;
+    padding: 3px 10px;
+    margin-right: 20px;
+    color: #7d7d7d;
+    font-size: 0.75rem;
+    font-weight: 100;
+    cursor: pointer;
+    border: 1px solid #7d7d7d;
+    transition: background-color 0.3s;
+    margin-bottom: 20px;
+  }
+  .Del-Btn-Box > input:hover {
+    background-color: #7d7d7d;
+    color: #ffffff;
+  }
+  .Manager-Comment {
+    display: flex;
+    align-items: center;
+  }
+  .Manager-Comment > div > div:first-child {
+    color: #191919;
+    font-size: 0.875rem;
+  }
+  .Manager-Comment > div > div:nth-child(2) {
+    color: #a0a0a0;
+    font-size: 0.75rem;
+  }
+  .Manager-Comment > div > div:last-child {
+    color: #404040;
+    font-size: 0.875rem;
+  }
+  .Del-Btn-Box {
+    display: flex;
+    flex: 1 1 0%;
+    justify-content: end;
+    align-items: end;
+  }
+  .Comment-Box > div:nth-child(3) {
+    height: 7%;
+    margin-left: 20px;
+  }
+  .Comment-Box > div:last-child {
+    height: 41%;
+    margin-left: 20px;
+  }
+  .Comment-Box > div:last-child > div {
+    height: 100%;
+  }
+  .Comment-input {
+    border: 1px solid #c2c2c2;
+    width: 100%;
+    height: 65%;
+  }
+  .Comment-input-Btn-Box {
+    display: flex;
+    justify-content: end;
+  }
+  .Comment-input-Btn {
+    margin: 25px 20px 25px 0;
+    background-color: #ffffff;
+    padding: 3px 25px;
+    color: #7d7d7d;
+    font-size: 0.75rem;
+    font-weight: 100;
+    cursor: pointer;
+    border: 1px solid #7d7d7d;
+    transition: background-color 0.3s;
+  }
+  .Comment-input-Btn:hover {
+    background-color: #7d7d7d;
+    color: #ffffff;
+  }
+  

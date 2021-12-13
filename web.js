@@ -142,8 +142,24 @@ _id: false,
 };
 app.use('/smartmirror', static(path.join(__dirname, 'smartmirror')));
 
-//Event set
-let databaseEvent = mongoose.connection;
+//Make salt what they will add on hash code
+const makeSalt = () =>
+  new Promise((resolve, reject) => {
+    crypto.randomBytes(64, (err, buf) => {
+      if (err) reject(err);
+        resolve(buf.toString('base64'));
+  });
+});
+
+//Make hash password
+const createHashPassword = ( plainPassword ) => new Promise(async (resolve, reject) => {
+const salt = await makeSalt();
+crypto.pbkdf2(plainPassword, salt, 9999, 64, 'sha512', (err, key) => {
+if(err) reject(err);
+resolve(key.toString('base64'));
+});
+});
+
 
 //Main Schema set
 let MemberSchema;
@@ -153,75 +169,81 @@ let CommentSchema;
 let TagSchema;
 let CalSchema;
 
+//Main Schema Model set
+let MemberModel;
+let SupportModel;
+let NoticeModel;
+let CommentModel;
+let TagModel;
+let CalModel;
 
 
 //Mongo Schema
 //databaseEvent.on('error', console.error.bind(console, 'mongoose connection error'));
 //databaseEvent.on('open', function(){
 MemberSchema = mongoose.Schema({
-id: { type: String, required: true, unique: true },
+id: {type:String, required:false, unique:true},
 loginmember: String,
-password: String,
+password: { type:String },
 username: String,
 sex: String,
 nfcnumber: String,
-syncTime: { type: Date, default: Date.now }
+syncTime: {type: Date, default: Date.now}
 }, { collection: 'member' });
 
-const MemberModel = mongoose.model("member", MemberSchema);
+MemberModel = mongoose.model("member", MemberSchema);
 
 SupportSchema = mongoose.Schema({
-id: { type: String, required: true, unique: true },
+id: {type:String, required:true, unique:true},
 title: String,
 sentense: String,
 username: String,
-syncTime: { type: Date, default: Date.now },
-checksum: Boolean,
+syncTime: {type: Date, default: Date.now},
+checksum: {type: Boolean, default: false},
 }, { collection: 'support' });
 
-const SupportModel = mongoose.model("support", SupportSchema);
+SupportModel = mongoose.model("support", SupportSchema);
 
 NoticeSchema = mongoose.Schema({
-id: { type: String, required: true, unique: true },
+id: {type:String, required:true, unique:true},
 title: String,
 image: String,
 sentense: String,
 username: String,
-syncTime: { type: Date, default: Date.now }
+syncTime: {type: Date, default: Date.now}
 }, { collection: 'notice' });
 
-const NoticeModel = mongoose.model("notice", NoticeSchema);
+NoticeModel = mongoose.model("notice", NoticeSchema);
 
 CommentSchema = mongoose.Schema({
-id: { type: String, required: true, unique: true },
+id: {type:String, required:true, unique:true},
 title: String,
 image: String,
 from: String,
 message: String,
-syncTime: { type: Date, default: Date.now }
+syncTime: {type: Date, default: Date.now}
 }, { collection: 'comment' });
 
-const CommentModel = mongoose.model("comment", CommentSchema);
+CommentModel = mongoose.model("comment", CommentSchema);
 
 TagSchema = mongoose.Schema({
-id: { type: String, required: true, unique: true },
-loginmember: String,
-password: String,
-username: String,
-sex: String,
+id: {type:String, required:true, unique:true},
+faucet: {type:String, required:true},
 nfcnumber: String,
-syncTime: { type: Date, default: Date.now }
+username: String,
+syncTime: {type: Date, default: Date.now}
 }, { collection: 'tag' });
 
-const TagModel = mongoose.model("tag", TagSchema);
+TagModel = mongoose.model("tag", TagSchema);
 
 CalSchema = mongoose.Schema({
-id: { type: String, required: true, unique: true },
-syncTime: { type: Date, default: Date.now },
-timezone: { type: Date, default: Date.now },
+syncTime: {type: Date, default: Date.now},
+timezone: {type: Date, default: Date.now},
+firstWeek: {type: Date, default: Date.now},
+lastWeek: {type: Date, default: Date.now}
 }, { collection: 'cal' });
 
-const CalModel = mongoose.model("cal", CalSchema);
+CalModel = mongoose.model("cal", CalSchema);
 
 //});
 
@@ -229,7 +251,7 @@ const CalModel = mongoose.model("cal", CalSchema);
 //수전 및 핸드드라이어 스키마, 달력데이터 스키마
 
 //Main Schema
-var schema = Graphql.buildSchema(`
+var schema = buildSchema(`
 
 
 scalar DateTime
@@ -302,19 +324,23 @@ message: String,
 type WashiTagRead {
 id: ID!,
 faucet: String,
-handdryer: String,
-nfcnumber: String,
-username: String,
+nfcnumber: [MemberList]!,
+username: [MemberList],
+syncTime: DateTime
 }
 
 input WashiTagWrite {
-nfcnumber: String,
+faucet: String,
+nfcnumber: String!,
 username: String,
+syncTime: DateTime
 }
 
 type WashiCalendar {
-syncTime: DateTime,
-timezone: String
+getState: DateTime,
+setState: DateTime,
+firstweek: DateTime,
+lastweek: DateTime
 }
 
 
@@ -324,8 +350,8 @@ getMember(id: ID!) : MemberList,
 getSupport(id: ID!) : WashiSupport,
 getNotice(id: ID!) : WashiNotice,
 getComment(id: ID!) : WashiComment,
-getTag(id: ID!) : WashiTagRead,
-getCalendar(id: ID!) : WashiCalendar
+getTag(username: [MemberList]) : WashiTagRead,
+getCalendar : WashiCalendar
 }
 
 type Mutation {
@@ -341,7 +367,8 @@ deleteNotice(id: ID!) : String,
 updateComment(id: ID!, input: WashiCommentInput) : WashiComment,
 createComment(input: WashiCommentInput) : WashiComment,
 deleteComment(id: ID!) : String,
-inputTag(input: WashiTagWrite) : WashiTagRead,
+signInMember(id: ID!, input: MemberJoin): MemberList,
+parsingTag(input: WashiTagWrite): WashiTagRead,
 }
 
 
@@ -352,351 +379,380 @@ Object.assign(schema._typeMap.DateTime, {
 name: "DateTime",
 description: "DateTime type definition line",
 serialize: (value) => {
-    const dateTime = new Date(value);
-    if (dateTime.toString() === "invalid Date") {
-        return null;
-    }
-    return dateTime;
+const dateTime = new Date(value);
+if(dateTime.toString()==="invalid Date")
+{ 
+  return null;
+}
+return dateTime;
 }
 }); //DateTime setup
 
-//data constructor
-let Member = new MemberModel();
-let Support = new SupportModel();
-let Notice = new NoticeModel();
-let Comment = new CommentModel();
-let Tag = new TagModel();
-let Cal = new CalModel();
+
 // Main Resolver
 var root = {
-    //Member
-    createMember: async ({ input }) => {
-      //Create crypto hash code
-      const id = require('crypto').randomBytes(2).toString('hex');
-      //Create date.now(); == moment();
-      const momenta = moment();
-      //Main Collection
-      const Member = new MemberModel({
-      'id': id,
-      'loginmember': input.loginmember,
-      'username': input.username,
-      'password': input.password,
-      'sex': input.sex,
-      'nfcnumber': input.nfcnumber,
-      'syncTime': momenta,
-      });
-      //Data de-duplication. Key set : id(hash), loginmember: loginID
-      const memName = await MemberModel.findOne({'loginmember': input.loginmember});
-      const memID = await MemberModel.findOne({'id': id});
-      if(!memName)
-      {
-        if(!memID)
-        {
-          const Members = await Member.save();
-           
-          return {
-            ...Members._doc,
-            id: Members.id.toString(), 
-          }
-        }
-        else if(memID) {
-          throw new Error("Already member existed");
-        }
-      } else if(memName) {
-          if(memID)
-          {
-            throw new Error("Already member existed");
-          }
-          else {
-            throw new Error("Already member existed");
-          }
-          
-      }
-       
-    },
-    getMember: async function ({ id }) {
-      //Find id(hash) key set
-      const Members = await MemberModel.findOne({id});
-      if(!Members) {
-        throw new Error("No items");
-      }
-      return {
-        ...Members._doc,
-        id: Members.id.toString(), 
-      }
-    },
-    updateMember: async function ({ id, input }) {
-      //Find id(hash) key set
-      const Members = await MemberModel.findOne({id});
-      if(!Members) {
-        throw new Error("No items");
-      }
-      //Update method
-      Members.loginmember = input.loginmember;
-      Members.username = input.username;
-      Members.password = input.password;
-      Members.sex = input.sex;
-      Members.nfcnumber = input.nfcnumber;
-      const upMembers = await MemberModel.save();
-      return {
-        ...upMembers._doc,
-        id: upMembers.id.toString(),
-      };
-    },
-    deleteMember: async function ({ id }) {
-      //Find id(hash) key set
-      const Members = await MemberModel.findOne({id});
-      if(!Members) {
-        throw new Error("No items");
-      }
-  
-      await MemberModel.findOneAndDelete({id});
-      return {
-        ...MemberModel._doc,
-        id: MemberModel.id,
-        
-      }, "delete Complete";
-    },
-  //Support
-  createSupport: async ({ input }) => {
-    //Create crypto hash code
-    const id = require('crypto').randomBytes(2).toString('hex');
-    //MemberList Connection => go to 'user' data set
-    const Members = await MemberModel.findOne({'username': input.username});
-    //Create date.now(); == moment();
-    const momenta = moment();
-    //Main Collection
-    const Support = new SupportModel({
-    'id': id,
-    'title': input.title,
-    'mainSentense': input.mainSentense,
-    'user': Members.username,
-    'syncTime': momenta,
-    });
-    //Data de-duplication. Key set : id(hash)
-    const supID = await MemberModel.findOne({'id': id});
-    if(!supID)
-    {
-      const Supporter = await Support.save();
+//Member
+createMember: async ({ input }) => {
+const plainPassword = await input.password.toString();
+const salt = await makeSalt();
+//Create crypto salt code
+const ipassword = await createHashPassword(plainPassword);
+//Create date.now(); == moment();
+const momenta = moment();
+//Main Collection
+const Member = new MemberModel({
+'id': salt.toString(),
+'loginmember': input.loginmember,
+'username': input.username,
+'password': ipassword.toString(),
+'sex': input.sex,
+'nfcnumber': input.nfcnumber,
+'syncTime': momenta,
+});
+//Data de-duplication. Key set : id(hash), loginmember: loginID
+const memName = await MemberModel.findOne({'loginmember': input.loginmember});
+const memID = await MemberModel.findOne({'id': salt});
+if(!memName)
+{
+  if(!memID)
+  {
+    const Members = await Member.save();
+     
     return {
-      ...Supporter._doc,
-      id: Supporter.id.toString(), 
+      ...Members._doc,
+      id: Members.id.toString(), 
     }
-      
-    } else if(supID) {
-      throw new Error("Already registered");
+  }
+  else if(memID) {
+    throw new Error("Already member existed");
+  }
+} else if(memName) {
+    if(memID)
+    {
+      throw new Error("Already member existed");
+    }
+    else {
+      throw new Error("Already member existed");
     }
     
-  },
-  getSupport: async function ({ id }) {
-    //Find id(hash) key set
-    const Supporter = await SupportModel.findOne({id});
-    if(!Supporter) {
-      throw new Error("No records");
-    }
-    return {
-      ...Supporter._doc,
-      id: Supporter.id.toString(), 
-    }
-  },
-  updateSupport: async function ({ id, input }) {
-    //Find id(hash) key set
-    const Supporter = await SupportModel.findOne({id});
-    if(!Supporter) {
-      throw new Error("No records");
-    }
-    //Update method
-    Supporter.title = input.title;
-    Supporter.mainSentense = input.mainSentense;
-    const upSupport = await SupportModel.save();
-    return {
-      ...upSupport._doc,
-      id: upSupport.id.toString(),
-    };
-  },
-  deleteSupport: async function ({ id }) {
-    //Find id(hash) key set
-    const Supporter = await SupportModel.findOne({id});
-    if(!Supporter) {
-      throw new Error("No records");
-    }
-  
-    await SupportModel.findOneAndDelete({id});
-    return {
-      ...SupportModel._doc,
-      id: SupportModel.id,
-      
-    }, "delete Complete";
-  },
-    //Notice
-    createNotice: async ({ input }) => {
-    //Create crypto hash code
-      const id = require('crypto').randomBytes(2).toString('hex'); 
-    //Find MemberList Connection => go to 'user' data set
-      const Members = await MemberModel.findOne({'username': input.username});
-    //Create date.now(); == moment();
-      const momenta = moment();
-      if(!Members){
-        throw new Error("No member");
-      }
-  
-    //Main Collection
-      const Notice = new NoticeModel({
-      'id': id,
-      'title': input.title,
-      'image': input.image,
-      'mainSentense': input.mainSentense,
-      'user': Members.username,
-      'syncTime': momenta,
-      });
-    //Data de-duplication. Key set : id(hash)
-      const notID = await NoticeModel.findOne({'id': id});
-      if(!notID)  {
-        const Notices = await Notice.save();
-      return {
-        ...Notices._doc,
-        id: Notices.id.toString(), 
-      }
-        
-      } else if(notID) {
-        throw new Error("Already registered");
-      }
-      
-    },
-    getNotice: async function ({ id }) {
-      //Find id(hash) key set
-      const Notices = await NoticeModel.findOne({id});
-      if(!Notices) {
-        throw new Error("No records");
-      }
-      return {
-        ...Notices._doc,
-        id: Notices.id.toString(), 
-      }
-    },
-    updateNotice: async function ({ id, input }) {
-      //Find id(hash) key set
-      const Notices = await NoticeModel.findOne({id});
-      if(!Notices) {
-        throw new Error("No records");
-      }
-    //Update method
-      Notices.title = input.title;
-      Notices.image = input.image;
-      Notices.mainSentense = input.mainSentense;
-      const upNotices = await NoticeModel.save();
-      return {
-        ...upNotices._doc,
-        id: upNotices.id.toString(),
-      };
-    },
-    deleteNotice: async function ({ id }) {
-      //Find id(hash) key set
-      const Notices = await NoticeModel.findOne({id});
-      if(!Notices) {
-        throw new Error("No records");
-      }
-  
-      await NoticeModel.findOneAndDelete({id});
-      return {
-        ...NoticeModel._doc,
-        id: NoticeModel.id,
-        
-      }, "delete Complete";
-    },
-    //Comment
-    createComment: async ({ input }) => {
-        //Create crypto hash code
-      const id = require('crypto').randomBytes(2).toString('hex');
-      //Find MemberList Connection => go to 'from' data set
-      const Members = await MemberModel.findOne({'username': input.username});
-      //Create date.now(); == moment();
-      const momenta = moment();
-      if(!Members){
-        throw new Error("No member");
-      }
-  
-    //Main Collection
-      const Comment = new CommentModel({
-      'id': id,
-      'title': input.title,
-      'image': input.image,
-      'from': Members.username,
-      'message': input.message,
-      'syncTime': momenta,
-      });
-      //Data de-duplication. Key set : id(hash)
-      const comID = await CommentModel.findOne({'id': id});
-      if(!comID)  {
-        const Comments = await Comment.save();
-      return {
-        ...Comments._doc,
-        id: Comments.id.toString(), 
-      }
-      } else if(comID) {
-        throw new Error("Already registered");
-      }
-      
-    },
-    getComment: async function ({ id }) {
-      //Find id(hash) key set
-      const Comments = await CommentModel.findOne({id});
-      if(!Comments) {
-        throw new Error("No records");
-      }
-      return {
-        ...Comments._doc,
-        id: Comments.id.toString(), 
-      }
-    },
-    updateComment: async function ({ id, input }) {
-      //Find id(hash) key set
-      const Comments = await CommentModel.findOne({id});
-      if(!Comments) {
-        throw new Error("No records");
-      }
-      //Update method
-      Comments.title = input.title;
-      Comments.image = input.image;
-      Comments.message = input.message;
-      const upComments = await CommentModel.save();
-      return {
-        ...upComments._doc,
-        id: upComments.id.toString(),
-      };
-    },
-    deleteComment: async function ({ id }) {
-      //Find id(hash) key set
-      const Comments = await CommentModel.findOne({id});
-      if(!Comments) {
-        throw new Error("No records");
-      }
-  
-      await CommentModel.findOneAndDelete({id});
-      return {
-        ...CommentModel._doc,
-        id: CommentModel.id,
-        
-      }, "delete Complete";
-    },
+}
+ 
+},
+getMember: async function ({ id }) {
+//Find id(hash) key set
+const Members = await MemberModel.findOne({id});
+if(!Members) {
+  throw new Error("No items");
+}
+return {
+  ...Members._doc,
+  id: Members.id.toString(), 
+}
+},
+updateMember: async function ({ id, input }) {
+//Find id(hash) key set
+const Members = await MemberModel.findOne({id});
+if(!Members) {
+  throw new Error("No items");
+}
+//Update method
+Members.loginmember = input.loginmember;
+Members.username = input.username;
+Members.password = input.password;
+Members.sex = input.sex;
+Members.nfcnumber = input.nfcnumber;
+const upMembers = await MemberModel.save();
+return {
+  ...upMembers._doc,
+  id: upMembers.id.toString(),
+};
+},
+deleteMember: async function ({ id }) {
+//Find id(hash) key set
+const Members = await MemberModel.findOne({id});
+if(!Members) {
+  throw new Error("No items");
+}
 
-    //calendar
-    getCalendar: () => {
-      const getState = moment();
-      const setState = getState;
-      const firstWeek = today.clone().startOf('month').week();
-    const lastWeek = today.clone().endOf('month').week() === 1 ? 53 : today.clone().endOf('month').week();
+await MemberModel.findOneAndDelete({id});
+return {
+  ...MemberModel._doc,
+  id: MemberModel.id,
   
-    CalModel.syncTime = setState;
-    CalModel.timezone = getState;
-    CalModel.firstWeek = firstWeek;
-    CalModel.lastWeek = lastWeek;
-    return {
-      ...CalModel._doc,
-      syncTime: CalModel.syncTime.toString(), 
-    }
-    }
-  };
+}, "delete Complete";
+},
+//Support
+createSupport: async ({ input }) => {
+//Create crypto hash code
+const id = require('crypto').randomBytes(2).toString('hex');
+//MemberList Connection => go to 'user' data set
+const Members = await MemberModel.findOne({'username': input.username});
+//Create date.now(); == moment();
+const momenta = moment();
+//Main Collection
+const Support = new SupportModel({
+'id': id,
+'title': input.title,
+'mainSentense': input.mainSentense,
+'user': Members.username,
+'syncTime': momenta,
+});
+//Data de-duplication. Key set : id(hash)
+const supID = await MemberModel.findOne({'id': id});
+if(!supID)
+{
+const Supporter = await Support.save();
+return {
+...Supporter._doc,
+id: Supporter.id.toString(), 
+}
+
+} else if(supID) {
+throw new Error("Already registered");
+}
+
+},
+getSupport: async function ({ id }) {
+//Find id(hash) key set
+const Supporter = await SupportModel.findOne({id});
+if(!Supporter) {
+throw new Error("No records");
+}
+return {
+...Supporter._doc,
+id: Supporter.id.toString(), 
+}
+},
+updateSupport: async function ({ id, input }) {
+//Find id(hash) key set
+const Supporter = await SupportModel.findOne({id});
+if(!Supporter) {
+throw new Error("No records");
+}
+//Update method
+Supporter.title = input.title;
+Supporter.mainSentense = input.mainSentense;
+const upSupport = await SupportModel.save();
+return {
+...upSupport._doc,
+id: upSupport.id.toString(),
+};
+},
+deleteSupport: async function ({ id }) {
+//Find id(hash) key set
+const Supporter = await SupportModel.findOne({id});
+if(!Supporter) {
+throw new Error("No records");
+}
+
+await SupportModel.findOneAndDelete({id});
+return {
+...SupportModel._doc,
+id: SupportModel.id,
+
+}, "delete Complete";
+},
+//Notice
+createNotice: async ({ input }) => {
+//Create crypto hash code
+const id = require('crypto').randomBytes(2).toString('hex'); 
+//Find MemberList Connection => go to 'user' data set
+const Members = await MemberModel.findOne({'username': input.username});
+//Create date.now(); == moment();
+const momenta = moment();
+if(!Members){
+  throw new Error("No member");
+}
+
+//Main Collection
+const Notice = new NoticeModel({
+'id': id,
+'title': input.title,
+'image': input.image,
+'mainSentense': input.mainSentense,
+'user': Members.username,
+'syncTime': momenta,
+});
+//Data de-duplication. Key set : id(hash)
+const notID = await NoticeModel.findOne({'id': id});
+if(!notID)  {
+  const Notices = await Notice.save();
+return {
+  ...Notices._doc,
+  id: Notices.id.toString(), 
+}
+  
+} else if(notID) {
+  throw new Error("Already registered");
+}
+
+},
+getNotice: async function ({ id }) {
+//Find id(hash) key set
+const Notices = await NoticeModel.findOne({id});
+if(!Notices) {
+  throw new Error("No records");
+}
+return {
+  ...Notices._doc,
+  id: Notices.id.toString(), 
+}
+},
+updateNotice: async function ({ id, input }) {
+//Find id(hash) key set
+const Notices = await NoticeModel.findOne({id});
+if(!Notices) {
+  throw new Error("No records");
+}
+//Update method
+Notices.title = input.title;
+Notices.image = input.image;
+Notices.mainSentense = input.mainSentense;
+const upNotices = await NoticeModel.save();
+return {
+  ...upNotices._doc,
+  id: upNotices.id.toString(),
+};
+},
+deleteNotice: async function ({ id }) {
+//Find id(hash) key set
+const Notices = await NoticeModel.findOne({id});
+if(!Notices) {
+  throw new Error("No records");
+}
+
+await NoticeModel.findOneAndDelete({id});
+return {
+  ...NoticeModel._doc,
+  id: NoticeModel.id,
+  
+}, "delete Complete";
+},
+//Comment
+createComment: async ({ input }) => {
+  //Create crypto hash code
+const id = require('crypto').randomBytes(2).toString('hex');
+//Find MemberList Connection => go to 'from' data set
+const Members = await MemberModel.findOne({'username': input.username});
+//Create date.now(); == moment();
+const momenta = moment();
+if(!Members){
+  throw new Error("No member");
+}
+
+//Main Collection
+const Comment = new CommentModel({
+'id': id,
+'title': input.title,
+'image': input.image,
+'from': Members.username,
+'message': input.message,
+'syncTime': momenta,
+});
+//Data de-duplication. Key set : id(hash)
+const comID = await CommentModel.findOne({'id': id});
+if(!comID)  {
+  const Comments = await Comment.save();
+return {
+  ...Comments._doc,
+  id: Comments.id.toString(), 
+}
+} else if(comID) {
+  throw new Error("Already registered");
+}
+
+},
+getComment: async function ({ id }) {
+//Find id(hash) key set
+const Comments = await CommentModel.findOne({id});
+if(!Comments) {
+  throw new Error("No records");
+}
+return {
+  ...Comments._doc,
+  id: Comments.id.toString(), 
+}
+},
+updateComment: async function ({ id, input }) {
+//Find id(hash) key set
+const Comments = await CommentModel.findOne({id});
+if(!Comments) {
+  throw new Error("No records");
+}
+//Update method
+Comments.title = input.title;
+Comments.image = input.image;
+Comments.message = input.message;
+const upComments = await CommentModel.save();
+return {
+  ...upComments._doc,
+  id: upComments.id.toString(),
+};
+},
+deleteComment: async function ({ id }) {
+//Find id(hash) key set
+const Comments = await CommentModel.findOne({id});
+if(!Comments) {
+  throw new Error("No records");
+}
+
+await CommentModel.findOneAndDelete({id});
+return {
+  ...CommentModel._doc,
+  id: CommentModel.id,
+  
+}, "delete Complete";
+},
+//Tag
+getTag: async ({ username }) => {
+//Find id(hash) key set
+const Tags = await MemberModel.findOne({'username': username.username});
+if(!Tags) {
+  throw new Error("No records");
+}
+return {
+  ...Comments._doc,
+  id: Comments.id.toString(),
+}
+},
+//Calendar
+getCalendar: () => {
+const getState = moment();
+const setState = getState;
+const firstWeek = today.clone().startOf('month').week();
+const lastWeek = today.clone().endOf('month').week() === 1 ? 53 : today.clone().endOf('month').week();
+
+CalModel.syncTime = setState;
+CalModel.timezone = getState;
+CalModel.firstWeek = firstWeek;
+CalModel.lastWeek = lastWeek;
+return {
+...CalModel._doc,
+syncTime: CalModel.syncTime.toString(), 
+}
+},
+//Login
+signInMember: async ({ id, input }) => {
+const MemberName = await MemberModel.findOne({'username': input.username});
+
+const makeLoginPassword = (id, plainPassword) =>
+new Promise(async (resolve, reject) => {
+    const salt = await MemberModel.findOne({})
+        .then((result) => result.salt);
+    crypto.pbkdf2(plainPassword, salt, 9999, 64, 'sha512', (err, key) => {
+        if (err) reject(err);
+        resolve(key.toString('base64'));
+    });
+});
+
+
+},
+/*
+//Calendar pasing
+parsingTag: ({ input }) => {
+const
+},*/
+};
 
 app.use('/graphql', GraphqlHttp({
 schema: schema,
@@ -867,7 +923,7 @@ try {
 
 var storageimg = multer.diskStorage({
 destination: function (req, file, callback) {
-    
+    //변경
     callback(null, '/home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/image')
     //callback(null, 'smartmirror/image')
 },
@@ -1035,7 +1091,7 @@ try {
 
 var storageSmartmirror = multer.diskStorage({
 destination: function (req, file, callback) {
-    
+    //변경
     callback(null, '/home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/item')
     //callback(null, 'smartmirror/item')
 },
@@ -1057,8 +1113,7 @@ limits: {
 });
 //스마트 미러 구동파일 교체
 router.route('/home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/item/Smartmirror.exe').post(uploadSmartmirror.array('photo', 1), function (req, res) {
-
-
+//변경
 try {
     var files = req.files;
     if (files == "SmartMirror.exe") {
@@ -1383,8 +1438,7 @@ for (let index = 2; index < 3775; index++) {
 
 
 //기상청 엑셀정보 불러오기
-
-
+//변경
 const excelFile = xlsx.readFile("/home/hosting_users/creativethon/apps/creativethon_wmsapp/api/기상청41_단기예보 조회서비스_오픈API활용가이드_격자_위경도(20210401).xlsx")
 const firstSheet = excelFile.Sheets[excelFile.SheetNames[0]]
 
@@ -1716,8 +1770,7 @@ app.post('/deletevideo', function (req, res, next) {
 const name = req.body.name
 const video = Videofilesave.find({ "name": name })
 version++
-
-
+//변경
 fs.unlink(`/home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/video/${name}`, function (err) {
     if (err) console.log(err)
 })
@@ -1749,8 +1802,7 @@ app.post('/deleteimage', function (req, res, next) {
 const name = req.body.name
 const image = Imgfile.find({ "name": name })
 version++
-
-
+//변경
 fs.unlink(`/home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/image/${name}`, function (err) {
     if (err) console.log(err)
 })
@@ -1782,8 +1834,7 @@ app.post('/deletereservationvideo', function (req, res, next) {
 const name = req.body.name
 const video = Videofilesave.find({ "name": name })
 version++
-
-
+//변경
 fs.unlink(`/home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/video/${name}`, function (err) {
     if (err) console.log(err)
 })
@@ -1919,7 +1970,6 @@ Water.find(function (err, water) {
         //weekendWater.push(percent(data[index].Useage, maxValue))
         percentArray[index] = Math.floor(percent(weekendWater[index], maxValue))
     }
-    console.log(percentArray)
     Smartmirrorvideofile.find(function (err, videofile) {
         Smartmirrorimagefile.find(function (err, imgfile) {
             if (req.session.logindata) {
@@ -2019,7 +2069,7 @@ SmartmirrorExe.find({}, imgProjection, function (err, data) {
 //스마트미러에 기상청 행정구역코드 보내기
 app.get('/smartmirror/weather', function (req, res) {
 Weather.find({}, imgProjection, function (err, weather) {
-    console.log(weather[0].name)
+    console.log(moment().format('MMDD:hh:mm') + " " + weather[0].name)
     res.render('weather', { contents: weather[0].name, layout: null })
 })
 });
@@ -2210,8 +2260,6 @@ for (let index = 0; index < yearWater.length; index++) {
     yearpercentArray[index] = Math.floor(percent(yearWater[index], maxyearValue))
 }
 //연결이 들어오면 실행되는 이벤트
-console.log(yearWater)
-console.log(yearpercentArray)
 io.emit('weekendwater', weekendWater[0])
 io.emit('waterpercent', percentArray)
 io.emit('wateryearpercent', yearpercentArray)
@@ -2224,7 +2272,7 @@ let count = 0
 let testvalue = ""
 app.get('/nfc_recieve', function (req, res) {
 getnfc = req.query.id
-console.log(getnfc)
+console.log(console.log(moment().format('MMDD:hh:mm:ss')) + getnfc)
 if (testvalue) {
     count++
     testvalue = ""
@@ -2254,11 +2302,10 @@ let receivehand = "2"
 app.get('/test_remain', function (req, res) {
 hand = req.query.id
 receivehand = parseInt(hand)
-console.log(hand)
+console.log(moment().format('MMDD:hh:mm')+hand)
 io.emit('remain', hand)
 res.render('dkatk', { layout: null })
 })
-console.log(moment().format("MM")-1)
 app.get('/wateruseage', function (req, res) {
 Water.find(function (err, data) {
     MonthUseage.find(function (err, yeardata) {
@@ -2284,7 +2331,7 @@ Water.find(function (err, data) {
             {
                 lastMonth = yeardata[index].Data
                 currentMonth = yeardata[index+1].Data
-                console.log(index)
+                
             }
         }
         if (weekendWater[0] > maxValue) {
@@ -2304,16 +2351,15 @@ Water.find(function (err, data) {
             //weekendWater.push(percent(data[index].Useage, maxValue))
             yearpercentArray[index] = Math.floor(percent(yearWater[index], maxyearValue))
         }
-        console.log(currentMonth)
+        
         res.render('wateruseage', {
             data: data, yeardata: yeardata, selectcityname: selectcityname, selectvillagename: selectvillagename, weekendWater: weekendWater,
             percentArray: percentArray, yearWater: yearWater, yearpercentArray: yearpercentArray, lastMonth : lastMonth, currentMonth : currentMonth
         })
-        console.log("aaaa" + Valueyeardata)
+
     }).sort({ Year: 1 }).sort({ Month: 1 }).limit(12)
 }).sort({ Year: -1 }).sort({ Month: -1 }).sort({ Day: -1 }).limit(7)
-console.log("수치 : " + yearWater)
-console.log("percent : " + percentArray)
+
 testvalue = "aaaa"
 })
 //const user = new Water({ 'name': "132", 'Date' : valuedata, 'Hour' : "18 : 10" })
@@ -2412,7 +2458,6 @@ for (let index = 0; index < yearWater.length; index++) {
 //weekendWater.push(percent(data[index].Useage, maxValue))
 yearpercentArray[index] = Math.floor(percent(yearWater[index], maxyearValue))
 }
-
 io.on('connection', (socket) => {   //연결이 들어오면 실행되는 이벤트
 // socket 변수에는 실행 시점에 연결한 상대와 연결된 소켓의 객체가 들어있다.
 
@@ -2483,6 +2528,23 @@ let divisionpage = clientpage / 5
 
 })
 
+app.get('/notice',function(req,res){
+let commentarray = new Array()
+Client.find(function (err, data) {
+    for (let index = 0; index < data.length; index++) {
+        if (data[index].name == "박찬종") {
+            for (let i = 0; i < data[index].comment.length; i++) {
+                let object = new Object()
+                object.name = data[index].comment[i].username
+                object.text = data[index].comment[i].text
+                object.Date = data[index].comment[i].Date
+                commentarray.push(object)
+            }
+            res.render('notice', { commentarray: commentarray })
+        }
+    }
+})
+})
 
 
 // custom 404 page
