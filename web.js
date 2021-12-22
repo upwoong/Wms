@@ -788,9 +788,8 @@ limits: {
 });
 //기본 비디오 파일 저장
 router.route('/processvideo').post(upload.array('photo', 1), function (req, res) {
-try {
     var files = req.files;
-    
+    if (files[0].mimetype == "video/mp4" || files[0].mimetype == "video/avi" || files[0].mimetype == "video/wmv") {
         version++
 
         if (files.length > 0) {
@@ -841,15 +840,19 @@ try {
         } else {
             console.log('파일이 없습니다');
         }
-    
-} catch (err) {
-    console.dir(err.stack);
-}
+    }
+    else {
+        console.log("옳바른 확장자가 아닙니다.")
+        fs.unlink(`smartmirror/video/${files[0].filename}`, function (err) {
+            console.log(files[0].filename)
+        })
+        res.send("<script>alert('옳바른 확장자가 아닙니다.');location.href='mediacontents';</script>");
+    }
 });
 
 router.route('/processbookingvideo').post(upload.array('photo', 1), function (req, res) {
-try {
     var files = req.files;
+    if (files[0].mimetype == "video/mp4" || files[0].mimetype == "video/avi" || files[0].mimetype == "video/wmv") {
         var selectday = req.body.chooseimageday
         const strArr = selectday.split('-')
         const month = strArr[1]
@@ -905,9 +908,14 @@ try {
         } else {
             console.log('파일이 없습니다');
         }
-} catch (err) {
-    console.dir(err.stack);
-}
+    }
+    else {
+        console.log("옳바른 확장자가 아닙니다.")
+        fs.unlink(`smartmirror/video/${files[0].filename}`, function (err) {
+            console.log(files[0].filename)
+        })
+        res.send("<script>alert('옳바른 확장자가 아닙니다.');location.href='bookmedia';</script>");
+    }
 });
 
 //이미지파일
@@ -938,6 +946,7 @@ limits: {
 router.route('/processimage').post(uploadimg.array('photo', 1), function (req, res) {
 try {
     var files = req.files;
+    if (files[0].mimetype == "image/jpg" || files[0].mimetype == "image/png" || files[0].mimetype == "image/gif" || files[0].mimetype == "image/jpeg") {
 
         version++
 
@@ -994,6 +1003,14 @@ try {
         } else {
             console.log('파일이 없습니다');
         }
+    }
+    else {
+        console.log("옳바른 확장자가 아닙니다.")
+        fs.unlink(`smartmirror/image/${files[0].filename}`, function (err) {
+            console.log(files[0].filename)
+        })
+        res.send("<script>alert('옳바른 확장자가 아닙니다.');location.href='mediacontents';</script>");
+    }
 } catch (err) {
     console.dir(err.stack);
 }
@@ -1003,6 +1020,7 @@ try {
 router.route('/processbookingimage').post(uploadimg.array('photo', 1), function (req, res) {
 try {
     var files = req.files;
+    if (files[0].mimetype == "image/jpg" || files[0].mimetype == "image/png" || files[0].mimetype == "image/gif" || files[0].mimetype == "image/jpeg") {
         var selectday = req.body.chooseimageday
         const strArr = selectday.split('-');
         const month = strArr[1]
@@ -1062,6 +1080,14 @@ try {
         } else {
             console.log('파일이 없습니다');
         }
+    }
+    else {
+        console.log("옳바른 확장자가 아닙니다.")
+        fs.unlink(`smartmirror/image/${files[0].filename}`, function (err) {
+            console.log(files[0].filename)
+        })
+        res.send("<script>alert('옳바른 확장자가 아닙니다.');location.href='mediacontents';</script>");
+    }
 } catch (err) {
     console.dir(err.stack);
 }
@@ -1151,10 +1177,6 @@ const month = moment().format('MM')
 const day = moment().format('DD')
 const date = moment().format('MMDD')
 const Hour = moment().format('HH:mm:ss')
-
-Water.updateOne({ 'Year': year, 'Month': month, 'Day': day - 1, 'Percent': "", 'Useage': weekendWater[0] }, (err, data) => {
-    console.log("일일 수전 데이터 저장 완료")
-})
 
 //수전 데이터 초기화
 weekendWater[0] = 0
@@ -1336,6 +1358,7 @@ io.emit("currentT1H", weatherdata[1])
 var m = schedule.scheduleJob("0 0 0 1 * *", function () {
 const todayYear = moment().format('YY')
 const todayMonth = moment().format('MM')
+const todayDay = moment().format('DD')
 
 const monthdata = new MonthUseage({ 'Data': yearWater, 'Year': todayYear, 'Month': todayMonth })
 monthdata.save(function (err, slience) {
@@ -1347,12 +1370,30 @@ monthdata.save(function (err, slience) {
     return console.log("한달 단위 수전사용량 업데이트 완료")
 })
 
-console.log("현재 달 : " + todayMonth)
+console.log("현재 날짜 : " + todayYear + " " + todayMonth + " " + todayDay)
 })
 
 //매년 1월에 발생하는 이벤트
 var Y = schedule.scheduleJob("0 0 0 0 1 *", function () {
-yearWater[0] = 0 // 올해 총 사용량 초기화
+yearWater = new Array() // 올해 총 사용량 초기화
+
+const todayYear = moment().format('YY')
+const todayMonth = moment().format('MM')
+const todayDay = moment().format('DD')
+
+for (let index = 0; index < 11; index++) {
+    const newDaywateruseage = new MonthUseage({ 'Year': todayYear, 'Month': index+1, 'Day': todayDay, 'Percent': "", 'Data': "" })
+    newDaywateruseage.save(function (err, slience) {
+        if (err) {
+            console.log(err)
+            res.status(500).send('update error')
+            return
+        }
+        return console.log(index+1 + "월 데이터 생성")
+    })
+}
+
+console.log("현재 날짜 : " + todayYear + " " + todayMonth + " " + todayDay)
 })
 
 app.get('/dkatk', function (req, res) {
@@ -1419,7 +1460,7 @@ for (let index = 2; index < 3775; index++) {
 
 //기상청 엑셀정보 불러오기
 //변경
-
+///home/hosting_users/creativethon/apps/creativethon_wmsapp/api/기상청41_단기예보 조회서비스_오픈API활용가이드_격자_위경도(20210401).xlsx
 const excelFile = xlsx.readFile("/home/hosting_users/creativethon/apps/creativethon_wmsapp/api/기상청41_단기예보 조회서비스_오픈API활용가이드_격자_위경도(20210401).xlsx")
 const firstSheet = excelFile.Sheets[excelFile.SheetNames[0]]
 
@@ -1624,7 +1665,7 @@ User.findOne({ name: req.body.name, password: req.body.password }, (err, user) =
                     res.redirect('main')
                 })
             })
-        }).sort({ Date: -1 }).sort({ Hour: -1 }).sort({ Day: -1 }).limit(7)
+        }).sort({ Date: -1 }).sort({ Hour: -1 }).limit(7)
     }
     else return res.status(404).send({ message: '유저 없음!' });
 });
@@ -1852,7 +1893,7 @@ app.post('/deletereservationimage', function (req, res, next) {
     const name = req.body.name
     const image = Imgfile.find({ "name": name })
     version++
-    fs.unlink(`smartmirror/image/${name}`, function (err) {
+    fs.unlink(`/home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/image/${name}`, function (err) {
         if (err) console.log(err)
     })
     Smartmirrorimagefile.find(function (err, data) {
@@ -2218,7 +2259,9 @@ let percentArray = new Array()
 let yearpercentArray = new Array()
 app.get('/testwater_recieve', function (req, res) {
 watervalue = req.query.id
+const todayYear = moment().format('MM')
 const todayMonth = moment().format('MM')
+const todayDay = moment().format('MM')
 pushwatervalue = parseInt(watervalue)
 //plusvalue = parseInt(plusvalue) + (parseInt(watervalue) / 1000)
 
@@ -2226,7 +2269,8 @@ weekendWater[0] = parseInt(weekendWater[0]) + parseInt(watervalue)
 if (weekendWater[0] > maxValue) {
     maxValue = weekendWater[0]
 }
-
+Water.updateOne({ 'Year': todayYear, 'Month': todayMonth, 'Day': todayDay, 'Percent': "", 'Useage': weekendWater[0] }, (err, data) => {
+})
 for (let index = 0; index < weekendWater.length; index++) {
     //weekendWater.push(percent(data[index].Useage, maxValue))
     percentArray[index] = Math.floor(percent(weekendWater[index], maxValue))
@@ -2551,7 +2595,7 @@ Water.countDocuments(function (err, water) {
 })
 })
 app.get('/inquirylist',function(req,res){
-    res.render('inquirylist',{layout : null})
+res.render('inquirylist',{layout : null})
 })
 
 // custom 404 page
