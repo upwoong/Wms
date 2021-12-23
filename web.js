@@ -2255,9 +2255,9 @@ let percentArray = new Array()
 let yearpercentArray = new Array()
 app.get('/testwater_recieve', function (req, res) {
     watervalue = req.query.id
-    const todayYear = moment().format('MM')
+    const todayYear = moment().format('YY')
     const todayMonth = moment().format('MM')
-    const todayDay = moment().format('MM')
+    const todayDay = moment().format('DD')
     pushwatervalue = parseInt(watervalue)
     //plusvalue = parseInt(plusvalue) + (parseInt(watervalue) / 1000)
 
@@ -2270,6 +2270,12 @@ app.get('/testwater_recieve', function (req, res) {
         percentArray[index] = Math.floor(percent(weekendWater[index], maxValue))
     }
 
+    console.log("현재 수전 사용 수치 : " + watervalue)
+    console.log("누적 수전 사용 수치 : " + weekendWater[0])
+    Water.findOneAndUpdate({ 'Year': todayYear, 'Month': todayMonth, 'Day': todayDay},{$set:{'Useage' : 1244}}, (err, data) => {
+        if(err) console.log(err)
+        else console.log("저장완료")
+    })
     //yearWater[0] = yearWater[0] + (parseInt(watervalue) / 1000)
     yearWater[todayMonth - 1] = parseInt(yearWater[todayMonth - 1]) + parseInt(watervalue)
     if (yearWater[todayMonth - 1] > maxyearValue) {
