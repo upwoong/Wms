@@ -2265,8 +2265,6 @@ app.get('/testwater_recieve', function (req, res) {
     if (weekendWater[0] > maxValue) {
         maxValue = weekendWater[0]
     }
-    Water.updateOne({ 'Year': todayYear, 'Month': todayMonth, 'Day': todayDay, 'Percent': "", 'Useage': weekendWater[0] }, (err, data) => {
-    })
     for (let index = 0; index < weekendWater.length; index++) {
         //weekendWater.push(percent(data[index].Useage, maxValue))
         percentArray[index] = Math.floor(percent(weekendWater[index], maxValue))
