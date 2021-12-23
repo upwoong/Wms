@@ -1162,9 +1162,9 @@ router.route('/home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmir
 
 
 
-//매일 오전6시에 예약한 날짜가 되면 스마트미러에 예약한 이미지포스터로 교체, 수전사용량 어제자 교체
+//매일 오전0시에 예약한 날짜가 되면 스마트미러에 예약한 이미지포스터로 교체, 수전사용량 어제자 교체
 let changefilename
-var j = schedule.scheduleJob("0 0 6 * * *", function () {
+var j = schedule.scheduleJob("0 0 0 * * *", function () {
     let imagestate = false
     let videostate = false
     const year = moment().format('YY')
@@ -2272,7 +2272,7 @@ app.get('/testwater_recieve', function (req, res) {
 
     console.log("현재 수전 사용 수치 : " + watervalue)
     console.log("누적 수전 사용 수치 : " + weekendWater[0])
-    Water.findOneAndUpdate({ 'Year': todayYear, 'Month': todayMonth, 'Day': todayDay},{$set:{'Useage' : 1244}}, (err, data) => {
+    Water.findOneAndUpdate({ 'Year': todayYear, 'Month': todayMonth, 'Day': todayDay},{$set:{'Useage' : weekendWater[0]}}, (err, data) => {
         if(err) console.log(err)
         else console.log("저장완료")
     })
