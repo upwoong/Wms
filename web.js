@@ -65,7 +65,7 @@ const adminuser = mongoose.Schema({
     password: String,
 })
 const usingwater = new mongoose.Schema({
-    Useage: String,
+    Useage: Number,
     Year: String,
     Month: String,
     Day: String,
@@ -1174,9 +1174,9 @@ var j = schedule.scheduleJob("0 0 0 * * *", function () {
     const Hour = moment().format('HH:mm:ss')
 
     //수전 데이터 초기화
-    weekendWater[0] = 0
+    weekendWater[0] = ""
 
-    const newDaywateruseage = new Water({ 'Year': year, 'Month': month, 'Day': day, 'Percent': "", 'Useage': "" })
+    const newDaywateruseage = new Water({ 'Year': year, 'Month': month, 'Day': day, 'Percent': "", 'Useage': 0 })
     newDaywateruseage.save(function (err, slience) {
         if (err) {
             console.log(err)
@@ -1185,6 +1185,52 @@ var j = schedule.scheduleJob("0 0 0 * * *", function () {
         }
         return console.log("새로운 수전사용 데이터 생성")
     })
+
+    const todayYear = moment().format('YY')
+    //초기 7일간 데이터중 가장 높은 일자의 값 구하기 설정
+    let maxValue = 0
+    Water.find(function (err, data) {
+        //maxValue = Math.max(...data.Date) //ES6 문법이기 때문에 안되면 const maxValue = Math.max.apply(null, data) 를 사용
+        let Valuedata = new Array()
+        for (let index = 0; index < data.length; index++) {
+            Valuedata.push(data[index].Useage)
+        }
+        maxValue = Math.max.apply(null, Valuedata)
+    }).sort({ Year: 1 }).sort({ Month: -1 }).sort({ Day: -1 }).limit(7) //추후엔 Month 와 Day로 나누기 때문에 각각에 sort정렬을 해줘야 최신 데이터가 나옴
+
+
+    //초기 1년간 데이터중 가장 높은 달의 값 구하기 설정
+    let maxyearValue = 0
+    MonthUseage.find(function (err, data) {
+        //maxValue = Math.max(...data.Date) //ES6 문법이기 때문에 안되면 const maxValue = Math.max.apply(null, data) 를 사용
+        let Valueyeardata = new Array()
+        for (let index = 0; index < data.length; index++) {
+            if (data[index].Year == todayYear)
+                Valueyeardata.push(data[index].Data)
+        }
+        maxyearValue = Math.max.apply(null, Valueyeardata)
+    }).sort({ Year: 1 }).sort({ Month: 1 }).sort({ Day: 1 }).limit(12) //추후엔 Month 와 Day로 나누기 때문에 각각에 sort정렬을 해줘야 최신 데이터가 나옴
+
+
+
+    // 수전데이터 받기전 일주일 데이터 기초 설정
+    let weekendWater = new Array()
+    Water.find(function (err, data) {
+        for (let index = 0; index < data.length; index++) {
+            //weekendWater.push(parseInt(percent(data[index].Useage, maxValue)))
+            weekendWater.push(parseInt(data[index].Useage))
+        }
+    }).sort({ Year: 1 }).sort({ Month: -1 }).sort({ Day: -1 }).limit(7)
+
+    //수전데이터 받기전 1년 데이터 기초 설정
+    let yearWater = new Array()
+    MonthUseage.find(function (err, data) {
+        for (let index = 0; index < data.length; index++) {
+            if (data[index].Year == todayYear)
+                yearWater.push(parseInt(data[index].Data))
+        }
+    }).sort({ Year: 1 }).sort({ Month: 1 }).limit(12)
+
     Smartmirrorimagefile.deleteMany(function (err, data) {
         //기존에 있던 smartmirror 데이터베이스를 모두 삭제
         if (err) console.log(err)
@@ -1656,7 +1702,7 @@ app.post('/main', (req, res) => {
                             name: 'username',
                             authorized: true
                         }
-                        req.session.save(err => {if(err) console.log(err)})
+                        req.session.save(err => { if (err) console.log(err) })
                         console.log("관리자 로그인 성공")
                         res.redirect('main')
                     })
@@ -2272,8 +2318,8 @@ app.get('/testwater_recieve', function (req, res) {
 
     console.log("현재 수전 사용 수치 : " + watervalue)
     console.log("누적 수전 사용 수치 : " + weekendWater[0])
-    Water.findOneAndUpdate({ 'Year': todayYear, 'Month': todayMonth, 'Day': todayDay},{$set:{'Useage' : weekendWater[0]}}, (err, data) => {
-        if(err) console.log(err)
+    Water.findOneAndUpdate({ 'Year': todayYear, 'Month': todayMonth, 'Day': todayDay }, { $set: { 'Useage': weekendWater[0] } }, (err, data) => {
+        if (err) console.log(err)
         else console.log("저장완료")
     })
     //yearWater[0] = yearWater[0] + (parseInt(watervalue) / 1000)
