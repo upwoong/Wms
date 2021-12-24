@@ -1174,7 +1174,7 @@ var j = schedule.scheduleJob("0 0 0 * * *", function () {
     const Hour = moment().format('HH:mm:ss')
 
     //수전 데이터 초기화
-    weekendWater[0] = ""
+    weekendWater[0] = 0
 
     const newDaywateruseage = new Water({ 'Year': year, 'Month': month, 'Day': day, 'Percent': "", 'Useage': 0 })
     newDaywateruseage.save(function (err, slience) {
