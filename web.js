@@ -1878,7 +1878,6 @@ video.remove(function (err) {
 })
 res.redirect('bookmedia')
 })
-/
 //예약 이미지파일 삭제
 
 app.post('/deletereservationimage', function (req, res, next) {
