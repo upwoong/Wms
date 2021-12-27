@@ -1872,9 +1872,7 @@ video.remove(function (err) {
     if (err) {
         console.log(err)
         res.status(500).send('update error')
-        return
     }
-    res.status(200).send("Removed")
 })
 res.redirect('bookmedia')
 })
