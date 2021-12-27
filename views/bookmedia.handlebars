@@ -128,7 +128,7 @@
               <form method="post">
               <div class="flex flex-1 mr-2">
                 <div class="Img-Url-Box w-full text-sm c-8F8F8F border-1-C4C4C4">
-                  <select class="w-full h-5 text-xs cursor-pointer" id="name" onchange="changevideoSelect()">
+                  <select class="w-full h-5 text-xs cursor-pointer" id="name" name = "name" onchange="changevideoSelect()">
                     <option value="" selected disabled>--</option>
                     {{#each videofile}}
                     <option name="videofile" value="{{this.name}}">{{this.name}}</option>
