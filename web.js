@@ -947,6 +947,19 @@ router.route('/processimage').post(uploadimg.array('photo', 1), function (req, r
 
                 //만약 현재 보여주는 미디어들의 type 이 None일 경우 또는 smartmirrorimagefile 데이터베이스가 비어있을경우
                 //Smartmirror 데이터베이스에도 추가하여 바로 반영되도록 추가
+                Smartmirrorimagefile.find(function (err, data) {
+                    if (data == "" || data[0].type == "None") {
+                        const imgfile = new Smartmirrorimagefile({ 'name': filename, 'Date': new Date(), 'type': "None" })
+                        imgfile.save(function (err, slience) {
+                            if (err) {
+                                console.log(err)
+                                res.send('update error,aaaaa')
+                                return
+                            }
+                            return
+                        })
+                    }
+                })
 
                 const imgfile = new Imgfile({ 'name': filename, 'Date': new Date(), 'type': "None" })
                 imgfile.save(function (err, slience) {
@@ -1011,19 +1024,6 @@ router.route('/processbookingimage').post(uploadimg.array('photo', 1), function 
 
                 // 클라이언트에 응답 전송
                 //만약 현재 보여주는 미디어들의 type 이 reservation이고 날짜가 현재 날짜와 같다면 smartmirrorimagefile 데이터베이스에도 추가
-                Smartmirrorimagefile.find(function (err, data) {
-                    if (data[0].type == "reservation" && data[0].Date == currentday) {
-                        const imgfile = new Smartmirrorimagefile({ 'name': filename, 'Date': currentday, 'type': "reservation" })
-                        imgfile.save(function (err, slience) {
-                            if (err) {
-                                console.log(err)
-                                res.send('update error,aaaaa')
-                                return
-                            }
-                            return
-                        })
-                    }
-                })
 
                 const imgfile = new Imgfile({ 'name': filename, 'Date': currentday, 'type': "reservation" })
                 imgfile.save(function (err, slience) {
