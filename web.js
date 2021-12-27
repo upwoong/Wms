@@ -906,7 +906,6 @@ router.route('/processbookingvideo').post(upload.array('photo', 1), function (re
         } else {
             console.log('파일이 없습니다');
         }
-    }
 });
 
 //이미지파일
