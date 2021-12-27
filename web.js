@@ -1121,7 +1121,7 @@ router.route('/processSmartmirror').post(uploadSmartmirror.array('photo', 1), fu
 ///home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/item/Smartmirror.exe
 try {
     var files = req.files;
-    if (files == "SmartMirror.exe") {
+    if (files[0].filename == "SmartMirror.exe") {
 
 
         fs.unlink(`/home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/item/Smartmirror.exe`, function (err) {
