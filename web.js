@@ -851,7 +851,6 @@ router.route('/processvideo').post(upload.array('photo', 1), function (req, res)
 
 router.route('/processbookingvideo').post(upload.array('photo', 1), function (req, res) {
     var files = req.files;
-    if (files[0].mimetype == "video/mp4" || files[0].mimetype == "video/avi" || files[0].mimetype == "video/wmv") {
         var selectday = req.body.chooseimageday
         const strArr = selectday.split('-')
         const month = strArr[1]
@@ -907,13 +906,6 @@ router.route('/processbookingvideo').post(upload.array('photo', 1), function (re
         } else {
             console.log('파일이 없습니다');
         }
-    }
-    else {
-        console.log("옳바른 확장자가 아닙니다.")
-        fs.unlink(`smartmirror/video/${files[0].filename}`, function (err) {
-            console.log(files[0].filename)
-        })
-        res.send("<script>alert('옳바른 확장자가 아닙니다.');location.href='bookmedia';</script>");
     }
 });
 
