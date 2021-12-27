@@ -1116,7 +1116,7 @@ limits: {
 }
 });
 //스마트 미러 구동파일 교체
-router.route('/home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/item/Smartmirror.exe').post(uploadSmartmirror.array('photo', 1), function (req, res) {
+router.route('/processSmartmirror').post(uploadSmartmirror.array('photo', 1), function (req, res) {
 //변경
 ///home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/item/Smartmirror.exe
 try {
@@ -1124,7 +1124,7 @@ try {
     if (files == "SmartMirror.exe") {
 
 
-        fs.unlink(`smartmirror/item/SmartMirror.exe`, function (err) {
+        fs.unlink(`/home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/item/Smartmirror.exe`, function (err) {
             if (err) console.log(err)
         })
 
