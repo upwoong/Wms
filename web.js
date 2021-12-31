@@ -139,6 +139,18 @@ var imgProjection = {
     __v: false,
     _id: false,
 };
+const port = process.env.PORT || 8001
+app.engine('handlebars', expressHandlebars({
+    defaultLayout: 'main',
+    runtimeOptions: {
+        allowProtoPropertiesByDefault: true,
+        allowProtoMethodsByDefault: true,
+    },
+}))
+app.set('view engine', 'handlebars')
+app.use(express.static(__dirname + '/public'))
+app.set('views', __dirname + '/views')
+app.use(express.static(__dirname + '/api'))
 app.use('/smartmirror', static(path.join(__dirname, 'smartmirror')));
 
 //Make salt what they will add on hash code
@@ -749,6 +761,7 @@ var root = {
     },*/
 };
 
+
 app.use('/graphql', GraphqlHttp({
     schema: schema,
     rootValue: root,
@@ -757,12 +770,14 @@ app.use('/graphql', GraphqlHttp({
 
 // 라우터 사용하여 라우팅 함수 등록
 var router = express.Router()
+app.use('/', router)
 
+//비디오파일 저장 위치
 var storagevideo = multer.diskStorage({
     destination: function (req, file, callback) {
         //변경
         callback(null, '/home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/video')
-        //callback(null, 'smartmirror/video')
+        
     },
     filename: function (req, file, callback) {
         var extension = path.extname(file.originalname);
@@ -844,59 +859,68 @@ router.route('/processvideo').post(upload.array('photo', 1), function (req, res)
     }
 });
 
+//예약 비디오파일 저장
 router.route('/processbookingvideo').post(upload.array('photo', 1), function (req, res) {
     var files = req.files;
-    var selectday = req.body.chooseimageday
-    const strArr = selectday.split('-')
-    const month = strArr[1]
-    const day = strArr[2]
-    const currentday = strArr[1] + strArr[2]
-    console.log("month :" + month + "day :" + day)
-    version++
+    if (files[0].mimetype == "video/mp4" || files[0].mimetype == "video/avi" || files[0].mimetype == "video/wmv") {
+        var selectday = req.body.chooseimageday
+        const strArr = selectday.split('-')
+        const month = strArr[1]
+        const day = strArr[2]
+        const currentday = strArr[1] + strArr[2]
+        console.log("month :" + month + "day :" + day)
+        version++
 
-    if (files.length > 0) {
-        console.dir(files[0]);
+        if (files.length > 0) {
+            console.dir(files[0]);
 
-        // 현재의 파일 정보를 저장할 변수 선언
-        var originalname = '',
-            filename = '',
-            mimetype = '',
-            size = 0;
+            // 현재의 파일 정보를 저장할 변수 선언
+            var originalname = '',
+                filename = '',
+                mimetype = '',
+                size = 0;
 
-        if (Array.isArray(files)) {   // 배열에 들어가 있는 경우 (설정에서 1개의 파일도 배열에 넣게 했음)
+            if (Array.isArray(files)) {   // 배열에 들어가 있는 경우 (설정에서 1개의 파일도 배열에 넣게 했음)
 
-            for (var i = 0; i < files.length; i++) {
-                originalname = files[i].originalname;
-                filename = files[i].filename;
-                mimetype = files[i].mimetype;
-                size = files[i].size;
+                for (var i = 0; i < files.length; i++) {
+                    originalname = files[i].originalname;
+                    filename = files[i].filename;
+                    mimetype = files[i].mimetype;
+                    size = files[i].size;
+                }
             }
-        }
 
-        //만약 현재 보여주는 미디어들의 type 이 reservation이고 날짜가 현재 날짜와 같다면 smartmirrorvideofile 데이터베이스에도 추가
-
-        const videofile = new Videofilesave({ 'name': filename, 'Date': currentday, 'type': "reservation" })
-        videofile.save(function (err, slience) {
-            if (err) {
-                console.log(err)
-                res.send('update error')
+            const videofile = new Videofilesave({ 'name': filename, 'Date': currentday, 'type': "reservation" })
+            videofile.save(function (err, slience) {
+                if (err) {
+                    console.log(err)
+                    res.send('update error')
+                    return
+                }
                 return
-            }
-            return
-        })
-        res.redirect('bookmedia')
-    } else {
-        console.log('파일이 없습니다');
+            })
+            res.redirect('bookmedia')
+        } else {
+            console.log('파일이 없습니다');
+        }
     }
+    else {
+        console.log("옳바른 확장자가 아닙니다.")
+        fs.unlink(`smartmirror/video/${files[0].filename}`, function (err) {
+            console.log(files[0].filename)
+        })
+        res.send("<script>alert('옳바른 확장자가 아닙니다.');location.href='mediacontents';</script>");
+    }
+
 });
 
-//이미지파일
+//이미지파일 저장 위치
 
 var storageimg = multer.diskStorage({
     destination: function (req, file, callback) {
         //변경
         callback(null, '/home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/image')
-        //callback(null, 'smartmirror/image')
+        
     },
     filename: function (req, file, callback) {
         var extension = path.extname(file.originalname);
@@ -1022,9 +1046,6 @@ router.route('/processbookingimage').post(uploadimg.array('photo', 1), function 
                 }
 
 
-                // 클라이언트에 응답 전송
-                //만약 현재 보여주는 미디어들의 type 이 reservation이고 날짜가 현재 날짜와 같다면 smartmirrorimagefile 데이터베이스에도 추가
-
                 const imgfile = new Imgfile({ 'name': filename, 'Date': currentday, 'type': "reservation" })
                 imgfile.save(function (err, slience) {
                     if (err) {
@@ -1052,12 +1073,12 @@ router.route('/processbookingimage').post(uploadimg.array('photo', 1), function 
     }
 });
 
-
+//스마트미러 구동파일 위치 저장
 var storageSmartmirror = multer.diskStorage({
     destination: function (req, file, callback) {
         //변경
         callback(null, '/home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/item')
-        //callback(null, 'smartmirror/item')
+       
     },
     filename: function (req, file, callback) {
         var extension = path.extname(file.originalname);
@@ -1081,7 +1102,7 @@ router.route('/processSmartmirror').post(uploadSmartmirror.array('photo', 1), fu
     ///home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/item/Smartmirror.exe
     try {
         var files = req.files;
-        if (files[0].filename == "SmartMirror.exe") {
+        if (files == "SmartMirror.exe") {
 
 
             fs.unlink(`/home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/item/Smartmirror.exe`, function (err) {
@@ -1126,9 +1147,9 @@ router.route('/processSmartmirror').post(uploadSmartmirror.array('photo', 1), fu
 
 
 
-//매일 오전6시에 예약한 날짜가 되면 스마트미러에 예약한 이미지포스터로 교체, 수전사용량 어제자 교체
+//매일 오전0시에 예약한 날짜가 되면 스마트미러에 예약한 이미지포스터로 교체, 새로운 일일 수전사용량 데이터생성
 let changefilename
-var j = schedule.scheduleJob("0 0 6 * * *", function () {
+var j = schedule.scheduleJob("0 0 0 * * *", function () {
     let imagestate = false
     let videostate = false
     const year = moment().format('YY')
@@ -1239,7 +1260,7 @@ var j = schedule.scheduleJob("0 0 6 * * *", function () {
 });
 
 
-//10초 간격으로 함수 실행
+//10초 간격으로 함수 실행, 현재 날씨현황과 기온 보여주는 함수
 var k = schedule.scheduleJob("*/10 * * * * *", function () {
     moment.tz.setDefault("Asia/Seoul")
     const date = moment().format('YYYYMMDD')
@@ -1341,7 +1362,7 @@ var Y = schedule.scheduleJob("0 0 0 0 1 *", function () {
     const todayDay = moment().format('DD')
 
     for (let index = 0; index < 11; index++) {
-        const newDaywateruseage = new MonthUseage({ 'Year': todayYear, 'Month': index + 1, 'Day': todayDay, 'Percent': "", 'Data': "" })
+        const newDaywateruseage = new MonthUseage({ 'Year': todayYear, 'Month': index + 1, 'Day': todayDay, 'Percent': "", 'Data': 0 })
         newDaywateruseage.save(function (err, slience) {
             if (err) {
                 console.log(err)
@@ -1355,6 +1376,7 @@ var Y = schedule.scheduleJob("0 0 0 0 1 *", function () {
     console.log("현재 날짜 : " + todayYear + " " + todayMonth + " " + todayDay)
 })
 
+//더미 데이터 삭제x
 app.get('/dkatk', function (req, res) {
     let commentarray = new Array()
     Client.find(function (err, data) {
@@ -1374,17 +1396,13 @@ app.get('/dkatk', function (req, res) {
     })
 })
 
+//댓글 작성 함수 테스트용
 app.post('/addcomment', (req, res) => {
     const todayDay = moment().format("DD")
     const todayMonth = moment().format("MM")
     Client.updateOne({ 'name': '박찬종' }, { $push: { comment: { 'text': req.body.commentText, 'username': "coolpaper", "Date": todayMonth + todayDay } } }, function (err) {
         if (err) {
-            console.log('댓글 추가 중 에러 발생 : ' + err.stack);
-
-            res.writeHead('200', { 'Content-Type': 'text/html;charset=utf8' });
-            res.write('<h2>게시판 댓글 추가 중 에러 발생</h2>');
-            res.end();
-
+            console.log(err)
             return;
         }
 
@@ -1393,8 +1411,6 @@ app.post('/addcomment', (req, res) => {
     });
 });
 
-//fs.unlink(`smartmirror/image/${name}`, function () { })
-app.use('/', router)
 
 
 //기상청api의 초기 x와 y값 불러오기
@@ -1472,13 +1488,13 @@ app.post('/weatherlista', function (req, res) {
         Smartmirrorvideofile.find(function (err, videofile) {
             Smartmirrorimagefile.find(function (err, imgfile) {
                 res.render('sub', {
-                    accessmanage: water, videofile: videofile, imgfile: imgfile, water: usewater, remainwater: remainwater,
-                    contents: localname, cityname: cityname, village: villagename, localselected: localselect, cityselected: cityselect,
-                    selectcityname: selectcityname, selectvillagename: selectvillagename
+                    accessmanage: water, videofile: videofile, imgfile: imgfile,
+                    cityname: cityname, village: villagename, localselected: localselect, cityselected: cityselect,
+                    selectcityname: selectcityname, selectvillagename: selectvillagename, percentArray: percentArray,
                 })
             })
         })
-    }).sort({ Year: -1 }).sort({ Month: -1 }).sort({ Day: -1 }).limit(7)
+    }).sort({ Date: -1 }).sort({ Hour: -1 }).limit(7)
 })
 let selectcityname;
 let selectvillagename;
@@ -1491,9 +1507,6 @@ app.post('/weather', function (req, res) {
     localselect = name
     cityselect = city
     villageselect = village
-    const deleteweather = Weather.find({ '__v': 0 })
-    deleteweather.deleteOne(function (err) {
-    })
 
     for (var index = 2; index <= 3775; index++) {
         if (localselect == firstSheet["C" + index].v && cityselect == firstSheet["D" + index].v && villageselect == firstSheet["E" + index].v) {
@@ -1509,14 +1522,9 @@ app.post('/weather', function (req, res) {
                 if (data == "") {
                     data = "2824561400"
                 }
-                const weather = new Weather({ 'name': data })
-                weather.save(function (err, slience) {
-                    if (err) {
-                        console.log(err)
-                        res.status(500).send('update error')
-                        return
-                    }
-                    return console.log("지역 선택 업데이트 완룐")
+                Weather.findOneAndUpdate({}, { $set: { 'name': data } }, (err, data) => {
+                    if (err) console.log(err)
+                    else console.log("저장완료")
                 })
             }
         }
@@ -1527,9 +1535,9 @@ app.post('/weather', function (req, res) {
         Smartmirrorvideofile.find(function (err, videofile) {
             Smartmirrorimagefile.find(function (err, imgfile) {
                 res.render('sub', {
-                    accessmanage: water, videofile: videofile, imgfile: imgfile, water: usewater, remainwater: remainwater,
+                    accessmanage: water, videofile: videofile, imgfile: imgfile, water: usewater,
                     contents: localname, cityname: cityname, village: villagename, localselected: localselect, cityselected: cityselect,
-                    selectcityname: selectcityname, selectvillagename: selectvillagename
+                    selectcityname: selectcityname, selectvillagename: selectvillagename, percentArray: percentArray,
                 })
             })
         })
@@ -1570,6 +1578,8 @@ for (var index = 2; index <= 3775; index++) {
     // 새 데이터 추가
     if (state) cityname.push(data)
 }
+
+//서버 실행시 초기 설정되었던 행정구역 코드 설정
 villagename = new Array();
 for (var index = 2; index <= 3775; index++) {
     if (localselect == firstSheet["C" + index].v && cityselect == firstSheet["D" + index].v) {
@@ -1596,7 +1606,7 @@ app.post('/insert', function (req, res, next) {
         Smartmirrorvideofile.find(function (err, videofile) {
             Smartmirrorimagefile.find(function (err, imgfile) {
                 res.render('sub', {
-                    accessmanage: water, videofile: videofile, imgfile: imgfile, water: usewater, remainwater: remainwater,
+                    accessmanage: water, videofile: videofile, imgfile: imgfile, water: usewater,
                     contents: localname, cityname: cityname, village: villagename, localselected: localselect, cityselected: cityselect,
                     selectcityname: selectcityname, selectvillagename: selectvillagename
                 })
@@ -1620,7 +1630,10 @@ app.post('/main', (req, res) => {
                             name: 'username',
                             authorized: true
                         }
-                        req.session.save(err => { if (err) console.log(err) })
+                        req.session.save(err => {
+                            if (err) console.log(err)
+                            else console.log(req.session)
+                        })
                         console.log("관리자 로그인 성공")
                         res.redirect('main')
                     })
@@ -1630,22 +1643,6 @@ app.post('/main', (req, res) => {
         else return res.status(404).send({ message: '유저 없음!' });
     });
 });
-
-router.route('/dlatlinsert').post(upload.array('photo', 1), function (req, res) {
-    try {
-        var files = req.files;
-        let name = req.body.name
-        let password = req.body.password
-        version++
-        console.log(files)
-        console.log(name)
-        console.log(password)
-
-    } catch (err) {
-        console.dir(err.stack);
-    }
-});
-
 
 //관리자 아이디 수정 페이지
 app.get('/modifyid', function (req, res) {
@@ -1702,7 +1699,7 @@ app.post('/insertwater', function (req, res, next) {
             Smartmirrorvideofile.find(function (err, videofile) {
                 Smartmirrorimagefile.find(function (err, imgfile) {
                     res.render('sub', {
-                        accessmanage: water, videofile: videofile, imgfile: imgfile, water: usewater, remainwater: remainwater,
+                        accessmanage: water, videofile: videofile, imgfile: imgfile, water: usewater,
                         contents: localname, cityname: cityname, village: villagename, localselected: localselect, cityselected: cityselect,
                         selectcityname: selectcityname, selectvillagename: selectvillagename
                     })
@@ -1726,25 +1723,6 @@ app.post('/deletedb', function (req, res, next) {
         }
         res.status(200).send("Removed")
     })
-})
-
-let usewater
-let remainwater
-app.post('/usewater', function (req, res, next) {
-    const water = req.body.water
-    usewater = water
-    remainwater = 100 - water
-    Water.find(function (err, water) {
-        Smartmirrorvideofile.find(function (err, videofile) {
-            Smartmirrorimagefile.find(function (err, imgfile) {
-                res.render('sub', {
-                    accessmanage: water, videofile: videofile, imgfile: imgfile, water: usewater, remainwater: remainwater,
-                    contents: localname, cityname: cityname, village: villagename, localselected: localselect, cityselected: cityselect,
-                    selectcityname: selectcityname, selectvillagename: selectvillagename
-                })
-            })
-        })
-    }).sort({ Date: -1 }).sort({ Hour: -1 }).limit(7)
 })
 
 //비디오파일 삭제
@@ -1844,6 +1822,7 @@ app.post('/deletereservationvideo', function (req, res, next) {
     })
     res.redirect('bookmedia')
 })
+
 //예약 이미지파일 삭제
 
 app.post('/deletereservationimage', function (req, res, next) {
@@ -1926,18 +1905,6 @@ app.use('/bookmedia', function (req, res) {
     })
 })
 
-const port = process.env.PORT || 8001
-app.engine('handlebars', expressHandlebars({
-    defaultLayout: 'main',
-    runtimeOptions: {
-        allowProtoPropertiesByDefault: true,
-        allowProtoMethodsByDefault: true,
-    },
-}))
-app.set('view engine', 'handlebars')
-app.use(express.static(__dirname + '/public'))
-app.set('views', __dirname + '/views')
-app.use(express.static(__dirname + '/api'))
 //메인페이지
 app.get('/main', function (req, res) {
     Water.find(function (err, water) {
@@ -1958,7 +1925,7 @@ app.get('/main', function (req, res) {
             Smartmirrorimagefile.find(function (err, imgfile) {
                 if (req.session.logindata) {
                     res.render('sub', {
-                        accessmanage: water, percentArray: percentArray, weekendWater: weekendWater, videofile: videofile, imgfile: imgfile, water: usewater, remainwater: remainwater,
+                        accessmanage: water, percentArray: percentArray, weekendWater: weekendWater, videofile: videofile, imgfile: imgfile, water: usewater,
                         contents: localname, cityname: cityname, village: villagename, selectcityname: selectcityname, selectvillagename: selectvillagename
                     })
                 }
@@ -2190,26 +2157,7 @@ app.use('/handdryermanage', function (req, res) {
     res.render('handdryermanage')
 })
 
-//서버에서 esp32 값을 받는 테스트 페이지
-var led_state = 0;
-app.get('/ledstate', (req, res) => {
 
-    res.setHeader('Content-Type', 'text/plain');
-    res.status(200);
-    res.send(led_state.toString());
-});
-
-app.post('/updateled', (req, res) => {
-    const led = req.body.name
-    led_state = parseInt(led);
-
-    res.status(200);
-    res.send("LED State send successfully");
-});
-
-app.get('/ledtest', function (req, res) {
-    res.render('esp32test', { layout: null, watervalue: watervalue, dlatlwatervalue: dlatlwatervalue })
-})
 const todayDay = moment().format('DD')
 const todayYear = moment().format('YY')
 const todayMonth = moment().format('MM')
@@ -2218,6 +2166,7 @@ let pushwatervalue = 0
 let plusdayvalue = 0
 let percentArray = new Array()
 let yearpercentArray = new Array()
+//수전에서 보내온 값을 받는 함수
 app.get('/testwater_recieve', function (req, res) {
     watervalue = req.query.id
     const todayYear = moment().format('YY')
@@ -2260,6 +2209,7 @@ app.get('/testwater_recieve', function (req, res) {
 let getnfc = ""
 let count = 0
 let testvalue = ""
+//핸드드라이어에서 nfc값을 받는 함수
 app.get('/nfc_recieve', function (req, res) {
     getnfc = req.query.id
     console.log(console.log(moment().format('MMDD:hh:mm:ss')) + "adwwad")
@@ -2274,6 +2224,7 @@ app.get('/nfc_recieve', function (req, res) {
 
 let gassensor = "2"
 let receivegas = "2"
+//핸드드라이어에서 가스센서 값을 받는 함수
 app.get('/test_gassensor', function (req, res) {
     gassensor = req.query.id
     receivegas = parseInt(gassensor)
@@ -2289,6 +2240,7 @@ app.get('/test_gassensor', function (req, res) {
 
 let hand = "2"
 let receivehand = "2"
+//핸드드라이어에서 남은 휴지출지량 값을 받는 함수
 app.get('/test_remain', function (req, res) {
     hand = req.query.id
     receivehand = parseInt(hand)
@@ -2296,6 +2248,8 @@ app.get('/test_remain', function (req, res) {
     io.emit('remain', hand)
     res.render('dkatk', { layout: null })
 })
+
+
 app.get('/wateruseage', function (req, res) {
     Water.find(function (err, data) {
         MonthUseage.find(function (err, yeardata) {
