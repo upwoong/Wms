@@ -8,6 +8,7 @@ const bodyparser = require('body-parser')
 app.use(bodyparser.urlencoded({
     extended: true
 }))
+app.use(bodyparser.json())
 require('moment-timezone');
 const cheerio = require('cheerio');
 const moment = require('moment');
