@@ -271,7 +271,7 @@ scalar DateTime
 type MemberList {
 id: ID!,
 loginmember: String!,
-password: String!,
+password: String,
 username: String!,
 sex: String!,
 nfcnumber: String!,
@@ -2212,7 +2212,7 @@ let testvalue = ""
 //핸드드라이어에서 nfc값을 받는 함수
 app.get('/nfc_recieve', function (req, res) {
     getnfc = req.query.id
-    console.log(console.log(moment().format('MMDD:hh:mm:ss')) + "adwwad")
+    console.log(moment().format('MMDD:hh:mm:ss') + "adwwad")
     if (testvalue) {
         count++
         testvalue = ""
