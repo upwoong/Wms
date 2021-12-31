@@ -174,7 +174,17 @@ const createHashPassword = (plainPassword) => new Promise(async (resolve, reject
 });
 
 
-
+function getCurrentDate(){
+    const dateNow = new Date();
+    var year = dateNow.getFullYear();
+    var month = dateNow.getMonth();
+    var today = dateNow.getDate();
+    var hours = dateNow.getHours();
+    var minutes = dateNow.getMinutes();
+    var seconds = dateNow.getSeconds();
+    var milliseconds = dateNow.getMilliseconds();
+    return new Date(Date.UTC(year, month, today, hours, minutes, seconds, milliseconds));
+  }
 
 //Main Schema set
 let MemberSchema;
