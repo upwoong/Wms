@@ -1925,7 +1925,7 @@ app.get('/main', function (req, res) {
             Smartmirrorimagefile.find(function (err, imgfile) {
                 if (req.session.logindata) {
                     res.render('sub', {
-                        accessmanage: water, percentArray: percentArray, weekendWater: weekendWater, videofile: videofile, imgfile: imgfile, water: usewater,
+                        accessmanage: water, percentArray: percentArray, weekendWater: weekendWater, videofile: videofile, imgfile: imgfile,
                         contents: localname, cityname: cityname, village: villagename, selectcityname: selectcityname, selectvillagename: selectvillagename
                     })
                 }
