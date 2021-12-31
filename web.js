@@ -254,15 +254,6 @@ CalSchema = mongoose.Schema({
 
 CalModel = mongoose.model("cal", CalSchema);
 
-//});
-
-databaseEvent.on('disconnected', function(){
-  console.log('disconnected');
-  setInterval(mongoose.connect
-    ("mongodb+srv://st1621:167943WX@cluster0.p4xrc.mongodb.net/myFirstDatabase?retryWrites=true&w=majority").then(()=>{
-      console.log('MongoDB Connected...');
-    }), 5000);
-});
 
 //수전 및 핸드드라이어 스키마, 달력데이터 스키마
 
