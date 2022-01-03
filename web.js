@@ -1609,7 +1609,7 @@ app.post('/weather', function (req, res) {
         Smartmirrorvideofile.find(function (err, videofile) {
             Smartmirrorimagefile.find(function (err, imgfile) {
                 res.render('sub', {
-                    accessmanage: water, videofile: videofile, imgfile: imgfile, water: usewater,
+                    accessmanage: water, videofile: videofile, imgfile: imgfile,
                     contents: localname, cityname: cityname, village: villagename, localselected: localselect, cityselected: cityselect,
                     selectcityname: selectcityname, selectvillagename: selectvillagename, percentArray: percentArray,
                 })
