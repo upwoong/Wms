@@ -388,378 +388,436 @@ parsingTag(input: WashiTagWrite): WashiTagRead,
 
 //Custom Schema setup line
 Object.assign(schema._typeMap.DateTime, {
-name: "DateTime",
-description: "DateTime type definition line",
-serialize: (value) => {
-    const dateTime = new Date(value);
-    if (dateTime.toString() === "invalid Date") {
+    name: "DateTime",
+    description: "DateTime type definition line",
+    serialize: (value) => {
+      const dateTime = new Date(value);
+      if(dateTime.toString()==="invalid Date")
+      { 
         return null;
+      }
+      return dateTime;
     }
-    return dateTime;
-}
-}); //DateTime setup
-
-
-// Main Resolver
-let root = {
-//Member
-createMember: async ({ input }) => {
-    const plainPassword = await input.password.toString();
-    const salt = await makeSalt();
-    //Create crypto salt code
-    const ipassword = await createHashPassword(plainPassword);
-    //Create date.now(); == moment();
-    const momenta = moment();
-    //Main Collection
-    const Member = new MemberModel({
-        'id': salt.toString(),
-        'loginmember': input.loginmember,
-        'username': input.username,
-        'password': ipassword.toString(),
-        'sex': input.sex,
-        'nfcnumber': input.nfcnumber,
-        'syncTime': momenta,
-    });
-    //Data de-duplication. Key set : id(hash), loginmember: loginID
-    const memName = await MemberModel.findOne({ 'loginmember': input.loginmember });
-    const memID = await MemberModel.findOne({ 'id': salt });
-    if (!memName) {
-        if (!memID) {
-            const Members = await Member.save();
-
-            return {
-                ...Members._doc,
-                id: Members.id.toString(),
-            }
+  }); //DateTime setup
+  
+  
+  // Main Resolver
+  var root = {
+    //Member
+    createMember: async ({ input }) => {
+          const plainPassword = await input.password.toString();
+          //Make salt what they will add on hash code
+          const memberSalt = require('crypto').randomBytes(32).toString('hex');;
+          //Make hash password
+          const ipassword = crypto.pbkdf2Sync(plainPassword, memberSalt, 65536, 32, 'sha512').toString('hex');
+          //Make Date()
+           const momenta = getCurrentDate();
+      //Main Collection
+      const Member = new MemberModel({
+      'id': memberSalt.toString(),
+      'loginmember': input.loginmember,
+      'username': input.username,
+      'password': ipassword.toString(),
+      'sex': input.sex,
+      'nfcnumber': input.nfcnumber,
+      'syncTime': momenta,
+      });
+      //Data de-duplication. Key set : id(hash), loginmember: loginID
+      const memName = await MemberModel.findOne({'loginmember': input.loginmember});
+      const memID = await MemberModel.findOne({'id': memberSalt});
+      if(!memName)
+      {
+        if(!memID)
+        {
+          const Members = await Member.save();
+          
+          return {
+            ...Members._doc,
+            id: Members.id.toString(), 
+          }
         }
-        else if (memID) {
+        else if(memID) {
+          throw new Error("Already member existed");
+        }
+      } else if(memName) {
+          if(memID)
+          {
             throw new Error("Already member existed");
-        }
-    } else if (memName) {
-        if (memID) {
+          }
+          else {
             throw new Error("Already member existed");
-        }
-        else {
-            throw new Error("Already member existed");
-        }
-
-    }
-
-},
-getMember: async function ({ id }) {
-    //Find id(hash) key set
-    const Members = await MemberModel.findOne({ id });
-    if (!Members) {
+          }
+          
+      }
+       
+    },
+    getMember: async function ({ loginmember }) {
+      //Find id(hash) key set
+      const Members = await MemberModel.findOne({loginmember});
+      if(!Members) {
         throw new Error("No items");
-    }
-    return {
+      }
+      return {
         ...Members._doc,
-        id: Members.id.toString(),
-    }
-},
-updateMember: async function ({ id, input }) {
-    //Find id(hash) key set
-    const Members = await MemberModel.findOne({ id });
-    if (!Members) {
+        loginmember: Members.loginmember.toString(), 
+      }
+    },
+    updateMember: async function ({ loginmember, input }) {
+      //Find id(hash) key set
+      const Members = await MemberModel.findOne({loginmember});
+      if(!Members) {
         throw new Error("No items");
-    }
-    //Update method
-    Members.loginmember = input.loginmember;
-    Members.username = input.username;
-    Members.password = input.password;
-    Members.sex = input.sex;
-    Members.nfcnumber = input.nfcnumber;
-    const upMembers = await MemberModel.save();
-    return {
+      }
+        // Find salt and washipassword
+        const isalt2 = await memberName.id.toString();
+        // Insert New password
+        const updatePassword = await input.password.toString();
+        const makeUpdatePassword = crypto.pbkdf2Sync(updatePassword, isalt2, 65536, 32, 'sha512').toString('hex')
+      //Update method
+      Members.username = input.username;
+      Members.password = makeUpdatePassword;
+      Members.sex = input.sex;
+      Members.nfcnumber = input.nfcnumber;
+      const upMembers = await MemberModel.save();
+      return {
         ...upMembers._doc,
-        id: upMembers.id.toString(),
-    };
-},
-deleteMember: async function ({ id }) {
-    //Find id(hash) key set
-    const Members = await MemberModel.findOne({ id });
-    if (!Members) {
+        loginmember: upMembers.loginmember.toString(),
+      };
+    },
+    deleteMember: async function ({ loginmember }) {
+      //Find id(hash) key set
+      const Members = await MemberModel.findOne({loginmember});
+      if(!Members) {
         throw new Error("No items");
-    }
-
-    await MemberModel.findOneAndDelete({ id });
-    return {
+      }
+  
+      await MemberModel.findOneAndDelete({loginmember});
+      return {
         ...MemberModel._doc,
-        id: MemberModel.id,
-
-    }, "delete Complete";
-},
-//Support
-createSupport: async ({ input }) => {
+        loginmember: MemberModel.loginmember,
+        
+      }, "delete Complete";
+    },
+  //Support
+  createSupport: async ({ input }) => {
     //Create crypto hash code
-    const id = require('crypto').randomBytes(2).toString('hex');
+    const idCount = await SupportModel.count();
+    const id = 0;
+    if(idCount == 0)
+    {
+      id++;
+    }
+    else if(idCount > 0)
+    {
+      id = idCount + 1;
+    }
     //MemberList Connection => go to 'user' data set
-    const Members = await MemberModel.findOne({ 'username': input.username });
+    const Members = await MemberModel.findOne({'username': input.username});
     //Create date.now(); == moment();
     const momenta = moment();
     //Main Collection
     const Support = new SupportModel({
-        'id': id,
-        'title': input.title,
-        'mainSentense': input.mainSentense,
-        'user': Members.username,
-        'syncTime': momenta,
+    'id': id,
+    'title': input.title,
+    'mainSentense': input.mainSentense,
+    'user': Members.username,
+    'syncTime': momenta,
     });
     //Data de-duplication. Key set : id(hash)
-    const supID = await MemberModel.findOne({ 'id': id });
-    if (!supID) {
-        const Supporter = await Support.save();
-        return {
-            ...Supporter._doc,
-            id: Supporter.id.toString(),
-        }
-
-    } else if (supID) {
-        throw new Error("Already registered");
+    const supID = await SupportModel.findOne({'id': id});
+    if(!supID)
+    {
+      const Supporter = await Support.save();
+    return {
+      ...Supporter._doc,
+      id: Supporter.id.toString(),
     }
-
-},
-getSupport: async function ({ id }) {
+      
+    } else if(supID) {
+      throw new Error("Already registered");
+    }
+    
+  },
+  getSupport: async function ({ id }) {
     //Find id(hash) key set
-    const Supporter = await SupportModel.findOne({ id });
-    if (!Supporter) {
-        throw new Error("No records");
+    const Supporter = await SupportModel.find({id});
+    if(!Supporter) {
+      throw new Error("No records");
     }
     return {
-        ...Supporter._doc,
-        id: Supporter.id.toString(),
+      ...Supporter._doc,
+      id: Supporter.id.toString(), 
     }
-},
-updateSupport: async function ({ id, input }) {
+  },
+  updateSupport: async function ({ id, input }) {
     //Find id(hash) key set
-    const Supporter = await SupportModel.findOne({ id });
-    if (!Supporter) {
-        throw new Error("No records");
+    const Supporter = await SupportModel.findOne({id});
+    if(!Supporter) {
+      throw new Error("No records");
     }
     //Update method
     Supporter.title = input.title;
     Supporter.mainSentense = input.mainSentense;
     const upSupport = await SupportModel.save();
     return {
-        ...upSupport._doc,
-        id: upSupport.id.toString(),
+      ...upSupport._doc,
+      id: upSupport.id.toString(),
     };
-},
-deleteSupport: async function ({ id }) {
+  },
+  deleteSupport: async function ({ id }) {
     //Find id(hash) key set
-    const Supporter = await SupportModel.findOne({ id });
-    if (!Supporter) {
-        throw new Error("No records");
+    const Supporter = await SupportModel.findOne({id});
+    if(!Supporter) {
+      throw new Error("No records");
     }
-
-    await SupportModel.findOneAndDelete({ id });
+  
+    await SupportModel.findOneAndDelete({id});
     return {
-        ...SupportModel._doc,
-        id: SupportModel.id,
-
+      ...SupportModel._doc,
+      id: SupportModel.id,
+      
     }, "delete Complete";
-},
-//Notice
-createNotice: async ({ input }) => {
+  },
+    //Notice
+    createNotice: async ({ input }) => {
     //Create crypto hash code
-    const id = require('crypto').randomBytes(2).toString('hex');
+      const id = require('crypto').randomBytes(2).toString('hex'); 
     //Find MemberList Connection => go to 'user' data set
-    const Members = await MemberModel.findOne({ 'username': input.username });
+      const Members = await MemberModel.findOne({'username': input.username});
     //Create date.now(); == moment();
-    const momenta = moment();
-    if (!Members) {
+      const momenta = moment();
+      if(!Members){
         throw new Error("No member");
-    }
-
+      }
+  
     //Main Collection
-    const Notice = new NoticeModel({
-        'id': id,
-        'title': input.title,
-        'image': input.image,
-        'mainSentense': input.mainSentense,
-        'user': Members.username,
-        'syncTime': momenta,
-    });
+      const Notice = new NoticeModel({
+      'id': id,
+      'title': input.title,
+      'image': input.image,
+      'mainSentense': input.mainSentense,
+      'user': Members.username,
+      'syncTime': momenta,
+      });
     //Data de-duplication. Key set : id(hash)
-    const notID = await NoticeModel.findOne({ 'id': id });
-    if (!notID) {
+      const notID = await NoticeModel.findOne({'id': id});
+      if(!notID)  {
         const Notices = await Notice.save();
-        return {
-            ...Notices._doc,
-            id: Notices.id.toString(),
-        }
-
-    } else if (notID) {
-        throw new Error("Already registered");
-    }
-
-},
-getNotice: async function ({ id }) {
-    //Find id(hash) key set
-    const Notices = await NoticeModel.findOne({ id });
-    if (!Notices) {
-        throw new Error("No records");
-    }
-    return {
+      return {
         ...Notices._doc,
-        id: Notices.id.toString(),
-    }
-},
-updateNotice: async function ({ id, input }) {
-    //Find id(hash) key set
-    const Notices = await NoticeModel.findOne({ id });
-    if (!Notices) {
+        id: Notices.id.toString(), 
+      }
+        
+      } else if(notID) {
+        throw new Error("Already registered");
+      }
+      
+    },
+    getNotice: async function ({ id }) {
+      //Find id(hash) key set
+      const Notices = await NoticeModel.findOne({id});
+      if(!Notices) {
         throw new Error("No records");
-    }
+      }
+      return {
+        ...Notices._doc,
+        id: Notices.id.toString(), 
+      }
+    },
+    updateNotice: async function ({ id, input }) {
+      //Find id(hash) key set
+      const Notices = await NoticeModel.findOne({id});
+      if(!Notices) {
+        throw new Error("No records");
+      }
     //Update method
-    Notices.title = input.title;
-    Notices.image = input.image;
-    Notices.mainSentense = input.mainSentense;
-    const upNotices = await NoticeModel.save();
-    return {
+      Notices.title = input.title;
+      Notices.image = input.image;
+      Notices.mainSentense = input.mainSentense;
+      const upNotices = await NoticeModel.save();
+      return {
         ...upNotices._doc,
         id: upNotices.id.toString(),
-    };
-},
-deleteNotice: async function ({ id }) {
-    //Find id(hash) key set
-    const Notices = await NoticeModel.findOne({ id });
-    if (!Notices) {
+      };
+    },
+    deleteNotice: async function ({ id }) {
+      //Find id(hash) key set
+      const Notices = await NoticeModel.findOne({id});
+      if(!Notices) {
         throw new Error("No records");
-    }
-
-    await NoticeModel.findOneAndDelete({ id });
-    return {
+      }
+  
+      await NoticeModel.findOneAndDelete({id});
+      return {
         ...NoticeModel._doc,
         id: NoticeModel.id,
-
-    }, "delete Complete";
-},
-//Comment
-createComment: async ({ input }) => {
-    //Create crypto hash code
-    const id = require('crypto').randomBytes(2).toString('hex');
-    //Find MemberList Connection => go to 'from' data set
-    const Members = await MemberModel.findOne({ 'username': input.username });
-    //Create date.now(); == moment();
-    const momenta = moment();
-    if (!Members) {
+        
+      }, "delete Complete";
+    },
+    //Comment
+    createComment: async ({ input }) => {
+        //Create crypto hash code
+      const id = require('crypto').randomBytes(2).toString('hex');
+      //Find MemberList Connection => go to 'from' data set
+      const Members = await MemberModel.findOne({'username': input.username});
+      //Create date.now(); == moment();
+      const momenta = moment();
+      if(!Members){
         throw new Error("No member");
-    }
-
+      }
+  
     //Main Collection
-    const Comment = new CommentModel({
-        'id': id,
-        'title': input.title,
-        'image': input.image,
-        'from': Members.username,
-        'message': input.message,
-        'syncTime': momenta,
-    });
-    //Data de-duplication. Key set : id(hash)
-    const comID = await CommentModel.findOne({ 'id': id });
-    if (!comID) {
+      const Comment = new CommentModel({
+      'id': id,
+      'title': input.title,
+      'image': input.image,
+      'from': Members.username,
+      'message': input.message,
+      'syncTime': momenta,
+      });
+      //Data de-duplication. Key set : id(hash)
+      const comID = await CommentModel.findOne({'id': id});
+      if(!comID)  {
         const Comments = await Comment.save();
-        return {
-            ...Comments._doc,
-            id: Comments.id.toString(),
-        }
-    } else if (comID) {
-        throw new Error("Already registered");
-    }
-
-},
-getComment: async function ({ id }) {
-    //Find id(hash) key set
-    const Comments = await CommentModel.findOne({ id });
-    if (!Comments) {
-        throw new Error("No records");
-    }
-    return {
+      return {
         ...Comments._doc,
-        id: Comments.id.toString(),
-    }
-},
-updateComment: async function ({ id, input }) {
-    //Find id(hash) key set
-    const Comments = await CommentModel.findOne({ id });
-    if (!Comments) {
+        id: Comments.id.toString(), 
+      }
+      } else if(comID) {
+        throw new Error("Already registered");
+      }
+      
+    },
+    getComment: async function ({ id }) {
+      //Find id(hash) key set
+      const Comments = await CommentModel.findOne({id});
+      if(!Comments) {
         throw new Error("No records");
-    }
-    //Update method
-    Comments.title = input.title;
-    Comments.image = input.image;
-    Comments.message = input.message;
-    const upComments = await CommentModel.save();
-    return {
+      }
+      return {
+        ...Comments._doc,
+        id: Comments.id.toString(), 
+      }
+    },
+    updateComment: async function ({ id, input }) {
+      //Find id(hash) key set
+      const Comments = await CommentModel.findOne({id});
+      if(!Comments) {
+        throw new Error("No records");
+      }
+      //Update method
+      Comments.title = input.title;
+      Comments.image = input.image;
+      Comments.message = input.message;
+      const upComments = await CommentModel.save();
+      return {
         ...upComments._doc,
         id: upComments.id.toString(),
-    };
-},
-deleteComment: async function ({ id }) {
-    //Find id(hash) key set
-    const Comments = await CommentModel.findOne({ id });
-    if (!Comments) {
+      };
+    },
+    deleteComment: async function ({ id }) {
+      //Find id(hash) key set
+      const Comments = await CommentModel.findOne({id});
+      if(!Comments) {
         throw new Error("No records");
-    }
-
-    await CommentModel.findOneAndDelete({ id });
-    return {
+      }
+  
+      await CommentModel.findOneAndDelete({id});
+      return {
         ...CommentModel._doc,
         id: CommentModel.id,
-
-    }, "delete Complete";
-},
-//Tag
-getTag: async ({ username }) => {
-    //Find id(hash) key set
-    const Tags = await MemberModel.findOne({ 'username': username.username });
-    if (!Tags) {
+        
+      }, "delete Complete";
+    },
+    //Tag
+    getTag: async ({ username }) => {
+      //Find id(hash) key set
+      const Tags = await MemberModel.findOne({username});
+      if(!Tags) {
         throw new Error("No records");
-    }
-    return {
+      }
+      return {
         ...Comments._doc,
         id: Comments.id.toString(),
-    }
-},
-//Calendar
-getCalendar: () => {
-    const getState = moment();
-    const setState = getState;
-    const firstWeek = today.clone().startOf('month').week();
+      }
+    },
+    //Calendar
+    getCalendar: async () => {
+      const getState = moment();
+      const setState = getState;
+      const firstWeek = today.clone().startOf('month').week();
     const lastWeek = today.clone().endOf('month').week() === 1 ? 53 : today.clone().endOf('month').week();
-
+  
     CalModel.syncTime = setState;
     CalModel.timezone = getState;
     CalModel.firstWeek = firstWeek;
     CalModel.lastWeek = lastWeek;
     return {
-        ...CalModel._doc,
-        syncTime: CalModel.syncTime.toString(),
+      ...CalModel._doc,
+      syncTime: CalModel.syncTime.toString(), 
     }
-},
-//Login
-signInMember: async ({ id, input }) => {
-    const MemberName = await MemberModel.findOne({ 'username': input.username });
-
-    const makeLoginPassword = (id, plainPassword) =>
-        new Promise(async (resolve, reject) => {
-            const salt = await MemberModel.findOne({})
-                .then((result) => result.salt);
-            crypto.pbkdf2(plainPassword, salt, 9999, 64, 'sha512', (err, key) => {
-                if (err) reject(err);
-                resolve(key.toString('base64'));
-            });
-        });
-
-
-},
-/*
-  //Calendar pasing
-  parsingTag: ({ input }) => {
-    const
-  },*/
-};
+    },
+    //Login
+    signInMember: async ({ input }) => {
+      // Find username
+        const memberName = await MemberModel.findOne({ 'loginmember': input.username });
+        //Find user
+        if (!memberName) {
+            if (input.username == "") {
+                throw new Error("Please insert your id first");
+            }
+            else {
+                throw new Error("No users");
+            }
+        }
+        // Make salt and washipassword
+        const isalt = await memberName.id.toString();
+        const memberPassword = await memberName.password.toString();
+        // Insert New password
+        const plainPassword2 = await input.password.toString();
+        const makeLoginPassword = crypto.pbkdf2Sync(plainPassword2, isalt, 65536, 32, 'sha512').toString('hex')
+    
+        //If you don't write Password, throw this error.
+        if (plainPassword2 == "") {
+            throw new Error("Please Insert your password");
+        }
+        //비밀번호가 맞는지 판단 후 콘솔로그로 정보 전달. 이후에 DB에 토큰 값 저장 진행 -> 판단 확인 요청
+        if (makeLoginPassword == memberPassword) {
+        console.log("sign in");
+            return {
+                ...memberName._doc,
+                loginmember: memberName.loginmember.toString(),
+            }
+        }
+        else if (makeLoginPassword != memberPassword) {
+          throw new Error("Password doesn't match.");
+      }
+      
+  
+    },
+  
+    //Find Date
+    findDate: async function({ input }) {
+      //시작 날짜와 끝 날짜를 입력하여 사이의 값 추출
+      const memberDate = await MemberModel.find({
+        'loginmember': input.username,
+        'date': {
+          "$gte": input.firstTime,
+          "$lt": input.lastTime,
+        },
+      });
+      if(!memberDate) {
+        throw new Error("No users");
+      }
+  
+      return {
+        ...memberDate._doc,
+        loginmember: memberDate.loginmember.toString(), 
+      }
+  
+    },
+   
+  };
 
 
 app.use('/graphql', GraphqlHttp({
