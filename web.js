@@ -55,7 +55,7 @@ db.once('open', function callback() {
 console.log("mongo db connection OK.");
 })
 mongoose.set('useFindAndModify', false); //fineOneandupdate 사용하기 위한 구문
-
+  
 //스키마생성
 const adminuser = mongoose.Schema({
 name: String,
