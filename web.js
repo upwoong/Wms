@@ -153,24 +153,6 @@ app.set('views', __dirname + '/views')
 app.use(express.static(__dirname + '/api'))
 app.use('/smartmirror', static(path.join(__dirname, 'smartmirror')));
 
-//Make salt what they will add on hash code
-const makeSalt = () =>
-new Promise((resolve, reject) => {
-    crypto.randomBytes(64, (err, buf) => {
-        if (err) reject(err);
-        resolve(buf.toString('base64'));
-    });
-});
-
-//Make hash password
-const createHashPassword = (plainPassword) => new Promise(async (resolve, reject) => {
-const salt = await makeSalt();
-crypto.pbkdf2(plainPassword, salt, 9999, 64, 'sha512', (err, key) => {
-    if (err) reject(err);
-    resolve(key.toString('base64'));
-});
-});
-
 
 //Main Schema set
 let MemberSchema;
