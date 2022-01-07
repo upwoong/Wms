@@ -243,127 +243,138 @@ CalModel = mongoose.model("cal", CalSchema);
 //수전 및 핸드드라이어 스키마, 달력데이터 스키마
 
 //Main Schema
-let schema = Graphql.buildSchema(`
+var schema = Graphql.buildSchema(`
 
 
 scalar DateTime
 
 type MemberList {
-id: ID!,
-loginmember: String!,
-password: String!,
-username: String!,
-sex: String!,
-nfcnumber: String!,
-syncTime: DateTime!
+  id: ID!,
+  loginmember: String!,
+  password: String,
+  username: String!,
+  sex: String!,
+  nfcnumber: String!,
+  syncTime: DateTime!
 }
 
 input MemberJoin {
-loginmember: String!,
-password: String!,
-username: String!,
-sex: String!,
-nfcnumber: String!
+  loginmember: String!,
+  password: String,
+  username: String!,
+  sex: String!,
+  nfcnumber: String!
 }
 
+input signInMember {
+  username: String!,
+  password: String,
+}
 
 type WashiSupport {
-id: ID!,
-title: String!,
-mainSentense: String!,
-user: [MemberList]!,
-syncTime: DateTime!
+  id: ID!,
+  title: String!,
+  mainSentense: String!,
+  user: [MemberList]!,
+  syncTime: DateTime!
 }
 
 input WashiSupportRequest {
-title: String!,
-mainSentense: String!,
-user: String!,
+  title: String!,
+  mainSentense: String!,
+  user: String!,
 }
 
 type WashiNotice {
-id: ID!,
-title: String,
-image: String,
-mainSentense: String,
-user: [MemberList]!,
-syncTime: DateTime!
+  id: ID!,
+  title: String,
+  image: String,
+  mainSentense: String,
+  user: [MemberList]!,
+  syncTime: DateTime!
 }
 
 input WashiNoticeInput {
-title: String,
-image: String,
-mainSentense: String,
-user: String!,
+  title: String,
+  image: String,
+  mainSentense: String,
+  user: String!,
 }
 
 type WashiComment {
-id: ID!,
-title: String,
-image: String,
-from: [MemberList]!,
-message: String,
-syncTime: DateTime!
+  id: ID!,
+  title: String,
+  image: String,
+  from: [MemberList]!,
+  message: String,
+  syncTime: DateTime!
 }
 
 input WashiCommentInput {
-title: String,
-image: String,
-from: String!,
-message: String,
+  title: String,
+  image: String,
+  from: String!,
+  message: String,
 }
 
 type WashiTagRead {
-id: ID!,
-faucet: String,
-nfcnumber: [MemberList]!,
-username: [MemberList],
-syncTime: DateTime
+  id: ID!,
+  faucet: String,
+  nfcnumber: [MemberList]!,
+  username: [MemberList],
+  syncTime: DateTime
 }
 
 input WashiTagWrite {
-faucet: String,
-nfcnumber: String!,
-username: String,
-syncTime: DateTime
+  faucet: String,
+  nfcnumber: String!,
+  username: String,
+  syncTime: DateTime
 }
 
 type WashiCalendar {
-getState: DateTime,
-setState: DateTime,
-firstweek: DateTime,
-lastweek: DateTime
+  getState: DateTime,
+  setState: DateTime,
+  firsttime: DateTime,
+  lasttime: DateTime
+}
+
+input WashiTimeSet {
+  username: String!,
+  dateNow: DateTime!,
+  firstTime: DateTime,
+  lastTime: DateTime
 }
 
 
 
-type Query {
-getMember(id: ID!) : MemberList,
-getSupport(id: ID!) : WashiSupport,
-getNotice(id: ID!) : WashiNotice,
-getComment(id: ID!) : WashiComment,
-getTag(username: [MemberList]) : WashiTagRead,
-getCalendar : WashiCalendar
-}
+  type Query {
+    getMember(loginmember: String!) : MemberList,
+    getSupport(id: ID!) : WashiSupport,
+    getNotice(id: ID!) : WashiNotice,
+    getComment(id: ID!) : WashiComment,
+    getTag(username: String!) : WashiTagRead,
+  }
 
-type Mutation {
-updateMember(id: ID!, input: MemberJoin) : MemberList,
-createMember(input: MemberJoin) : MemberList,
-deleteMember(id: ID!) : String,
-updateSupport(id: ID!, input: WashiSupportRequest) : WashiSupport,
-createSupport(input: WashiSupportRequest) : WashiSupport,
-deleteSupport(id: ID!) : String,
-updateNotice(id: ID!, input: WashiNoticeInput) : WashiNotice,
-createNotice(input: WashiNoticeInput) : WashiNotice,
-deleteNotice(id: ID!) : String,
-updateComment(id: ID!, input: WashiCommentInput) : WashiComment,
-createComment(input: WashiCommentInput) : WashiComment,
-deleteComment(id: ID!) : String,
-signInMember(id: ID!, input: MemberJoin): MemberList,
-parsingTag(input: WashiTagWrite): WashiTagRead,
-}
+  type Mutation {
+    updateMember(longinmember: String!, input: MemberJoin) : MemberList,
+    createMember(input: MemberJoin) : MemberList,
+    deleteMember(longinmember: String!) : String,
+    updateSupport(user: String!, input: WashiSupportRequest) : WashiSupport,
+    createSupport(input: WashiSupportRequest) : WashiSupport,
+    deleteSupport(user: String!) : String,
+    updateNotice(user: String!, input: WashiNoticeInput) : WashiNotice,
+    createNotice(input: WashiNoticeInput) : WashiNotice,
+    deleteNotice(user: String!) : String,
+    updateComment(from: String!, input: WashiCommentInput) : WashiComment,
+    createComment(input: WashiCommentInput) : WashiComment,
+    deleteComment(from: String!) : String,
+    signInMember( input: signInMember): MemberList,
+    parsingTag(input: WashiTagWrite): WashiTagRead,
+    findDate(input: WashiTimeSet): MemberList,
+  }
 
-
+  
 `);
 
 //Custom Schema setup line
