@@ -5,9 +5,7 @@ const expressHandlebars = require('express-handlebars')
 const app = express()
 const bodyparser = require('body-parser')
 , static = require('serve-static')
-app.use(bodyparser.urlencoded({
-extended: true
-}))
+
 require('moment-timezone');
 const cheerio = require('cheerio');
 const moment = require('moment');
