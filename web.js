@@ -1126,7 +1126,7 @@ let uploadSmartmirror = multer({
         fileSize: 1024 * 1024 * 1024
     }
 });
-//스마트 미러 구동파일 교체
+//스마트 미러 구동파일 교체    
 router.route('/processSmartmirror').post(uploadSmartmirror.array('photo', 1), function (req, res) {
 
     try {
