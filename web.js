@@ -4,7 +4,9 @@ const expressHandlebars = require('express-handlebars')
 const app = express()
 const bodyparser = require('body-parser')
     , static = require('serve-static')
-
+app.use(bodyparser.urlencoded({
+    extended: true
+}))
 require('moment-timezone');
 const cheerio = require('cheerio');
 const moment = require('moment');
@@ -137,7 +139,7 @@ let imgProjection = {
     __v: false,
     _id: false,
 };
-const port = process.env.PORT || 8002
+const port = process.env.PORT || 8001
 app.engine('handlebars', expressHandlebars({
     defaultLayout: 'main',
     runtimeOptions: {
@@ -1675,7 +1677,7 @@ for (let index = 2; index <= 3775; index++) {
 app.post('/main', (req, res) => {
     //User 컬렉션에서 입력한 아이디와 패스워드를 찾아서 있으면 로그인하고 없으면 에러를 표시한다.
     User.findOne({ name: req.body.name, password: req.body.password }, (err, user) => {
-        if (err) return res.status(500).send({ message: '에러!' + err + "err"});
+        if (err) return res.status(500).send({ message: '에러!' });
         else if (user) {
             Water.find(function (err, water) {
                 Smartmirrorvideofile.find(function (err, videofile) {
