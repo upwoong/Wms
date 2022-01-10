@@ -841,7 +841,7 @@ const todayMonth = moment().format('MM')
 let storagevideo = multer.diskStorage({
     destination: function (req, file, callback) {
         //변경
-        callback(null, '/home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/video')
+        callback(null, '/home/hosting_users/creativethon/apps/creativethon_wmswebsite/smartmirror/video')
         //callback(null, 'smartmirror/video')
     },
     filename: function (req, file, callback) {
@@ -994,7 +994,7 @@ router.route('/processbookingvideo').post(upload.array('photo', 1), function (re
 let storageimg = multer.diskStorage({
     destination: function (req, file, callback) {
         //변경
-        callback(null, '/home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/image')
+        callback(null, '/home/hosting_users/creativethon/apps/creativethon_wmswebsite/smartmirror/image')
         //callback(null, 'smartmirror/image')
     },
     filename: function (req, file, callback) {
@@ -1153,7 +1153,7 @@ router.route('/processbookingimage').post(uploadimg.array('photo', 1), function 
 let storageSmartmirror = multer.diskStorage({
     destination: function (req, file, callback) {
         //변경
-        callback(null, '/home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/item')
+        callback(null, '/home/hosting_users/creativethon/apps/creativethon_wmswebsite/smartmirror/item')
         //callback(null, 'smartmirror/item')
     },
     filename: function (req, file, callback) {
@@ -1181,7 +1181,7 @@ router.route('/processSmartmirror').post(uploadSmartmirror.array('photo', 1), fu
             //변경
             ///home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/item/Smartmirror.exe
 
-            fs.unlink(`/home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/item/Smartmirror.exe`, function (err) {
+            fs.unlink(`/home/hosting_users/creativethon/apps/creativethon_wmswebsite/smartmirror/item/Smartmirror.exe`, function (err) {
                 if (err) console.log(err)
             })
 
@@ -1517,7 +1517,7 @@ Weather.find({}, imgProjection, function (err, data) {
 //기상청 엑셀정보 불러오기
 //변경
 ///home/hosting_users/creativethon/apps/creativethon_wmsapp/api/기상청41_단기예보 조회서비스_오픈API활용가이드_격자_위경도(20210401).xlsx
-const excelFile = xlsx.readFile("/home/hosting_users/creativethon/apps/creativethon_wmsapp/api/기상청41_단기예보 조회서비스_오픈API활용가이드_격자_위경도(20210401).xlsx")
+const excelFile = xlsx.readFile("/home/hosting_users/creativethon/apps/creativethon_wmswebsite/api/기상청41_단기예보 조회서비스_오픈API활용가이드_격자_위경도(20210401).xlsx")
 const firstSheet = excelFile.Sheets[excelFile.SheetNames[0]]
 
 let localselect
@@ -1757,7 +1757,7 @@ app.post('/deletevideo', function (req, res, next) {
     //변경
     ///home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/video/${name}
     //파일을 없애는 함수입니다.
-    fs.unlink(`/home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/video/${name}`, function (err) {
+    fs.unlink(`/home/hosting_users/creativethon/apps/creativethon_wmswebsite/smartmirror/video/${name}`, function (err) {
         if (err) console.log(err)
     })
     Smartmirrorvideofile.find(function (err, data) {
@@ -1791,7 +1791,7 @@ app.post('/deleteimage', function (req, res, next) {
     version++
     //변경
     ///home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/image/${name}
-    fs.unlink(`/home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/image/${name}`, function (err) {
+    fs.unlink(`/home/hosting_users/creativethon/apps/creativethon_wmswebsite/smartmirror/image/${name}`, function (err) {
         if (err) console.log(err)
     })
     Smartmirrorimagefile.find(function (err, data) {
@@ -1824,7 +1824,7 @@ app.post('/deletereservationvideo', function (req, res, next) {
     version++
     //변경
     ///home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/video/${name}
-    fs.unlink(`/home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/video/${name}`, function (err) {
+    fs.unlink(`/home/hosting_users/creativethon/apps/creativethon_wmswebsite/smartmirror/video/${name}`, function (err) {
         if (err) console.log(err)
     })
     Smartmirrorvideofile.find(function (err, data) {
@@ -1857,7 +1857,7 @@ app.post('/deletereservationimage', function (req, res, next) {
     version++
     //변경
     ///home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/image/${name}
-    fs.unlink(`/home/hosting_users/creativethon/apps/creativethon_wmsapp/smartmirror/image/${name}`, function (err) {
+    fs.unlink(`/home/hosting_users/creativethon/apps/creativethon_wmswebsite/smartmirror/image/${name}`, function (err) {
         if (err) console.log(err)
     })
     Smartmirrorimagefile.find(function (err, data) {
