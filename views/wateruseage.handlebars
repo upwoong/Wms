@@ -53,8 +53,14 @@
     <div class="Data-Text-Item Data-Text-Item-1 flex-1">
       <div class="flex justify-center items-center text-xs font-bold c-47525B">
         <span>
-          어제
+          11
         </span>
+        <span>월</span>
+        <span>11</span>
+        <span>일</span>
+        <span>[</span>
+        <span>목</span>
+        <span class="mr-1">]</span>
         <span>총 사용량</span>
       </div>
       <div></div>
@@ -77,8 +83,14 @@
     <div class="Data-Text-Item Data-Text-Item-1 flex-1">
       <div class="flex justify-center items-center text-xs font-bold c-47525B">
         <span>
-          금일
+          11
         </span>
+        <span>월</span>
+        <span>12</span>
+        <span>일</span>
+        <span>[</span>
+        <span>금</span>
+        <span class="mr-1">]</span>
         <span>총 사용량</span>
       </div>
       <div></div>
@@ -152,7 +164,7 @@
       <div class="Graph-Bar-Text-Box flex justify-center items-center">
         <div class="flex items-center">
           <span class="text-xs font-bold c-47525B ml-4 mr-1">이번주 총 사용량</span>
-          <span class="text-lg font-bold c-3AAFE2">30</span>
+          <span class="text-lg font-bold c-3AAFE2" id="weekendTotalUseage">{{plustotaldayvalue}}</span>
           <span class="text-lg font-bold c-3AAFE2">L</span>
         </div>
         <div class="flex-1"></div>
@@ -385,7 +397,7 @@
       <div class="Graph-Bar-Text-Box flex justify-center items-center">
         <div class="flex items-center">
           <span class="text-xs font-bold c-47525B ml-4 mr-1">올해 총 사용량</span>
-          <span class="text-lg font-bold c-3AAFE2">30</span>
+          <span class="text-lg font-bold c-3AAFE2" id="yearTotalUseage">{{plustotalyearvalue}}</span>
           <span class="text-lg font-bold c-3AAFE2">L</span>
         </div>
         <div class="flex-1"></div>
@@ -838,6 +850,18 @@
 
     todaywateruseage.innerText = msg;
     txt.innerText = msg;
+  });
+
+  socket.on('weekendTotalUseage', (msg) => {
+    var weekendTotalUseage = document.getElementById('weekendTotalUseage');
+
+    weekendTotalUseage.innerText = msg;
+  });
+
+  socket.on('yearTotalUseage', (msg) => {
+    var weekendTotalUseage = document.getElementById('yearTotalUseage');
+
+    yearTotalUseage.innerText = msg;
   });
 
   socket.on('waterpercent', (msg) => {
