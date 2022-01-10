@@ -6,6 +6,7 @@ const bodyparser = require('body-parser')
     , static = require('serve-static')
     app.use(express.json());
     app.use(express.urlencoded({extended:true}));
+    const crypto = require('crypto')
 require('moment-timezone');
 const cheerio = require('cheerio');
 const moment = require('moment');
