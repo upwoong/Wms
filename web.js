@@ -1517,7 +1517,7 @@ Weather.find({}, imgProjection, function (err, data) {
 //기상청 엑셀정보 불러오기
 //변경
 ///home/hosting_users/creativethon/apps/creativethon_wmsapp/api/기상청41_단기예보 조회서비스_오픈API활용가이드_격자_위경도(20210401).xlsx
-const excelFile = xlsx.readFile("/home/hosting_users/creativethon/apps/creativethon_wmswebsite/api/기상청41_단기예보 조회서비스_오픈API활용가이드_격자_위경도(20210401).xlsx")
+const excelFile = xlsx.readFile("/home/hosting_users/creativethon/apps/creativethon_wmsapp/api/기상청41_단기예보 조회서비스_오픈API활용가이드_격자_위경도(20210401).xlsx")
 const firstSheet = excelFile.Sheets[excelFile.SheetNames[0]]
 
 let localselect
@@ -1531,10 +1531,8 @@ let codename = new Array();
 app.post('/weatherlista', function (req, res) {
     const name = req.body.name
     const city = req.body.city
-    const village = req.body.village
     localselect = name
     cityselect = city
-    villageselect = village
     // localselect의 값과 중복된 값을 cityname에 추가
     cityname = new Array()
     for (let index = 2; index <= 3775; index++) {
@@ -2340,7 +2338,6 @@ app.get('/wateruseage', function (req, res) {
             for (let index = 0; index < data.length; index++) {
                 Valuedata.push(data[index].Useage)
             }
-
             //Valueyeardata에 1년치 데이터를 저장한다.
             let Valueyeardata = new Array()
             for (let index = 0; index < yeardata.length; index++) {
@@ -2379,6 +2376,7 @@ app.get('/wateruseage', function (req, res) {
             for (let index = 0; index < yearWater.length; index++) {
                 yearpercentArray[index] = Math.floor(percent(yearWater[index], maxyearValue))
             }
+            console.log(weekendWater)
             res.render('wateruseage', {
                 data: data, yeardata: yeardata, selectcityname: selectcityname, selectvillagename: selectvillagename, weekendWater: weekendWater,
                 percentArray: percentArray, yearWater: yearWater, yearpercentArray: yearpercentArray, lastMonth: lastMonth, currentMonth: currentMonth,
@@ -2398,11 +2396,11 @@ function percent(par, total) {
 let maxValue = 0
 Water.find(function (err, data) {
     let Valuedata = new Array()
-    if(data = "")
+    if(data == "")
     {
         for(let index = 0; index < 7; index++)
         {
-            data[index].Useage = index
+            Valuedata.push(index)
         }
     }
     else
@@ -2412,6 +2410,7 @@ Water.find(function (err, data) {
         }
     }
     maxValue = Math.max.apply(null, Valuedata)
+    console.log("dawad" + Valuedata +"dawawd")
 }).sort({ Year: -1 }).sort({ Month: -1 }).sort({ Day: -1 }).limit(7) //추후엔 Month 와 Day로 나누기 때문에 각각에 sort정렬을 해줘야 최신 데이터가 나옴
 
 
