@@ -1480,7 +1480,7 @@ app.get('/dkatk', function (req, res) {
 app.post('/addcomment', (req, res) => {
     const todayDay = moment().format("DD")
     const todayMonth = moment().format("MM")
-    Client.updateOne({ 'name': '박찬종' }, { $push: { comment: { 'text': req.body.commentText, 'username': "coolpaper", "Date": todayMonth + todayDay } } }, function (err) {
+    Client.updateOne({ 'name': '박찬종' }, { $push: { comment: { 'text': req.body.commentText, 'username': "관리자", "Date": todayMonth + todayDay } } }, function (err) {
         if (err) {
             console.log(err)
             return;
@@ -2139,7 +2139,7 @@ app.get('/smartmirrormanage', function (req, res) {
 
 
 //스마트미러 관리자 페이지 선택버튼
-//저도 여긴 무서워서 아직 안건들였음
+
 app.post('/smartmirrormanage', function (req, res) {
     const selectsmartmirror = req.body.name
     const selectimage = req.body.selectimage
@@ -2174,7 +2174,10 @@ app.get('/smartmirror/version', function (req, res) {
 
 //esp32에서 서버로 값을 불러올때 리턴값을 보내기 위하여 만든 더미 페이지
 app.get('/dummy', function (req, res) {
-    res.render('dummy')
+    let dataarray = new Array()
+    Water.find(function(err,data){
+        res.render('dummy',{data : data})
+    }).sort({ Year: -1 }).sort({ Month: -1 }).sort({ Day: -1 }).limit(7)
 })
 
 //핸드드라이어 공기필터 오염량 관리 페이지
@@ -2260,6 +2263,14 @@ app.get('/testwater_recieve', function (req, res) {
         //weekendWater.push(percent(data[index].Useage, maxValue))
         percentArray[index] = Math.floor(percent(weekendWater[index], maxValue))
     }
+
+     //yearWater[0] = yearWater[0] + (parseInt(watervalue) / 1000)
+     yearWater[todayMonth - 1] = (parseFloat(yearWater[todayMonth - 1]) + (parseFloat(watervalue) / 1000)).toFixed(3)
+     if (yearWater[todayMonth - 1] > maxyearValue) {
+         maxyearValue = yearWater[todayMonth - 1]
+     }
+
+
     console.log("현재 수전 사용 수치 : " + watervalue + "mL")
     console.log("누적 수전 사용 수치 : " + weekendWater[0])
     console.log("사용시간 : " + todayDay + " : " + todayHour)
@@ -2270,11 +2281,7 @@ app.get('/testwater_recieve', function (req, res) {
         else console.log("저장완료")
     })
 
-    //yearWater[0] = yearWater[0] + (parseInt(watervalue) / 1000)
-    yearWater[todayMonth - 1] = (parseFloat(yearWater[todayMonth - 1]) + (parseFloat(watervalue) / 1000)).toFixed(3)
-    if (yearWater[todayMonth - 1] > maxyearValue) {
-        maxyearValue = yearWater[todayMonth - 1]
-    }
+   
     MonthUseage.findOneAndUpdate({ 'Year': todayYear, 'Month': todayMonth }, { $set: { 'Data': yearWater[todayMonth - 1] } }, (err, data) => {
         if (err) console.log(err)
     })
@@ -2315,6 +2322,7 @@ app.get('/test_gassensor', function (req, res) {
 })
 
 let hand = "2"
+let saveremainhand = ""
 let receivehand = "2"
 //핸드드라이어에서 남은 휴지출지량 값을 받는 함수
 app.get('/test_remain', function (req, res) {
@@ -2376,7 +2384,7 @@ app.get('/wateruseage', function (req, res) {
             for (let index = 0; index < yearWater.length; index++) {
                 yearpercentArray[index] = Math.floor(percent(yearWater[index], maxyearValue))
             }
-            console.log(weekendWater)
+
             res.render('wateruseage', {
                 data: data, yeardata: yeardata, selectcityname: selectcityname, selectvillagename: selectvillagename, weekendWater: weekendWater,
                 percentArray: percentArray, yearWater: yearWater, yearpercentArray: yearpercentArray, lastMonth: lastMonth, currentMonth: currentMonth,
@@ -2410,7 +2418,6 @@ Water.find(function (err, data) {
         }
     }
     maxValue = Math.max.apply(null, Valuedata)
-    console.log("dawad" + Valuedata +"dawawd")
 }).sort({ Year: -1 }).sort({ Month: -1 }).sort({ Day: -1 }).limit(7) //추후엔 Month 와 Day로 나누기 때문에 각각에 sort정렬을 해줘야 최신 데이터가 나옴
 
 
@@ -2418,7 +2425,7 @@ Water.find(function (err, data) {
 let maxyearValue = 0
 MonthUseage.find(function (err, data) {
     let Valueyeardata = new Array()
-    if(data = "")
+    if(data == "")
     {
         for(let index = 0; index < 12; index++)
         {
@@ -2484,7 +2491,7 @@ let clientpage
 app.get('/clientlist/:page', function (req, res) {
     clientpage = req.params.page //페이지번호를 받습니다. ex)페이지가 clientlist/1 이면 clientpage는 1
     if (clientpage == null) { clientpage = 1 } //페이지가 한개도 없다면 1페이지로 넘어옵니다.
-    let skipsize = (clientpage - 1) * 10 //데이터베이스에서 10개 단위로 보여줍니다.
+    let skipsize = (clientpage - 1) * 14 //데이터베이스에서 14개 단위로 보여줍니다.
     let limitsize = 14 //한 페이지에 14개의 데이터만 보여줍니다.
     let pagenum = 1
 
@@ -2495,7 +2502,7 @@ app.get('/clientlist/:page', function (req, res) {
         for (let i = 1; i <= pagenum; i++) {
             listint[i] = i
         }
-        Water.find({}).sort({ Date: -1 }).skip(skipsize).limit(limitsize).exec(function (err, pageContents) {
+        Water.find({}).sort({ Year: -1 }).sort({ Month: -1 }).sort({ Day: 1 }).skip(skipsize).limit(limitsize).exec(function (err, pageContents) {
             if (err) throw err
             res.render('clientlist', { contents: pageContents, pagination: pagenum, count: listint })
         })
@@ -2525,12 +2532,12 @@ app.get('/notice', function (req, res) {
     })
 })
 app.get('/noticecreate', function (req, res) {
-    res.render('noticecreate')
+    res.render('noticecreate',{layout:null})
 })
 app.get('/noticelist', function (req, res) {
     clientpage = req.params.page
     if (clientpage == null) { clientpage = 1 }
-    let skipsize = (clientpage - 1) * 10
+    let skipsize = (clientpage - 1) * 14
     let limitsize = 14
     let pagenum = 1
 
