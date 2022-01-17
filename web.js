@@ -1516,8 +1516,8 @@ Weather.find({}, imgProjection, function (err, data) {
 
 //기상청 엑셀정보 불러오기
 //변경
-///home/hosting_users/creativethon/apps/creativethon_wmsapp/api/기상청41_단기예보 조회서비스_오픈API활용가이드_격자_위경도(20210401).xlsx
-const excelFile = xlsx.readFile("/home/hosting_users/creativethon/apps/creativethon_wmsapp/api/기상청41_단기예보 조회서비스_오픈API활용가이드_격자_위경도(20210401).xlsx")
+///home/hosting_users/creativethon/apps/creativethon_wmswebsite/api/기상청41_단기예보 조회서비스_오픈API활용가이드_격자_위경도(20210401).xlsx
+const excelFile = xlsx.readFile("/home/hosting_users/creativethon/apps/creativethon_wmswebsite/api/기상청41_단기예보 조회서비스_오픈API활용가이드_격자_위경도(20210401).xlsx")
 const firstSheet = excelFile.Sheets[excelFile.SheetNames[0]]
 
 let localselect
