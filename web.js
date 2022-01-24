@@ -185,8 +185,6 @@ function getCurrentDate(){
   let NoticeModel;
   let CommentModel;
   let CalModel;
-  
-  //databaseEvent.on('open', function(){
   MemberSchema = mongoose.Schema({
     id: {type:String, required:false, unique:true},
     loginmember: String,
@@ -214,8 +212,8 @@ function getCurrentDate(){
     id: {type:String, required:true, unique:true},
     title: String,
     image: String,
-    sentense: String,
-    username: String,
+    mainSentense: String,
+    user: String,
     syncTime: {type: Date, default: Date.now}
   }, { collection: 'notice' });
   
@@ -253,11 +251,18 @@ function getCurrentDate(){
   
   //});
   
+  databaseEvent.on('disconnected', function(){
+    console.log('disconnected');
+    setInterval(mongoose.connect
+      ("mongodb+srv://st1621:167943WX@cluster0.p4xrc.mongodb.net/myFirstDatabase?retryWrites=true&w=majority").then(()=>{
+        console.log('MongoDB Connected...');
+      }), 5000);
+  });
   
   //수전 및 핸드드라이어 스키마, 달력데이터 스키마
   
   //Main Schema
-  var schema = Graphql.buildSchema(`
+  var schema = buildSchema(`
   
   
   scalar DateTime
@@ -289,8 +294,12 @@ function getCurrentDate(){
     id: ID!,
     title: String!,
     mainSentense: String!,
-    user: [MemberList]!,
+    user: String,
     syncTime: DateTime!
+  }
+  
+  type SupportData {
+    products: [WashiSupport]
   }
   
   input WashiSupportRequest {
@@ -304,24 +313,32 @@ function getCurrentDate(){
     title: String,
     image: String,
     mainSentense: String,
-    user: [MemberList]!,
+    user: String,
     syncTime: DateTime!
+  }
+  
+  type NoticeData {
+    products: [WashiNotice]
   }
   
   input WashiNoticeInput {
     title: String,
     image: String,
     mainSentense: String,
-    user: String!,
+    user: String,
   }
   
   type WashiComment {
     id: ID!,
     title: String,
     image: String,
-    from: [MemberList]!,
+    from: String,
     message: String,
     syncTime: DateTime!
+  }
+  
+  type CommentData {
+    products: [WashiComment]
   }
   
   input WashiCommentInput {
@@ -334,8 +351,8 @@ function getCurrentDate(){
   type WashiTagRead {
     id: ID!,
     faucet: String,
-    nfcnumber: [MemberList]!,
-    username: [MemberList],
+    nfcnumber: String,
+    username: String,
     syncTime: DateTime
   }
   
@@ -364,9 +381,9 @@ function getCurrentDate(){
   
     type Query {
       getMember(loginmember: String!) : MemberList,
-      getSupport(id: ID!) : WashiSupport,
-      getNotice(id: ID!) : WashiNotice,
-      getComment(id: ID!) : WashiComment,
+      getSupport(user: String) : SupportData,
+      getNotice(user: String): NoticeData,
+      getComment(from: String) : CommentData,
       getTag(username: String!) : WashiTagRead,
     }
   
@@ -506,53 +523,48 @@ function getCurrentDate(){
   //Support
   createSupport: async ({ input }) => {
     //Create crypto hash code
-    const idCount = await SupportModel.count();
-    const id = 0;
-    if(idCount == 0)
-    {
-      id++;
-    }
-    else if(idCount > 0)
-    {
-      id = idCount + 1;
-    }
+    const id = await SupportModel.count() + 1; 
     //MemberList Connection => go to 'user' data set
-    const Members = await MemberModel.findOne({'username': input.username});
+    const Members = await MemberModel.findOne({'username': input.user});
+    if(!Members){
+      throw new Error("No member");
+    }
     //Create date.now(); == moment();
-    const momenta = moment();
+    const momenta = getCurrentDate();
     //Main Collection
     const Support = new SupportModel({
     'id': id,
     'title': input.title,
     'mainSentense': input.mainSentense,
-    'user': Members.username,
+    'user': input.user,
     'syncTime': momenta,
     });
     //Data de-duplication. Key set : id(hash)
-    const supID = await SupportModel.findOne({'id': id});
-    if(!supID)
-    {
+    
       const Supporter = await Support.save();
     return {
       ...Supporter._doc,
-      id: Supporter.id.toString(),
+      user: Supporter.user.toString(),
     }
       
-    } else if(supID) {
-      throw new Error("Already registered");
-    }
+     
     
   },
-  getSupport: async function ({ id }) {
+  getSupport: async function ({ user }) {
     //Find id(hash) key set
-    const Supporter = await SupportModel.find({id});
+    const Supporter = await SupportModel.find({user});
     if(!Supporter) {
       throw new Error("No records");
     }
     return {
-      ...Supporter._doc,
-      id: Supporter.id.toString(), 
-    }
+      products: Supporter.map((q) => {
+        return {
+          ...Supporter._doc,
+      user: Supporter.user.toString(), 
+        };
+      })
+      
+    };
   },
   updateSupport: async function ({ id, input }) {
     //Find id(hash) key set
@@ -586,11 +598,11 @@ function getCurrentDate(){
     //Notice
     createNotice: async ({ input }) => {
     //Create crypto hash code
-      const id = require('crypto').randomBytes(2).toString('hex'); 
+      const id = await NoticeModel.count() + 1; 
     //Find MemberList Connection => go to 'user' data set
-      const Members = await MemberModel.findOne({'username': input.username});
+      const Members = await MemberModel.findOne({'username': input.user});
     //Create date.now(); == moment();
-      const momenta = moment();
+    const momenta = getCurrentDate();
       if(!Members){
         throw new Error("No member");
       }
@@ -601,33 +613,32 @@ function getCurrentDate(){
       'title': input.title,
       'image': input.image,
       'mainSentense': input.mainSentense,
-      'user': Members.username,
+      'user': input.user,
       'syncTime': momenta,
       });
-    //Data de-duplication. Key set : id(hash)
-      const notID = await NoticeModel.findOne({'id': id});
-      if(!notID)  {
         const Notices = await Notice.save();
       return {
         ...Notices._doc,
-        id: Notices.id.toString(), 
+        user: Notices.user.toString(), 
       }
         
-      } else if(notID) {
-        throw new Error("Already registered");
-      }
       
     },
-    getNotice: async function ({ id }) {
+    getNotice: async function ({user}) {
       //Find id(hash) key set
-      const Notices = await NoticeModel.findOne({id});
+      const Notices = await NoticeModel.find({user});
       if(!Notices) {
         throw new Error("No records");
       }
-      return {
-        ...Notices._doc,
-        id: Notices.id.toString(), 
-      }
+          return {
+            products: Notices.map((q) => {
+              return {
+                ...q._doc,
+                user: q.user.toString(), 
+              };
+            })
+           
+          };
     },
     updateNotice: async function ({ id, input }) {
       //Find id(hash) key set
@@ -662,11 +673,11 @@ function getCurrentDate(){
     //Comment
     createComment: async ({ input }) => {
         //Create crypto hash code
-      const id = require('crypto').randomBytes(2).toString('hex');
+      const id = await CommentModel.count() + 1;
       //Find MemberList Connection => go to 'from' data set
-      const Members = await MemberModel.findOne({'username': input.username});
+      const Members = await MemberModel.findOne({'username': input.from});
       //Create date.now(); == moment();
-      const momenta = moment();
+      const momenta = getCurrentDate();
       if(!Members){
         throw new Error("No member");
       }
@@ -676,33 +687,32 @@ function getCurrentDate(){
       'id': id,
       'title': input.title,
       'image': input.image,
-      'from': Members.username,
+      'from': input.from,
       'message': input.message,
       'syncTime': momenta,
       });
-      //Data de-duplication. Key set : id(hash)
-      const comID = await CommentModel.findOne({'id': id});
-      if(!comID)  {
+  
         const Comments = await Comment.save();
       return {
         ...Comments._doc,
         id: Comments.id.toString(), 
       }
-      } else if(comID) {
-        throw new Error("Already registered");
-      }
-      
+  
     },
-    getComment: async function ({ id }) {
+    getComment: async function ({ from }) {
       //Find id(hash) key set
-      const Comments = await CommentModel.findOne({id});
+      const Comments = await CommentModel.find({from});
       if(!Comments) {
         throw new Error("No records");
       }
       return {
-        ...Comments._doc,
-        id: Comments.id.toString(), 
-      }
+        products: Comments.map((q) => {
+          return {
+            ...Comments._doc,
+        from: Comments.from.toString(), 
+          };
+        })
+      };
     },
     updateComment: async function ({ id, input }) {
       //Find id(hash) key set
@@ -1971,7 +1981,7 @@ app.get('/main', function (req, res) {
     }).sort({ Year: -1 }).sort({ Month: -1 }).sort({ Day: -1 }).limit(7)
 })
 
-//임시 모든 값 입력창
+
 app.get('/login', function (req, res) {
     res.render('login', { layout: null })
 })
@@ -2184,7 +2194,7 @@ app.get('/dummy', function (req, res) {
 app.use('/handdryermanage', function (req, res) {
     console.log(receivehand)
     console.log(receivegas)
-    res.render('handdryermanage')
+    res.render('handdryermanage',{hand : hand})
 })
 
 
