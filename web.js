@@ -255,8 +255,7 @@ function getCurrentDate(){
   //수전 및 핸드드라이어 스키마, 달력데이터 스키마
   
   //Main Schema
-  var schema = buildSchema(`
-  
+  var schema = Graphql.buildSchema(`
   
   scalar DateTime
   
