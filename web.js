@@ -47,7 +47,7 @@ app.use(
         },
     })
 )
-
+    
 
 mongoose.connect('mongodb+srv://upwoong:ehdrhd12@cluster0.ahlcp.mongodb.net/test?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.set('useCreateIndex', true)
