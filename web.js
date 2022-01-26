@@ -250,14 +250,7 @@ function getCurrentDate(){
   CalModel = mongoose.model("cal", CalSchema);
   
   //});
-  
-  databaseEvent.on('disconnected', function(){
-    console.log('disconnected');
-    setInterval(mongoose.connect
-      ("mongodb+srv://st1621:167943WX@cluster0.p4xrc.mongodb.net/myFirstDatabase?retryWrites=true&w=majority").then(()=>{
-        console.log('MongoDB Connected...');
-      }), 5000);
-  });
+
   
   //수전 및 핸드드라이어 스키마, 달력데이터 스키마
   
@@ -1534,8 +1527,8 @@ let localselect
 let cityselect
 let villageselect
 let cityname = new Array()
-let villagename = new Array();
-let codename = new Array();
+let villagename = new Array()
+let codename = new Array()
 
 //구역 선택 post
 app.post('/weatherlista', function (req, res) {
