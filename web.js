@@ -169,6 +169,24 @@ function getCurrentDate(){
     return new Date(Date.UTC(year, month, today, hours, minutes, seconds, milliseconds));
   }
   
+  function getToday(){
+    const dateNow = new Date();
+    var year = dateNow.getFullYear();
+    var month = dateNow.getMonth();
+    var today = dateNow.getDate();
+    return new Date(Date.UTC(year, month, today));
+  }
+  
+  function getTomorrow(){
+    const dateNow = new Date();
+    var year = dateNow.getFullYear();
+    var month = dateNow.getMonth();
+    var today = dateNow.getDate() + 1;
+    return new Date(Date.UTC(year, month, today));
+  }
+
+
+
   let MemberSchema;
 let SupportSchema;
 let NoticeSchema;
