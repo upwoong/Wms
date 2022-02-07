@@ -169,16 +169,14 @@ function getCurrentDate(){
     return new Date(Date.UTC(year, month, today, hours, minutes, seconds, milliseconds));
   }
   
-  
-  
-//Main Schema set
-let MemberSchema;
+  let MemberSchema;
 let SupportSchema;
 let NoticeSchema;
 let CommentSchema;
 let TagSchema;
 let CalSchema;
 let HWSchema;
+let FindSchema;
 
 //Main Schema Model set
 let MemberModel;
@@ -187,6 +185,7 @@ let NoticeModel;
 let CommentModel;
 let CalModel;
 let HWModel;
+let FindModel;
 
 
 //Mongo Schema
@@ -199,18 +198,20 @@ MemberSchema = mongoose.Schema({
   username: String,
   sex: String,
   nfcnumber: String,
+  admin: {type:Number, required:true},
+  todayTag: Number,
   syncTime: {type: Date, default: Date.now}
 }, { collection: 'member' });
 
 MemberModel = mongoose.model("member", MemberSchema);
 
 SupportSchema = mongoose.Schema({
-  id: {type:String, required:true, unique:true},
+  id: {type:String, required:true},
   title: String,
   sentense: String,
   username: String,
   syncTime: {type: Date, default: Date.now},
-  checksum: {type: Boolean, default: false},
+  checksum: Number,
 }, { collection: 'support' });
 
 SupportModel = mongoose.model("support", SupportSchema);
@@ -238,8 +239,8 @@ CommentSchema = mongoose.Schema({
 CommentModel = mongoose.model("comment", CommentSchema);
 
 TagSchema = mongoose.Schema({
-  connectHW: {type:String, required:true, unique:true},
-  faucet: {type:Number, required:true},
+  connectHW: String,
+  faucet: Number,
   nfcnumber: String,
   username: String,
   syncTime: {type: Date, default: Date.now}
@@ -257,11 +258,23 @@ CalSchema = mongoose.Schema({
 CalModel = mongoose.model("cal", CalSchema);
 
 HWSchema = mongoose.Schema({
-  registryHW: {type:String, required:true, unique:true},
+  registryHW: {type:String, unique:true},
   syncTime: {type: Date, default: Date.now}
 }, { collection: 'HW' });
 
 HWModel = mongoose.model("HW", HWSchema);
+
+FindSchema = mongoose.Schema({
+  connectHW: String,
+  faucet: Number,
+  nfcnumber: String,
+  username: String,
+  syncTime: {type: Date, default: Date.now},
+  firstTime: {type: Date, default: Date.now},
+  lastTime: {type: Date, default: Date.now}
+}, { collection: 'find' });
+
+FindModel = mongoose.model("find", FindSchema);
 
 //});
 
@@ -288,6 +301,8 @@ type MemberList {
   username: String!,
   sex: String!,
   nfcnumber: String!,
+  admin: Int!,
+  todayTag: Int,
   syncTime: DateTime!
 }
 
@@ -296,7 +311,8 @@ input MemberJoin {
   password: String,
   username: String!,
   sex: String!,
-  nfcnumber: String!
+  nfcnumber: String!,
+  admin: Int!
 }
 
 input signInMember {
@@ -306,9 +322,10 @@ input signInMember {
 
 type WashiSupport {
   id: ID!,
-  title: String!,
-  mainSentense: String!,
-  user: String,
+  title: String,
+  sentense: String,
+  username: String,
+  checksum: Int!,
   syncTime: DateTime!
 }
 
@@ -317,9 +334,10 @@ type SupportData {
 }
 
 input WashiSupportRequest {
-  title: String!,
-  mainSentense: String!,
-  user: String!,
+  title: String,
+  sentense: String,
+  username: String!,
+  checksum: Int,
 }
 
 type WashiNotice {
@@ -358,12 +376,12 @@ type CommentData {
 input WashiCommentInput {
   title: String,
   image: String,
-  from: String!,
+  from: String,
   message: String,
 }
 
 type WashiTagRead {
-  connectHW: String!,
+  connectHW: String,
   faucet: Int,
   nfcnumber: String,
   username: String,
@@ -375,9 +393,9 @@ type TagData {
 }
 
 input WashiTagWrite {
-  connectHW: String!,
+  connectHW: String,
   faucet: String,
-  nfcnumber: String!,
+  nfcnumber: String,
   username: String,
   syncTime: DateTime
 }
@@ -387,6 +405,20 @@ type WashiCalendar {
   setState: DateTime,
   firsttime: DateTime,
   lasttime: DateTime
+}
+
+type WashiFindRead {
+  connectHW: String,
+  faucet: Int,
+  nfcnumber: String,
+  username: String,
+  syncTime: DateTime,
+  firstTime: DateTime,
+  lastTime: DateTime
+}
+
+type FindData {
+  products: [WashiFindRead]
 }
 
 input WashiTimeSet {
@@ -408,28 +440,29 @@ type HWData {
 
   type Query {
     getMember(loginmember: String!) : MemberList,
-    getSupport(user: String) : SupportData,
+    getSupport(username: String) : SupportData,
     getNotice(user: String): NoticeData,
     getComment(from: String) : CommentData,
-    getTag(username: String!) : TagData,
+    getTag(username: String) : TagData,
+    
   }
 
   type Mutation {
-    updateMember(longinmember: String!, input: MemberJoin) : MemberList,
+    updateMember(loginmember: String, input: MemberJoin) : MemberList,
     createMember(input: MemberJoin) : MemberList,
-    deleteMember(longinmember: String!) : String,
-    updateSupport(user: String!, input: WashiSupportRequest) : WashiSupport,
+    deleteMember(loginmember: String!) : String,
+    updateSupport(id: ID!, input: WashiSupportRequest) : WashiSupport,
     createSupport(input: WashiSupportRequest) : WashiSupport,
-    deleteSupport(user: String!) : String,
+    deleteSupport(id: ID!) : String,
     updateNotice(user: String!, input: WashiNoticeInput) : WashiNotice,
     createNotice(input: WashiNoticeInput) : WashiNotice,
     deleteNotice(user: String!) : String,
-    updateComment(from: String!, input: WashiCommentInput) : WashiComment,
+    updateComment(id: ID!, input: WashiCommentInput) : WashiComment,
     createComment(input: WashiCommentInput) : WashiComment,
-    deleteComment(from: String!) : String,
+    deleteComment(id: ID!) : String,
     signInMember( input: signInMember): MemberList,
     parsingTag(input: WashiTagWrite): WashiTagRead,
-    findDate(input: WashiTimeSet): TagData,
+    findDate(input: WashiTimeSet): FindData,
   }
 
   
@@ -456,7 +489,7 @@ var root = {
   createMember: async ({ input }) => {
         const plainPassword = await input.password.toString();
         //Make salt what they will add on hash code
-        const memberSalt = require('crypto').randomBytes(32).toString('hex');;
+        const memberSalt = require('crypto').randomBytes(32).toString('hex');
         //Make hash password
         const ipassword = crypto.pbkdf2Sync(plainPassword, memberSalt, 65536, 32, 'sha512').toString('hex');
         //Make Date()
@@ -469,6 +502,7 @@ var root = {
     'password': ipassword.toString(),
     'sex': input.sex,
     'nfcnumber': input.nfcnumber,
+    'admin': input.admin,
     'syncTime': momenta,
     });
     //Data de-duplication. Key set : id(hash), loginmember: loginID
@@ -506,10 +540,22 @@ var root = {
     if(!Members) {
       throw new Error("No items");
     }
+
+    const firstTime = getToday();
+    const lastTime = getTomorrow();
+    const tagCount = await TagModel.find({
+      'username': Members.username,
+      'syncTime': {
+        "$gte": firstTime,
+        "$lt": lastTime,
+      },
+    }).count();
+
+    Members.todayTag = tagCount;
     return {
       ...Members._doc,
-      loginmember: Members.loginmember.toString(), 
-    }
+      loginmember: Members.loginmember.toString(),
+    } 
   },
   updateMember: async function ({ loginmember, input }) {
     //Find id(hash) key set
@@ -518,16 +564,17 @@ var root = {
       throw new Error("No items");
     }
       // Find salt and washipassword
-      const isalt2 = await memberName.id.toString();
+      const isalt2 = await Members.id.toString();
       // Insert New password
       const updatePassword = await input.password.toString();
-      const makeUpdatePassword = crypto.pbkdf2Sync(updatePassword, isalt2, 65536, 32, 'sha512').toString('hex')
+      const makeUpdatePassword = crypto.pbkdf2Sync(updatePassword, isalt2, 65536, 32, 'sha512').toString('hex');
     //Update method
     Members.username = input.username;
     Members.password = makeUpdatePassword;
     Members.sex = input.sex;
     Members.nfcnumber = input.nfcnumber;
-    const upMembers = await MemberModel.save();
+    Members.admin = input.admin;
+    const upMembers = await Members.save();
     return {
       ...upMembers._doc,
       loginmember: upMembers.loginmember.toString(),
@@ -552,34 +599,34 @@ createSupport: async ({ input }) => {
   //Create crypto hash code
   const id = await SupportModel.count() + 1; 
   //MemberList Connection => go to 'user' data set
-  const Members = await MemberModel.findOne({'username': input.user});
+  const Members = await MemberModel.findOne({'username': input.username});
   if(!Members){
     throw new Error("No member");
   }
   //Create date.now(); == moment();
   const momenta = getCurrentDate();
+  let chksum = 0;
   //Main Collection
   const Support = new SupportModel({
   'id': id,
   'title': input.title,
-  'mainSentense': input.mainSentense,
-  'user': input.user,
+  'sentense': input.sentense,
+  'username': input.username,
+  'checksum': chksum,
   'syncTime': momenta,
   });
-  //Data de-duplication. Key set : id(hash)
-  
     const Supporter = await Support.save();
   return {
     ...Supporter._doc,
-    user: Supporter.user.toString(),
+    id: Supporter.id.toString(),
   }
     
    
   
 },
-getSupport: async function ({ user }) {
+getSupport: async function ({ username }) {
   //Find id(hash) key set
-  const Supporter = await SupportModel.find({user});
+  const Supporter = await SupportModel.find({username});
   if(!Supporter) {
     throw new Error("No records");
   }
@@ -587,10 +634,9 @@ getSupport: async function ({ user }) {
     products: Supporter.map((q) => {
       return {
         ...q._doc,
-    user: q.user.toString(), 
+    username: q.username.toString(), 
       };
     })
-    
   };
 },
 updateSupport: async function ({ id, input }) {
@@ -601,8 +647,10 @@ updateSupport: async function ({ id, input }) {
   }
   //Update method
   Supporter.title = input.title;
-  Supporter.mainSentense = input.mainSentense;
-  const upSupport = await SupportModel.save();
+  Supporter.sentense = input.sentense;
+  Supporter.username = input.username;
+  Supporter.checksum = input.checksum;
+  const upSupport = await Supporter.save();
   return {
     ...upSupport._doc,
     id: upSupport.id.toString(),
@@ -751,7 +799,7 @@ deleteSupport: async function ({ id }) {
     Comments.title = input.title;
     Comments.image = input.image;
     Comments.message = input.message;
-    const upComments = await CommentModel.save();
+    const upComments = await Comments.save();
     return {
       ...upComments._doc,
       id: upComments.id.toString(),
@@ -774,7 +822,7 @@ deleteSupport: async function ({ id }) {
   //Tag
   getTag: async ({ username }) => {
     //Find id(hash) key set
-    const Tags = await MemberModel.find({username});
+    const Tags = await TagModel.find({username});
     if(!Tags) {
       throw new Error("No records");
     }
@@ -782,7 +830,7 @@ deleteSupport: async function ({ id }) {
       products: Tags.map((q) => {
         return {
           ...q._doc,
-      username: q.username.toString(), 
+      _id: q._id.toString(), 
         };
       })
     };
@@ -798,18 +846,17 @@ deleteSupport: async function ({ id }) {
     }
 
   //Main Collection
-  const ConnectModel = new HWModel({
+  const ConnectModel = new TagModel({
     'connectHW': input.connectHW,
     'faucet': counter,
     'nfcnumber': input.nfcnumber,
     'username': input.username,
     'syncTime': timeNow,
     });
-
     const HWset = await ConnectModel.save();
     return {
       ...HWset._doc,
-      username: Comments.username.toString(), 
+      connectHW: HWset.connectHW.toString(), 
     }
   },
   //Calendar
@@ -847,7 +894,18 @@ deleteSupport: async function ({ id }) {
       // Insert New password
       const plainPassword2 = await input.password.toString();
       const makeLoginPassword = crypto.pbkdf2Sync(plainPassword2, isalt, 65536, 32, 'sha512').toString('hex')
-  
+      //Get tag list
+     const firstTime = getToday();
+     const lastTime = getTomorrow();
+     const tagCount = await TagModel.find({
+      'username': memberName.username,
+      'syncTime': {
+        "$gte": firstTime,
+        "$lt": lastTime,
+       },
+     }).count();
+
+     memberName.todayTag = tagCount;
       //If you don't write Password, throw this error.
       if (plainPassword2 == "") {
           throw new Error("Please Insert your password");
@@ -870,13 +928,17 @@ deleteSupport: async function ({ id }) {
   //Find Date
   findDate: async function({ input }) {
     //시작 날짜와 끝 날짜를 입력하여 사이의 값 추출
+    const firsto = input.firstTime;
+    const lasto = input.lastTime;
     const memberDate = await TagModel.find({
-      'username': input.username,
-      'syncTime': {
-        "$gte": input.firstTime,
-        "$lt": input.lastTime,
+      where: {
+        username: input.username,
+        syncTime: {
+          $gte: firsto,
+          $lt: lasto,
+        }
       },
-    });
+     });
     if(!memberDate) {
       throw new Error("No users");
     }
@@ -893,7 +955,6 @@ deleteSupport: async function ({ id }) {
   },
  
 };
-
 
 
 app.use('/graphql', GraphqlHttp({
@@ -2302,6 +2363,8 @@ MonthUseage.find(function (err, data) {
 
 let dlatlaaa= 0
 let watervalue = 3
+let receivewater = ""
+let tolletnumber =0 
 let plusdayvalue = 0
 let percentArray = new Array()
 let yearpercentArray = new Array()
@@ -2313,10 +2376,22 @@ app.get('/testa',function(req,res){
     console.log(strArr[1])
     res.render('dkatk',{layout : null})
 })
+/*
+2층 여자1 : 1
+2층 여자2 : 2
+2층 남자 : 3
+3층 여자1 : 4
+3층 여자2 : 5
+3층 남자 : 6
+*/
 app.get('/testwater_recieve', function (req, res) {
+    receivewater = req.query.id
+    const strArr = receivewater.split(',')
+    watervalue = strArr[0] // 수전 사용량
+    tolletnumber = strArr[1] // 사용한 화장실
     watervalue = req.query.id
-    dlatlaaa = req.query.name
-    console.log(dlatlaaa)
+
+
     const todayYear = moment().format('YY')
     const todayMonth = moment().format('MM')
     const todayDay = moment().format('DD')
