@@ -314,7 +314,7 @@ let CommentNModel;
 //수전 및 핸드드라이어 스키마, 달력데이터 스키마
 
 //Main Schema
-var schema = buildSchema(`
+var schema = Graphql.buildSchema(`
 
 
 scalar DateTime
@@ -1043,8 +1043,7 @@ var root = {
             "$lt": last1,
           },
        });
-      console.log(first1);
-      console.log(last1);
+     
   
       return {
         products: memberDate.map((q) => {
