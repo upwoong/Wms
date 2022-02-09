@@ -424,7 +424,7 @@ type WashiFindRead {
   nfcnumber: String,
   username: String,
   syncTime: DateTime,
-  firstTime: DateTime,
+  firstT: DateTime,
   lastTime: DateTime
 }
 
