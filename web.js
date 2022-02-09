@@ -1043,7 +1043,8 @@ var root = {
             "$lt": last1,
           },
        });
-      
+      console.log(first1);
+      console.log(last1);
   
       return {
         products: memberDate.map((q) => {
