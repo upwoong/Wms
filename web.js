@@ -303,6 +303,7 @@ FindModel = mongoose.model("find", FindSchema);
 var schema = Graphql.buildSchema(`
 
 
+
 scalar DateTime
 
 type MemberList {
@@ -424,7 +425,7 @@ type WashiFindRead {
   nfcnumber: String,
   username: String,
   syncTime: DateTime,
-  firstT: DateTime,
+  firstTime: DateTime,
   lastTime: DateTime
 }
 
@@ -435,7 +436,7 @@ type FindData {
 input WashiTimeSet {
   username: String,
   syncTime: DateTime,
-  firstT: DateTime,
+  firstTime: DateTime,
   lastTime: DateTime
 }
 
@@ -452,10 +453,10 @@ type HWData {
   type Query {
     getMember(loginmember: String!) : MemberList,
     getSupport(username: String) : SupportData,
-    getNotice(user: String): NoticeData,
+    getNotice : NoticeData,
     getComment(from: String) : CommentData,
     getTag(username: String) : TagData,
-    
+    getNComment(from: String) : CommentData,
   }
 
   type Mutation {
@@ -471,6 +472,9 @@ type HWData {
     updateComment(id: ID!, input: WashiCommentInput) : WashiComment,
     createComment(input: WashiCommentInput) : WashiComment,
     deleteComment(id: ID!) : String,
+    updateNComment(id: ID!, input: WashiCommentInput) : WashiComment,
+    createNComment(input: WashiCommentInput) : WashiComment,
+    deleteNComment(id: ID!) : String,
     signInMember( input: signInMember): MemberList,
     parsingTag(input: WashiTagWrite): WashiTagRead,
     findDate(input: WashiTimeSet): FindData,
