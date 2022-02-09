@@ -435,7 +435,7 @@ type FindData {
 input WashiTimeSet {
   username: String,
   syncTime: DateTime,
-  firstTime: DateTime,
+  firstT: DateTime,
   lastTime: DateTime
 }
 
@@ -939,7 +939,7 @@ deleteSupport: async function ({ id }) {
   //Find Date
   findDate: async function({ input }) {
     //시작 날짜와 끝 날짜를 입력하여 사이의 값 추출
-    const firsto = input.firstTime;
+    const firsto = input.firstT;
     const lasto = input.lastTime;
     const memberDate = await TagModel.find({
       where: {
