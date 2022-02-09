@@ -502,473 +502,547 @@ Object.assign(schema._typeMap.DateTime, {
 var root = {
   //Member
   createMember: async ({ input }) => {
-        const plainPassword = await input.password.toString();
-        //Make salt what they will add on hash code
-        const memberSalt = require('crypto').randomBytes(32).toString('hex');
-        //Make hash password
-        const ipassword = crypto.pbkdf2Sync(plainPassword, memberSalt, 65536, 32, 'sha512').toString('hex');
-        //Make Date()
-         const momenta = getCurrentDate();
-    //Main Collection
-    const Member = new MemberModel({
-    'id': memberSalt.toString(),
-    'loginmember': input.loginmember,
-    'username': input.username,
-    'password': ipassword.toString(),
-    'sex': input.sex,
-    'nfcnumber': input.nfcnumber,
-    'admin': input.admin,
-    'syncTime': momenta,
-    });
-    //Data de-duplication. Key set : id(hash), loginmember: loginID
-    const memName = await MemberModel.findOne({'loginmember': input.loginmember});
-    const memID = await MemberModel.findOne({'id': memberSalt});
-    if(!memName)
-    {
-      if(!memID)
-      {
-        const Members = await Member.save();
-        
-        return {
-          ...Members._doc,
-          id: Members.id.toString(), 
-        }
-      }
-      else if(memID) {
-        throw new Error("Already member existed");
-      }
-    } else if(memName) {
-        if(memID)
-        {
-          throw new Error("Already member existed");
-        }
-        else {
-          throw new Error("Already member existed");
-        }
-        
-    }
-     
-  },
-  getMember: async function ({ loginmember }) {
-    //Find id(hash) key set
-    const Members = await MemberModel.findOne({loginmember});
-    if(!Members) {
-      throw new Error("No items");
-    }
-
-    const firstTime = getToday();
-    const lastTime = getTomorrow();
-    const tagCount = await TagModel.find({
-      'username': Members.username,
-      'syncTime': {
-        "$gte": firstTime,
-        "$lt": lastTime,
-      },
-    }).count();
-
-    Members.todayTag = tagCount;
+    const plainPassword = await input.password.toString();
+    //Make salt what they will add on hash code
+    const memberSalt = require('crypto').randomBytes(32).toString('hex');
+    //Make hash password
+    const ipassword = crypto.pbkdf2Sync(plainPassword, memberSalt, 65536, 32, 'sha512').toString('hex');
+    //Make Date()
+     const momenta = getCurrentDate();
+//Main Collection
+const Member = new MemberModel({
+'id': memberSalt.toString(),
+'loginmember': input.loginmember,
+'username': input.username,
+'password': ipassword.toString(),
+'sex': input.sex,
+'nfcnumber': input.nfcnumber,
+'admin': input.admin,
+'syncTime': momenta,
+});
+//Data de-duplication. Key set : id(hash), loginmember: loginID
+const memName = await MemberModel.findOne({'loginmember': input.loginmember});
+const memID = await MemberModel.findOne({'id': memberSalt});
+if(!memName)
+{
+  if(!memID)
+  {
+    const Members = await Member.save();
+    
     return {
       ...Members._doc,
-      loginmember: Members.loginmember.toString(),
-    } 
-  },
-  updateMember: async function ({ loginmember, input }) {
-    //Find id(hash) key set
-    const Members = await MemberModel.findOne({loginmember});
-    if(!Members) {
-      throw new Error("No items");
+      id: Members.id.toString(), 
     }
-      // Find salt and washipassword
-      const isalt2 = await Members.id.toString();
-      // Insert New password
-      const updatePassword = await input.password.toString();
-      const makeUpdatePassword = crypto.pbkdf2Sync(updatePassword, isalt2, 65536, 32, 'sha512').toString('hex');
-    //Update method
-    Members.username = input.username;
-    Members.password = makeUpdatePassword;
-    Members.sex = input.sex;
-    Members.nfcnumber = input.nfcnumber;
-    Members.admin = input.admin;
-    const upMembers = await Members.save();
-    return {
-      ...upMembers._doc,
-      loginmember: upMembers.loginmember.toString(),
-    };
-  },
-  deleteMember: async function ({ loginmember }) {
-    //Find id(hash) key set
-    const Members = await MemberModel.findOne({loginmember});
-    if(!Members) {
-      throw new Error("No items");
+  }
+  else if(memID) {
+    throw new Error("Already member existed");
+  }
+} else if(memName) {
+    if(memID)
+    {
+      throw new Error("Already member existed");
     }
+    else {
+      throw new Error("Already member existed");
+    }
+    
+}
+ 
+},
+getMember: async function ({ loginmember }) {
+//Find id(hash) key set
+const Members = await MemberModel.findOne({loginmember});
+if(!Members) {
+  throw new Error("No items");
+}
 
-    await MemberModel.findOneAndDelete({loginmember});
-    return {
-      ...MemberModel._doc,
-      loginmember: MemberModel.loginmember,
-      
-    }, "delete Complete";
+const firstTime = getToday();
+const lastTime = getTomorrow();
+const tagCount = await TagModel.find({
+  'username': Members.username,
+  'syncTime': {
+    "$gte": firstTime,
+    "$lt": lastTime,
   },
+}).count();
+
+Members.todayTag = tagCount;
+return {
+  ...Members._doc,
+  loginmember: Members.loginmember.toString(),
+} 
+},
+updateMember: async function ({ loginmember, input }) {
+//Find id(hash) key set
+const Members = await MemberModel.findOne({loginmember});
+if(!Members) {
+  throw new Error("No items");
+}
+  // Find salt and washipassword
+  const isalt2 = await Members.id.toString();
+  // Insert New password
+  const updatePassword = await input.password.toString();
+  const makeUpdatePassword = crypto.pbkdf2Sync(updatePassword, isalt2, 65536, 32, 'sha512').toString('hex');
+//Update method
+Members.username = input.username;
+Members.password = makeUpdatePassword;
+Members.sex = input.sex;
+Members.nfcnumber = input.nfcnumber;
+Members.admin = input.admin;
+const upMembers = await Members.save();
+return {
+  ...upMembers._doc,
+  loginmember: upMembers.loginmember.toString(),
+};
+},
+deleteMember: async function ({ loginmember }) {
+//Find id(hash) key set
+const Members = await MemberModel.findOne({loginmember});
+if(!Members) {
+  throw new Error("No items");
+}
+
+await MemberModel.findOneAndDelete({loginmember});
+return {
+  ...MemberModel._doc,
+  loginmember: MemberModel.loginmember,
+  
+}, "delete Complete";
+},
 //Support
 createSupport: async ({ input }) => {
-  //Create crypto hash code
-  const id = await SupportModel.count() + 1; 
-  //MemberList Connection => go to 'user' data set
-  const Members = await MemberModel.findOne({'username': input.username});
-  if(!Members){
-    throw new Error("No member");
-  }
-  //Create date.now(); == moment();
-  const momenta = getCurrentDate();
-  let chksum = 0;
-  //Main Collection
-  const Support = new SupportModel({
-  'id': id,
-  'title': input.title,
-  'sentense': input.sentense,
-  'username': input.username,
-  'checksum': chksum,
-  'syncTime': momenta,
-  });
-    const Supporter = await Support.save();
-  return {
-    ...Supporter._doc,
-    id: Supporter.id.toString(),
-  }
-    
-   
-  
+//Create crypto hash code
+const id = await SupportModel.count() + 1; 
+//MemberList Connection => go to 'user' data set
+const Members = await MemberModel.findOne({'username': input.username});
+if(!Members){
+throw new Error("No member");
+}
+//Create date.now(); == moment();
+const momenta = getCurrentDate();
+let chksum = 0;
+//Main Collection
+const Support = new SupportModel({
+'id': id,
+'title': input.title,
+'sentense': input.sentense,
+'username': input.username,
+'checksum': chksum,
+'syncTime': momenta,
+});
+const Supporter = await Support.save();
+return {
+...Supporter._doc,
+id: Supporter.id.toString(),
+}
+
+
+
 },
 getSupport: async function ({ username }) {
-  //Find id(hash) key set
-  const Supporter = await SupportModel.find({username});
-  if(!Supporter) {
-    throw new Error("No records");
-  }
+//Find id(hash) key set
+const Supporter = await SupportModel.find({username});
+if(!Supporter) {
+throw new Error("No records");
+}
+return {
+products: Supporter.map((q) => {
   return {
-    products: Supporter.map((q) => {
-      return {
-        ...q._doc,
-    username: q.username.toString(), 
-      };
-    })
+    ...q._doc,
+username: q.username.toString(), 
   };
+})
+};
 },
 updateSupport: async function ({ id, input }) {
-  //Find id(hash) key set
-  const Supporter = await SupportModel.findOne({id});
-  if(!Supporter) {
-    throw new Error("No records");
-  }
-  //Update method
-  Supporter.title = input.title;
-  Supporter.sentense = input.sentense;
-  Supporter.username = input.username;
-  Supporter.checksum = input.checksum;
-  const upSupport = await Supporter.save();
-  return {
-    ...upSupport._doc,
-    id: upSupport.id.toString(),
-  };
+//Find id(hash) key set
+const Supporter = await SupportModel.findOne({id});
+if(!Supporter) {
+throw new Error("No records");
+}
+//Update method
+Supporter.title = input.title;
+Supporter.sentense = input.sentense;
+Supporter.username = input.username;
+Supporter.checksum = input.checksum;
+const upSupport = await Supporter.save();
+return {
+...upSupport._doc,
+id: upSupport.id.toString(),
+};
 },
 deleteSupport: async function ({ id }) {
-  //Find id(hash) key set
-  const Supporter = await SupportModel.findOne({id});
-  if(!Supporter) {
-    throw new Error("No records");
-  }
+//Find id(hash) key set
+const Supporter = await SupportModel.findOne({id});
+if(!Supporter) {
+throw new Error("No records");
+}
 
-  await SupportModel.findOneAndDelete({id});
-  return {
-    ...SupportModel._doc,
-    id: SupportModel.id,
-    
-  }, "delete Complete";
+await SupportModel.findOneAndDelete({id});
+return {
+...SupportModel._doc,
+id: SupportModel.id,
+
+}, "delete Complete";
 },
-  //Notice
-  createNotice: async ({ input }) => {
+//Notice
+createNotice: async ({ input }) => {
+//Create crypto hash code
+const id = await NoticeModel.count() + 1; 
+//Find MemberList Connection => go to 'user' data set
+const Members = await MemberModel.findOne({'username': input.user});
+//Create date.now(); == moment();
+const momenta = getCurrentDate();
+if(!Members){
+  throw new Error("No member");
+}
+
+//Main Collection
+const Notice = new NoticeModel({
+'id': id,
+'title': input.title,
+'image': input.image,
+'mainSentense': input.mainSentense,
+'user': input.user,
+'syncTime': momenta,
+});
+  const Notices = await Notice.save();
+return {
+  ...Notices._doc,
+  user: Notices.user.toString(), 
+}
+  
+
+},
+getNotice: async function () {
+//Find id(hash) key set
+const Notices = await NoticeModel.find();
+if(!Notices) {
+  throw new Error("No records");
+}
+    return {
+      products: Notices.map((q) => {
+        return {
+          ...q._doc,
+          id: q.id.toString(), 
+        };
+      })
+     
+    };
+},
+updateNotice: async function ({ id, input }) {
+//Find id(hash) key set
+const Notices = await NoticeModel.findOne({id});
+if(!Notices) {
+  throw new Error("No records");
+}
+//Update method
+Notices.title = input.title;
+Notices.image = input.image;
+Notices.mainSentense = input.mainSentense;
+const upNotices = await NoticeModel.save();
+return {
+  ...upNotices._doc,
+  id: upNotices.id.toString(),
+};
+},
+deleteNotice: async function ({ id }) {
+//Find id(hash) key set
+const Notices = await NoticeModel.findOne({id});
+if(!Notices) {
+  throw new Error("No records");
+}
+
+await NoticeModel.findOneAndDelete({id});
+return {
+  ...NoticeModel._doc,
+  id: NoticeModel.id,
+  
+}, "delete Complete";
+},
+//NComment
+createNComment: async ({ input }) => {
   //Create crypto hash code
-    const id = await NoticeModel.count() + 1; 
-  //Find MemberList Connection => go to 'user' data set
-    const Members = await MemberModel.findOne({'username': input.user});
-  //Create date.now(); == moment();
-  const momenta = getCurrentDate();
-    if(!Members){
-      throw new Error("No member");
-    }
+const id = await CommentNModel.count() + 1;
+//Find MemberList Connection => go to 'from' data set
+const Members = await MemberModel.findOne({'username': input.from});
+//Create date.now(); == moment();
+const momenta = getCurrentDate();
+if(!Members){
+  throw new Error("No member");
+}
 
-  //Main Collection
-    const Notice = new NoticeModel({
-    'id': id,
-    'title': input.title,
-    'image': input.image,
-    'mainSentense': input.mainSentense,
-    'user': input.user,
-    'syncTime': momenta,
-    });
-      const Notices = await Notice.save();
+//Main Collection
+const Comment = new CommentNModel({
+'id': id,
+'title': input.title,
+'image': input.image,
+'from': input.from,
+'message': input.message,
+'syncTime': momenta,
+});
+
+  const Comments = await Comment.save();
+return {
+  ...Comments._doc,
+  id: Comments.id.toString(), 
+}
+
+},
+getNComment: async function ({ from }) {
+//Find id(hash) key set
+const Comments = await CommentNModel.find({from});
+if(!Comments) {
+  throw new Error("No records");
+}
+return {
+  products: Comments.map((q) => {
     return {
-      ...Notices._doc,
-      user: Notices.user.toString(), 
-    }
-      
-    
-  },
-  getNotice: async function ({user}) {
-    //Find id(hash) key set
-    const Notices = await NoticeModel.find({user});
-    if(!Notices) {
-      throw new Error("No records");
-    }
-        return {
-          products: Notices.map((q) => {
-            return {
-              ...q._doc,
-              user: q.user.toString(), 
-            };
-          })
-         
-        };
-  },
-  updateNotice: async function ({ id, input }) {
-    //Find id(hash) key set
-    const Notices = await NoticeModel.findOne({id});
-    if(!Notices) {
-      throw new Error("No records");
-    }
-  //Update method
-    Notices.title = input.title;
-    Notices.image = input.image;
-    Notices.mainSentense = input.mainSentense;
-    const upNotices = await NoticeModel.save();
-    return {
-      ...upNotices._doc,
-      id: upNotices.id.toString(),
+      ...q._doc,
+  from: q.from.toString(), 
     };
-  },
-  deleteNotice: async function ({ id }) {
-    //Find id(hash) key set
-    const Notices = await NoticeModel.findOne({id});
-    if(!Notices) {
-      throw new Error("No records");
-    }
+  })
+};
+},
+updateNComment: async function ({ id, input }) {
+//Find id(hash) key set
+const Comments = await CommentNModel.findOne({id});
+if(!Comments) {
+  throw new Error("No records");
+}
+//Update method
+Comments.title = input.title;
+Comments.image = input.image;
+Comments.message = input.message;
+const upComments = await Comments.save();
+return {
+  ...upComments._doc,
+  id: upComments.id.toString(),
+};
+},
+deleteNComment: async function ({ id }) {
+//Find id(hash) key set
+const Comments = await CommentNModel.findOne({id});
+if(!Comments) {
+  throw new Error("No records");
+}
 
-    await NoticeModel.findOneAndDelete({id});
+await CommentNModel.findOneAndDelete({id});
+return {
+  ...CommentNModel._doc,
+  id: CommentNModel.id,
+  
+}, "delete Complete";
+},
+//Comment
+createComment: async ({ input }) => {
+  //Create crypto hash code
+const id = await CommentModel.count() + 1;
+//Find MemberList Connection => go to 'from' data set
+const Members = await MemberModel.findOne({'username': input.from});
+//Create date.now(); == moment();
+const momenta = getCurrentDate();
+if(!Members){
+  throw new Error("No member");
+}
+
+//Main Collection
+const Comment = new CommentModel({
+'id': id,
+'title': input.title,
+'image': input.image,
+'from': input.from,
+'message': input.message,
+'syncTime': momenta,
+});
+
+  const Comments = await Comment.save();
+return {
+  ...Comments._doc,
+  id: Comments.id.toString(), 
+}
+
+},
+getComment: async function ({ from }) {
+//Find id(hash) key set
+const Comments = await CommentModel.find({from});
+if(!Comments) {
+  throw new Error("No records");
+}
+return {
+  products: Comments.map((q) => {
     return {
-      ...NoticeModel._doc,
-      id: NoticeModel.id,
-      
-    }, "delete Complete";
-  },
-  //Comment
-  createComment: async ({ input }) => {
-      //Create crypto hash code
-    const id = await CommentModel.count() + 1;
-    //Find MemberList Connection => go to 'from' data set
-    const Members = await MemberModel.findOne({'username': input.from});
-    //Create date.now(); == moment();
-    const momenta = getCurrentDate();
-    if(!Members){
-      throw new Error("No member");
-    }
-
-  //Main Collection
-    const Comment = new CommentModel({
-    'id': id,
-    'title': input.title,
-    'image': input.image,
-    'from': input.from,
-    'message': input.message,
-    'syncTime': momenta,
-    });
-
-      const Comments = await Comment.save();
-    return {
-      ...Comments._doc,
-      id: Comments.id.toString(), 
-    }
-
-  },
-  getComment: async function ({ from }) {
-    //Find id(hash) key set
-    const Comments = await CommentModel.find({from});
-    if(!Comments) {
-      throw new Error("No records");
-    }
-    return {
-      products: Comments.map((q) => {
-        return {
-          ...q._doc,
-      from: q.from.toString(), 
-        };
-      })
+      ...q._doc,
+  from: q.from.toString(), 
     };
-  },
-  updateComment: async function ({ id, input }) {
-    //Find id(hash) key set
-    const Comments = await CommentModel.findOne({id});
-    if(!Comments) {
-      throw new Error("No records");
-    }
-    //Update method
-    Comments.title = input.title;
-    Comments.image = input.image;
-    Comments.message = input.message;
-    const upComments = await Comments.save();
+  })
+};
+},
+updateComment: async function ({ id, input }) {
+//Find id(hash) key set
+const Comments = await CommentModel.findOne({id});
+if(!Comments) {
+  throw new Error("No records");
+}
+//Update method
+Comments.title = input.title;
+Comments.image = input.image;
+Comments.message = input.message;
+const upComments = await Comments.save();
+return {
+  ...upComments._doc,
+  id: upComments.id.toString(),
+};
+},
+deleteComment: async function ({ id }) {
+//Find id(hash) key set
+const Comments = await CommentModel.findOne({id});
+if(!Comments) {
+  throw new Error("No records");
+}
+
+await CommentModel.findOneAndDelete({id});
+return {
+  ...CommentModel._doc,
+  id: CommentModel.id,
+  
+}, "delete Complete";
+},
+//Tag
+getTag: async ({ username }) => {
+//Find id(hash) key set
+const Tags = await TagModel.find({username});
+if(!Tags) {
+  throw new Error("No records");
+}
+return {
+  products: Tags.map((q) => {
     return {
-      ...upComments._doc,
-      id: upComments.id.toString(),
+      ...q._doc,
+  _id: q._id.toString(), 
     };
-  },
-  deleteComment: async function ({ id }) {
-    //Find id(hash) key set
-    const Comments = await CommentModel.findOne({id});
-    if(!Comments) {
-      throw new Error("No records");
-    }
+  })
+};
+},
 
-    await CommentModel.findOneAndDelete({id});
-    return {
-      ...CommentModel._doc,
-      id: CommentModel.id,
-      
-    }, "delete Complete";
-  },
-  //Tag
-  getTag: async ({ username }) => {
-    //Find id(hash) key set
-    const Tags = await TagModel.find({username});
-    if(!Tags) {
-      throw new Error("No records");
-    }
-    return {
-      products: Tags.map((q) => {
-        return {
-          ...q._doc,
-      _id: q._id.toString(), 
-        };
-      })
-    };
-  },
+parsingTag: async ({ input }) => {
+//Find HW
+const findHW = await HWModel.findOne({'registryHW': input.connectHW});
+const timeNow = getCurrentDate();
+const counter = 1;
+if(!findHW) {
+  throw new Error("Can't find HW");
+}
 
-  parsingTag: async ({ input }) => {
-    //Find HW
-    const findHW = await HWModel.findOne({'registryHW': input.connectHW});
-    const timeNow = getCurrentDate();
-    const counter = 1;
-    if(!findHW) {
-      throw new Error("Can't find HW");
-    }
+//Main Collection
+const ConnectModel = new TagModel({
+'connectHW': input.connectHW,
+'faucet': counter,
+'nfcnumber': input.nfcnumber,
+'username': input.username,
+'syncTime': timeNow,
+});
+const HWset = await ConnectModel.save();
+return {
+  ...HWset._doc,
+  connectHW: HWset.connectHW.toString(), 
+}
+},
+//Calendar
+getCalendar: async () => {
+const getState = moment();
+const setState = getState;
+const firstWeek = today.clone().startOf('month').week();
+const lastWeek = today.clone().endOf('month').week() === 1 ? 53 : today.clone().endOf('month').week();
 
-  //Main Collection
-  const ConnectModel = new TagModel({
-    'connectHW': input.connectHW,
-    'faucet': counter,
-    'nfcnumber': input.nfcnumber,
-    'username': input.username,
-    'syncTime': timeNow,
-    });
-    const HWset = await ConnectModel.save();
-    return {
-      ...HWset._doc,
-      connectHW: HWset.connectHW.toString(), 
-    }
-  },
-  //Calendar
-  getCalendar: async () => {
-    const getState = moment();
-    const setState = getState;
-    const firstWeek = today.clone().startOf('month').week();
-  const lastWeek = today.clone().endOf('month').week() === 1 ? 53 : today.clone().endOf('month').week();
-
-  CalModel.syncTime = setState;
-  CalModel.timezone = getState;
-  CalModel.firstWeek = firstWeek;
-  CalModel.lastWeek = lastWeek;
-  return {
-    ...CalModel._doc,
-    syncTime: CalModel.syncTime.toString(), 
+CalModel.syncTime = setState;
+CalModel.timezone = getState;
+CalModel.firstWeek = firstWeek;
+CalModel.lastWeek = lastWeek;
+return {
+...CalModel._doc,
+syncTime: CalModel.syncTime.toString(), 
+}
+},
+//Login
+signInMember: async ({ input }) => {
+// Find username
+  const memberName = await MemberModel.findOne({ 'loginmember': input.username });
+  //Find user
+  if (!memberName) {
+      if (input.username == "") {
+          throw new Error("Please insert your id first");
+      }
+      else {
+          throw new Error("No users");
+      }
   }
-  },
-  //Login
-  signInMember: async ({ input }) => {
-    // Find username
-      const memberName = await MemberModel.findOne({ 'loginmember': input.username });
-      //Find user
-      if (!memberName) {
-          if (input.username == "") {
-              throw new Error("Please insert your id first");
-          }
-          else {
-              throw new Error("No users");
-          }
+  // Make salt and washipassword
+  const isalt = await memberName.id.toString();
+  const memberPassword = await memberName.password.toString();
+  // Insert New password
+  const plainPassword2 = await input.password.toString();
+  const makeLoginPassword = crypto.pbkdf2Sync(plainPassword2, isalt, 65536, 32, 'sha512').toString('hex')
+  //Get tag list
+ const firstTime = getToday();
+ const lastTime = getTomorrow();
+ const tagCount = await TagModel.find({
+  'username': memberName.username,
+  'syncTime': {
+    "$gte": firstTime,
+    "$lt": lastTime,
+   },
+ }).count();
+
+ memberName.todayTag = tagCount;
+  //If you don't write Password, throw this error.
+  if (plainPassword2 == "") {
+      throw new Error("Please Insert your password");
+  }
+  //비밀번호가 맞는지 판단 후 콘솔로그로 정보 전달. 이후에 DB에 토큰 값 저장 진행 -> 판단 확인 요청
+  if (makeLoginPassword == memberPassword) {
+  console.log("sign in");
+      return {
+          ...memberName._doc,
+          loginmember: memberName.loginmember.toString(),
       }
-      // Make salt and washipassword
-      const isalt = await memberName.id.toString();
-      const memberPassword = await memberName.password.toString();
-      // Insert New password
-      const plainPassword2 = await input.password.toString();
-      const makeLoginPassword = crypto.pbkdf2Sync(plainPassword2, isalt, 65536, 32, 'sha512').toString('hex')
-      //Get tag list
-     const firstTime = getToday();
-     const lastTime = getTomorrow();
-     const tagCount = await TagModel.find({
-      'username': memberName.username,
-      'syncTime': {
-        "$gte": firstTime,
-        "$lt": lastTime,
-       },
-     }).count();
+  }
+  else if (makeLoginPassword != memberPassword) {
+    throw new Error("Password doesn't match.");
+}
 
-     memberName.todayTag = tagCount;
-      //If you don't write Password, throw this error.
-      if (plainPassword2 == "") {
-          throw new Error("Please Insert your password");
-      }
-      //비밀번호가 맞는지 판단 후 콘솔로그로 정보 전달. 이후에 DB에 토큰 값 저장 진행 -> 판단 확인 요청
-      if (makeLoginPassword == memberPassword) {
-      console.log("sign in");
-          return {
-              ...memberName._doc,
-              loginmember: memberName.loginmember.toString(),
-          }
-      }
-      else if (makeLoginPassword != memberPassword) {
-        throw new Error("Password doesn't match.");
-    }
-    
 
-  },
+},
 
-  //Find Date
-  findDate: async function({ input }) {
-    //시작 날짜와 끝 날짜를 입력하여 사이의 값 추출
-    const firsto = input.firstT;
-    const lasto = input.lastTime;
-    const memberDate = await TagModel.find({
-      where: {
-        username: input.username,
-        syncTime: {
-          $gte: firsto,
-          $lt: lasto,
-        }
-      },
-     });
-    if(!memberDate) {
-      throw new Error("No users");
-    }
+//Find Date
+findDate: async function({ input }) {
+//시작 날짜와 끝 날짜를 입력하여 사이의 값 추출
+const first1 = new Date(input.firstTime.toString());
+const last1 = new Date(input.lastTime.toString());
+const memberName = await TagModel.findOne({ 'username': input.username });
+if(!memberName) {
+  throw new Error("No users");
+}
+const memberDate = await TagModel.find({
+    'username': input.username,
+    'syncTime': {
+      "$gte": first1,
+      "$lt": last1,
+    },
+ });
 
+
+return {
+  products: memberDate.map((q) => {
     return {
-      products: memberDate.map((q) => {
-        return {
-          ...q._doc,
-      username: q.username.toString(), 
-        };
-      })
+      ...q._doc,
+  username: q.username.toString(), 
     };
+  })
+};
 
-  },
- 
+},
+
 };
 
 
