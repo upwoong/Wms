@@ -283,17 +283,11 @@ HWSchema = mongoose.Schema({
 HWModel = mongoose.model("HW", HWSchema);
 
 FindSchema = mongoose.Schema({
-  connectHW: String,
-  faucet: Number,
-  nfcnumber: String,
-  username: String,
-  syncTime: {type: Date, default: Date.now},
-  firstTime: {type: Date, default: Date.now},
-  lastTime: {type: Date, default: Date.now}
-}, { collection: 'find' });
-
-FindModel = mongoose.model("find", FindSchema);
-
+    findTag: Number,
+  }, { collection: 'find' });
+  
+  FindModel = mongoose.model("find", FindSchema);
+  
 //});
 
 
@@ -420,67 +414,72 @@ type WashiCalendar {
 }
 
 type WashiFindRead {
-  connectHW: String,
-  faucet: Int,
-  nfcnumber: String,
-  username: String,
-  syncTime: DateTime,
-  firstTime: DateTime,
-  lastTime: DateTime
-}
-
-type FindData {
-  products: [WashiFindRead]
-}
-
-input WashiTimeSet {
-  username: String,
-  syncTime: DateTime,
-  firstTime: DateTime,
-  lastTime: DateTime
-}
-
-type WashiHW {
-  registryHW: String,
-  syncTime: DateTime
-}
-
-type HWData {
-  products: [WashiHW]
-}
-
-
-  type Query {
-    getMember(loginmember: String!) : MemberList,
-    getSupport(username: String) : SupportData,
-    getNotice : NoticeData,
-    getComment(from: String) : CommentData,
-    getTag(username: String) : TagData,
-    getNComment(from: String) : CommentData,
+    connectHW: String,
+    faucet: Int,
+    nfcnumber: String,
+    username: String,
+    syncTime: DateTime,
+    firstTime: DateTime,
+    lastTime: DateTime,
+    findTag: Int,
   }
-
-  type Mutation {
-    updateMember(loginmember: String, input: MemberJoin) : MemberList,
-    createMember(input: MemberJoin) : MemberList,
-    deleteMember(loginmember: String!) : String,
-    updateSupport(id: ID!, input: WashiSupportRequest) : WashiSupport,
-    createSupport(input: WashiSupportRequest) : WashiSupport,
-    deleteSupport(id: ID!) : String,
-    updateNotice(user: String!, input: WashiNoticeInput) : WashiNotice,
-    createNotice(input: WashiNoticeInput) : WashiNotice,
-    deleteNotice(user: String!) : String,
-    updateComment(id: ID!, input: WashiCommentInput) : WashiComment,
-    createComment(input: WashiCommentInput) : WashiComment,
-    deleteComment(id: ID!) : String,
-    updateNComment(id: ID!, input: WashiCommentInput) : WashiComment,
-    createNComment(input: WashiCommentInput) : WashiComment,
-    deleteNComment(id: ID!) : String,
-    signInMember( input: signInMember): MemberList,
-    parsingTag(input: WashiTagWrite): WashiTagRead,
-    findDate(input: WashiTimeSet): FindData,
-  }
-
   
+  type WashiFindSet {
+    findTag: Int,
+  }
+  
+  type FindData {
+    products: [WashiFindRead]
+  }
+  
+  input WashiTimeSet {
+    username: String,
+    syncTime: DateTime,
+    firstTime: DateTime,
+    lastTime: DateTime
+  }
+  
+  type WashiHW {
+    registryHW: String,
+    syncTime: DateTime
+  }
+  
+  type HWData {
+    products: [WashiHW]
+  }
+  
+  
+    type Query {
+      getMember(loginmember: String!) : MemberList,
+      getSupport(username: String) : SupportData,
+      getNotice : NoticeData,
+      getComment(from: String) : CommentData,
+      getTag(username: String) : TagData,
+      getNComment(from: String) : CommentData,
+    }
+  
+    type Mutation {
+      updateMember(loginmember: String, input: MemberJoin) : MemberList,
+      createMember(input: MemberJoin) : MemberList,
+      deleteMember(loginmember: String!) : String,
+      updateSupport(id: ID!, input: WashiSupportRequest) : WashiSupport,
+      createSupport(input: WashiSupportRequest) : WashiSupport,
+      deleteSupport(id: ID!) : String,
+      updateNotice(user: String!, input: WashiNoticeInput) : WashiNotice,
+      createNotice(input: WashiNoticeInput) : WashiNotice,
+      deleteNotice(user: String!) : String,
+      updateComment(id: ID!, input: WashiCommentInput) : WashiComment,
+      createComment(input: WashiCommentInput) : WashiComment,
+      deleteComment(id: ID!) : String,
+      updateNComment(id: ID!, input: WashiCommentInput) : WashiComment,
+      createNComment(input: WashiCommentInput) : WashiComment,
+      deleteNComment(id: ID!) : String,
+      signInMember( input: signInMember): MemberList,
+      parsingTag(input: WashiTagWrite): WashiTagRead,
+      findDate(input: WashiTimeSet): WashiFindSet,
+    }
+  
+    
 `);
 
 //Custom Schema setup line
@@ -1013,35 +1012,35 @@ signInMember: async ({ input }) => {
 
 
 },
+ //Find Date
+ findDate: async function({ input }) {
+    //시작 날짜와 끝 날짜를 입력하여 사이의 값 추출
+    const first1 = new Date(input.firstTime.toString());
+    const last1 = new Date(input.lastTime.toString());
+    const memberName = await TagModel.findOne({ 'username': input.username });
+    if(!memberName) {
+      throw new Error("No users");
+    }
+    const memberDate = await TagModel.find({
+        'username': input.username,
+        'syncTime': {
+          "$gte": first1,
+          "$lt": last1,
+        },
+     }).count();
 
-//Find Date
-findDate: async function({ input }) {
-//시작 날짜와 끝 날짜를 입력하여 사이의 값 추출
-const first1 = new Date(input.firstTime.toString());
-const last1 = new Date(input.lastTime.toString());
-const memberName = await TagModel.findOne({ 'username': input.username });
-if(!memberName) {
-  throw new Error("No users");
-}
-const memberDate = await TagModel.find({
-    'username': input.username,
-    'syncTime': {
-      "$gte": first1,
-      "$lt": last1,
-    },
- });
+     const finder = new FindModel({
+      'findTag': memberDate
+      });
+      
 
+        return {
+          ...finder._doc,
+      findTag: finder.findTag.toString(), 
+        };
+     
 
-return {
-  products: memberDate.map((q) => {
-    return {
-      ...q._doc,
-  username: q.username.toString(), 
-    };
-  })
-};
-
-},
+  },
 
 };
 
