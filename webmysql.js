@@ -726,24 +726,19 @@ app.get('/testwater_recieve', async function (req, res) {
     }
 })
 
-let hand = "2"
-let saveremainhand = ""
-let receivehand = "2"
 //핸드드라이어에서 남은 휴지출지량 값을 받는 함수
 app.get('/test_remain', function (req, res) {
     try{
         let number = req.query.number
         let hand = req.query.id
-        receivehand = parseInt(hand)
+        let receivehand = parseInt(hand)
         console.log(moment().format('MMDD:hh:mm') + hand)
         console.log(number)
         io.emit('remain', [number, hand])
         res.render('dummy', { layout: null })
     }
     catch(err){
-
     }
-   
 })
 
 
