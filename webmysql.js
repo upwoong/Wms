@@ -775,7 +775,7 @@ app.use((req, res) => {
 })
 
 process.on('SIGINT', async () => {
-    console.log('서버를 종료합니다.');
+    console.log('서버 종료.');
 
     // 프로세스 종료
     process.exit();
