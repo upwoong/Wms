@@ -410,8 +410,6 @@ app.post('/weather', async function (req, res) {
     res.redirect('main')
 })
 
-
-
 //관리자 로그인
 app.post('/main', async (req, res) => {
     const FindUser = await User.FindUser(req.body.name, req.body.password)
@@ -433,7 +431,6 @@ app.post('/main', async (req, res) => {
     else return res.status(404).send({ message: '유저 없음!' })
 });
 
-//여기는 예약 안된걸 보여줘야하네
 app.use('/mediacontents', async function (req, res) {
     try{
         const Video = await sqlmirror.GetFile("curvideofile", "None")
@@ -452,7 +449,6 @@ app.use('/mediacontents', async function (req, res) {
     }
 })
 
-//예약된걸 보여줘야하는데
 app.use('/bookmedia', async function (req, res) {
     try{
         const Video = sqlmirror.GetFile("VideoFile", "reservation")
@@ -471,7 +467,6 @@ app.use('/bookmedia', async function (req, res) {
 
 })
 
-//여기는 현재 보여주는거
 app.get('/main', async function (req, res) {
     try{
         const Video = await sqlmirror.GetFile("curvideofile", "None")
@@ -624,8 +619,6 @@ app.get('/smartmirror/getcontents', function (req, res) {
                 smartMirror.refImageArray.push(data)
             }
         }
-    
-    
         res.render('dummy', { layout: null })
     }catch(err){
         console.log(err)
@@ -635,8 +628,6 @@ app.get('/smartmirror/getcontents', function (req, res) {
 /*
 매니저 페이지 : 최근 5분 내 재생중인 홍보물을 확인하는 페이지
 */
-
-
 //스마트미러 관리 페이지
 /*
 app.get('/smartmirrormanage', function (req, res) {
@@ -729,7 +720,7 @@ app.get('/test_remain', function (req, res) {
     try{
         let number = req.query.number
         let hand = req.query.id
-        let receivehand = parseInt(hand)
+        //let receivehand = parseInt(hand)
         console.log(moment().format('MMDD:hh:mm') + hand)
         console.log(number)
         io.emit('remain', [number, hand])
@@ -774,7 +765,7 @@ app.use((req, res) => {
 
 process.on('SIGINT', async () => {
     console.log('서버 종료.');
-
+    await Water.save(7, waterArray.weekData.Valueobject[0][0], waterArray.weekData.getDate[0])
     // 프로세스 종료
     process.exit();
 });

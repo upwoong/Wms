@@ -76,7 +76,6 @@ const addDb = async function (Num) {
 module.exports = { getData, getPercent, addDb, maxValue, Valueobject, getDate };
 
 
-
 /*
 const newArray = data.map((item) => ({
     id: item.id,
