@@ -212,8 +212,6 @@ router.route('/processbookingvideo').post(upload.array('photo', 1), async functi
 
 //기본 이미지 파일 저장
 router.route('/processimage').post(uploadimg.array('photo', 1), async function (req, res) {
-    console.log(req.files)
-    console.log(req.body)
     const SaveImg = await sqlmirror.SaveFile(req.files, "Img", "None", 0)
     switch (SaveImg) {
         case 1: res.redirect('mediacontents')
