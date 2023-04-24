@@ -1,1 +1,6 @@
-{{contents}}
+ {{#each weekData.Valueobject.[0]}}
+<p>L :{{this}}</p>
+<p>Percent : {{lookup ../weekData.Valueobject.[1] @index}}</p>
+<p>{{lookup ../weekData.getDate @index}}</p>
+{{@indexInc}}: {{this}}
+{{/each}}

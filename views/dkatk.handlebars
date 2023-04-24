@@ -1,31 +1,142 @@
-<form class="Form-Area-Box-2 flex items-center" action="/dlatlinsert" method="post" enctype="multipart/form-data">
-  <!--B-2-->
-  <input type="text" name='name' placeholder="제목" autofocus />
-  <input type="password" name='password' placeholder="내용" />
+{{#each weekData.Valueobject.[0]}}
+<div>{{this}} -
+    {{lookup ../weekData.getDate @index}} -
+    {{lookup ../weekData.Percent @index}}</div>
 
-  <label
-    class="Flie-Add-Btn bg-3AAFE2 flex justify-center items-center text-white text-xs ml-2 cursor-pointer border-radius-50"
-    for="videofile">add</label>
-  <input type="file" id="videofile" name="photo">
-
-  <input type="submit" value="up" name="submit" />
-</form>
-
-
-<!-- 댓글 -->
-<br>
-<form method="post" action="/addcomment">
-    <label>댓글 </label>
-    <br>
-    <input type="text" name="commentText" value="">
-    <input type="submit" value="입력완료">
-
-</form>
-
-{{#each commentarray}}
-<div>이름 : {{this.name}}</div>
-<div>댓글 : {{this.text}}</div>
-<div>시간 : {{this.Date}}</div>
-<div>------</div>
 {{/each}}
 
+<div>ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ</div>
+<form name="test">
+    {{#each weekData.Valueobject.[0]}}
+    <div id="dummy{{@index}}">{{@index}}daw</div>
+    {{/each}}
+    <!--G2-->
+</form>
+<div id="dummy34">1233434213</div>
+<form name='my_form'>
+    <input type='button' onclick='count_input();' value='개수 세기' />
+    <hr>
+    <input type='text' id='tag1' />
+    <input type='text' id='tag2' />
+    <input type='text' id='tag3' />
+    <input type='text' id='tag' />
+    <input type='text' id='tag' />
+</form>
+<input type='button' onclick='getInnerText()' value="클릭" />
+
+
+<script>
+    function getInnerText() {
+        let newArray = new Array()
+        for (let i = 0; i < 7; i++) {
+            newArray[i] = document.getElementById(`dummy${i}`)
+        }
+
+        const element = document.getElementById('dummy0')
+        alert(newArray[0].innerText)
+    }
+</script>
+
+
+
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    let txtday = document.getElementById('textday');
+    let txthours = document.getElementById('texthours');
+    function clock() {
+        let today = new Date();
+        let month = today.getMonth() + 1;
+        let date = today.getDate();
+        let day = today.getDay();
+        let charday = "";
+        switch (day) {
+            case 0: charday = "일요일";
+                break;
+            case 1: charday = "월요일";
+                break;
+            case 2: charday = "화요일";
+                break;
+            case 3: charday = "수요일";
+                break;
+            case 4: charday = "목요일";
+                break;
+            case 5: charday = "금요일";
+                break;
+            case 6: charday = "토요일";
+                break;
+        }
+        let hours = today.getHours();
+        let minutes = today.getMinutes();
+        let daytext = month + "월 " + date + "일 " + charday;
+
+        txtday.innerText = daytext;
+    }
+
+    function clockminute() {
+        let today = new Date();
+        let hours = today.getHours();
+        let minutes = today.getMinutes();
+        let daytext = hours + " : " + minutes;
+
+        txthours.innerText = daytext;
+    }
+    setInterval(clock, 1000);
+    setInterval(clockminute, 1000);
+
+    var socket = io();
+    socket.on('currentT1H', (msg) => {
+        var txt = document.getElementById('currentT1H');
+        txt.innerText = msg;
+    });
+
+    socket.on('weekendwater', (msg) => {
+        var txt = document.getElementById('weekendwater');
+        var todaywateruseage = document.getElementById('todaywateruseage');
+
+        todaywateruseage.innerText = msg;
+        txt.innerText = msg;
+    });
+
+    socket.on('weekendTotalUseage', (msg) => {
+        var weekendTotalUseage = document.getElementById('weekendTotalUseage');
+
+        weekendTotalUseage.innerText = msg;
+    });
+
+    socket.on('yearTotalUseage', (msg) => {
+        var weekendTotalUseage = document.getElementById('yearTotalUseage');
+
+        yearTotalUseage.innerText = msg;
+    });
+
+  socket.on('yearWater',(msg)=>{
+    let today = new Date();
+    let month = today.getMonth();
+    var monthwateruseage = document.getElementById('monthwateruseage');
+    var graphmonth = document.getElementById('graphmonth'+month);
+    graphmonth.innerText = msg
+    monthwateruseage.innerText = msg;
+  });
+    socket.on('waterpercent', (msg) => {
+        let WGArray = new Array()
+        let ShowPercent = new Array()
+        for (let i = 0; i < 7; i++) {
+            WGArray[i] = document.getElementById(`WeekGraph${i}`)
+            ShowPercent[i] = document.getElementById(`ShowWPercent${i}`)
+            WGArray[i].style.height = msg[i] + "%"
+            ShowPercent[i].innerText = msg[i]
+        }
+    });
+
+    socket.on('wateryearpercent', (msg) => {
+        let YGArray = new Array()
+        let ShowPercent = new Array()
+        for (let i = 0; i < 12; i++) {
+            YGArray[i] = document.getElementById(`YeekGraph${i}`)
+            ShowPercent[i] = document.getElementById(`ShowYPercent${i}`)
+            YGArray[i].style.height = msg[i] + "%"
+            ShowPercent[i].innerText = msg[i]
+        }
+    });
+</script>

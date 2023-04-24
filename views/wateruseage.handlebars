@@ -26,15 +26,6 @@
     </div>
   </div>
   <div class="flex-1"></div>
-  <div>
-    <div class="flex items-center">
-      <span class="text-base text-white mr-1">
-        <i class="fas fa-users"></i>
-      </span>
-      <span class="text-sm text-white font-bold">13</span>
-      <span class="text-sm text-white font-bold">명</span>
-    </div>
-  </div>
   <div class="flex-1"></div>
   <div class="flex">
     <div class="flex text-sm text-white font-bold">
@@ -865,10 +856,7 @@
   });
 
   socket.on('waterpercent', (msg) => {
-    var txt1 = document.getElementById('waterpercent');
     var todaywaterpercent = document.getElementById('todaywaterpercent');
-    var txt2 = document.getElementById('waterpercent1');
-    var txt3 = document.getElementById('Arraypercent');
     var graphpercent2 = document.getElementById("graphpercent2");
     var graphpercent3 = document.getElementById("graphpercent3");
     var graphpercent4 = document.getElementById("graphpercent4");
@@ -893,17 +881,12 @@
     graphpercent7.style.height = msg[6] + "%";
 
     showpercent1.innerText = msg[0];
-
     showpercent2.innerText = msg[1];
     showpercent3.innerText = msg[2];
     showpercent4.innerText = msg[3];
     showpercent5.innerText = msg[4];
     showpercent6.innerText = msg[5];
     showpercent7.innerText = msg[6];
-
-    txt1.innerText = msg[0];
-    txt2.innerText = msg[1];
-    txt3.innerText = msg;
   });
 
   socket.on('yearWater',(msg)=>{

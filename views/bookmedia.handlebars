@@ -32,7 +32,7 @@
                     <select class="w-full h-5 text-xs cursor-pointer" name="name" id="imgfilelist" onchange="changeimageSelect()">
                       <option value="none" selected disabled>--</option>
                       {{#each imgfile}}
-                        <option name="videofile" value="{{this.name}}">{{this.name}}</option>
+                        <option name="videofile" value="{{this.Name}}">{{this.Name}}</option>
                       {{/each}}
                     </select>
                   </div>
@@ -131,7 +131,7 @@
                   <select class="w-full h-5 text-xs cursor-pointer" id="videofilelist" name ="name" onchange="changevideoSelect()">
                     <option value="" selected disabled>--</option>
                     {{#each videofile}}
-                    <option name="videofile" value="{{this.name}}">{{this.name}}</option>
+                    <option name="videofile" value="{{this.Name}}">{{this.Name}}</option>
                     {{/each}}
                   </select>
                 </div>
