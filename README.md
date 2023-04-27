@@ -68,5 +68,6 @@ node server.js
 
 ```cpp
 [WiFi 연결 정보 설정](server.js#L10)
+console.log(0
 ```
 * 스마트미러 사용방법
