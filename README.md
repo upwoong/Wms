@@ -40,6 +40,11 @@ openssl req -nodes -new -x509 -keyout server.key -out localhost.cert
 node server.js
 ```
 
+```cpp
+const char* Host = "https://localhost/";
+WiFi.begin("WIFI", "WIFI_PASSWORD");
+```
+
 * * *
 ## 프로젝트 기여도
 * 프론트 엔드
@@ -50,16 +55,49 @@ node server.js
   * API 설계 및 개발 (100%)
 
 * * *
+## Rest Api 문서
+| URL | METHOD | Request Body | Response Body |
+| --- | --- | --- | --- |
+| /InsertContent | Post | --- | --- |
+| /DeleteContent | Delete | --- | --- |
+| /WeatherList | Post | --- | --- |
+| /SelectSmartmirror | Put | --- | --- |
+| /LoginUser | Post | --- | --- |
+| /mediacontents | Get | --- | --- |
+| /BookMedia | Get | --- | --- |
+| /Main | Get | --- | --- |
+| /WaterUseage | Get | --- | --- |
+| /SmartMirrorManage | Get | --- | --- |
+
+
+* * *
 ## 구현된 기능
 | 기능 설명 | 스크린샷 |
 | --- | --- |
 | 1. 아두이노 통신 | |
-| 1.1. 아두이노에서 손을 씻기 위해 물을 사용하면 사용량을 http통신으로 서버에 값을 받아와 처리합니다. | ![스크린샷 제목 1-1](스크린샷 파일 경로 1-1) |
-| 1.2. 아두이노에서 휴지 사용 감지 시, 휴지의 남은 양을 http통신으로 서버에 값을 받아와 처리합니다. | ![스크린샷 제목 1-2](스크린샷 파일 경로 1-2) |
+| 1.1. 아두이노에서 손을 씻기 위해 물을 사용하면 사용량을 http통신으로 서버에 값을 받아와 처리합니다. | 수전 페이지 |
+| 1.2. 아두이노에서 휴지 사용 감지 시, 휴지의 남은 양을 http통신으로 서버에 값을 받아와 처리합니다. | 메인페이지 하단 편집후 사용 |
 | 2. 스마트미러 | |
 | 2.1. 서버에서 이미지 또는 비디오 등록시 스마트미러에 보여줍니다. | ![스크린샷 제목 2-1](스크린샷 파일 경로 2-1) |
 
 * * *
 ## 사용 방법
 * 아두이노 통신
-* 스마트미러 사용방법
+> 데이터 보내기
+```cpp
+String Path = "water_useage/daily?amount=" + String(value);
+sendHTTPData(Path); // 서버에 값 보내는 함수
+```
+* 스마트미러 사용방법   
+추가하는 이미지1
+실제 스마트미러 실행화면
+
+* * *
+## 기여자
+KMH : 프론트 엔드 구성 (80%)
+KDH : 아두이노 개발 (90%)
+LDG : 스마트미러 개발 (100%)
+
+* * *
+## 향후 계획
+일별 수전사용량의 모든 데이터를 게시판 형태로 보여주기
