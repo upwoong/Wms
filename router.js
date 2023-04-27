@@ -396,7 +396,6 @@ router.get('/main', async function (req, res) {
     try {
         const Video = await sqlmirror.GetFile("curvideofile", "None")
         const Img = await sqlmirror.GetFile("curimgfile", "None")
-        console.log(waterArray.weekData)
         if (req.session.logindata) {
             res.render('subcopy', {
                 weekData: waterArray.weekData, yearData: waterArray.yearData, videofile: Video, imgfile: Img,
@@ -410,8 +409,6 @@ router.get('/main', async function (req, res) {
     } catch (err) {
         console.log(err)
     }
-
-
 })
 
 router.get('/login', function (req, res) {
@@ -545,9 +542,9 @@ router.get('/dummy', function (req, res) {
     res.render('dummy', { weekData: waterArray.weekData })
 })
 
-router.get('/testwater_recieve', async function (req, res) {
+router.get('/water_useage/daily', async function (req, res) {
     try {
-        let watervalue = parseFloat(((req.query.id) / 1000).toFixed(3))
+        let watervalue = parseFloat(((req.query.amount) / 1000).toFixed(3))
         waterArray.weekData.Valueobject[0][0] = parseFloat((parseFloat(waterArray.weekData.Valueobject[0][0]) + watervalue).toFixed(3))
         await Water.getPercent(waterArray.weekData)
         waterArray.yearData.Valueobject[0][0] = parseFloat((parseFloat(waterArray.yearData.Valueobject[0][0]) + watervalue).toFixed(3))
@@ -566,10 +563,10 @@ router.get('/testwater_recieve', async function (req, res) {
 })
 
 //핸드드라이어에서 남은 휴지출지량 값을 받는 함수
-router.get('/test_remain', function (req, res) {
+router.get('/toilet-paper-quantity', function (req, res) {
     try {
         let number = req.query.number
-        let hand = req.query.id
+        let hand = req.query.remain
         //let receivehand = parseInt(hand)
         console.log(moment().format('MMDD:hh:mm') + hand)
         console.log(number)

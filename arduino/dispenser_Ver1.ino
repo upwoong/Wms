@@ -8,7 +8,7 @@
 #define RST_PIN 22 // ESP32 pin GIOP22 
 
 
-const char* Host = "http://makingnfc.cafe24app.com/";
+const char* Host = "https://localhost/";
 
 MFRC522 rfid(SS_PIN, RST_PIN);
 
@@ -33,10 +33,8 @@ void setup() {
 
   Serial.println("  done!.");
   
-  //WiFi.begin("Galaxy S9+7444","ehdrhd12");
- //WiFi.begin("Makerspace_Team", "5z6669NN");
-  //WiFi.begin("making","making3cmd");
-  WiFi.begin("U+Net7404","@B556B659P");
+  //WIFI CONNECT
+  WiFi.begin("WIFI","WIFI_PASSWORD");
   while(WiFi.status() != WL_CONNECTED){
     delay(500);
     Serial.print(".");
@@ -74,7 +72,7 @@ void NFC(void){
       Serial.println();
       Serial.print("String : ");
       Serial.println(UID);
-      String Path = "nfc_recieve?id=" + UID;
+      String Path = "toilet-paper-quantity?remain=" + UID;
       sendHTTPData(Path); // 서버에 값 보내는 함수
       UID = "";
       Serial.println(Path);

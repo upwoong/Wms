@@ -3,7 +3,7 @@
 #include <HTTPClient.h>
 #include <WiFi.h>
 //서버 주소입력
-const char* Host = "http://192.168.1.17:8001/";
+const char* Host = "https://localhost/";
 
 #define SV_1 25         //B-1A
 #define SV_2 26         //B-1B 
@@ -48,11 +48,8 @@ void pulseCounter()   //유량센서 인터럽트 함수 (펄스값만 증가)
 
 void setup() {
   // Set pin mode 
-  //본인의 와이파이 주소 입력
-  //WiFi.begin("happyyc_7", "happyyc1318");
-  //WiFi.begin("메이킹3층", "12345678");
-  //WiFi.begin("Galaxy S20+5G고동환", "ttsj0022");
-  WiFi.begin("Makerspace_Team", "5z6669NN");
+  //WIFI_CONNECT
+  WiFi.begin("WIFI", "WIFI_PASSWORD");
   while(WiFi.status() != WL_CONNECTED) delay(500);
   Serial.println("WIFI OK");
   pinMode(IR_1, INPUT);
@@ -97,7 +94,7 @@ void loop() {
   if(sendtrigger){
     Serial.print("send");
     value = totalMilliLiters;
-    String Path = "testwater_recieve?id=" + String(value);
+    String Path = "water_useage/daily?amount=" + String(value);
     sendHTTPData(Path); // 서버에 값 보내는 함수
     totalMilliLiters = 0;
     sendtrigger = false;

@@ -190,7 +190,7 @@ const todayMonth = moment().format('MM')
 
 const mirrorsave = require('./script/mirrorsave')
 const getDays =  require('./script/getDays')
-const water = require('./script/water')
+const water = require('./script/Water')
 let weekData
 let yearData
 async function Init(){
