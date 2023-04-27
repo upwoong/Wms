@@ -65,4 +65,8 @@ node server.js
 ```cpp
 [WiFi 연결 정보 설정](arduino/solValve_dualMCU.ino#L10)
 ```
+
+```cpp
+[WiFi 연결 정보 설정](server.js#L10)
+```
 * 스마트미러 사용방법
