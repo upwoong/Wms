@@ -2,11 +2,12 @@
 const mysql = require('./Mysql')
 const getDays = require('./getDays')
 
+
 let getDate = []
 let maxValue = 0
+
 const getData = async function(Days) {
     let table
-    let sort
     let limit
     let dayColumn
     
@@ -72,14 +73,20 @@ const addDb = async function (Num) {
 
 const save = async function(Num,Useage,Date) {
     let split = Date.split('.')
-    let split1 = split[0]
-    let split2 = split[1]
+    let split1 = Number(split[0])
+    let split2 = Number(split[1])
     if(Num == 12){
-        const sql = `UPDATE mytable SET Useage=? WHERE Year=?, Month=?`;
+        const sql = `UPDATE monthuseage 
+        JOIN (SELECT MAX(id) AS max_id FROM weekuseage) AS temp 
+        SET Useage=?, Year=?, Month=?
+        WHERE weekuseage.id = temp.max_id;`;
         const params = [Useage, split1, split2];
         await mysql.Runquery(sql,params)
     }else {
-        const sql = `UPDATE mytable SET Useage=? WHERE Year=?, Month=?, Day=?`;
+        const sql = `UPDATE weekuseage 
+        JOIN (SELECT MAX(id) AS max_id FROM weekuseage) AS temp 
+        SET Useage=?, Month=?, Day=?
+        WHERE weekuseage.id = temp.max_id;`;
         const params = [Useage, split1, split2];
         await mysql.Runquery(sql,params)
     }

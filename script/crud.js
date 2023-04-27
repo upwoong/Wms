@@ -1,63 +1,6 @@
 const mysql = require('./Mysql');
 const getDays = require('./getDays')
-// 전체 데이터 조회
-function getAllData(callback) {
-  const sql = 'SELECT * FROM mytable';
-  mysql.query(sql, null, callback);
-}
-
-// 특정 데이터 조회
-function getDataById(id, callback) {
-  const sql = 'SELECT * FROM mytable WHERE id=?';
-  const params = [id];
-  mysql.query(sql, params, (err, result) => {
-    if (err) {
-      callback(err, null);
-    } else if (result.length === 0) {
-      callback('Data Not Found', null);
-    } else {
-      callback(null, result[0]);
-    }
-  });
-}
-
-// 데이터 추가
-function addData(name, age, callback) {
-  const sql = 'INSERT INTO mytable (name, age) VALUES (?, ?)';
-  const params = [name, age];
-  mysql.query(sql, params, callback);
-}
-
-// 데이터 수정
-function updateData(id, name, age, callback) {
-  const sql = 'UPDATE mytable SET name=?, age=? WHERE id=?';
-  const params = [name, age, id];
-  mysql.query(sql, params, (err, result) => {
-    if (err) {
-      callback(err, null);
-    } else if (result.affectedRows === 0) {
-      callback('Data Not Found', null);
-    } else {
-      callback(null, 'Data Updated');
-    }
-  });
-}
-
-// 데이터 삭제
-function deleteData(id, callback) {
-  const sql = 'DELETE FROM mytable WHERE id=?';
-  const params = [id];
-  mysql.query(sql, params, (err, result) => {
-    if (err) {
-      callback(err, null);
-    } else if (result.affectedRows === 0) {
-      callback('Data Not Found', null);
-    } else {
-      callback(null, 'Data Deleted');
-    }
-  });
-}
-
+require('dotenv').config();
 let version = 0
 
 const SaveFile = async function (Files, Kind, Type, Days) {
@@ -114,25 +57,25 @@ const SaveFile = async function (Files, Kind, Type, Days) {
   }
 }
 
-const deletefile = async function (Files, Type, Type) {
+const deletefile = async function (Files, Kind, Type) {
   let Reposql
   let Cursql
-  if (Type == "image") {
+  if (Kind == "image") {
     Reposql = `DELETE FROM imgfile WHERE FileName = '${Files}'`;
     Cursql =`DELETE FROM curimgfile WHERE FileNmae = '${Files}'`;
   }
-  else if (Type == "video") {
+  else if (Kind == "video") {
     Reposql = `DELETE FROM videofile WHERE FileName = '${Files}'`;
     Cursql =`DELETE FROM curvideofile WHERE FileNmae = '${Files}'`;
   }
   this.version++
-  fs.unlink(`smartmirror/${Type}/${Files}`, function (err) {
+  fs.unlink(`smartmirror/${Kind}/${Files}`, function (err) {
       if (err) console.log(err)
   })
-
-  const params = [id];
+  if(Type == "None") {
+    await mysql.Runquery(Cursql)
+  }
   await mysql.Runquery(Reposql)
-  await mysql.Runquery(Cursql)
   return "Complete"
 }
 
@@ -193,7 +136,7 @@ const UpdateData = async function(data) {
   return result
 }
 
-module.exports = { deleteData, SaveFile, deletefile, GetFile, ChangeFile, DeleteAll, GetData, UpdateData, version };
+module.exports = {SaveFile, deletefile, GetFile, ChangeFile, DeleteAll, GetData, UpdateData, version };
 
 
 function copyDataToUpdateTable() {

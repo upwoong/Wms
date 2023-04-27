@@ -624,6 +624,7 @@ let k = schedule.scheduleJob("*/10 * * * * *", function () {
     //io.emit을 사용하여 값을 보냅니다. io.emit("이름", 보낼 변수)
     io.emit("currentimage", currentimg)
     io.emit("currentT1H", weatherdata[1])
+    
 })
 
 //매년 1월에 발생하는 이벤트
