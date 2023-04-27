@@ -40,6 +40,11 @@ openssl req -nodes -new -x509 -keyout server.key -out localhost.cert
 node server.js
 ```
 
+```cpp
+const char* Host = "https://localhost/";
+WiFi.begin("WIFI", "WIFI_PASSWORD");
+```
+
 * * *
 ## 프로젝트 기여도
 * 프론트 엔드
@@ -48,6 +53,22 @@ node server.js
   * http 통신 (10%)
 * 백엔드
   * API 설계 및 개발 (100%)
+
+* * *
+## Rest Api 문서
+| URL | METHOD | Request Body | Response Body |
+| --- | --- | --- | --- |
+| /InsertContent | Post | --- | --- |
+| /DeleteContent | Delete | --- | --- |
+| /WeatherList | Post | --- | --- |
+| /SelectSmartmirror | Put | --- | --- |
+| /LoginUser | Post | --- | --- |
+| /mediacontents | Get | --- | --- |
+| /BookMedia | Get | --- | --- |
+| /Main | Get | --- | --- |
+| /WaterUseage | Get | --- | --- |
+| /SmartMirrorManage | Get | --- | --- |
+
 
 * * *
 ## 구현된 기능
@@ -62,13 +83,21 @@ node server.js
 * * *
 ## 사용 방법
 * 아두이노 통신
-```cpp **Node** [https://nodejs.org/ko/download](https://nodejs.org/ko/download) 
- 
-[WiFi 연결 정보 설정(https://github.com/upwoong/Wms/blob/3b8d6ed1bd6f194247a6a6334e77d116cf0d9851/arduino/tnwjs_solValve_dualMCU.ino#L55)
-```
-
+> 데이터 보내기
 ```cpp
-[WiFi 연결 정보 설정](server.js#L10)
-console.log(0
+String Path = "water_useage/daily?amount=" + String(value);
+sendHTTPData(Path); // 서버에 값 보내는 함수
 ```
-* 스마트미러 사용방법
+* 스마트미러 사용방법   
+추가하는 이미지1
+실제 스마트미러 실행화면
+
+* * *
+## 기여자
+KMH : 프론트 엔드 구성 (80%)
+KDH : 아두이노 개발 (90%)
+LDG : 스마트미러 개발 (100%)
+
+* * *
+## 향후 계획
+일별 수전사용량의 모든 데이터를 게시판 형태로 보여주기
