@@ -62,8 +62,9 @@ node server.js
 * * *
 ## 사용 방법
 * 아두이노 통신
-```cpp
-[WiFi 연결 정보 설정](https://github.com/upwoong/Wms/blob/3b8d6ed1bd6f194247a6a6334e77d116cf0d9851/arduino/tnwjs_solValve_dualMCU.ino#L55)
+```cpp **Node** [https://nodejs.org/ko/download](https://nodejs.org/ko/download) 
+ 
+[WiFi 연결 정보 설정(https://github.com/upwoong/Wms/blob/3b8d6ed1bd6f194247a6a6334e77d116cf0d9851/arduino/tnwjs_solValve_dualMCU.ino#L55)
 ```
 
 ```cpp
