@@ -8,6 +8,7 @@ const static = require('serve-static')
 const moment = require('moment-timezone')
 const schedule = require('node-schedule')
 const fs = require('fs');
+const http = require('http')
 const https = require('https')
 const cors = require('cors')
 const session = require('express-session')
@@ -18,7 +19,7 @@ const options = {
     requestCert: false,
     rejectUnauthorized: false
   };
-const server = https.createServer(options, app)
+const server = http.createServer(app)
 const io = require('socket.io')(server)
 module.exports = {
     io : io
@@ -63,7 +64,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.use(express.static(path.join(__dirname, 'api')))
 app.use('/smartmirror', static(path.join(__dirname, 'smartmirror')));
 app.use('/',routes.router)
-const httpsPort = process.env.PORT || 443
+const httpsPort = process.env.PORT || 8006
 
 const Days = require('./script/getDays')
 const sqlmirror = require('./script/crud')
@@ -103,21 +104,21 @@ schedule.scheduleJob("*/20 * * * * *", function () {
 
     queryParams += '&' + encodeURIComponent('base_date') + '=' + encodeURIComponent(Days.base_date) /* */
     queryParams += '&' + encodeURIComponent('base_time') + '=' + encodeURIComponent(hourtime); /* */
-    queryParams += '&' + encodeURIComponent('nx') + '=' + encodeURIComponent(routes.weatherInfo.currentlocationX) /* */
-    queryParams += '&' + encodeURIComponent('ny') + '=' + encodeURIComponent(routes.weatherInfo.currentlocationY) /* */
+    queryParams += '&' + encodeURIComponent('nx') + '=' + encodeURIComponent(routes.placeInfo.currentlocationX) /* */
+    queryParams += '&' + encodeURIComponent('ny') + '=' + encodeURIComponent(routes.placeInfo.currentlocationY) /* */
 
     let currentimg
     if (cash === null || cash !== hourtime) {
         request({ url: url + queryParams, method: 'GET' }, function (error, response, body) {
-            if (routes.weatherInfo.weathername != "") {
-                routes.weatherInfo.weathername = []
+            if (routes.placeInfo.weathername != "") {
+                routes.placeInfo.weathername = []
             }
             let $ = cheerio.load(body);
             $('item').each(function () {
                 const weather = $(this).find('category').text()
                 const wea_val = $(this).find('obsrValue').text()
                 if (weather == 'PTY' || weather == 'T1H') {
-                    routes.weatherInfo.weathername.push(wea_val)
+                    routes.placeInfo.weathername.push(wea_val)
                 }
             });
         })
@@ -125,7 +126,7 @@ schedule.scheduleJob("*/20 * * * * *", function () {
         /*
         없음(0), 비(1), 비/눈(2), 눈(3), 소나기(4), 빗방울(5), 빗방울/눈날림(6), 눈날림(7)
         */
-        switch (routes.weatherInfo.weathername[0]) {
+        switch (routes.placeInfo.weathername[0]) {
             case '0': currentimg = "weathericon/weather-0.png"
                 break
             case '1': currentimg = "weathericon/weather-4.png"
@@ -144,7 +145,7 @@ schedule.scheduleJob("*/20 * * * * *", function () {
         console.log(cash)
         console.log("함수실행")
         io.emit("currentimage", currentimg)
-        io.emit("currentT1H", routes.weatherInfo.weathername[1])
+        io.emit("currentT1H", routes.placeInfo.weathername[1])
     }
 })
 schedule.scheduleJob("0 0 0 0 1 *", function () {
@@ -162,14 +163,14 @@ async function init() {
     }
 
     for (let index = 2; index < 3775; index++) {
-        if (testweather == routes.weatherInfo.firstSheet["B" + index].v) {
-            routes.placeInfo.selectcityname = routes.weatherInfo.firstSheet["D" + index].v
-            routes.placeInfo.selectvillagename = routes.weatherInfo.firstSheet["E" + index].v
+        if (testweather == routes.placeInfo.firstSheet["B" + index].v) {
+            routes.placeInfo.selectcityname = routes.placeInfo.firstSheet["D" + index].v
+            routes.placeInfo.selectvillagename = routes.placeInfo.firstSheet["E" + index].v
         }
     }
 
     for (let index = 2; index <= 3775; index++) {
-        let data = routes.weatherInfo.firstSheet["C" + index].v
+        let data = routes.placeInfo.firstSheet["C" + index].v
         let state = true;
         for (let i = 0; i < routes.placeInfo.localname.length; i++) {
             if (routes.placeInfo.localname[i] == data) {
@@ -182,9 +183,9 @@ async function init() {
 
     //서버가 켜질때 x,y의 값을 불러와야 하므로 만든 코드
     for (let index = 2; index < 3775; index++) {
-        if ((await sqlmirror.GetData("weather"))[0].Code == routes.weatherInfo.firstSheet["B" + index].v) {
-            routes.weatherInfo.currentlocationX = routes.weatherInfo.firstSheet["F" + index].v
-            routes.weatherInfo.currentlocationY = routes.weatherInfo.firstSheet["G" + index].v
+        if ((await sqlmirror.GetData("weather"))[0].Code == routes.placeInfo.firstSheet["B" + index].v) {
+            routes.placeInfo.currentlocationX = routes.placeInfo.firstSheet["F" + index].v
+            routes.placeInfo.currentlocationY = routes.placeInfo.firstSheet["G" + index].v
         }
     }
 
@@ -212,6 +213,7 @@ app.use((err, req, res, next) => {
 })
 
 server.listen(httpsPort, () => {
+    sqlmirror.version++
   console.log(`Express started on https://localhost:${httpsPort}; press Ctrl-C to terminate.`);
 })
 

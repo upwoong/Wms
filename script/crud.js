@@ -1,5 +1,6 @@
 const mysql = require('./Mysql');
 const getDays = require('./getDays')
+const fs = require('fs')
 require('dotenv').config();
 let version = 0
 
@@ -26,7 +27,6 @@ const SaveFile = async function (Files, Kind, Type, Days) {
   
     const strArr = selectday.split('-')
     const currentday = strArr[1] + strArr[2]
-  console.log(selectday)
   this.version++
   if (Files.length > 0) {
     console.dir(Files[0]);
@@ -61,12 +61,12 @@ const deletefile = async function (Files, Kind, Type) {
   let Reposql
   let Cursql
   if (Kind == "image") {
-    Reposql = `DELETE FROM imgfile WHERE FileName = '${Files}'`;
-    Cursql =`DELETE FROM curimgfile WHERE FileNmae = '${Files}'`;
+    Reposql = `DELETE FROM imgfile WHERE Name = '${Files}'`;
+    Cursql =`DELETE FROM curimgfile WHERE Name = '${Files}'`;
   }
   else if (Kind == "video") {
-    Reposql = `DELETE FROM videofile WHERE FileName = '${Files}'`;
-    Cursql =`DELETE FROM curvideofile WHERE FileNmae = '${Files}'`;
+    Reposql = `DELETE FROM videofile WHERE Name = '${Files}'`;
+    Cursql =`DELETE FROM curvideofile WHERE Name = '${Files}'`;
   }
   this.version++
   fs.unlink(`smartmirror/${Kind}/${Files}`, function (err) {
@@ -130,13 +130,19 @@ const GetData = async function(Table){
   return result
 }
 
+const getFile = async function(Table){
+  const GetData = `SELECT name FROM ${Table}`;
+  const result = await mysql.Runquery(GetData, null)
+  return result
+}
+
 const UpdateData = async function(data) {
   const Updatesql = `UPDATE weather SET Code=${data} WHERE id=1`;
   const result = await mysql.Runquery(Updatesql, null)
   return result
 }
 
-module.exports = {SaveFile, deletefile, GetFile, ChangeFile, DeleteAll, GetData, UpdateData, version };
+module.exports = {SaveFile, deletefile, GetFile, ChangeFile, DeleteAll, GetData, UpdateData, getFile, version };
 
 
 function copyDataToUpdateTable() {

@@ -50,7 +50,7 @@
         <option name='adw' value="{{this}}">{{this}}</option>
         {{/each}}
       </select>
-      <input type='submit' value='add' onclick='this.form.action= "/weatherlista"'
+      <input type='submit' value='add' onclick='this.form.action= "/weatherlista?_method=put"'
         class="Btn Flie-Add-Btn flex justify-center items-center text-white text-xs cursor-pointer border-radius-50">
     </div>
     <div class="wid-10"></div>
@@ -61,7 +61,7 @@
         <option value="{{this}}">{{this}}</option>
         {{/each}}
       </select>
-      <input type='submit' value='add' onclick='this.form.action= "/weatherlista"'
+      <input type='submit' value='add' onclick='this.form.action= "/weatherlista?_method=put"'
         class="Btn Flie-Add-Btn bg-3AAFE2 flex justify-center items-center text-white text-xs cursor-pointer border-radius-50">
     </div>
     <div class="wid-10"></div>
@@ -71,7 +71,7 @@
         <option value="{{this}}">{{this}}</option>
         {{/each}}
       </select>
-      <input type='submit' value='add' onclick='this.form.action= "/weather"'
+      <input type='submit' value='add' onclick='this.form.action= "/weather?_method=put"'
         class="Btn Flie-Add-Btn bg-3AAFE2 flex justify-center items-center text-white text-xs cursor-pointer border-radius-50">
     </div>
   </form>
