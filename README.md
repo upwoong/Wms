@@ -58,16 +58,18 @@ WiFi.begin("WIFI", "WIFI_PASSWORD");
 ## Rest Api 문서
 | URL | METHOD | Request Body | Response Body |
 | --- | --- | --- | --- |
-| /InsertContent | Post | --- | --- |
-| /DeleteContent | Delete | --- | --- |
-| /WeatherList | Post | --- | --- |
-| /SelectSmartmirror | Put | --- | --- |
-| /LoginUser | Post | --- | --- |
-| /mediacontents | Get | --- | --- |
-| /BookMedia | Get | --- | --- |
-| /Main | Get | --- | --- |
-| /WaterUseage | Get | --- | --- |
-| /SmartMirrorManage | Get | --- | --- |
+| /insertImage | Post | { originalname : "Name",   mimetype : "Type",   destination : "smartmirror/image" | --- |
+| /insertVideo | Post | { originalname : "Name",   mimetype : "Type",   destination : "smartmirror/video" | --- |
+| /deleteImage | Post | { originalname : "Name",   mimetype : "Type",   destination : "smartmirror/image" | --- |
+| /deleteVideo | Post | { originalname : "Name",   mimetype : "Type",   destination : "smartmirror/video" | --- |
+| /weatherList | put | [서울특별시,부산광역시,대구광역시...] | --- |
+| /SelectSmartmirror | Put | { selectSmartmirror : "contents"} | --- |
+| /LoginUser | Post | { name : "Name", password : "Password"} | --- |
+| /mediacontents | Get | --- | vidoefile : Array, imgfile : Array |
+| /bookMedia | Get | --- | vidoefile : Array, imgfile : Array |
+| /main | Get | --- | selectcityname : String, selectvillagename : String, weekData : Array, yeerData : Array, vidoefile : Array, imgfile : Array |
+| /waterUseage | Get | --- | selectcityname : String, selectvillagename : String, weekData : Array, yeerData : Array |
+| /smartMirrorManage | Get | --- | videodata : Array, imgdata : Array, ComboVideo : Array |
 
 
 * * *
