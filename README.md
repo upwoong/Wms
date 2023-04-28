@@ -73,31 +73,70 @@ WiFi.begin("WIFI", "WIFI_PASSWORD");
 
 
 * * *
+
 ## 구현된 기능
-| 기능 설명 | 스크린샷 |
-| --- | --- |
-| 1. 아두이노 통신 | |
-| 1.1. 아두이노에서 손을 씻기 위해 물을 사용하면 사용량을 http통신으로 서버에 값을 받아와 처리합니다. | 수전 페이지 |
-| 1.2. 아두이노에서 휴지 사용 감지 시, 휴지의 남은 양을 http통신으로 서버에 값을 받아와 처리합니다. | 메인페이지 하단 편집후 사용 |
-| 2. 스마트미러 | |
-| 2.1. 서버에서 이미지 또는 비디오 등록시 스마트미러에 보여줍니다. | ![스크린샷 제목 2-1](스크린샷 파일 경로 2-1) |
+### 아두이노
+- 물 사용량
+    ```javascript
+    router.get('/water_useage/daily', async function (req, res) {
+        try {
+            let watervalue = parseFloat(((req.query.amount) / 1000).toFixed(3))
+            waterArray.weekData.Valueobject[0][0] = parseFloat((parseFloat(waterArray.weekData.Valueobject[0][0]) + watervalue).toFixed(3))
+            await Water.getPercent(waterArray.weekData)
+            io.emit('weekendwater', waterArray.weekData.Valueobject[0][0])  //량
+            io.emit('waterpercent', waterArray.weekData.Valueobject[1]) //일주일%
+            res.render('dummy', { layout: null })
+        } catch (err) {
+            console.log(err)
+        }
+    }
+    ```
+    아두이노로부터 받은 데이터를 데이터베이스에 있는 데이터에 더하여 화면에 출력합니다.
+    - 결과 화면
+        <p align="center"><img src="https://github.com/upwoong/Wms/blob/main/Wms-screenshots/waterUseage.png?raw=true" width="400"></p>
+
+### 휴지 디스펜서
+- 남은 양
+    ```javascript
+    router.get('/tollet-paper-quantity', function (req, res) {
+        try {
+            let number = req.query.number
+            let hand = req.query.remain
+            io.emit('remain', [number, hand])
+            res.render('dummy', { layout: null })
+        }
+        catch (err) {
+        }
+    })
+    ```
+    아두이노로부터 받은 남은 휴지의 양을 화면에 출력합니다.
+    - 결과 화면   
+        ![paper-remain-quantity](https://github.com/upwoong/Wms/blob/main/Wms-screenshots/paper-remain-quantity.png)
+
+### 스마트미러
+- 이미지와 비디오
+    등록한 이미지와 비디오를 스마트미러에 보여줍니다.
+    <p align="center"><img src="https://github.com/upwoong/Wms/blob/main/Wms-screenshots/smartmirror-result.png?raw=true" width="400"></p>
 
 * * *
-## 사용 방법
+### 사용 방법
 * 아두이노 통신
 > 데이터 보내기
 ```cpp
 String Path = "water_useage/daily?amount=" + String(value);
 sendHTTPData(Path); // 서버에 값 보내는 함수
 ```
-* 스마트미러 사용방법   
-추가하는 이미지1
-실제 스마트미러 실행화면
+  * 스마트미러 사용방법   
+추가 화면{ ex) : add - naver.png}
+<img src="https://github.com/upwoong/Wms/blob/main/Wms-screenshots/add-naver.png?raw=true" width="400">
+
+ * 결과 화면{ ex) : result - naver-png}
+<img src="https://github.com/upwoong/Wms/blob/main/Wms-screenshots/result-naver.png?raw=true" width="400">
 
 * * *
 ## 기여자
-KMH : 프론트 엔드 구성 (80%)
-KDH : 아두이노 개발 (90%)
+KMH : 프론트 엔드 구성 (80%)   
+KDH : 아두이노 개발 (90%)   
 LDG : 스마트미러 개발 (100%)
 
 * * *
