@@ -537,7 +537,6 @@ router.get('/water_useage/daily', async function (req, res) {
         await Water.getPercent(waterArray.weekData)
         waterArray.yearData.Valueobject[0][0] = parseFloat((parseFloat(waterArray.yearData.Valueobject[0][0]) + watervalue).toFixed(3))
         await Water.getPercent(waterArray.yearData)
-        console.log(waterArray.weekData)
         io.emit('weekendwater', waterArray.weekData.Valueobject[0][0])  //량
         io.emit('waterpercent', waterArray.weekData.Valueobject[1]) //일주일%
         io.emit('weekendTotalUseage', waterArray.weekData.Valueobject[0][0]) //일주일 총%
@@ -555,9 +554,6 @@ router.get('/tollet-paper-quantity', function (req, res) {
     try {
         let number = req.query.number
         let hand = req.query.remain
-        //let receivehand = parseInt(hand)
-        console.log(moment().format('MMDD:hh:mm') + hand)
-        console.log(number)
         io.emit('remain', [number, hand])
         res.render('dummy', { layout: null })
     }
