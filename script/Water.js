@@ -1,19 +1,20 @@
 
-const mysql = require('./Mysql')
+const mysql = require('./mySql')
 const getDays = require('./getDays')
 
-
-let getDate = []
-let maxValue = 0
+class waterInfo {
+    constructor() {
+        this.getDate = []
+        this.maxValue = 0
+    }
+}
 
 const getData = async function(Days) {
     let table
     let limit
     let dayColumn
-    
-    maxValue = 0
-    getDate = []
-    let Valueobject = [[], []]
+    let waterInfoObj = new waterInfo()
+    let valueObject = [[], []]
     if (Days == 12) {
         table = "monthuseage"
         limit = 12
@@ -31,22 +32,22 @@ const getData = async function(Days) {
 `;
 const data = await mysql.Runquery(query)
     for (let i = 0; i < data.length; i++) {
-        Days == 12 ? getDate.push(data[i].Year +"."+data[i].Month) : getDate.push(data[i].Month + "." +data[i].Day)
-        Valueobject[0].push(parseFloat(data[i].Useage))
+        Days == 12 ? waterInfoObjgetDate.push(data[i].Year +"."+data[i].Month) : waterInfoObjgetDate.push(data[i].Month + "." +data[i].Day)
+        valueObject[0].push(parseFloat(data[i].Useage))
     }
-    if (!Valueobject[0]) Valueobject[0].push(1)
-    maxValue = Math.max.apply(null, Valueobject[0])
+    if (!valueObject[0]) valueObject[0].push(1)
+    waterInfoObj.maxValue = Math.max.apply(null, valueObject[0])
     return {
         maxValue : maxValue,
-        Valueobject : Valueobject,
-        getDate : getDate
+        valueObject : valueObject,
+        getDate : waterInfoObjgetDate
     }
 }
 
 const getPercent = function (Array) {
-    let MaxValue = Math.max.apply(null, Array.Valueobject[0])
-    for (let i = 0; i < Array.Valueobject[0].length; i++) {
-        Array.Valueobject[1][i] = Number((Array.Valueobject[0][i] / MaxValue * 100).toFixed(0))
+    let maxValue = Math.max.apply(null, Array.valueObject[0])
+    for (let i = 0; i < Array.valueObject[0].length; i++) {
+        Array.valueObject[1][i] = Number((Array.valueObject[0][i] / maxValue * 100).toFixed(0))
     }
     return Array
 }
@@ -92,18 +93,3 @@ const save = async function(Num,Useage,Date) {
     }
 }
 module.exports = { getData, getPercent, addDb, save };
-
-
-
-/*
-const newArray = data.map((item) => ({
-    id: item.id,
-    name: item.name,
-
-}));
-내림차순 DESC - 1
-오름차순 ASC 1
-Year: DESC
-days == 12 ASC
-else DESC
-*/

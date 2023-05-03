@@ -1,4 +1,4 @@
-const mysql = require('./Mysql');
+const mysql = require('./mySql');
 const getDays = require('./getDays')
 require('dotenv').config();
 let version = 0
@@ -26,10 +26,8 @@ const SaveFile = async function (Files, Kind, Type, Days) {
   
     const strArr = selectday.split('-')
     const currentday = strArr[1] + strArr[2]
-  console.log(selectday)
   this.version++
   if (Files.length > 0) {
-    console.dir(Files[0]);
 
     // 현재의 파일 정보를 저장할 변수 선언
     let originalname = '',

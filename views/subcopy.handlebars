@@ -42,15 +42,14 @@
     </div>
     <div class="wid-10"></div>
     <div class="bg-white flex flex-1 justify-center items-center px-2 border-05-787878 border-radius-50">
-      <select name="name" id="localname"
+      <select name="local" id="localname"
         class="w-full bg-white bg-opacity-0 py-1 mr-1 text-sm c-6F8294 border border-radius-50">
-        <!--기본 텍스트 제가 내려가서 수정하겠습니다.-->
         <option hidden selected>{{localselected}}</option>
         {{#each localname}}
         <option name='adw' value="{{this}}">{{this}}</option>
         {{/each}}
       </select>
-      <input type='submit' value='add' onclick='this.form.action= "/weatherlista"'
+      <input type='submit' value='add' onclick='this.form.action= "/weatherList"'
         class="Btn Flie-Add-Btn flex justify-center items-center text-white text-xs cursor-pointer border-radius-50">
     </div>
     <div class="wid-10"></div>
@@ -61,7 +60,7 @@
         <option value="{{this}}">{{this}}</option>
         {{/each}}
       </select>
-      <input type='submit' value='add' onclick='this.form.action= "/weatherlista"'
+      <input type='submit' value='add' onclick='this.form.action= "/weatherList"'
         class="Btn Flie-Add-Btn bg-3AAFE2 flex justify-center items-center text-white text-xs cursor-pointer border-radius-50">
     </div>
     <div class="wid-10"></div>
@@ -71,7 +70,7 @@
         <option value="{{this}}">{{this}}</option>
         {{/each}}
       </select>
-      <input type='submit' value='add' onclick='this.form.action= "/weather"'
+      <input type='submit' value='add' onclick='this.form.action= "/weatherFinal"'
         class="Btn Flie-Add-Btn bg-3AAFE2 flex justify-center items-center text-white text-xs cursor-pointer border-radius-50">
     </div>
   </form>
