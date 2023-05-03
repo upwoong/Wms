@@ -4,7 +4,7 @@ const config = require('../config/sqlConfig')
 
 const query = util.promisify(config.connection.query).bind(config.connection);
 // MySQL 쿼리 실행 함수
-const runquery = async function(sql, params) {
+const runQuery = async function(sql, params) {
   try{
     const result = await query(sql, params);
     return result
@@ -19,4 +19,4 @@ function end() {
   console.log('MySQL Disconnected!');
 }
 
-module.exports = { runquery, end };
+module.exports = { runQuery, end };

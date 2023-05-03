@@ -5,8 +5,6 @@ const path = require('path')
 const fs = require('fs')
 const xlsx = require("xlsx")
 
-
-const Days = require('./script/getDays')
 const mirrorSql = require('./script/mirrorSql')
 const User = require('./script/User');
 const Water = require('./script/Water')
@@ -68,8 +66,8 @@ class placeInfo {
         this.localSelect = ""
         this.citySelect = ""
         this.villageSelect = ""
-        this.selectcityName = ""
-        this.selectvillageName = ""
+        this.selectCityName = ""
+        this.selectVillageName = ""
         this.localName = []
         this.cityName = []
         this.villageName = []
@@ -283,8 +281,8 @@ router.post('/weatherFinal', async function (req, res) {
         for (let index = 2; index <= 3775; index++) {
             if (placeInfo.localSelect == firstSheet["C" + index].v && placeInfo.citySelect == firstSheet["D" + index].v && placeInfo.villageSelect == firstSheet["E" + index].v) {
                 let data = firstSheet["B" + index].v
-                placeInfo.selectcityName = firstSheet["D" + index].v
-                placeInfo.selectvillageName = firstSheet["E" + index].v
+                placeInfo.selectCityName = firstSheet["D" + index].v
+                placeInfo.selectVillageName = firstSheet["E" + index].v
                 weatherInfo.currentLocationX = firstSheet["F" + index].v
                 weatherInfo.currentLocationY = firstSheet["G" + index].v
                 if (data != "") {
@@ -397,7 +395,7 @@ router.get('/main', async function (req, res) {
         if (req.session.logindata) {
             res.render('subcopy', {
                 weekData: waterArray.weekData, yearData: waterArray.yearData, videoFile: Video, imgFile: Img,
-                localName: placeInfo.localName, cityName: placeInfo.cityName, village: placeInfo.villageName, selectcityName: placeInfo.selectcityName, selectvillageName: placeInfo.selectvillageName,
+                localName: placeInfo.localName, cityName: placeInfo.cityName, village: placeInfo.villageName, selectCityName: placeInfo.selectCityName, selectVillageName: placeInfo.selectVillageName,
                 localSelected: placeInfo.localSelect, citySelected: placeInfo.citySelect
             })
         }
@@ -537,17 +535,17 @@ router.get('/dummy', function (req, res) {
 router.get('/water_useage/daily', async function (req, res) {
     try {
         let waterValue = parseFloat(((req.query.amount) / 1000).toFixed(3))
-        waterArray.weekData.Valueobject[0][0] = parseFloat((parseFloat(waterArray.weekData.Valueobject[0][0]) + waterValue).toFixed(3))
+        waterArray.weekData.valueObject[0][0] = parseFloat((parseFloat(waterArray.weekData.valueObject[0][0]) + waterValue).toFixed(3))
         await Water.getPercent(waterArray.weekData)
-        waterArray.yearData.Valueobject[0][0] = parseFloat((parseFloat(waterArray.yearData.Valueobject[0][0]) + waterValue).toFixed(3))
+        waterArray.yearData.valueObject[0][0] = parseFloat((parseFloat(waterArray.yearData.valueObject[0][0]) + waterValue).toFixed(3))
         await Water.getPercent(waterArray.yearData)
         console.log(waterArray.weekData)
-        io.emit('weekendwater', waterArray.weekData.Valueobject[0][0])  //량
-        io.emit('waterpercent', waterArray.weekData.Valueobject[1]) //일주일%
-        io.emit('weekendTotalUseage', waterArray.weekData.Valueobject[0][0]) //일주일 총%
-        io.emit('yearTotalUseage', waterArray.yearData.Valueobject[0][0]) //연총량
-        io.emit('MonthTotalUseage', waterArray.weekData.Valueobject[1]) //연총%
-        io.emit('yearWater', waterArray.yearData.Valueobject[0][0])
+        io.emit('weekendwater', waterArray.weekData.valueObject[0][0])  //량
+        io.emit('waterpercent', waterArray.weekData.valueObject[1]) //일주일%
+        io.emit('weekendTotalUseage', waterArray.weekData.valueObject[0][0]) //일주일 총%
+        io.emit('yearTotalUseage', waterArray.yearData.valueObject[0][0]) //연총량
+        io.emit('MonthTotalUseage', waterArray.weekData.valueObject[1]) //연총%
+        io.emit('yearWater', waterArray.yearData.valueObject[0][0])
         res.render('dummy', { layout: null })
     } catch (err) {
         console.log(err)
@@ -572,7 +570,7 @@ router.get('/toilet-paper-quantity', function (req, res) {
 router.get('/wateruseage', function (req, res) {
     try{
         res.render('wateruseage', {
-            selectcityName: placeInfo.selectcityName, selectvillageName: placeInfo.selectvillageName,
+            selectCityName: placeInfo.selectCityName, selectVillageName: placeInfo.selectVillageName,
             weekData: waterArray.weekData, yearData: waterArray.yearData
         })
     }catch(err){

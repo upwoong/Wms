@@ -5,6 +5,7 @@ const expressHandlebars = require('express-handlebars')
 const static = require('serve-static')
 const schedule = require('node-schedule')
 const fs = require('fs');
+const https = require('https')
 const cors = require('cors')
 const session = require('express-session')
 const cookieParser = require('cookie-parser')
@@ -18,10 +19,7 @@ const options = {
     cert: fs.readFileSync('config/localhost.crt'),
     requestCert: false,
     rejectUnauthorized: false
-};
-const httpsPort = process.env.PORT || 443
-const app = express()
-const https = require('https')
+  };
 const server = https.createServer(options, app)
 const io = require('socket.io')(server)
 const routes = require('./router')
@@ -59,7 +57,8 @@ app.set('views', path.join(__dirname, 'views'))
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(express.static(path.join(__dirname, 'api')))
 app.use('/smartmirror', static(path.join(__dirname, 'smartmirror')));
-app.use('/', routes.router)
+app.use('/',routes.router)
+const httpsPort = process.env.PORT || 443
 
 const Days = require('./script/getDays')
 const mirrorSql = require('./script/mirrorSql')
@@ -96,7 +95,7 @@ schedule.scheduleJob("*/20 * * * * *", function () {
     const hourTime = nowHourTime.toString()
 
     queryParams += '&' + encodeURIComponent('base_date') + '=' + encodeURIComponent(Days.base_date) /* */
-    queryParams += '&' + encodeURIComponent('base_time') + '=' + encodeURIComponent(hourTime); /* */
+    queryParams += '&' + encodeURIComponent('base_time') + '=' + encodeURIComponent(hourtime); /* */
     queryParams += '&' + encodeURIComponent('nx') + '=' + encodeURIComponent(routes.weatherInfo.currentlocationX) /* */
     queryParams += '&' + encodeURIComponent('ny') + '=' + encodeURIComponent(routes.weatherInfo.currentlocationY) /* */
 
@@ -137,7 +136,7 @@ schedule.scheduleJob("*/20 * * * * *", function () {
         cash = hourTime;
         console.log(cash)
         console.log("함수실행")
-        io.emit("currentimage", currentImg)
+        io.emit("currentimage", currentimg)
         io.emit("currentT1H", routes.weatherInfo.weatherName[1])
     }
 })
@@ -146,24 +145,24 @@ schedule.scheduleJob("0 0 0 0 1 *", function () {
 })
 
 async function init() {
-    let initweather = ""
-    const GetWeatehr = await mirrorSql.GetData("weather")
-    if (GetWeatehr) {
-        initweather = GetWeatehr[0].Code
+    let initWeather = ""
+    const GetWeather = await mirrorSql.GetData("weather")
+    if (GetWeather) {
+        initWeather = GetWeather[0].Code
     }
     else {
-        initweather = 1111053000
+        initWeather = 1111053000
     }
 
     for (let index = 2; index < 3775; index++) {
-        if (initweather == routes.weatherInfo.firstSheet["B" + index].v) {
+        if (initWeather == routes.weatherInfo.firstSheet["B" + index].v) {
             routes.placeInfo.selectCityName = routes.weatherInfo.firstSheet["D" + index].v
             routes.placeInfo.selectVillageName = routes.weatherInfo.firstSheet["E" + index].v
         }
     }
 
     for (let index = 2; index <= 3775; index++) {
-        let data = routes.weatherInfo.firstSheet["C" + index].v
+        let data = routes.placeInfo.firstSheet["C" + index].v
         let state = true;
         for (let i = 0; i < routes.placeInfo.localName.length; i++) {
             if (routes.placeInfo.localName[i] == data) {
@@ -176,7 +175,7 @@ async function init() {
 
     //서버가 켜질때 x,y의 값을 불러와야 하므로 만든 코드
     for (let index = 2; index < 3775; index++) {
-        if ((await mirrorSql.GetData("weather"))[0].Code == routes.weatherInfo.firstSheet["B" + index].v) {
+        if ((await sqlmirror.GetData("weather"))[0].Code == routes.weatherInfo.firstSheet["B" + index].v) {
             routes.weatherInfo.currentLocationX = routes.weatherInfo.firstSheet["F" + index].v
             routes.weatherInfo.currentLocationY = routes.weatherInfo.firstSheet["G" + index].v
         }
@@ -206,7 +205,7 @@ app.use((err, req, res, next) => {
 })
 
 server.listen(httpsPort, () => {
-    console.log(`Express started on https://localhost:${httpsPort}; press Ctrl-C to terminate.`);
+  console.log(`Express started on https://localhost:${httpsPort}; press Ctrl-C to terminate.`);
 })
 
 process.on('SIGINT', async () => {

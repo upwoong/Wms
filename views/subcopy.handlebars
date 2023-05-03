@@ -49,7 +49,7 @@
         <option name='adw' value="{{this}}">{{this}}</option>
         {{/each}}
       </select>
-      <input type='submit' value='add' onclick='this.form.action= "/weatherList"'
+      <input type='submit' value='add' onclick='this.form.action= "/weatherlista"'
         class="Btn Flie-Add-Btn flex justify-center items-center text-white text-xs cursor-pointer border-radius-50">
     </div>
     <div class="wid-10"></div>
@@ -60,7 +60,7 @@
         <option value="{{this}}">{{this}}</option>
         {{/each}}
       </select>
-      <input type='submit' value='add' onclick='this.form.action= "/weatherList"'
+      <input type='submit' value='add' onclick='this.form.action= "/weatherlista"'
         class="Btn Flie-Add-Btn bg-3AAFE2 flex justify-center items-center text-white text-xs cursor-pointer border-radius-50">
     </div>
     <div class="wid-10"></div>
@@ -70,7 +70,7 @@
         <option value="{{this}}">{{this}}</option>
         {{/each}}
       </select>
-      <input type='submit' value='add' onclick='this.form.action= "/weatherFinal"'
+      <input type='submit' value='add' onclick='this.form.action= "/weather"'
         class="Btn Flie-Add-Btn bg-3AAFE2 flex justify-center items-center text-white text-xs cursor-pointer border-radius-50">
     </div>
   </form>
@@ -96,7 +96,7 @@
       </div>
       <div class="Graph-Box flex items-end justify-center">
         <!--G2-1-->
-        {{#each weekData.Valueobject.[0]}}
+        {{#each weekData.valueObject.[0]}}
         <div class="Graph-Bar-Item Graph-Bar-Item-2-5 relative inline-block">
           <div class="Nd-Pop-Up Pop-Up-2-5 text-xs">
             <span class="c-3AAFE2 mr-1">
@@ -111,7 +111,7 @@
           </div>
           <div class="flex justify-center">
             <span class="Gra-Per-Text text-xs c-A8A8A8" id="ShowPercent{{@index}}">
-              {{lookup ../weekData.Valueobject.[1] @index}}
+              {{lookup ../weekData.valueObject.[1] @index}}
             </span>
             <span class="Gra-Per-Text text-xs c-A8A8A8">
               %
@@ -119,7 +119,7 @@
           </div>
           <div class="Gra-Bar-Ele-Box flex justify-center items-end mt-1 mb-1">
             <div class="Gra-Back-Ele-Bar h-full flex items-end border-radius-2">
-              <div class="w-full border-radius-2" style="height:{{lookup ../weekData.Valueobject.[1] @index}}%;"
+              <div class="w-full border-radius-2" style="height:{{lookup ../weekData.valueObject.[1] @index}}%;"
                 id="WeekGraph{{@index}}" ;></div>
             </div>
           </div>
@@ -273,7 +273,7 @@
         </div>
         <div class="flex flex-1 justify-center items-center">
           <span class="text-sm c-565656" id="todaywateruseage0">
-            {{weekData.Valueobject.[0].[0]}}
+            {{weekData.valueObject.[0].[0]}}
           </span>
           <span class="text-sm c-565656">
             L
@@ -294,7 +294,7 @@
         </div>
         <div class="flex flex-1 justify-center items-center border-radius-50">
           <div class="Graph-Back-Bar wid-80-p h-2 mx-2 border-radius-50">
-            <div class="Percent-Bar h-full border-radius-50" style="width: {{weekData.Valueobject.[1].[0]}}%;" id="CurGraph">
+            <div class="Percent-Bar h-full border-radius-50" style="width: {{weekData.valueObject.[1].[0]}}%;" id="CurGraph">
             </div>
           </div>
         </div>

@@ -26,6 +26,7 @@
     "handlebars": "^4.7.7",
     "https": "^1.0.0",
     "jsonwebtoken": "^8.5.1",
+    "method-override": "^3.0.0",
     "mkcert": "^1.5.1",
     "moment": "^2.29.1",
     "moment-timezone": "^0.5.33",
