@@ -13,7 +13,6 @@ const request = require('request')
 const cheerio = require('cheerio')
 const moment = require('moment-timezone')
 moment.tz.setDefault("Asia/Seoul");
-
 const options = {
     key: fs.readFileSync('config/localhost.key'),
     cert: fs.readFileSync('config/localhost.crt'),
@@ -23,10 +22,11 @@ const options = {
 const server = https.createServer(options, app)
 const io = require('socket.io')(server)
 const routes = require('./router')
+const weekData = new test.WaterUsage('weekuseage',7,", Day DESC")
+const yearData = new test.WaterUsage('monthuseage',12,'')
 module.exports = {
-    io: io
+    io,weekData,yearData,regionWeatherData,curImgFile,curVideoFile
 }
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({
@@ -62,20 +62,24 @@ const httpsPort = process.env.PORT || 443
 
 const Days = require('./script/getDays')
 const mirrorSql = require('./script/mirrorSql')
+const curImgFile = new mirrorSql.smartMirror("ImgFIle","None")
+const curVideoFile = new mirrorSql.smartMirror("VideoFile","None")
 const Water = require('./script/Water')
-
+const test = require('./script/watertest')
+const testa = require('./test')
+const regionWeatherData = new testa.regionInfo()
 //매일 오전0시에 예약한 날짜가 되면 스마트미러에 예약한 이미지포스터로 교체, 새로운 일일 수전사용량 데이터생성
 schedule.scheduleJob("0 0 0 * * *", async function () {
     //새로운 데이터를 생성합니다.
-    await Water.save(7, routes.waterArray.weekData.valueObject[0][0], routes.waterArray.weekData.getDate[0])
-    await Water.save(12, routes.waterArray.yearData.valueObject[0][0], routes.waterArray.yearData.getDate[0])
+    await Water.save(7, weekData.valueObject[0][0], weekData.getDate[0])
+    await Water.save(12, yearData.valueObject[0][0], yearData.getDate[0])
     Water.addDb(7)
 
-    await mirrorSql.DeleteAll("ImgFile")
-    await mirrorSql.DeleteAll("VideoFile")
+    await curImgFile.DeleteAll("ImgFile")
+    await curVideoFile.DeleteAll("VideoFile")
 
-    await mirrorSql.ChangeFile("ImgFile")
-    await mirrorSql.ChangeFile("VideoFile")
+    await curImgFile.ChangeFile("ImgFile")
+    await curVideoFile.ChangeFile("VideoFile")
     mirrorSql.version++
 });
 let url = 'http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtNcst';
@@ -96,21 +100,21 @@ schedule.scheduleJob("*/20 * * * * *", function () {
 
     queryParams += '&' + encodeURIComponent('base_date') + '=' + encodeURIComponent(Days.base_date) /* */
     queryParams += '&' + encodeURIComponent('base_time') + '=' + encodeURIComponent(hourtime); /* */
-    queryParams += '&' + encodeURIComponent('nx') + '=' + encodeURIComponent(routes.weatherInfo.currentlocationX) /* */
-    queryParams += '&' + encodeURIComponent('ny') + '=' + encodeURIComponent(routes.weatherInfo.currentlocationY) /* */
+    queryParams += '&' + encodeURIComponent('nx') + '=' + encodeURIComponent(regionWeatherData.currentlocationX) /* */
+    queryParams += '&' + encodeURIComponent('ny') + '=' + encodeURIComponent(regionWeatherData.currentlocationY) /* */
 
     let currentImg
     if (cash === null || cash !== hourTime) {
         request({ url: url + queryParams, method: 'GET' }, function (error, response, body) {
-            if (routes.weatherInfo.weatherName != "") {
-                routes.weatherInfo.weatherName = []
+            if (regionWeatherData.weatherName != "") {
+                regionWeatherData.weatherName = []
             }
             let $ = cheerio.load(body);
             $('item').each(function () {
                 const weather = $(this).find('category').text()
                 const wea_val = $(this).find('obsrValue').text()
                 if (weather == 'PTY' || weather == 'T1H') {
-                    routes.weatherInfo.weatherName.push(wea_val)
+                    regionWeatherData.weatherName.push(wea_val)
                 }
             });
         })
@@ -118,7 +122,7 @@ schedule.scheduleJob("*/20 * * * * *", function () {
         /*
         없음(0), 비(1), 비/눈(2), 눈(3), 소나기(4), 빗방울(5), 빗방울/눈날림(6), 눈날림(7)
         */
-        switch (routes.weatherInfo.weatherName[0]) {
+        switch (regionWeatherData.weatherName[0]) {
             case '0': currentImg = "weathericon/weather-0.png"
                 break
             case '1': currentImg = "weathericon/weather-4.png"
@@ -137,7 +141,7 @@ schedule.scheduleJob("*/20 * * * * *", function () {
         console.log(cash)
         console.log("함수실행")
         io.emit("currentimage", currentimg)
-        io.emit("currentT1H", routes.weatherInfo.weatherName[1])
+        io.emit("currentT1H", regionWeatherData.weatherName[1])
     }
 })
 schedule.scheduleJob("0 0 0 0 1 *", function () {
@@ -145,48 +149,14 @@ schedule.scheduleJob("0 0 0 0 1 *", function () {
 })
 
 async function init() {
-    let initWeather = ""
-    const GetWeather = await mirrorSql.GetData("weather")
-    if (GetWeather) {
-        initWeather = GetWeather[0].Code
-    }
-    else {
-        initWeather = 1111053000
-    }
+    await regionWeatherData.init()
 
-    for (let index = 2; index < 3775; index++) {
-        if (initWeather == routes.weatherInfo.firstSheet["B" + index].v) {
-            routes.placeInfo.selectCityName = routes.weatherInfo.firstSheet["D" + index].v
-            routes.placeInfo.selectVillageName = routes.weatherInfo.firstSheet["E" + index].v
-        }
-    }
 
-    for (let index = 2; index <= 3775; index++) {
-        let data = routes.placeInfo.firstSheet["C" + index].v
-        let state = true;
-        for (let i = 0; i < routes.placeInfo.localName.length; i++) {
-            if (routes.placeInfo.localName[i] == data) {
-                state = false;
-                break
-            }
-        }
-        if (state) routes.placeInfo.localName.push(data)
-    }
-
-    //서버가 켜질때 x,y의 값을 불러와야 하므로 만든 코드
-    for (let index = 2; index < 3775; index++) {
-        if ((await sqlmirror.GetData("weather"))[0].Code == routes.weatherInfo.firstSheet["B" + index].v) {
-            routes.weatherInfo.currentLocationX = routes.weatherInfo.firstSheet["F" + index].v
-            routes.weatherInfo.currentLocationY = routes.weatherInfo.firstSheet["G" + index].v
-        }
-    }
-
-    routes.waterArray.yearData = await Water.getData(12)
-    routes.waterArray.weekData = await Water.getData(7)
-    await Water.getPercent(routes.waterArray.yearData)
-    await Water.getPercent(routes.waterArray.weekData)
+await weekData.getData()
+await weekData.getPercent()
+await yearData.getData()
+await yearData.getPercent()
 }
-
 init()
 
 // custom 404 page
@@ -210,7 +180,7 @@ server.listen(httpsPort, () => {
 
 process.on('SIGINT', async () => {
     console.log('서버 종료.');
-    await Water.save(7, routes.waterArray.weekData.valueObject[0][0], routes.waterArray.weekData.getDate[0])
+    await Water.save(7, weekData.valueObject[0][0], weekData.getDate[0])
     // 프로세스 종료
     process.exit();
 });
