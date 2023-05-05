@@ -48,7 +48,16 @@ let uploadVideo = multer({
         fileSize: 1024 * 1024 * 1024
     }
 });
-const io = require('./server').io
+const server = require('./server.js')
+const io = server.io
+const weekData = server.weekData
+const yearData = server.yearData
+const regionWeatherData = server.regionWeatherData
+const smartmirror = server.smartmirror
+const curImgFile = server.curImgFile
+const curVideoFile = server.curVideoFile
+const repoImgFile = new mirrorSql.smartMirror("mirrorimgfile","reservation")
+const repoVideoFile = new mirrorSql.smartMirror("mirrorimgfile","reservation")
 
 
 
@@ -227,6 +236,7 @@ router.post('/weatherList', function (req, res) {
     }
     res.redirect('main')
 })
+
 //최종 구역 선택
 router.post('/weatherFinal', async function (req, res) {
     try {
