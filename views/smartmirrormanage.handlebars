@@ -25,13 +25,13 @@
                 </div>
                 <div class="flex flex-1 mr-2">
                   <form method="post" class="Img-Url-Box w-full flex text-sm c-8F8F8F border-1-C4C4C4">
-                    <select name="selectSmartmirror" class="w-full flex h-5 text-xs cursor-pointer" onchange="chagevidoeSelect()">
-                      <option selected hidden>{{selectsmartmirror}}</option>
-                      {{#each comboSmartmirror}}
-                        <option name='adw' value="{{this}}">{{this}}</option>
+                    <select name="setSmartmirror" class="w-full flex h-5 text-xs cursor-pointer">
+                      <option selected hidden>{{selectSmartmirror}}</option>
+                      {{#each comboVideo}}
+                        <option value="{{this}}">{{this}}</option>
                       {{/each}}
                     </select>
-                    <input class="Flie-Del-Btn bg-3AAFE2 flex justify-center items-center text-white text-xs ml-2 cursor-pointer border-radius-50" type="submit" value="확인" name="submit" onclick='this.form.action ="/smartmirrorManage"' />
+                    <input class="Flie-Del-Btn bg-3AAFE2 flex justify-center items-center text-white text-xs ml-2 cursor-pointer border-radius-50" type="submit" value="확인" name="submit" onclick='this.form.action ="/smartmirrormanage"' />
                   </form>
                 </div>
               </div>
@@ -45,7 +45,7 @@
       <div class="Img-Pre-V hei-61 flex items-center c-047525B ml-10">[ Preview ]</div>
       <div class="Img-Setn">
         <div class="img-box Image h-full flex justify-center items-center">
-          <img src="/smartmirror/image/{{imgfile}}" alt="">
+          <img src="/smartmirror/image/{{selectImage}}" alt="">
         </div>
       </div>
       <div class="h-10"></div>
@@ -106,7 +106,7 @@
       <div class="Img-Pre-V hei-61 flex items-center c-047525B ml-10">[ Preview ]</div>
       <div class="Img-Setn">
         <div class="video-box Image h-full flex justify-center items-center">
-          <video width="550px;" src="/smartmirror/video/{{num}}" autoplay controls loop muted></video>
+          <video width="550px;" src="/smartmirror/video/{{selectVideo}}" autoplay controls loop muted></video>
         </div>
       </div>
       <div class="h-10"></div>

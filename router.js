@@ -4,13 +4,12 @@ const multer = require('multer')
 const path = require('path')
 const fs = require('fs')
 const xlsx = require("xlsx")
-const methodOverride = require('method-override');
-const Days = require('./script/getDays')
-const sqlmirror = require('./script/crud')
+
+const mirrorSql = require('./script/mirrorSql')
 const User = require('./script/User');
 const Water = require('./script/Water')
-router.use(methodOverride('_method'));
-let storageimg = multer.diskStorage({
+
+let storageImg = multer.diskStorage({
     destination: function (req, file, callback) {
         callback(null, 'smartmirror/image')
     },
@@ -22,8 +21,8 @@ let storageimg = multer.diskStorage({
     }
 })
 
-let uploadimg = multer({
-    storage: storageimg,
+let uploadImg = multer({
+    storage: storageImg,
     limits: {
         files: 10,
         fileSize: 1024 * 1024 * 1024
@@ -31,7 +30,7 @@ let uploadimg = multer({
 })
 
 
-let storagevideo = multer.diskStorage({
+let storageVideo = multer.diskStorage({
     destination: function (req, file, callback) {
         callback(null, 'smartmirror/video')
     },
@@ -42,8 +41,8 @@ let storagevideo = multer.diskStorage({
         callback(null, basename + extension);
     }
 });
-let upload = multer({
-    storage: storagevideo,
+let uploadVideo = multer({
+    storage: storageVideo,
     limits: {
         files: 10,
         fileSize: 1024 * 1024 * 1024
@@ -51,48 +50,7 @@ let upload = multer({
 });
 const io = require('./server').io
 
-class PlaceInfo {
-    constructor() {
-        this.localselect = ""
-        this.cityselect = ""
-        this.villageselect = ""
-        this.selectcityname = ""
-        this.selectvillagename = ""
-        this.localname = []
-        this.cityname = []
-        this.villagename = []
-        this.weathername = []
-        this.currentlocationX = 0
-        this.currentlocationY = 0
-        this.readFile()
-    }
-    readFile() {
-        const excelFile = xlsx.readFile("api/기상청41_단기예보 조회서비스_오픈API활용가이드_격자_위경도(20210401).xlsx")
-        this.firstSheet = excelFile.Sheets[excelFile.SheetNames[0]]
-    }
-}
 
-class WaterArray {
-    constructor() {
-        this.weekData = []
-        this.yearData = []
-    }
-}
-class SmartMirror {
-    constructor() {
-        this.refVideoArray = []
-        this.refImageArray = []
-        this.ComboVideo = []
-
-        this.numberimage = 0
-        this.numbervideo = 0
-    }
-}
-
-
-const waterArray = new WaterArray()
-const smartMirror = new SmartMirror()
-const placeInfo = new PlaceInfo()
 
 let storageSmartmirror = multer.diskStorage({
     destination: function (req, file, callback) {
@@ -114,55 +72,65 @@ let uploadSmartmirror = multer({
     }
 })
 //기본 비디오 파일 저장
-router.route('/insertVideo').post(upload.array('photo', 1), async function (req, res) {
-    const SaveVideo = await sqlmirror.SaveFile(req.files, "Video", "None", 0)
-    switch (SaveVideo) {
-        case 1: res.redirect('mediacontents')
-            break
-        case 2: res.send("<script>alert('옳바른 확장자가 아닙니다.');location.href='mediacontents';</script>");
-            break
-        case 3: res.send("<script>alert('옳바른 확장자가 아닙니다.');location.href='mediacontents';</script>");
-            break
-    }
+router.route('/processvideo').post(uploadVideo.array('photo', 1), async function (req, res) {
+    let Extension = req.files[0].filename
+
+    if (Extension == "video/mp4" || Extension == "video/avi" || Extension == "video/wmv") {
+        await curVideoFile.SaveFile(req.files,0)
+        await repoVideoFile.SaveFile(req.files,0)
+      }
+      else {
+        fs.unlink(`smartmirror/video/${req.files[0].filename}`, function (err) {
+        })
+        res.send("<script>alert('옳바른 확장자가 아닙니다.');location.href='mediacontents';</script>")
+      }
+      res.redirect('mediacontents')
 });
 
 //예약 비디오 파일 저장
-router.route('/processbookingvideo').post(upload.array('photo', 1), async function (req, res) {
-    const SaveVideo = await sqlmirror.SaveFile(req.files, "Video", "reservation", req.body.chooseimageday)
-    switch (SaveVideo) {
-        case 1: res.redirect('bookmedia')
-            break
-        case 2: res.send("<script>alert('옳바른 확장자가 아닙니다.');location.href='bookmedia';</script>");
-            break
-        case 3: res.send("<script>alert('옳바른 확장자가 아닙니다.');location.href='bookmedia';</script>");
-            break
-    }
+router.route('/processbookingvideo').post(uploadVideo.array('photo', 1), async function (req, res) {
+    let Extension = req.files[0].filename
+    await repoVideoFile.SaveFile(req.files,req.body.chooseimageday)
+
+    if (Extension == "video/mp4" || Extension == "video/avi" || Extension == "video/wmv") {
+        await repoVideoFile.SaveFile(req.files,req.body.chooseimageday)
+      }
+      else {
+        fs.unlink(`smartmirror/video/${req.files[0].filename}`, function (err) {
+        })
+        res.send("<script>alert('옳바른 확장자가 아닙니다.');location.href='bookmedia';</script>")
+      }
+      res.redirect('bookmedia')
 });
 
 //기본 이미지 파일 저장
-router.route('/insertImage').post(uploadimg.array('photo', 1), async function (req, res) {
-    const SaveImg = await sqlmirror.SaveFile(req.files, "Img", "None", 0)
-    switch (SaveImg) {
-        case 1: res.redirect('mediacontents')
-            break
-        case 2: res.send("<script>alert('옳바른 확장자가 아닙니다.');location.href='mediacontents';</script>");
-            break
-        case 3: res.send("<script>alert('옳바른 확장자가 아닙니다.');location.href='mediacontents';</script>");
-            break
-    }
+router.route('/processimage').post(uploadImg.array('photo', 1), async function (req, res) {
+    let Extension = req.files[0].filename
+
+    if (Extension == "image/jpg" || Extension == "image/png" || Extension == "image/gif" || Extension == "image/jpeg") {
+        await curImgFile.SaveFile(req.files,0)
+        await repoImgFile.SaveFile(req.files,0)
+      }
+      else {
+        fs.unlink(`smartmirror/image/${req.files[0].filename}`, function (err) {
+        })
+        res.send("<script>alert('옳바른 확장자가 아닙니다.');location.href='mediacontents';</script>")
+      }
+      res.redirect('mediacontents')
 });
 
 //예약 이미지 파일 저장
-router.route('/processbookingimage').post(uploadimg.array('photo', 1), async function (req, res) {
-    const SaveImg = await sqlmirror.SaveFile(req.files, "Img", "reservation", req.body.chooseimageday)
-    switch (SaveImg) {
-        case 1: res.redirect('bookmedia')
-            break
-        case 2: res.send("<script>alert('옳바른 확장자가 아닙니다.');location.href='bookmedia';</script>");
-            break
-        case 3: res.send("<script>alert('옳바른 확장자가 아닙니다.');location.href='bookmedia';</script>");
-            break
-    }
+router.route('/processbookingimage').post(uploadImg.array('photo', 1), async function (req, res) {
+    let Extension = req.files[0].filename
+    if (Extension == "image/jpg" || Extension == "image/png" || Extension == "image/gif" || Extension == "image/jpeg") {
+        await repoImgFile.SaveFile(req.files,req.body.chooseimageday)
+      }
+      else {
+        fs.unlink(`smartmirror/image/${req.files[0].filename}`, function (err) {
+        })
+        res.send("<script>alert('옳바른 확장자가 아닙니다.');location.href='bookmedia';</script>")
+      }
+      res.redirect('bookmedia')
 });
 
 //스마트 미러 구동파일 교체
@@ -175,7 +143,7 @@ router.route('/processSmartmirror').post(uploadSmartmirror.array('photo', 1), fu
             fs.unlink(`/item/Smartmirror.exe`, function (err) {
                 if (err) console.log(err)
             })
-            sqlmirror.version++
+            mirrorSql.version++
         }
         else {
             console.log("Smartmirror.exe 구동파일이 아닙니다.")
@@ -188,9 +156,10 @@ router.route('/processSmartmirror').post(uploadSmartmirror.array('photo', 1), fu
 
 //files,kind,type,returnvalue
 //비디오파일 삭제
-router.delete('/deleteVideo', async function (req, res, next) {
+router.post('/deletevideo', async function (req, res, next) {
     try {
-        await sqlmirror.deletefile(req.body.videofile, "video", "None")
+        await curVideoFile.deletefile(req.files)
+        await repoVideoFile.deletefile(req.files)
     } catch (err) {
         console.dir(err.stack);
     }
@@ -198,9 +167,10 @@ router.delete('/deleteVideo', async function (req, res, next) {
 })
 
 //이미지파일 삭제
-router.delete('/deleteImage', async function (req, res, next) {
+router.post('/deleteimage', async function (req, res, next) {
     try {
-        await sqlmirror.deletefile(req.body.imagefile, "image", "None")
+        await curImgFile.deletefile(req.files)
+        await repoImgFile.deletefile(req.files)
     } catch (err) {
         console.dir(err.stack);
     }
@@ -208,9 +178,9 @@ router.delete('/deleteImage', async function (req, res, next) {
 })
 
 //예약 비디오파일 삭제
-router.delete('/deletereservationvideo', async function (req, res, next) {
+router.post('/deletereservationvideo', async function (req, res, next) {
     try {
-        await sqlmirror.deletefile(req.files, "video", "reservation")
+        await repoVideoFile.deletefile(req.files)
     } catch (err) {
         console.dir(err.stack);
     }
@@ -219,9 +189,9 @@ router.delete('/deletereservationvideo', async function (req, res, next) {
 
 //예약 이미지파일 삭제
 
-router.delete('/deletereservationimage', async function (req, res, next) {
+router.post('/deletereservationimage', async function (req, res, next) {
     try {
-        await sqlmirror.deletefile(req.files, "image", "reservation")
+        await repoImgFile.deletefile(req.files)
     } catch (err) {
         console.dir(err.stack);
     }
@@ -229,61 +199,58 @@ router.delete('/deletereservationimage', async function (req, res, next) {
 })
 
 //구역 선택 post
-router.put('/weatherlista', function (req, res) {
-    const name = req.body.name
+router.post('/weatherList', function (req, res) {
+    const local = req.body.local
     const city = req.body.city
-    placeInfo.localselect = name
-    placeInfo.cityselect = city
-    placeInfo.cityname = []
+    regionWeatherData.localSelect = local
+    regionWeatherData.citySelect = city
+    regionWeatherData.cityName = []
     for (let index = 2; index <= 3775; index++) {
-        if (placeInfo.localselect != placeInfo.firstSheet["C" + index].v) continue
-        let data = placeInfo.firstSheet["D" + index].v
+        if (regionWeatherData.localSelect != firstSheet["C" + index].v) continue
+        let data = firstSheet["D" + index].v
         if (data == "") continue;
         let state = true;
-        for (let i = 0; i < placeInfo.cityname.length; i++) {
-            if (placeInfo.cityname[i] == data) {
+        for (let i = 0; i < regionWeatherData.cityName.length; i++) {
+            if (regionWeatherData.cityName[i] == data) {
                 state = false;
                 break
             }
         }
-        if (state) placeInfo.cityname.push(data)
+        if (state) regionWeatherData.cityName.push(data)
     }
-    placeInfo.villagename = new Array()
+    regionWeatherData.villageName = new Array()
     for (let index = 2; index <= 3775; index++) {
-        if (placeInfo.localselect == placeInfo.firstSheet["C" + index].v && placeInfo.cityselect == placeInfo.firstSheet["D" + index].v) {
-            let data = placeInfo.firstSheet["E" + index].v
-            if (data != "") placeInfo.villagename.push(data)
+        if (regionWeatherData.localSelect == firstSheet["C" + index].v && regionWeatherData.citySelect == firstSheet["D" + index].v) {
+            let data = firstSheet["E" + index].v
+            if (data != "") regionWeatherData.villageName.push(data)
         }
     }
     res.redirect('main')
 })
 //최종 구역 선택
-router.put('/weather', async function (req, res) {
+router.post('/weatherFinal', async function (req, res) {
     try {
-        const name = req.body.name
+        const local = req.body.local
         const city = req.body.city
         const village = req.body.village
-        placeInfo.localselect = name
-        placeInfo.cityselect = city
-        placeInfo.villageselect = village
+        regionWeatherData.localSelect = local
+        regionWeatherData.citySelect = city
+        regionWeatherData.villageSelect = village
 
         for (let index = 2; index <= 3775; index++) {
-            if (placeInfo.localselect == placeInfo.firstSheet["C" + index].v && placeInfo.cityselect == placeInfo.firstSheet["D" + index].v && placeInfo.villageselect == placeInfo.firstSheet["E" + index].v) {
-                let data = placeInfo.firstSheet["B" + index].v
-                placeInfo.selectcityname = placeInfo.firstSheet["D" + index].v
-                placeInfo.selectvillagename = placeInfo.firstSheet["E" + index].v
-                placeInfo.currentlocationX = placeInfo.firstSheet["F" + index].v
-                placeInfo.currentlocationY = placeInfo.firstSheet["G" + index].v
-                if (data != "") {
-                    if (data == "") {
-                        data = "2824561400" //임시 데이터
-                    }
-                    await sqlmirror.UpdateData(data)
-                }
+            if (regionWeatherData.localSelect == firstSheet["C" + index].v && regionWeatherData.citySelect == firstSheet["D" + index].v && regionWeatherData.villageSelect == firstSheet["E" + index].v) {
+                let data = firstSheet["B" + index].v
+                regionWeatherData.selectCityName = firstSheet["D" + index].v
+                regionWeatherData.selectVillageName = firstSheet["E" + index].v
+                regionWeatherData.currentLocationX = firstSheet["F" + index].v
+                regionWeatherData.currentLocationY = firstSheet["G" + index].v
+
+                    await regionWeatherData.updateData(data)
+
             }
         }
 
-        sqlmirror.version++
+        mirrorSql.version++
         res.redirect('main')
     } catch (err) {
         console.log(err)
@@ -291,21 +258,30 @@ router.put('/weather', async function (req, res) {
     }
 })
 
-router.post('/smartmirrorManage', async function (req, res) {
+router.post('/smartmirrormanage', function (req, res) {
     try {
-        const selectsmartmirror = req.body.selectSmartmirror
+        const selectSmartmirror = req.body.setSmartmirror
+        const selectImage = req.body.selectImage
         for (let i = 0; i < smartMirror.refVideoArray.length; i++) {
-            if (smartMirror.refVideoArray[i][0] == selectsmartmirror) {
-                smartMirror.numbervideo = smartMirror.refVideoArray[i][1]
-                smartMirror.numberimage = smartMirror.refImageArray[i][1]
+            if (smartMirror.refVideoArray[i][0] == selectSmartmirror) {
+                smartMirror.numberVideo = smartMirror.refVideoArray[i][1]
                 break
             }
         }
-        const ImgFile = await sqlmirror.GetData("curimgfile")
-        const VideoFile = await sqlmirror.GetData("curvideofile")
+
+        for (let i = 0; i < smartMirror.refImageArray.length; i++) {
+            if (smartMirror.refImageArray[i][0] == selectImage) {
+                smartMirror.numberImage = smartMirror.refImageArray[i][1]
+                break
+            }
+        }
+
+        const ImgFile = curImgFile.GetData()
+        const VideoFile = curVideoFile.GetData()
+
         res.render('smartmirrormanage', {
-            videodata: smartMirror.refVideoArray, imgdata: smartMirror.refImageArray, selectsmartmirror: selectsmartmirror, ComboVideo: smartMirror.ComboVideo,
-            num: VideoFile[smartMirror.numbervideo].name, imgfile: ImgFile[smartMirror.numberimage].name
+            selectSmartmirror: selectSmartmirror, ComboVideo: smartMirror.ComboVideo,
+            selectVideo: VideoFile[smartMirror.numberVideo].name, selectImage: ImgFile[smartMirror.numberImage].name
         })
     } catch (err) {
         console.log(err)
@@ -314,8 +290,8 @@ router.post('/smartmirrorManage', async function (req, res) {
 
 //관리자 로그인
 router.post('/main', async (req, res) => {
-    const FindUser = await User.FindUser(req.body.name, req.body.password)
-    if (FindUser) {
+    const findUser = await User.findUser(req.body.name, req.body.password)
+    if (findUser) {
         req.session.logindata =
         {
             id: req.body.name,
@@ -335,8 +311,8 @@ router.post('/main', async (req, res) => {
 
 router.get('/mediacontents', async function (req, res) {
     try {
-        const Video = await sqlmirror.GetFile("curvideofile", "None")
-        const Img = await sqlmirror.GetFile("curimgfile", "None")
+        const Video = await mirrorSql.GetFile("curvideofile", "None")
+        const Img = await mirrorSql.GetFile("curimgfile", "None")
         if (req.session.logindata) {
             res.render('mediacontents', {
                 videofile: Video, imgfile: Img
@@ -352,8 +328,8 @@ router.get('/mediacontents', async function (req, res) {
 
 router.get('/bookmedia', async function (req, res) {
     try {
-        const Video = sqlmirror.GetFile("VideoFile", "reservation")
-        const Img = sqlmirror.GetFile("ImgFile", "reservation")
+        const Video = mirrorSql.GetFile("VideoFile", "reservation")
+        const Img = mirrorSql.GetFile("ImgFile", "reservation")
         if (req.session.logindata) {
             res.render('bookmedia', {
                 videofile: Video, imgfile: Img
@@ -370,14 +346,14 @@ router.get('/bookmedia', async function (req, res) {
 
 router.get('/main', async function (req, res) {
     try {
-        const Video = await sqlmirror.GetFile("curvideofile", "None")
-        const Img = await sqlmirror.GetFile("curimgfile", "None")
-        console.log(waterArray.weekData)
+        const Video = await mirrorSql.GetFile("curvideofile", "None")
+        const Img = await mirrorSql.GetFile("curimgfile", "None")
         if (req.session.logindata) {
             res.render('subcopy', {
-                weekData: waterArray.weekData, yearData: waterArray.yearData, videofile: Video, imgfile: Img,
-                localname: placeInfo.localname, cityname: placeInfo.cityname, village: placeInfo.villagename, selectcityname: placeInfo.selectcityname, selectvillagename: placeInfo.selectvillagename,
-                localselected: placeInfo.localselect, cityselected: placeInfo.cityselect
+                weekData: weekData, yearData: yearData, videoFile: Video, imgFile: Img,
+                localName: regionWeatherData.localName, cityName: regionWeatherData.cityName, village: regionWeatherData.villageName,
+                selectCityName: regionWeatherData.selectCityName, selectVillageName: regionWeatherData.selectVillageName,
+                localSelected: regionWeatherData.localSelect, citySelected: regionWeatherData.citySelect
             })
         }
         else {
@@ -392,46 +368,37 @@ router.get('/login', function (req, res) {
     res.render('login', { layout: null })
 })
 
-router.get('/', function (req, res) {
-    res.json({ message: `Server is running on port ${req.secure ? "HTTPS_PORT" : "HTTP_PORT"}` });
-})
-
-
 router.get('/smartmirror/item', function (req, res) {
     res.render('item', { layout: null })
 })
 
 router.get('/smartmirror/image/info', async function (req, res) {
-    const SmartMirrorImgFile = await sqlmirror.getFile("curimgfile")
-    console.log(SmartMirrorImgFile)
+    const SmartMirrorImgFile = await mirrorSql.GetData("ImgFile")
     res.json(SmartMirrorImgFile)
 })
 
 router.get('/smartmirror/video/info', async function (req, res) {
-    const SmartMirrorVideoFIle = await sqlmirror.getFile("curvideofile")
+    const SmartMirrorVideoFIle = await mirrorSql.GetData("VideoFIle")
     res.json(SmartMirrorVideoFIle)
 })
 
 router.get('/smartmirror/item/info', async function (req, res) {
-    const MirrorExe = (await sqlmirror.GetData("mirrorExe"))[0].name
-    console.log(MirrorExe)
+    const MirrorExe = await mirrorSql.GetData("MirrorExe")
     res.json(MirrorExe)
 
 })
 
 router.get('/smartmirror/weather', async function (req, res) {
-    const Weather = await sqlmirror.GetData("Weather")
-    res.render('weather', { contents: Weather[0].Code, layout: null })
+    const Weather = await mirrorSql.GetData("Weather")
+    res.render('weather', { contents: Weather[0].name, layout: null })
 });
 
 router.get('/smartmirror/model', async function (req, res) {
-    let smartmirrormodel = req.query.id
-    //const MirrorModel = await sqlmirror.GetData("MirrorModel")
-    res.render('dummy', { contents: smartmirrormodel, layout: null })
+    const MirrorModel = await mirrorSql.GetData("MirrorModel")
+    res.render('dummy', { contents: MirrorModel, layout: null })
 })
 
 // 스마트미러의 현재 실행하고 있는 비디오파일와 이미지파일 출력
-
 router.get('/smartmirror/getcontents', function (req, res) {
     try {
         let model = req.query.model //스마트미러 모델명
@@ -486,7 +453,7 @@ router.get('/smartmirror/getcontents', function (req, res) {
 */
 //스마트미러 관리 페이지
 
-router.get('/smartmirrormanage', function (req, res) {
+app.get('/smartmirrormanage', function (req, res) {
     const nowtime = new Date()
     for (let i = 0; i < smartMirror.refVideoArray.length; i++) {
         //현재시간에서 스마트미러의 비디오가 저장된 시간을 빼는 계산을 하여
@@ -510,38 +477,33 @@ router.get('/smartmirrormanage', function (req, res) {
         // 그 외의 경우 대입
         smartMirror.ComboVideo.push(smartMirror.refVideoArray[i][0])
     }
-    console.log(smartMirror.ComboVideo)
-    res.render('smartmirrormanage', { videodata: smartMirror.refVideoArray, imgdata: smartMirror.refImageArray, comboSmartmirror: smartMirror.ComboVideo })
+    res.render('smartmirrormanage', { videodata: smartMirror.refVideoArray, imgdata: smartMirror.refImageArray, ComboVideo: smartMirror.ComboVideo })
 })
+
 
 router.get('/smartmirror/version', function (req, res) {
-    res.render('dummy', { layout: null, contents: sqlmirror.version })
+    res.render('dummy', { layout: null, contents: mirrorSql.version })
 })
 
-/**
- * 아두이노의 http통신시 return값이 필요하기 때문에 사용한 dummy 페이지.
- */
 router.get('/dummy', function (req, res) {
-    res.render('dummy', { weekData: waterArray.weekData })
+    res.render('dummy', { weekData: weekData })
 })
+const testa = require('./script/watertest')
 
-
-/**
- * 물 사용에 관한 아두이노 http통신시 처리기능
- */
 router.get('/water_useage/daily', async function (req, res) {
     try {
-        let watervalue = parseFloat(((req.query.amount) / 1000).toFixed(3))
-        waterArray.weekData.Valueobject[0][0] = parseFloat((parseFloat(waterArray.weekData.Valueobject[0][0]) + watervalue).toFixed(3))
-        await Water.getPercent(waterArray.weekData)
-        waterArray.yearData.Valueobject[0][0] = parseFloat((parseFloat(waterArray.yearData.Valueobject[0][0]) + watervalue).toFixed(3))
-        await Water.getPercent(waterArray.yearData)
-        io.emit('weekendwater', waterArray.weekData.Valueobject[0][0])  //량
-        io.emit('waterpercent', waterArray.weekData.Valueobject[1]) //일주일%
-        io.emit('weekendTotalUseage', waterArray.weekData.Valueobject[0][0]) //일주일 총%
-        io.emit('yearTotalUseage', waterArray.yearData.Valueobject[0][0]) //연총량
-        io.emit('MonthTotalUseage', waterArray.weekData.Valueobject[1]) //연총%
-        io.emit('yearWater', waterArray.yearData.Valueobject[0][0])
+        let waterValue = parseFloat(((req.query.amount) / 1000).toFixed(3))
+        weekData.values[0][0] = parseFloat((parseFloat(weekData.values[0][0]) + waterValue).toFixed(3))
+        await weekData.getPercent()
+        yearData.values[0][0] = parseFloat((parseFloat(yearData.values[0][0]) + waterValue).toFixed(3))
+        await yearData.getPercent()
+        console.log(weekData)
+        io.emit('weekendwater', weekData.valueObject[0][0])  //량
+        io.emit('waterpercent', weekData.valueObject[1]) //일주일%
+        io.emit('weekendTotalUseage', weekData.valueObject[0][0]) //일주일 총%
+        io.emit('yearTotalUseage', yearData.valueObject[0][0]) //연총량
+        io.emit('MonthTotalUseage', weekData.valueObject[1]) //연총%
+        io.emit('yearWater', yearData.valueObject[0][0])
         res.render('dummy', { layout: null })
     } catch (err) {
         console.log(err)
@@ -549,10 +511,13 @@ router.get('/water_useage/daily', async function (req, res) {
 })
 
 //핸드드라이어에서 남은 휴지출지량 값을 받는 함수
-router.get('/tollet-paper-quantity', function (req, res) {
+router.get('/toilet-paper-quantity', function (req, res) {
     try {
         let number = req.query.number
         let hand = req.query.remain
+        //let receivehand = parseInt(hand)
+        console.log(moment().format('MMDD:hh:mm') + hand)
+        console.log(number)
         io.emit('remain', [number, hand])
         res.render('dummy', { layout: null })
     }
@@ -561,20 +526,82 @@ router.get('/tollet-paper-quantity', function (req, res) {
 })
 
 router.get('/wateruseage', function (req, res) {
-    try{
+    try {
         res.render('wateruseage', {
-            selectcityname: placeInfo.selectcityname, selectvillagename: placeInfo.selectvillagename,
-            weekData: waterArray.weekData, yearData: waterArray.yearData
+            selectCityName: regionWeatherData.selectCityName, selectVillageName: regionWeatherData.selectVillageName,
+            weekData: weekData, yearData: yearData
         })
-    }catch(err){
+    } catch (err) {
+        console.log(err)
+    }
+})
+
+router.put('/weatherFinal', async function (req, res) {
+    try {
+        const name = req.body.name
+        const city = req.body.city
+        const village = req.body.village
+        await regionWeatherData.setPlace(name, city, village)
+        sqlmirror.version++
+        res.redirect('main')
+    } catch (err) {
+        console.log(err)
+        res.status(500).json({ error: 'server error' })
+    }
+})
+
+router.post('/weatherList', async function (req, res) {
+    try {
+        const local = req.body.local
+        const city = req.body.city
+        await regionWeatherData.selectPlace(local, city)
+        res.redirect('main')
+    } catch (err) {
+        console.log(err)
+    }
+})
+
+router.get('/smartmirrormanage', function (req, res) {
+    smartmirror.showContents()
+    res.render('smartmirrormanage', { videodata: smartMirror.refVideoArray, imgdata: smartMirror.refImageArray, ComboVideo: smartMirror.ComboVideo })
+})
+
+// 스마트미러의 현재 실행하고 있는 비디오파일와 이미지파일 출력
+router.get('/smartmirror/getcontents', function (req, res) {
+    try {
+        let model = req.query.model //스마트미러 모델명
+        let contents = req.query.contents //스마트미러가 보여주는 미디어들
+        let kinds = req.query.kinds //스마트미러가 보여주는 미디어들의 종류들 (이미지,비디오)
+
+        smartmirror.getContents(model,contents,kinds)
+        res.render('dummy', { layout: null })
+    } catch (err) {
+        console.log(err)
+    }
+})
+
+router.post('/smartmirrormanage', function (req, res) {
+    try {
+        const selectSmartmirror = req.body.setSmartmirror
+        const selectImage = req.body.selectImage
+        smartmirror.getShowSmartmirror(selectSmartmirror,selectImage)
+
+        res.render('smartmirrormanage', {
+            selectSmartmirror: selectSmartmirror, ComboVideo: smartmirror.ComboVideo,
+            selectVideo: smartmirror.allVideofile[smartmirror.numberVideo].name, selectImage: smartmirror.allImgfile[smartmirror.numberImage].name
+        })
+    } catch (err) {
         console.log(err)
     }
 })
 
 
+
 module.exports = {
-  waterArray: waterArray,
-  smartMirror: smartMirror,
-  placeInfo: placeInfo,
-  router: router
+    router: router
 };
+
+//스마트미러 수정 예정
+// getData를 캐시로 전환
+// init해서 맨처음 데이터베이스에 있는 파일불러오기
+// saveFile할때 cash수정
