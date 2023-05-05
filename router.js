@@ -49,7 +49,7 @@ let upload = multer({
         fileSize: 1024 * 1024 * 1024
     }
 });
-const io = require('./server.js').io
+const io = require('./server').io
 
 class PlaceInfo {
     constructor() {
@@ -257,7 +257,6 @@ router.put('/weatherlista', function (req, res) {
     }
     res.redirect('main')
 })
-
 //최종 구역 선택
 router.put('/weather', async function (req, res) {
     try {

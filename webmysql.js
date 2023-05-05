@@ -730,6 +730,9 @@ app.get('/dummy', function (req, res) {
     res.render('dummy', { weekData: waterArray.weekData })
 })
 
+/**
+ * 물 사용에 관한 아두이노 http통신시 처리기능
+ */
 app.get('/testwater_recieve', async function (req, res) {
     try{
         let watervalue = parseFloat(((req.query.id) / 1000).toFixed(3))
@@ -749,7 +752,9 @@ app.get('/testwater_recieve', async function (req, res) {
         console.log(err)
     }
 })
-
+/**
+ * 
+ */
 //핸드드라이어에서 남은 휴지출지량 값을 받는 함수
 app.get('/test_remain', function (req, res) {
     try{

@@ -16,7 +16,6 @@ const connection = mysql.createConnection({
     port : 3306
   });
   */
-  
   // MySQL 연결
   connection.connect((err) => {
     if (err) throw err;
