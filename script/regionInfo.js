@@ -1,5 +1,6 @@
-const router = require("./router")
 
+const xlsx = require("xlsx")
+const mysql = require('./Mysql')
 class regionInfo {
     constructor() {
         this.localSelect = ''
@@ -12,8 +13,8 @@ class regionInfo {
         this.villageName = []
         this.weatherName = []
         this.weatherCode = 0
-        this.currentLocationX = 0;
-        this.currentLocationY = 0;
+        this.currentLocationX = 0
+        this.currentLocationY = 0
         this.firstSheet = []
     }
 
@@ -24,7 +25,8 @@ class regionInfo {
         await this.getLocalArray()
     }
     async getWeatherData() {
-        const GetWeather = await mirrorSql.GetData("weather")
+        const sql = `SELECT * FROM weather`
+        const GetWeather = await mysql.runQuery(sql, null)
         if (GetWeather) {
             this.weatherCode = GetWeather[0].Code
         }
@@ -102,7 +104,7 @@ class regionInfo {
                 this.citySelect == this.firstSheet['D' + index].v &&
                 this.villageSelect == this.firstSheet['E' + index].v
             ) {
-                const data = this.firstSheet['B' + index].v;
+                const data = this.firstSheet['B' + index].v
                 this.selectCityName = this.firstSheet['D' + index].v
                 this.selectVillageName = this.firstSheet['E' + index].v
                 this.currentLocationX = this.firstSheet['F' + index].v
@@ -112,4 +114,4 @@ class regionInfo {
         }
     }
 }
-module.exports = {regionInfo,smartMirror}
+module.exports = {regionInfo}

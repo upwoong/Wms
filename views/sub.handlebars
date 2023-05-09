@@ -42,36 +42,35 @@
     </div>
     <div class="wid-10"></div>
     <div class="bg-white flex flex-1 justify-center items-center px-2 border-05-787878 border-radius-50">
-      <select name="name" id="localname"
+      <select name="local" id="localname"
         class="w-full bg-white bg-opacity-0 py-1 mr-1 text-sm c-6F8294 border border-radius-50">
-        <!--기본 텍스트 제가 내려가서 수정하겠습니다.-->
-        <option hidden selected>{{localselected}}</option>
-        {{#each localname}}
+        <option hidden selected>{{localSelected}}</option>
+        {{#each localName}}
         <option name='adw' value="{{this}}">{{this}}</option>
         {{/each}}
       </select>
-      <input type='submit' value='add' onclick='this.form.action= "/weatherlista?_method=put"'
+      <input type='submit' value='add' onclick='this.form.action= "/weatherList"'
         class="Btn Flie-Add-Btn flex justify-center items-center text-white text-xs cursor-pointer border-radius-50">
     </div>
     <div class="wid-10"></div>
     <div class="bg-white flex flex-1 justify-center items-center px-2 border-05-787878 border-radius-50">
       <select name="city" class="w-full bg-white bg-opacity-0 py-1 mr-1 text-sm c-6F8294 border border-radius-50">
-        <option selected hidden>{{cityselected}}</option>
-        {{#each cityname}}
+        <option selected hidden>{{citySelected}}</option>
+        {{#each cityName}}
         <option value="{{this}}">{{this}}</option>
         {{/each}}
       </select>
-      <input type='submit' value='add' onclick='this.form.action= "/weatherlista?_method=put"'
+      <input type='submit' value='add' onclick='this.form.action= "/weatherList"'
         class="Btn Flie-Add-Btn bg-3AAFE2 flex justify-center items-center text-white text-xs cursor-pointer border-radius-50">
     </div>
     <div class="wid-10"></div>
     <div class="bg-white flex flex-1 justify-center items-center px-2 border-05-787878 border-radius-50">
       <select name="village" class="w-full bg-white bg-opacity-0 py-1 mr-1 text-sm c-6F8294 border border-radius-50">
-        {{#each village}}
+        {{#each villageName}}
         <option value="{{this}}">{{this}}</option>
         {{/each}}
       </select>
-      <input type='submit' value='add' onclick='this.form.action= "/weather?_method=put"'
+      <input type='submit' value='add' onclick='this.form.action= "/weatherListFinal"'
         class="Btn Flie-Add-Btn bg-3AAFE2 flex justify-center items-center text-white text-xs cursor-pointer border-radius-50">
     </div>
   </form>
@@ -97,153 +96,22 @@
       </div>
       <div class="Graph-Box flex items-end justify-center">
         <!--G2-1-->
-        <div class="Graph-Bar-Item Graph-Bar-Item-2-1 relative inline-block">
-          <div class="Nd-Pop-Up Pop-Up-2-1 text-xs">
-            <span class="c-3AAFE2">
-              <i class="fas fa-hand-holding-water"></i>
-            </span>
-            <span id="todaywateruseage">
-              {{weekendWater.[0]}}
-            </span>
-            <span>
-              L
-            </span>
-          </div>
-          <div class="flex justify-center">
-            <span class="Gra-Per-Text text-xs c-A8A8A8" id="showpercent1">
-              {{percentArray.[0]}}
-            </span>
-            <span class="Gra-Per-Text text-xs c-A8A8A8">
-              %
-            </span>
-          </div>
-          <div class="Gra-Bar-Ele-Box flex justify-center items-end mt-1 mb-1">
-            <div class="Gra-Back-Ele-Bar h-full flex items-end border-radius-2">
-              <div class="w-full border-radius-2" style="height: {{percentArray.[0]}}%;" id="todaywaterpercent"></div>
-            </div>
-          </div>
-          <div class="flex justify-center items-center text-xs c-A8A8A8">
-            <span>{{accessmanage.0.Month}}</span>
-            <span>.</span>
-            <span>{{accessmanage.0.Day}}</span>
-          </div>
-        </div>
-        <div class="w-4"></div>
-        <!--G2-2-->
-        <div class="Graph-Bar-Item Graph-Bar-Item-2-2 relative inline-block">
-          <div class="Nd-Pop-Up Pop-Up-2-2 text-xs">
-            <span class="c-3AAFE2 mr-1">
-              <i class="fas fa-hand-holding-water"></i>
-            </span>
-            <span id="todaywateruseage">
-              {{weekendWater.[1]}}
-            </span>
-            <span>
-              L
-            </span>
-          </div>
-          <div class="flex justify-center">
-            <span class="Gra-Per-Text text-xs c-A8A8A8" id="showpercent2">
-              {{percentArray.[1]}}
-            </span>
-            <span class="Gra-Per-Text text-xs c-A8A8A8">
-              %
-            </span>
-          </div>
-          <div class="Gra-Bar-Ele-Box flex justify-center items-end mt-1 mb-1">
-            <div class="Gra-Back-Ele-Bar h-full flex items-end border-radius-2">
-              <div class="w-full border-radius-2" style="height: {{percentArray.[1]}}%;" id="graphpercent2"></div>
-            </div>
-          </div>
-          <div class="flex justify-center items-center text-xs c-A8A8A8">
-            <span>{{accessmanage.1.Month}}</span>
-            <span>.</span>
-            <span>{{accessmanage.1.Day}}</span>
-          </div>
-        </div>
-        <div class="w-4"></div>
-        <!--G2-3-->
-        <div class="Graph-Bar-Item Graph-Bar-Item-2-3 relative inline-block">
-          <div class="Nd-Pop-Up Pop-Up-2-3 text-xs">
-            <span class="c-3AAFE2 mr-1">
-              <i class="fas fa-hand-holding-water"></i>
-            </span>
-            <span>
-              {{weekendWater.[2]}}
-            </span>
-            <span>
-              L
-            </span>
-          </div>
-          <div class="flex justify-center">
-            <span class="Gra-Per-Text text-xs c-A8A8A8" id="showpercent3">
-              {{percentArray.[2]}}
-            </span>
-            <span class="Gra-Per-Text text-xs c-A8A8A8">
-              %
-            </span>
-          </div>
-          <div class="Gra-Bar-Ele-Box flex justify-center items-end mt-1 mb-1">
-            <div class="Gra-Back-Ele-Bar h-full flex items-end border-radius-2">
-              <div class="w-full border-radius-2" style="height: {{percentArray.[2]}}%;" id="graphpercent3"></div>
-            </div>
-          </div>
-          <div class="flex justify-center items-center text-xs c-A8A8A8">
-            <span>{{accessmanage.2.Month}}</span>
-            <span>.</span>
-            <span>{{accessmanage.2.Day}}</span>
-          </div>
-        </div>
-        <div class="w-4"></div>
-        <!--G2-4-->
-        <div class="Graph-Bar-Item Graph-Bar-Item-2-4 relative inline-block">
-          <div class="Nd-Pop-Up Pop-Up-2-4 text-xs">
-            <span class="c-3AAFE2 mr-1">
-              <i class="fas fa-hand-holding-water"></i>
-            </span>
-            <span>
-              {{weekendWater.[3]}}
-            </span>
-            <span>
-              L
-            </span>
-          </div>
-          <div class="flex justify-center">
-            <span class="Gra-Per-Text text-xs c-A8A8A8" id="showpercent4">
-              {{percentArray.[3]}}
-            </span>
-            <span class="Gra-Per-Text text-xs c-A8A8A8">
-              %
-            </span>
-          </div>
-          <div class="Gra-Bar-Ele-Box flex justify-center items-end mt-1 mb-1">
-            <div class="Gra-Back-Ele-Bar h-full flex items-end border-radius-2">
-              <div class="w-full border-radius-2" style="height: {{percentArray.[3]}}%;" id="graphpercent4"></div>
-            </div>
-          </div>
-          <div class="flex justify-center items-center text-xs c-A8A8A8">
-            <span>{{accessmanage.3.Month}}</span>
-            <span>.</span>
-            <span>{{accessmanage.3.Day}}</span>
-          </div>
-        </div>
-        <div class="w-4"></div>
-        <!--G2-5-->
+        {{#each weekData.values.[0]}}
         <div class="Graph-Bar-Item Graph-Bar-Item-2-5 relative inline-block">
           <div class="Nd-Pop-Up Pop-Up-2-5 text-xs">
             <span class="c-3AAFE2 mr-1">
               <i class="fas fa-hand-holding-water"></i>
             </span>
-            <span>
-              {{weekendWater.[4]}}
+            <span id="weekendwater{{@index}}">
+              {{this}}
             </span>
             <span>
               L
             </span>
           </div>
           <div class="flex justify-center">
-            <span class="Gra-Per-Text text-xs c-A8A8A8" id="showpercent5">
-              {{percentArray.[4]}}
+            <span class="Gra-Per-Text text-xs c-A8A8A8" id="ShowWeekPercent{{@index}}">
+              {{lookup ../weekData.values.[1] @index}}
             </span>
             <span class="Gra-Per-Text text-xs c-A8A8A8">
               %
@@ -251,84 +119,22 @@
           </div>
           <div class="Gra-Bar-Ele-Box flex justify-center items-end mt-1 mb-1">
             <div class="Gra-Back-Ele-Bar h-full flex items-end border-radius-2">
-              <div class="w-full border-radius-2" style="height: {{percentArray.[4]}}%;" id="graphpercent5"></div>
+              <div class="w-full border-radius-2" style="height:{{lookup ../weekData.values.[1] @index}}%;"
+                id="ShowWeekGraph{{@index}}" ;></div>
             </div>
           </div>
           <div class="flex justify-center items-center text-xs c-A8A8A8">
-            <span>{{accessmanage.4.Month}}</span>
-            <span>.</span>
-            <span>{{accessmanage.4.Day}}</span>
+            <span>{{lookup ../weekData.dates @index}}</span>
           </div>
         </div>
-        <div class="w-4"></div>
-        <!--G2-6-->
-        <div class="Graph-Bar-Item Graph-Bar-Item-2-6 relative inline-block">
-          <div class="Nd-Pop-Up Pop-Up-2-6 text-xs">
-            <span class="c-3AAFE2 mr-1">
-              <i class="fas fa-hand-holding-water"></i>
-            </span>
-            <span>
-              {{weekendWater.[5]}}
-            </span>
-            <span>
-              L
-            </span>
-          </div>
-          <div class="flex justify-center">
-            <span class="Gra-Per-Text text-xs c-A8A8A8" id="showpercent6">
-              {{percentArray.[5]}}
-            </span>
-            <span class="Gra-Per-Text text-xs c-A8A8A8">
-              %
-            </span>
-          </div>
-          <div class="Gra-Bar-Ele-Box flex justify-center items-end mt-1 mb-1">
-            <div class="Gra-Back-Ele-Bar h-full flex items-end border-radius-2">
-              <div class="w-full border-radius-2" style="height: {{percentArray.[5]}}%;" id="graphpercent6"></div>
-            </div>
-          </div>
-          <div class="flex justify-center items-center text-xs c-A8A8A8">
-            <span>{{accessmanage.5.Month}}</span>
-            <span>.</span>
-            <span>{{accessmanage.5.Day}}</span>
-          </div>
-        </div>
-        <div class="w-4"></div>
-        <!--G2-7-->
-        <div class="Graph-Bar-Item Graph-Bar-Item-2-7 relative inline-block">
-          <div class="Nd-Pop-Up Pop-Up-2-7 text-xs">
-            <span class="c-3AAFE2 mr-1">
-              <i class="fas fa-hand-holding-water"></i>
-            </span>
-            <span>
-              {{weekendWater.[6]}}
-            </span>
-            <span>
-              L
-            </span>
-          </div>
-          <div class="flex justify-center">
-            <span class="Gra-Per-Text text-xs c-A8A8A8" id="showpercent7">
-              {{percentArray.[6]}}
-            </span>
-            <span class="Gra-Per-Text text-xs c-A8A8A8">
-              %
-            </span>
-          </div>
-          <div class="Gra-Bar-Ele-Box flex justify-center items-end mt-1 mb-1">
-            <div class="Gra-Back-Ele-Bar h-full flex items-end border-radius-2">
-              <div class="w-full border-radius-2" style="height: {{percentArray.[6]}}%;" id="graphpercent7"></div>
-            </div>
-          </div>
-          <div class="flex justify-center items-center text-xs c-A8A8A8">
-            <span>{{accessmanage.6.Month}}</span>
-            <span>.</span>
-            <span>{{accessmanage.6.Day}}</span>
-          </div>
-        </div>
+        {{#if @last}}
       </div>
     </div>
     <div class="w-5"></div>
+    {{else}}
+    <div class="w-4"></div>
+    {{/if}}
+    {{/each}}
     <!--이미지-->
     <div class="flex-1">
       <div class="h-9 flex">
@@ -364,8 +170,8 @@
                   <select class="w-full h-5 text-xs cursor-pointer border" name="name" id="imgfilelist"
                     onchange="changeimageSelect()">
                     <option value="" selected disabled>--</option>
-                    {{#each imgfile}}
-                    <option name="videofile" value="{{this.name}}">{{this.name}}</option>
+                    {{#each imgFile}}
+                    <option name="imgFile" value="{{this.Name}}">{{this.Name}}</option>
                     {{/each}}
                   </select>
                 </div>
@@ -408,8 +214,8 @@
                   <select class="w-full h-5 text-xs ml-1 cursor-pointer border" name="name" id="videofilelist"
                     onchange="changevideoSelect()">
                     <option value="" selected disabled>--</option>
-                    {{#each videofile}}
-                    <option name="videofile" value="{{this.name}}">{{this.name}}</option>
+                    {{#each videoFile}}
+                    <option name="videofile" value="{{this.Name}}">{{this.Name}}</option>
                     {{/each}}
                   </select>
                 </div>
@@ -431,7 +237,7 @@
       </div>
       <div class="bg-6F8294 flex flex-1 justify-center items-center">
         <span class="text-sm text-white">
-          사용량&오염량
+          사용량
         </span>
       </div>
       <div class="bg-6F8294 flex flex-1 justify-center items-center">
@@ -466,8 +272,8 @@
           </span>
         </div>
         <div class="flex flex-1 justify-center items-center">
-          <span class="text-sm c-565656" id="weekendwater">
-            {{weekendWater.[0]}}
+          <span class="text-sm c-565656" id="todaywateruseage0">
+            {{weekData.values.[0].[0]}}
           </span>
           <span class="text-sm c-565656">
             L
@@ -488,7 +294,8 @@
         </div>
         <div class="flex flex-1 justify-center items-center border-radius-50">
           <div class="Graph-Back-Bar wid-80-p h-2 mx-2 border-radius-50">
-            <div class="Percent-Bar h-full border-radius-50" style="width: {{percentArray.[0]}}%;" id="showpercent01"></div>
+            <div class="Percent-Bar h-full border-radius-50" style="width: {{weekData.values.[1].[0]}}%;" id="CurGraph">
+            </div>
           </div>
         </div>
         <div class="flex flex-1 justify-center items-center"></div>
@@ -501,8 +308,8 @@
           </span>
         </div>
         <div class="flex flex-1 justify-center items-center">
-          <span class="text-sm c-565656">
-            85
+          <span class="text-sm c-565656" id="Manhandtowel_usage">
+            100
           </span>
           <span class="text-sm c-565656">
             %
@@ -521,7 +328,7 @@
         <div class="flex flex-1 justify-center items-center">
           <div class="poll-btn inline-block">
             <div class="relative flex">
-              <div class="Use-Move-Btn" style="right: 0;">
+              <div class="Use-Move-Btn" style="right: 60px;" id="ManBtn" >
                 <span class="h-full flex justify-center items-center">
                   btn
                 </span>
@@ -538,7 +345,7 @@
         </div>
         <div class="flex flex-1 justify-center items-center border-radius-50">
           <div class="Graph-Back-Bar wid-80-p h-2 mx-2 border-radius-50">
-            <div class="Percent-Bar h-full border-radius-50" style="width: 85%;"></div>
+            <div class="Percent-Bar h-full border-radius-50" style="width: 100%;" id="Manhandtowel_Percent"></div>
           </div>
         </div>
         <div class="flex flex-1 justify-center items-center"></div>
@@ -551,8 +358,8 @@
           </span>
         </div>
         <div class="flex flex-1 justify-center items-center">
-          <span class="text-sm c-565656">
-            30
+          <span class="text-sm c-565656" id="Womanhandtowel_usage">
+            100
           </span>
           <span class="text-sm c-565656">
             %
@@ -571,7 +378,7 @@
         <div class="flex flex-1 justify-center items-center">
           <div class="poll-btn inline-block">
             <div class="relative flex">
-              <div class="Use-Move-Btn" style="left: 0;">
+              <div class="Use-Move-Btn" style="right: 60px;">
                 <span class="h-full flex justify-center items-center">
                   btn
                 </span>
@@ -588,107 +395,7 @@
         </div>
         <div class="flex flex-1 justify-center items-center border-radius-50">
           <div class="Graph-Back-Bar wid-80-p h-2 mx-2 border-radius-50">
-            <div class="Percent-Bar h-full border-radius-50" style="width: 30%;"></div>
-          </div>
-        </div>
-        <div class="flex flex-1 justify-center items-center"></div>
-      </div>
-      <!--4-->
-      <div class="Use-List-Item-Box flex">
-        <div class="flex flex-1 justify-center items-center">
-          <span class="text-sm c-565656">
-            필터 오염량 (1)
-          </span>
-        </div>
-        <div class="flex flex-1 justify-center items-center">
-          <span class="text-sm c-565656">
-            90
-          </span>
-          <span class="text-sm c-565656">
-            %
-          </span>
-        </div>
-        <div class="flex flex-1 justify-center items-center">
-          <div>
-            <span class="c-079E24">
-              Change
-            </span>
-            <span class="text-xs c-079E24 M-B--2 ml-1">
-              <i class="fas fa-exclamation-triangle"></i>
-            </span>
-          </div>
-        </div>
-        <div class="flex flex-1 justify-center items-center">
-          <div class="poll-btn inline-block">
-            <div class="relative flex">
-              <div class="Use-Move-Btn" style="right: 0;">
-                <span class="h-full flex justify-center items-center">
-                  btn
-                </span>
-              </div>
-              <div class="btn-text-off hei-34 bg-white flex justify-center items-center" style="width: 60px;">
-                <span class="text-xs c-FD7B32">
-                  <i class="fas fa-exclamation-triangle"></i>
-                </span>
-              </div>
-              <div class="btn-text-danger bg-white flex" style="width: 60px;">
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="flex flex-1 justify-center items-center border-radius-50">
-          <div class="Graph-Back-Bar wid-80-p h-2 mx-2 border-radius-50">
-            <div class="Percent-Bar h-full border-radius-50" style="width: 90%;"></div>
-          </div>
-        </div>
-        <div class="flex flex-1 justify-center items-center"></div>
-      </div>
-      <!--5-->
-      <div class="Use-List-Item-Box flex">
-        <div class="flex flex-1 justify-center items-center">
-          <span class="text-sm c-565656">
-            필터 오염량 (2)
-          </span>
-        </div>
-        <div class="flex flex-1 justify-center items-center">
-          <span class="text-sm c-565656">
-            95
-          </span>
-          <span class="text-sm c-565656">
-            %
-          </span>
-        </div>
-        <div class="flex flex-1 justify-center items-center">
-          <div>
-            <span class="c-079E24">
-              Change
-            </span>
-            <span class="text-xs c-079E24 M-B--2 ml-1">
-              <i class="fas fa-exclamation-triangle"></i>
-            </span>
-          </div>
-        </div>
-        <div class="flex flex-1 justify-center items-center">
-          <div class="poll-btn inline-block">
-            <div class="relative flex">
-              <div class="Use-Move-Btn" style="right: 0;">
-                <span class="h-full flex justify-center items-center">
-                  btn
-                </span>
-              </div>
-              <div class="btn-text-off hei-34 bg-white flex justify-center items-center" style="width: 60px;">
-                <span class="text-xs c-FD7B32">
-                  <i class="fas fa-exclamation-triangle"></i>
-                </span>
-              </div>
-              <div class="btn-text-danger bg-white flex" style="width: 60px;">
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="flex flex-1 justify-center items-center border-radius-50">
-          <div class="Graph-Back-Bar wid-80-p h-2 mx-2 border-radius-50">
-            <div class="Percent-Bar h-full border-radius-50" style="width: 95%;"></div>
+            <div class="Percent-Bar h-full border-radius-50" style="width: 100%;" id="Womanhandtowel_Percent"></div>
           </div>
         </div>
         <div class="flex flex-1 justify-center items-center"></div>
@@ -696,7 +403,7 @@
     </div>
   </div>
 </div>
-
+<div id="asd">1</div>
 <script src="/socket.io/socket.io.js"></script>
 <script>
   function changevideoSelect() {
@@ -718,7 +425,7 @@
   function clock() {
     let today = new Date();
     let month = today.getMonth() + 1;
-    let date = today.getDate();
+    let date = today.dates();
     let day = today.getDay();
     let charday = "";
     switch (day) {
@@ -759,78 +466,56 @@
   }
   setInterval(clock, 1000);
   setInterval(clockminute, 1000);
-  //실시간 값 받기
-  var socket = io();
-  socket.on('messageled', (msg) => {
-    var handdryercheck = document.getElementById("handdryercheck");
-    if (msg == "checked") {
-      handdryercheck.style.right = "1px";
-    } else {
-      handdryercheck.style.right = "";
-    }
-  });
-  socket.on('messageh1', (msg) => {
-    var txt = document.getElementById('changeh1');
-    txt.style.width = msg + "%"
-  });
+  let socket = io()
   socket.on('currentimage', (msg) => {
-    var txt = document.getElementById('currentimage');
+    let txt = document.getElementById('currentimage');
     txt.src = msg
   });
   socket.on('currentT1H', (msg) => {
-    var txt = document.getElementById('currentT1H');
+    let txt = document.getElementById('currentT1H');
     txt.innerText = msg
   });
-  socket.on('weekendwater', (msg) => {
-    var txt = document.getElementById('weekendwater');
-    var todaywateruseage = document.getElementById('todaywateruseage');
+  socket.on('remain', (msg) => {
+    let ShowUseage
+    let ShowPercent
+    let ChangeBtn 
+    if (msg[0] == 1) {
+      ShowUseage = document.getElementById('Manhandtowel_usage');
+      ShowPercent = document.getElementById('Manhandtowel_Percent');
+      ChangeBtn= document.getElementById('ManBtn');
+    } else {
+      ShowUseage = document.getElementById('Womanhandtowel_usage');
+      ShowPercent = document.getElementById('Womanhandtowel_Percent');
+      ChangeBtn= document.getElementById('WomanBtn');
+    }
+    if(msg[1] < 30) ChangeBtn.style.right = 0 + "px"
+    else ChangeBtn.style.right = 60 + "px"
+    ShowUseage.innerText = msg[1]
+    ShowPercent.style.width = msg[1] + "%"
+  });
+
+</script>
+<script>
+    socket.on('weekendwater', (msg) => {
+    var txt = document.getElementById('weekendwater0');
+    var todaywateruseage = document.getElementById('todaywateruseage0');
 
     todaywateruseage.innerText = msg;
     txt.innerText = msg;
   });
-
   socket.on('waterpercent', (msg) => {
-    var txt1 = document.getElementById('waterpercent');
-    var todaywaterpercent = document.getElementById('todaywaterpercent');
-    var txt2 = document.getElementById('waterpercent1');
-    var txt3 = document.getElementById('Arraypercent');
-    var graphpercent2 = document.getElementById("graphpercent2");
-    var graphpercent3 = document.getElementById("graphpercent3");
-    var graphpercent4 = document.getElementById("graphpercent4");
-    var graphpercent5 = document.getElementById("graphpercent5");
-    var graphpercent6 = document.getElementById("graphpercent6");
-    var graphpercent7 = document.getElementById("graphpercent7");
-
-    var showpercent1 = document.getElementById("showpercent1");
-    var showpercent2 = document.getElementById("showpercent2");
-    var showpercent3 = document.getElementById("showpercent3");
-    var showpercent4 = document.getElementById("showpercent4");
-    var showpercent5 = document.getElementById("showpercent5");
-    var showpercent6 = document.getElementById("showpercent6");
-    var showpercent7 = document.getElementById("showpercent7");
-
-    todaywaterpercent.style.height = msg[0] + "%";
-    graphpercent2.style.height = msg[1] + "%";
-    graphpercent3.style.height = msg[2] + "%";
-    graphpercent4.style.height = msg[3] + "%";
-    graphpercent5.style.height = msg[4] + "%";
-    graphpercent6.style.height = msg[5] + "%";
-    graphpercent7.style.height = msg[6] + "%";
-
-    showpercent1.innerText = msg[0];
-
-    showpercent2.innerText = msg[1];
-    showpercent3.innerText = msg[2];
-    showpercent4.innerText = msg[3];
-    showpercent5.innerText = msg[4];
-    showpercent6.innerText = msg[5];
-    showpercent7.innerText = msg[6];
-
-    txt1.innerText = msg[0];
-    txt2.innerText = msg[1];
-    txt3.innerText = msg;
+    let WGArray = []
+    let ShowPercent = []
+    let CurGraph = document.getElementById('CurGraph')
+    for (let i = 0; i < 7; i++) {
+      WGArray[i] = document.getElementById(`ShowWeekGraph${i}`)
+      ShowPercent[i] = document.getElementById(`ShowWeekPercent${i}`)
+      WGArray[i].style.height = msg[i] + "%"
+      ShowPercent[i].innerText = msg[i]
+    }
+    CurGraph.style.width = msg[0] + "%"
   });
 </script>
-</div>
 
+</div>
 <!-- End of Main Content -->

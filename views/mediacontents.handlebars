@@ -39,8 +39,8 @@
                     <div class="Img-Url-Box w-full text-sm c-8F8F8F border-1-C4C4C4">
                       <select class="w-full flex h-5 text-xs cursor-pointer" name="imagefile" id="imgfilelist" onchange="changeimageSelect()">
                         <option value="none" selected disabled>--</option>
-                        {{#each imgfile}}
-                          <option name="imgfile" value="{{this.name}}">{{this.name}}</option>
+                        {{#each imgFile}}
+                          <option name="imgfile" value="{{this.Name}}">{{this.Name}}</option>
                         {{/each}}
                       </select>
                     </div>
@@ -143,8 +143,8 @@
                     <div class="Img-Url-Box w-full text-sm c-8F8F8F border-1-C4C4C4">
                       <select class="w-full flex h-5 text-xs cursor-pointer" name="videofile" id="videofilelist" onchange="changevideoSelect()">
                         <option value="none" selected disabled>--</option>
-                        {{#each videofile}}
-                          <option name="videofile" value="{{this.name}}">{{this.name}}</option>
+                        {{#each videoFile}}
+                          <option name="videofile" value="{{this.Name}}">{{this.Name}}</option>
                         {{/each}}
                       </select>
                     </div>

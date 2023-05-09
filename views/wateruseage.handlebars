@@ -52,7 +52,7 @@
     <!--1-->
     <div class="Data-Text-Item Data-Text-Item-1 flex-1">
       <div class="flex justify-center items-center text-xs font-bold c-47525B">
-        <span>{{weekData.getDate.[1]}}</span>
+        <span>{{weekData.dates.[1]}}</span>
         <span>일</span>
         <span>총 사용량</span>
       </div>
@@ -60,7 +60,7 @@
       <div class="flex justify-center items-center">
         <div>
           <div class="flex justify-center text-6xl c-3AAFE2">
-            <span>{{weekData.Valueobject.[0].[1]}}</span>
+            <span>{{weekData.values.[0].[1]}}</span>
             <span>L</span>
           </div>
           <div class="flex justify-center items-center text-sm font-bold c-A8A8A8">
@@ -75,7 +75,7 @@
     <!--2-->
     <div class="Data-Text-Item Data-Text-Item-1 flex-1">
       <div class="flex justify-center items-center text-xs font-bold c-47525B">
-        <span>{{weekData.getDate.[0]}}</span>
+        <span>{{weekData.dates.[0]}}</span>
         <span>일</span>
         <span>총 사용량</span>
       </div>
@@ -83,7 +83,7 @@
       <div class="flex justify-center items-center">
         <div>
           <div class="flex justify-center text-6xl c-3AAFE2">
-            <span id="weekendwater">{{weekData.Valueobject.[0].[0]}}</span>
+            <span id="weekendwater">{{weekData.values.[0].[0]}}</span>
             <span>L</span>
           </div>
           <div class="flex justify-center items-center text-sm font-bold c-A8A8A8">
@@ -106,7 +106,7 @@
       <div class="flex justify-center items-center">
         <div>
           <div class="flex justify-center text-6xl c-3AAFE2">
-            <span>{{yearData.Valueobject.[0].[1]}}</span>
+            <span>{{yearData.values.[0].[1]}}</span>
             <span>L</span>
           </div>
           <div class="flex justify-center items-center text-sm font-bold c-A8A8A8">
@@ -129,7 +129,7 @@
       <div class="flex justify-center items-center">
         <div>
           <div class="flex justify-center text-6xl c-3AAFE2">
-            <span id="monthuseage">{{yearData.Valueobject.[0].[0]}}</span>
+            <span id="monthuseage">{{yearData.values.[0].[0]}}</span>
             <span>L</span>
           </div>
           <div class="flex justify-center items-center text-sm font-bold c-A8A8A8">
@@ -149,7 +149,7 @@
       <div class="Graph-Bar-Text-Box flex justify-center items-center">
         <div class="flex items-center">
           <span class="text-xs font-bold c-47525B ml-4 mr-1">이번주 총 사용량</span>
-          <span class="text-lg font-bold c-3AAFE2" id="weekendTotalUseage">{{weekData.Valueobject.[0].[0]}}</span>
+          <span class="text-lg font-bold c-3AAFE2" id="weekendTotalUseage">{{weekData.values.[0].[0]}}</span>
           <span class="text-lg font-bold c-3AAFE2">L</span>
         </div>
         <div class="flex-1"></div>
@@ -159,7 +159,7 @@
       </div>
       <div class="flex justify-center items-center">
         <!--G1-->
-        {{#each weekData.Valueobject.[0]}}
+        {{#each weekData.values.[0]}}
         <div class="Graph-Bar-Item Graph-Bar-Item-1 relative inline-block">
           <div class="St-Pop-Up Pop-Up-1 text-xs">
             <span class="c-3AAFE2 mr-1">
@@ -174,7 +174,7 @@
           </div>
           <div class="flex justify-center">
             <span class="Gra-Per-Text text-xs c-A8A8A8" id="ShowWeekPercent{{@index}}">
-              {{lookup ../weekData.Valueobject.[1] @index}}
+              {{lookup ../weekData.values.[1] @index}}
             </span>
             <span class="Gra-Per-Text text-xs c-A8A8A8">
               %
@@ -182,12 +182,12 @@
           </div>
           <div class="Gra-Bar-Ele-Box flex justify-center items-end mb-1">
             <div class="Gra-Back-Ele-Bar h-full flex items-end border-radius-2">
-              <div class="w-full border-radius-2" style="height: {{lookup ../weekData.Valueobject.[1] @index}}%;"
-                id="GraphWeekPercent"></div>
+              <div class="w-full border-radius-2" style="height: {{lookup ../weekData.values.[1] @index}}%;"
+                id="ShowWeekGraph{{@index}}"></div>
             </div>
           </div>
           <div class="text-center text-xs c-A8A8A8">
-            <span>{{yearData.getDate}}.{{lookup ../weekData.getDate @index}}일</span>
+            <span>{{yearData.dates}}.{{lookup ../weekData.dates @index}}일</span>
           </div>
         </div>
         {{#if @last}}
@@ -211,7 +211,7 @@
         </div>
       </div>
       <div class="flex justify-center items-center">
-        {{#each yearData.Valueobject.[0]}}
+        {{#each yearData.values.[0]}}
         <!--G2-1-->
         <div class="Graph-Bar-Item Graph-Bar-Item-2-1 relative inline-block">
           <div class="Nd-Pop-Up Pop-Up-2-1 text-xs">
@@ -227,7 +227,7 @@
           </div>
           <div class="flex justify-center">
             <span class="Gra-Per-Text text-xs c-A8A8A8" id="ShowYearPercent{{@index}}">
-              {{lookup ../yearData.Valueobject.[1] @index}}
+              {{lookup ../yearData.values.[1] @index}}
             </span>
             <span class="Gra-Per-Text text-xs c-A8A8A8">
               %
@@ -235,12 +235,12 @@
           </div>
           <div class="Gra-Bar-Ele-Box flex justify-center items-end mb-1">
             <div class="Gra-Back-Ele-Bar h-full flex items-end border-radius-2">
-              <div class="w-full border-radius-2" style="height: {{lookup ../yearData.Valueobject.[1] @index}}%;"
-                id="GraphYearPercent{{@index}}"></div>
+              <div class="w-full border-radius-2" style="height: {{lookup ../yearData.values.[1] @index}}%;"
+                id="ShowYearGraph{{@index}}"></div>
             </div>
           </div>
           <div class="flex justify-center items-center text-xs c-A8A8A8">
-            <span>{{lookup ../yearData.getDate @index}}</span>
+            <span>{{lookup ../yearData.dates @index}}</span>
             <span>월</span>
           </div>
         </div>
@@ -250,7 +250,8 @@
       </div>
     </div>
   </div>
-</div>
+</div>  
+{{weekData}}
 <script src="/socket.io/socket.io.js"></script>
 <script>
   let txtday = document.getElementById('textday');
@@ -258,7 +259,7 @@
   function clock() {
     let today = new Date();
     let month = today.getMonth() + 1;
-    let date = today.getDate();
+    let date = today.dates();
     let day = today.getDay();
     let charday = "";
     switch (day) {
@@ -295,54 +296,54 @@
   setInterval(clock, 1000);
   setInterval(clockminute, 1000);
 
-  var socket = io();
+  let socket = io();
   socket.on('currentT1H', (msg) => {
-    var txt = document.getElementById('currentT1H');
+    let txt = document.getElementById('currentT1H');
     txt.innerText = msg;
   });
 
 
   socket.on('weekendwater', (msg) => {
-    var todaywateruseage = document.getElementById('TodayWaterUseage0');
+    let todaywateruseage = document.getElementById('TodayWaterUseage0');
     todaywateruseage.innerText = msg;
   });
 
   socket.on('weekendTotalUseage', (msg) => {
-    var weekendTotalUseage = document.getElementById('weekendTotalUseage');
-    var txt = document.getElementById('weekendwater');
+    let weekendTotalUseage = document.getElementById('weekendTotalUseage');
+    let txt = document.getElementById('weekendwater');
     txt.innerText = msg;
     weekendTotalUseage.innerText = msg;
   });
 
   socket.on('yearTotalUseage', (msg) => {
-    var yearTotalUseage = document.getElementById('yearTotalUseage');
+    let yearTotalUseage = document.getElementById('yearTotalUseage');
 
     yearTotalUseage.innerText = msg;
   });
   socket.on('yearWater', (msg) => {
     let today = new Date();
     let month = today.getMonth();
-    var monthwateruseage = document.getElementById('MonthWaterUseage0');
-    var monthuseage = document.getElementById('monthuseage');
+    let monthwateruseage = document.getElementById('MonthWaterUseage0');
+    let monthuseage = document.getElementById('monthuseage');
     monthwateruseage.innerText = msg;
     monthuseage.innerText = msg;
   });
   socket.on('waterpercent', (msg) => {
-    let WGArray = new Array()
-    let ShowPercent = new Array()
+    let WGArray = []
+    let ShowPercenta = []
     for (let i = 0; i < 7; i++) {
       WGArray[i] = document.getElementById(`ShowWeekGraph${i}`)
-      ShowPercent[i] = document.getElementById(`ShowWeekPercent${i}`)
+      ShowPercenta[i] = document.getElementById(`ShowWeekPercent${i}`)
       WGArray[i].style.height = msg[i] + "%"
-      ShowPercent[i].innerText = msg[i]
+      ShowPercenta[i].innerText = msg[i]
     }
   });
 
   socket.on('MonthTotalUseage', (msg) => {
-    let YGArray = new Array()
-    let ShowPercent = new Array()
+    let YGArray = []
+    let ShowPercent = []
     for (let i = 0; i < 12; i++) {
-      YGArray[i] = document.getElementById(`GraphYeekGraph${i}`)
+      YGArray[i] = document.getElementById(`ShowYearGraph${i}`)
       ShowPercent[i] = document.getElementById(`ShowYearPercent${i}`)
       YGArray[i].style.height = msg[i] + "%"
       ShowPercent[i].innerText = msg[i]
